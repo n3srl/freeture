@@ -90,7 +90,8 @@ PKG_CHECK_MODULES(GOBJ_2_0, [gobject-2.0], [LIBS="$GOBJ_2_0_LIBS $LIBS"]
 PKG_CHECK_MODULES(UDEV, [libudev], [LIBS="$UDEV_LIBS $LIBS"]
 				      [AM_CPPFLAGS="$AM_CPPFLAGS $UDEV_CFLAGS"],
 				      [AC_MSG_ERROR([$UDEV_ERROR Exiting.])])
-PKG_CHECK_MODULES(CFITSIO, [cfitsio])
+PKG_CHECK_MODULES(CFITSIO, [cfitsio], [LIBS="$CFITSIO_LIBS $LIBS"]
+				      [AM_CPPFLAGS="$AM_CPPFLAGS $CFITSIO_CFLAGS"])
 PKG_CHECK_MODULES(CRYPTO, [libcrypto], [LIBS="$CRYPTO_LIBS $LIBS"]
 				      [AM_CPPFLAGS="$AM_CPPFLAGS $CRYPTO_CFLAGS"],
 				      [AC_MSG_ERROR([$CRYPTO_ERROR Exiting.])])
@@ -99,10 +100,10 @@ PKG_CHECK_MODULES(V4L2, [libv4l2], [LIBS="$V4L2_LIBS $LIBS"]
 				      [AC_MSG_ERROR([$V4L2_ERROR Exiting.])])
 PKG_CHECK_MODULES(OPENCV, [opencv >= 3.0],
 			  [AC_DEFINE([HAVE_OPENCV], [1], [Using OpenCV])]
-			  [LIBS="-lopencv_core -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_highgui -lopencv_imgproc -lopencv_ml -lopencv_objdetect -lopencv_video -lopencv_videoio $LIBS"],
-			  [PKG_CHECK_MODULES([OPENCV], [opencv >= 2.0],
+			  [LIBS="-lopencv_core -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_highgui -lopencv_imgproc -lopencv_ml -lopencv_objdetect -lopencv_video -lopencv_videoio -lopencv_imgcodecs $LIBS"],
+			  [PKG_CHECK_MODULES([OPENCV], [opencv < 3.0],
 			  [AC_DEFINE([HAVE_OPENCV], [1], [Using OpenCV])]
-			  [LIBS="-lopencv_core -lopencv_calib3d -lopencv_contrib -lopencv_features2d -lopencv_flann -lopencv_highgui -lopencv_imgproc -lopencv_legacy -lopencv_ml -lopencv_objdetect -lopencv_video $LIBS"],
+			  [LIBS="-lopencv_core -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_highgui -lopencv_imgproc -lopencv_ml -lopencv_objdetect -lopencv_video -lopencv_contrib -lopencv_legacy $LIBS"],
 			  AC_MSG_WARN([opencv not found. Not using some image processing.]))]
 			  )
 
