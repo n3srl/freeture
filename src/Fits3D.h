@@ -41,12 +41,7 @@
 #define BOOST_LOG_DYN_LINK 1
 #endif
 
-#ifdef CFITSIO_H
-  #include CFITSIO_H
-#else
-  #include "fitsio.h"
-#endif
-
+#include "cfitsio/fitsio.h"
 #include "opencv2/highgui/highgui.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
 #include <boost/log/common.hpp>

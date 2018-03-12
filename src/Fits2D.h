@@ -43,11 +43,7 @@
 
 #include "opencv2/highgui/highgui.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
-#ifdef CFITSIO_H
-  #include CFITSIO_H
-#else
-  #include "fitsio.h"
-#endif
+#include "cfitsio/fitsio.h"
 #include <boost/log/common.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/utility/setup/file.hpp>
