@@ -15,10 +15,10 @@ Makefile
 README
 config.h
 config.status
-doc/Makefile
+*/Makefile.in
+*/Makefile
 doc/freeture.1
 src/.deps/
-src/Makefile
 stamp-h1
 src/freeture
 
