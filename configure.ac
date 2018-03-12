@@ -50,7 +50,6 @@ AC_DEFINE(LINUX, 1, [Linux plateform])
 # Include macros
 sinclude(acx_urbi_resolve_dir.m4)
 sinclude(acx_boost.m4)
-sinclude(acx_cfitsio.m4)
 sinclude(acx_pylon.m4)
 
 # Display package and version number
@@ -91,6 +90,7 @@ PKG_CHECK_MODULES(GOBJ_2_0, [gobject-2.0], [LIBS="$GOBJ_2_0_LIBS $LIBS"]
 PKG_CHECK_MODULES(UDEV, [libudev], [LIBS="$UDEV_LIBS $LIBS"]
 				      [AM_CPPFLAGS="$AM_CPPFLAGS $UDEV_CFLAGS"],
 				      [AC_MSG_ERROR([$UDEV_ERROR Exiting.])])
+PKG_CHECK_MODULES(CFITSIO, [cfitsio])
 PKG_CHECK_MODULES(CRYPTO, [libcrypto], [LIBS="$CRYPTO_LIBS $LIBS"]
 				      [AM_CPPFLAGS="$AM_CPPFLAGS $CRYPTO_CFLAGS"],
 				      [AC_MSG_ERROR([$CRYPTO_ERROR Exiting.])])
@@ -99,10 +99,10 @@ PKG_CHECK_MODULES(V4L2, [libv4l2], [LIBS="$V4L2_LIBS $LIBS"]
 				      [AC_MSG_ERROR([$V4L2_ERROR Exiting.])])
 PKG_CHECK_MODULES(OPENCV, [opencv >= 3.0],
 			  [AC_DEFINE([HAVE_OPENCV], [1], [Using OpenCV])]
-			  [OPENCV_LIBS="-lopencv_core -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_highgui -lopencv_imgproc -lopencv_ml -lopencv_objdetect -lopencv_video -lopencv_videoio"],
+			  [LIBS="-lopencv_core -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_highgui -lopencv_imgproc -lopencv_ml -lopencv_objdetect -lopencv_video -lopencv_videoio $LIBS"],
 			  [PKG_CHECK_MODULES([OPENCV], [opencv >= 2.0],
 			  [AC_DEFINE([HAVE_OPENCV], [1], [Using OpenCV])]
-			  [OPENCV_LIBS="-lopencv_core -lopencv_calib3d -lopencv_contrib -lopencv_features2d -lopencv_flann -lopencv_highgui -lopencv_imgproc -lopencv_legacy -lopencv_ml -lopencv_objdetect -lopencv_video"],
+			  [LIBS="-lopencv_core -lopencv_calib3d -lopencv_contrib -lopencv_features2d -lopencv_flann -lopencv_highgui -lopencv_imgproc -lopencv_legacy -lopencv_ml -lopencv_objdetect -lopencv_video $LIBS"],
 			  AC_MSG_WARN([opencv not found. Not using some image processing.]))]
 			  )
 
@@ -127,38 +127,6 @@ AC_ARG_WITH(boost-libdir,
 AC_ARG_WITH(boost-incdir,
         [AS_HELP_STRING([--with-boost-incdir=<BOOST include dir>],
 	[Alternative directory for BOOST include files])])
-
-# Provide special options for OPENCV
-AC_ARG_WITH(opencv-libdir,
-        [AS_HELP_STRING([--with-opencv-libdir=<OPENCV library path>],
-	[Alternative directory for the OPENCV library])])
-AC_ARG_WITH(opencv-incdir,
-        [AS_HELP_STRING([--with-opencv-incdir=<OPENCV include dir>],
-	[Alternative directory for OPENCV include files])])
-
-# Provide special options for OPENSSL
-AC_ARG_WITH(openssl-libdir,
-        [AS_HELP_STRING([--with-openssl-libdir=<OPENSSL library path>],
-        [Alternative directory for the OPENSSL library])])
-AC_ARG_WITH(openssl-incdir,
-        [AS_HELP_STRING([--with-openssl-incdir=<OPENSSL include dir>],
-        [Alternative directory for OPENSSL include files])])
-
-# Provide special options for V4L2
-AC_ARG_WITH(v4l2-libdir,
-        [AS_HELP_STRING([--with-v4l2-libdir=<V4L2 library path>],
-        [Alternative directory for the V4L2 library])])
-AC_ARG_WITH(v4l2-incdir,
-        [AS_HELP_STRING([--with-v4l2-incdir=<V4L2 include dir>],
-        [Alternative directory for V4L2 include files])])
-
-# Provide special options for CFITSIO
-AC_ARG_WITH(cfitsio-libdir,
-        [AS_HELP_STRING([--with-cfitsio-libdir=<CFITSIO library path>],
-	[Alternative directory for the CFITSIO library])])
-AC_ARG_WITH(cfitsio-incdir,
-        [AS_HELP_STRING([--with-cfitsio-incdir=<CFITSIO include dir>],
-	[Alternative directory for CFITSIO include files])])
 
 # Provide a special option for the default config file path
 with_cfg_path=$(URBI_RESOLVE_DIR([$datadir]))"/$PACKAGE_NAME/"
@@ -190,15 +158,6 @@ ACX_BOOST($with_boost_libdir,$with_boost_incdir,
 	fi,
 	AC_MSG_ERROR([$BOOST_ERROR Exiting.]))						
 
-###################### handle the CFITSIO library ######################
-ACX_CFITSIO($with_cfitsio_libdir,$with_cfitsio_incdir,
-    	[AM_CPPFLAGS="$AM_CPPFLAGS $CFITSIO_CFLAGS"]
-	[LIBS="$CFITSIO_LIBS $LIBS"]
-	if test "$CFITSIO_WARN" != ""; then
-	  AC_MSG_WARN([$CFITSIO_WARN])
-	fi,
-	AC_MSG_ERROR([$CFITSIO_ERROR Exiting.]))						
-
 ###################### handle the OPENSSL library ######################
 PKG_CHECK_MODULES(OPENSSL, openssl,
 	[LIBS="$OPENSSL_LIBS $LIBS"]
@@ -212,7 +171,7 @@ PKG_CHECK_MODULES(GST01, gstreamer-0.10,
 	[AC_MSG_ERROR([$GST_ERROR Exiting.])])
 	
 ###################### handle the ARAVIS library ######################
-PKG_CHECK_MODULES(ARV, aravis-0.4,
+PKG_CHECK_MODULES(ARV, aravis-0.6,
 	[LIBS="$ARV_LIBS $LIBS"]
 	[AM_CPPFLAGS="$AM_CPPFLAGS $ARV_CFLAGS"],
 	[AC_MSG_ERROR([$ARV_ERROR Exiting.])])
