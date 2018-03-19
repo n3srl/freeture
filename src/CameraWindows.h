@@ -50,6 +50,8 @@ class CameraWindows: public Camera {
 
         int mDevNumber;
         videoInput mVideoInput;
+        int mStartX;
+        int mStartY;
         int mWidth;
         int mHeight;
         int mSize;
@@ -106,7 +108,7 @@ class CameraWindows: public Camera {
 
         bool setFPS(double value);
 
-        bool setSize(int width, int height, bool customSize);
+        bool setSize(int startx, int starty, int width, int height, bool customSize);
 
         bool setFpsToLowerValue();
 

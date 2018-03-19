@@ -76,7 +76,7 @@ vector<pair<int,string>> CameraWindows::getCamerasList() {
 
 }
 
-bool CameraWindows::setSize(int width, int height, bool customSize) {
+bool CameraWindows::setSize(int startx, int starty, int width, int height, bool customSize) {
 
     if(customSize)
         return mVideoInput.setupDevice(mDevNumber,width,height);

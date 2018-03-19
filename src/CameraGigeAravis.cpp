@@ -6,7 +6,8 @@
 *   This file is part of:   freeture
 *
 *   Copyright:      (C) 2014-2016 Yoan Audureau
-*                               FRIPON-GEOPS-UPSUD-CNRS
+*                       2018 Chiara Marmo
+*                               GEOPS-UPSUD-CNRS
 *
 *   License:        GNU General Public License
 *
@@ -21,15 +22,15 @@
 *   You should have received a copy of the GNU General Public License
 *   along with FreeTure. If not, see <http://www.gnu.org/licenses/>.
 *
-*   Last modified:      16/05/2016
+*   Last modified:      19/03/2018
 *
 *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
 /**
 * \file    CameraGigeAravis.cpp
-* \author  Yoan Audureau -- FRIPON-GEOPS-UPSUD
-* \version 1.0
-* \date    16/05/2016
+* \author  Yoan Audureau -- Chiara Marmo -- GEOPS-UPSUD
+* \version 1.2
+* \date    19/03/2018
 * \brief   Use Aravis library to pilot GigE Cameras.
 *          https://wiki.gnome.org/action/show/Projects/Aravis?action=show&redirect=Aravis
 */
@@ -42,7 +43,7 @@
     CameraGigeAravis::Init CameraGigeAravis::initializer;
 
     CameraGigeAravis::CameraGigeAravis(bool shift):
-    camera(NULL), mWidth(0), mHeight(0), fps(0), gainMin(0.0), gainMax(0.0),
+    camera(NULL), mStartX(0), mStartY(0), mWidth(0), mHeight(0), fps(0), gainMin(0.0), gainMax(0.0),
     payload(0), exposureMin(0), exposureMax(0), gain(0), exp(0), nbCompletedBuffers(0),
     nbFailures(0), nbUnderruns(0), frameCounter(0), shiftBitsImage(shift), stream(NULL) {
         mExposureAvailable = true;
@@ -51,7 +52,7 @@
     }
 
     CameraGigeAravis::CameraGigeAravis():
-    camera(NULL), mWidth(0), mHeight(0), fps(0), gainMin(0.0), gainMax(0.0),
+    camera(NULL), mStartX(0), mStartY(0), mWidth(0), mHeight(0), fps(0), gainMin(0.0), gainMax(0.0),
     payload(0), exposureMin(0), exposureMax(0), gain(0), exp(0), nbCompletedBuffers(0),
     nbFailures(0), nbUnderruns(0), frameCounter(0), shiftBitsImage(false), stream(NULL) {
         mExposureAvailable = true;
@@ -161,13 +162,14 @@
         return true;
     }
 
-    bool CameraGigeAravis::setSize(int width, int height, bool customSize) {
+    bool CameraGigeAravis::setSize(int startx, int starty, int width, int height, bool customSize) {
 
         if(customSize) {
 
-            arv_camera_set_region(camera, 0, 0,width,height);
-            arv_camera_get_region (camera, NULL, NULL, &mWidth, &mHeight);
+            arv_camera_set_region(camera, startx, starty, width, height);
+            arv_camera_get_region (camera, &mStartX, &mStartY, &mWidth, &mHeight);
             BOOST_LOG_SEV(logger, notification) << "Camera region size : " << mWidth << "x" << mHeight;
+            BOOST_LOG_SEV(logger, notification) << "Starting from : " << mStartX << "," << mStartY;
 
         // Default is maximum size
         }else {
@@ -244,6 +246,8 @@
         cout << "DEVICE NAME     : " << arv_camera_get_model_name(camera)   << endl;
         cout << "DEVICE VENDOR   : " << arv_camera_get_vendor_name(camera)  << endl;
         cout << "PAYLOAD         : " << payload                             << endl;
+        cout << "Start X         : " << mStartX                             << endl
+             << "Start Y         : " << mStartY                             << endl;
         cout << "Width           : " << mWidth                               << endl
              << "Height          : " << mHeight                              << endl;
         cout << "Exp Range       : [" << exposureMin    << " - " << exposureMax   << "]"  << endl;
@@ -538,7 +542,7 @@
 
         if(frame.mWidth > 0 && frame.mHeight > 0) {
 
-            arv_camera_set_region(camera, 0, 0,frame.mWidth,frame.mHeight);
+            arv_camera_set_region(camera, frame.mStartX, frame.mStartY, frame.mWidth, frame.mHeight);
             arv_camera_get_region (camera, NULL, NULL, &mWidth, &mHeight);
 
         }else{
@@ -576,6 +580,8 @@
         cout << "DEVICE NAME     : " << arv_camera_get_model_name(camera)   << endl;
         cout << "DEVICE VENDOR   : " << arv_camera_get_vendor_name(camera)  << endl;
         cout << "PAYLOAD         : " << payload                             << endl;
+        cout << "Start X         : " << mStartX                             << endl
+             << "Start Y         : " << mStartY                             << endl;
         cout << "Width           : " << mWidth                               << endl
              << "Height          : " << mHeight                              << endl;
         cout << "Exp Range       : [" << exposureMin    << " - " << exposureMax   << "]"  << endl;
@@ -922,12 +928,14 @@
     }
 
 
-    bool CameraGigeAravis::getFrameSize(int &w, int &h) {
+    bool CameraGigeAravis::getFrameSize(int &x, int &y, int &w, int &h) {
 
         if(camera != NULL) {
 
-            int ww = 0, hh = 0;
-            arv_camera_get_region(camera, NULL, NULL, &ww, &h);
+            int ww = 0, hh = 0, xx = 0, yy = 0;
+            arv_camera_get_region(camera, &x, &y, &w, &h);
+            x = xx;
+            y = yy;
             w = ww;
             h = hh;
 
