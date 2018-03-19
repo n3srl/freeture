@@ -220,6 +220,7 @@ int main(int argc, const char ** argv){
     // Program options.
     po::options_description desc("FreeTure options");
     desc.add_options()
+      ("help,h",                                                                                        "Print FreeTure help.")
       ("mode,m",        po::value<int>(),                                                               "FreeTure modes :\n- MODE 1 : Check configuration file.\n- MODE 2 : Continuous acquisition.\n- MODE 3 : Meteor detection.\n- MODE 4 : Single acquisition.\n- MODE 5 : Clean logs.")
       ("time,t",        po::value<int>(),                                                               "Execution time (s) of meteor detection mode.")
       ("width",         po::value<int>(),                                                               "Image width.")
@@ -259,6 +260,8 @@ int main(int argc, const char ** argv){
 
         po::store(po::parse_command_line(argc, argv, desc), vm);
 
+
+
         ///%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         ///%%%%%%%%%%%%%%%%%%%%%%% PRINT FREETURE VERSION %%%%%%%%%%%%%%%%%%%%%%%%
         ///%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -266,6 +269,14 @@ int main(int argc, const char ** argv){
         if(vm.count("version")){
 
             std::cout << "Current version : " << version << endl;
+
+        ///%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        ///%%%%%%%%%%%%%%%%%%%%%%% PRINT FREETURE HELP %%%%%%%%%%%%%%%%%%%%%%%%
+        ///%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+        }else if(vm.count("help")){
+
+            std::cout << desc;
 
         ///%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         ///%%%%%%%%%%%%%%%%%%%%%%% LIST CONNECTED DEVICES %%%%%%%%%%%%%%%%%%%%%%%%
