@@ -8,7 +8,7 @@
 #*	This file part of:	FreeTure
 #*
 #*	Copyright:		(C) 2014-2018 Yoan Audureau, Chiara Marmo
-#*                              FRIPON-GEOPS-UPSUD-CNRS
+#*                              GEOPS-UPSUD-CNRS
 #*
 #*	License:		GNU General Public License
 #*
@@ -23,7 +23,7 @@
 #*	You should have received a copy of the GNU General Public License
 #*	along with FreeTure. If not, see <http://www.gnu.org/licenses/>.
 #*
-#*	Last modified:		12/03/2018
+#*	Last modified:		19/03/2018
 #*
 #*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
@@ -87,6 +87,9 @@ PKG_CHECK_MODULES(GLIB_2_0, [glib-2.0], [LIBS="$GLIB_2_0_LIBS $LIBS"]
 PKG_CHECK_MODULES(GOBJ_2_0, [gobject-2.0], [LIBS="$GOBJ_2_0_LIBS $LIBS"]
 				      [AM_CPPFLAGS="$AM_CPPFLAGS $GOBJ_2_0_CFLAGS"],
 				      [AC_MSG_ERROR([$GOBJ_2_0_ERROR Exiting.])])
+PKG_CHECK_MODULES(GTHREAD_2_0, [gthread-2.0], [LIBS="$GTHREAD_2_0_LIBS $LIBS"]
+				      [AM_CPPFLAGS="$AM_CPPFLAGS $GTHREAD_2_0_CFLAGS"],
+				      [AC_MSG_ERROR([$GTHREAD_2_0_ERROR Exiting.])])
 PKG_CHECK_MODULES(UDEV, [libudev], [LIBS="$UDEV_LIBS $LIBS"]
 				      [AM_CPPFLAGS="$AM_CPPFLAGS $UDEV_CFLAGS"],
 				      [AC_MSG_ERROR([$UDEV_ERROR Exiting.])])
@@ -164,12 +167,6 @@ PKG_CHECK_MODULES(OPENSSL, openssl,
 	[LIBS="$OPENSSL_LIBS $LIBS"]
 	[AM_CPPFLAGS="$AM_CPPFLAGS $OPENSSL_CFLAGS"],
 	[AC_MSG_ERROR([$OPENSSL_ERROR Exiting.])])
-
-###################### handle the GSTREAMER library ######################
-PKG_CHECK_MODULES(GST01, gstreamer-0.10,
-	[LIBS="$GST01_LIBS $LIBS"]
-	[AM_CPPFLAGS="$AM_CPPFLAGS $GST01_CFLAGS"],
-	[AC_MSG_ERROR([$GST_ERROR Exiting.])])
 	
 ###################### handle the ARAVIS library ######################
 PKG_CHECK_MODULES(ARV, aravis-0.6,
