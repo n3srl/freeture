@@ -82,7 +82,7 @@ OpenSSL::~OpenSSL() {
         rstShutdown = SSL_shutdown(ssl_.get());
     else if(-1 == rstShutdown && SSL_RECEIVED_SHUTDOWN != SSL_get_shutdown(ssl_.get())) {
         BOOST_LOG_SEV(logger,fail) << "Shutdown failed.";
-        throw "Shutdown failed.";
+        //throw "Shutdown failed.";
         //throw runtime_error("shutdown failed.");
     }
 
