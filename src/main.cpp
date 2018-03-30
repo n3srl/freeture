@@ -356,9 +356,9 @@ int main(int argc, const char ** argv){
                         // Cam id.
                         if(vm.count("id")) devID = vm["id"].as<int>();
                         // Crop start x
-                        //if(vm.count("startx")) startx = vm["startx"].as<int>();
+                        if(vm.count("startx")) startx = vm["startx"].as<int>();
                         // Crop start y
-                        //if(vm.count("starty")) starty = vm["starty"].as<int>();
+                        if(vm.count("starty")) starty = vm["starty"].as<int>();
                         // Cam width size
                         if(vm.count("width")) acqWidth = vm["width"].as<int>();
                         // Cam height size
@@ -753,9 +753,9 @@ int main(int argc, const char ** argv){
                         // Acquisition pixel format.
                         if(vm.count("format")) acqFormat = vm["format"].as<int>();
                         // Crop start x
-                        //if(vm.count("startx")) startx = vm["startx"].as<int>();
+                        if(vm.count("startx")) startx = vm["startx"].as<int>();
                         // Crop start y
-                        //if(vm.count("starty")) starty = vm["starty"].as<int>();
+                        if(vm.count("starty")) starty = vm["starty"].as<int>();
                         // Cam width size.
                         if(vm.count("width")) acqWidth = vm["width"].as<int>();
                         // Cam height size

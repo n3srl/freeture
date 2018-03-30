@@ -230,9 +230,6 @@
         BOOST_LOG_SEV(logger, notification) << "Camera gain bound min : " << gainMin;
         BOOST_LOG_SEV(logger, notification) << "Camera gain bound max : " << gainMax;
 
-        arv_camera_set_frame_rate(camera, 30.); /* Continuous acquisitions */ 
-
-        fps = arv_camera_get_frame_rate(camera);
         BOOST_LOG_SEV(logger, notification) << "Camera frame rate : " << fps;
 
         capsString = arv_pixel_format_to_gst_caps_string(pixFormat);
@@ -1030,6 +1027,11 @@
         if (camera != NULL){
 
             arv_camera_set_frame_rate(camera, fps);
+            double setfps = arv_camera_get_frame_rate(camera);
+            if (setfps!=fps) {
+                cout << "> Frame rate value (" << fps << ") can't be set! Please check genicam features." << endl;
+                BOOST_LOG_SEV(logger, warning) << "> Frame rate value (" << fps << ") can't be set!";
+            }
 
             return true;
 

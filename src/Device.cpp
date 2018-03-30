@@ -60,8 +60,8 @@ Device::Device(cameraParam cp, framesParam fp, videoParam vp, int cid) {
     mShiftBits = cp.SHIFT_BITS;
     mFormat = cp.ACQ_FORMAT;
     mCustomSize = cp.ACQ_RES_CUSTOM_SIZE;
-    mStartX = cp.ACQ_WIDTH;
-    mStartY = cp.ACQ_HEIGHT;
+    mStartX = cp.ACQ_STARTX;
+    mStartY = cp.ACQ_STARTY;
     mSizeWidth = cp.ACQ_WIDTH;
     mSizeHeight = cp.ACQ_HEIGHT;
     mDeviceType = UNDEFINED_INPUT_TYPE;
