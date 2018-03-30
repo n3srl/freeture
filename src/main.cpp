@@ -22,7 +22,7 @@
 *   You should have received a copy of the GNU General Public License
 *   along with FreeTure. If not, see <http://www.gnu.org/licenses/>.
 *
-*   Last modified:      19/03/2018
+*   Last modified:      20/03/2018
 *
 *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
@@ -30,7 +30,7 @@
 * \file    main.cpp
 * \author  Yoan Audureau -- Chiara Marmo -- GEOPS-UPSUD
 * \version 1.2
-* \date    19/03/2018
+* \date    20/03/2018
 */
 
 #include "config.h"
@@ -224,11 +224,8 @@ int main(int argc, const char ** argv){
       ("help,h",                                                                                        "Print FreeTure help.")
       ("mode,m",        po::value<int>(),                                                               "FreeTure modes :\n- MODE 1 : Check configuration file.\n- MODE 2 : Continuous acquisition.\n- MODE 3 : Meteor detection.\n- MODE 4 : Single acquisition.\n- MODE 5 : Clean logs.")
       ("time,t",        po::value<int>(),                                                               "Execution time (s) of meteor detection mode.")
-
-/* Aravis seems to be bugged on this... more checks are needed
-      ("startx",        po::value<int>(),                                                               "Crop starting x (from left to right): this is an aravis only implementation.")
-      ("starty",        po::value<int>(),                                                               "Crop starting y (from top to bottom): this is an aravis only implementation.")
-*/
+      ("startx",        po::value<int>(),                                                               "Crop starting x (from left to right): only for aravis cameras yet.")
+      ("starty",        po::value<int>(),                                                               "Crop starting y (from top to bottom): only for aravis cameras yet.")
       ("width",         po::value<int>(),                                                               "Image width.")
       ("height",        po::value<int>(),                                                               "Image height.")
       ("cfg,c",         po::value<string>()->default_value(string(CFG_PATH) + "configuration.cfg"),     "Configuration file's path.")

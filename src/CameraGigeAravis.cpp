@@ -22,7 +22,7 @@
 *   You should have received a copy of the GNU General Public License
 *   along with FreeTure. If not, see <http://www.gnu.org/licenses/>.
 *
-*   Last modified:      19/03/2018
+*   Last modified:      30/03/2018
 *
 *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
@@ -30,7 +30,7 @@
 * \file    CameraGigeAravis.cpp
 * \author  Yoan Audureau -- Chiara Marmo -- GEOPS-UPSUD
 * \version 1.2
-* \date    19/03/2018
+* \date    30/03/2018
 * \brief   Use Aravis library to pilot GigE Cameras.
 *          https://wiki.gnome.org/action/show/Projects/Aravis?action=show&redirect=Aravis
 */
@@ -169,7 +169,11 @@
             arv_camera_set_region(camera, startx, starty, width, height);
             arv_camera_get_region (camera, &mStartX, &mStartY, &mWidth, &mHeight);
             BOOST_LOG_SEV(logger, notification) << "Camera region size : " << mWidth << "x" << mHeight;
-            BOOST_LOG_SEV(logger, notification) << "Starting from : " << mStartX << "," << mStartY;
+            if (arv_device_get_feature(arv_camera_get_device(camera), "OffsetX")) {
+                BOOST_LOG_SEV(logger, notification) << "Starting from : " << mStartX << "," << mStartY;
+            } else {
+                BOOST_LOG_SEV(logger, warning) << "OffsetX, OffsetY are not available: cannot set offset.";
+            }
 
         // Default is maximum size
         }else {
@@ -226,7 +230,7 @@
         BOOST_LOG_SEV(logger, notification) << "Camera gain bound min : " << gainMin;
         BOOST_LOG_SEV(logger, notification) << "Camera gain bound max : " << gainMax;
 
-        arv_camera_set_frame_rate(camera, 30);
+        arv_camera_set_frame_rate(camera, 30.); /* Continuous acquisitions */ 
 
         fps = arv_camera_get_frame_rate(camera);
         BOOST_LOG_SEV(logger, notification) << "Camera frame rate : " << fps;
@@ -542,8 +546,9 @@
 
         if(frame.mWidth > 0 && frame.mHeight > 0) {
 
-            arv_camera_set_region(camera, frame.mStartX, frame.mStartY, frame.mWidth, frame.mHeight);
-            arv_camera_get_region (camera, NULL, NULL, &mWidth, &mHeight);
+            setFrameSize(frame.mStartX, frame.mStartY, frame.mWidth, frame.mHeight,1);
+            //arv_camera_set_region(camera, frame.mStartX, frame.mStartY, frame.mWidth, frame.mHeight);
+            //arv_camera_get_region (camera, NULL, NULL, &mWidth, &mHeight);
 
         }else{
 
@@ -565,7 +570,7 @@
 
         arv_camera_get_gain_bounds (camera, &gainMin, &gainMax);
 
-        arv_camera_set_frame_rate(camera, 1);
+        arv_camera_set_frame_rate(camera, frame.mFps); /* Regular captures */
 
         fps = arv_camera_get_frame_rate(camera);
 
@@ -1059,6 +1064,37 @@
 
         return false;
 
+    }
+
+    bool CameraGigeAravis::setFrameSize(int startx, int starty, int width, int height, bool customSize) {
+
+        if (camera != NULL){
+            if(customSize) {
+
+                if (arv_device_get_feature(arv_camera_get_device(camera), "OffsetX")) {
+                    cout << "Starting from : " << mStartX << "," << mStartY;
+                    BOOST_LOG_SEV(logger, notification) << "Starting from : " << mStartX << "," << mStartY;
+                } else {
+                    BOOST_LOG_SEV(logger, warning) << "OffsetX, OffsetY are not available: cannot set offset.";
+                }
+                arv_camera_set_region(camera, startx, starty, width, height);
+                arv_camera_get_region (camera, &mStartX, &mStartY, &mWidth, &mHeight);
+
+            // Default is maximum size
+            } else {
+
+                int sensor_width, sensor_height;
+
+                arv_camera_get_sensor_size(camera, &sensor_width, &sensor_height);
+                BOOST_LOG_SEV(logger, notification) << "Camera sensor size : " << sensor_width << "x" << sensor_height;
+
+                arv_camera_set_region(camera, 0, 0,sensor_width,sensor_height);
+                arv_camera_get_region (camera, NULL, NULL, &mWidth, &mHeight);
+
+            }
+            return true;
+        }
+        return false;
     }
 
 #endif

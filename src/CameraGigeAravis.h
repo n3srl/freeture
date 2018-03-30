@@ -159,6 +159,8 @@
 
             bool setFPS(double fps);
 
+            bool setFrameSize(int startx, int starty, int width, int height, bool customSize);
+
             bool setPixelFormat(CamPixFmt depth);
 
             void saveGenicamXml(string p);
