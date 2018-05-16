@@ -27,7 +27,7 @@
 
 /**
 * \file    OpenSSL.cpp
-* \author  Yoan Audureau -- FRIPON-GEOPS-UPSUD
+* \author  Yoan Audureau -- GEOPS-UPSUD
 * \version 1.0
 * \date    30/05/2015
 */

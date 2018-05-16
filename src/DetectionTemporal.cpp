@@ -28,7 +28,7 @@
 
 /**
 * \file    DetectionTemporal.cpp
-* \author  Yoan Audureau -- FRIPON-GEOPS-UPSUD
+* \author  Yoan Audureau -- GEOPS-UPSUD
 * \version 1.0
 * \date    12/03/2018
 * \brief   Detection method by temporal movement.

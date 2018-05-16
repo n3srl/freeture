@@ -28,7 +28,7 @@
 
 /**
 * \file    Device.cpp
-* \author  Yoan Audureau -- Chiara Marmo -- FRIPON-GEOPS-UPSUD
+* \author  Yoan Audureau -- Chiara Marmo -- GEOPS-UPSUD
 * \version 1.2
 * \date    19/03/2018
 * \brief
