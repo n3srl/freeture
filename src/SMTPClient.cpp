@@ -6,6 +6,7 @@
 *   This file is part of:   freeture
 *
 *   Copyright:      (C) 2014-2015 Yoan Audureau
+*                       2016-2018 Chiara Marmo
 *                               GEOPS-UPSUD-CNRS
 *
 *   License:        GNU General Public License
@@ -21,15 +22,15 @@
 *   You should have received a copy of the GNU General Public License
 *   along with FreeTure. If not, see <http://www.gnu.org/licenses/>.
 *
-*   Last modified:      20/07/2015
+*   Last modified:      10/12/2018
 *
 *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
 /**
 * \file    SMTPClient.cpp
 * \author  Yoan Audureau -- GEOPS-UPSUD
-* \version 1.0
-* \date    03/12/2014
+* \version 1.3
+* \date    10/12/2018
 * \brief   SMTP connection and send mails.
 */
 
@@ -344,7 +345,7 @@ void SMTPClient::sendMail(  string            server,
                     BOOST_LOG_SEV(logger,notification) << "Initialize SSL connection.";
                     OpenSSL::StaticInitialize sslInitializer;
 
-                    OpenSSL openSSL(socket.GetSocket()->native());
+                    OpenSSL openSSL(socket.GetSocket()->native_handle());
                     BOOST_LOG_SEV(logger,normal) << openSSL.Read(ReceiveFunctor(220));
 
                     BOOST_LOG_SEV(logger,notification) << string("EHLO ") << server;

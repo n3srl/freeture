@@ -23,7 +23,7 @@
 #*	You should have received a copy of the GNU General Public License
 #*	along with FreeTure. If not, see <http://www.gnu.org/licenses/>.
 #*
-#*	Last modified:		19/03/2018
+#*	Last modified:		17/12/2018
 #*
 #*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
@@ -32,7 +32,7 @@ define([AC_CACHE_LOAD],)
 define([AC_CACHE_SAVE],)
 
 AC_PREREQ([2.69])
-AC_INIT([freeture], [1.2-0], [chiara.marmo@u-psud.fr])
+AC_INIT([freeture], [1.3-0], [chiara.marmo@u-psud.fr])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_HEADERS([config.h])
 
