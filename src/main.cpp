@@ -303,11 +303,12 @@ int main(int argc, const char ** argv){
             Device *device = new Device();
             device->listDevices(false);
 
-            if(!device->createCamera(devID, true))
+            if(!device->createCamera(devID, true)){
                 delete device;
-
-            device->getSupportedPixelFormats();
-            delete device;
+            }else{ 
+                device->getSupportedPixelFormats();
+                delete device;
+            }
 
         }else if(vm.count("mode")){
 
