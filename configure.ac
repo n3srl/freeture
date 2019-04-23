@@ -7,7 +7,8 @@
 #*
 #*	This file part of:	FreeTure
 #*
-#*	Copyright:		(C) 2014-2018 Yoan Audureau, Chiara Marmo
+#*	Copyright:		(C) 2014-2018 Yoan Audureau
+#*                                  2014-2019 Chiara Marmo
 #*                              GEOPS-UPSUD-CNRS
 #*
 #*	License:		GNU General Public License
@@ -32,7 +33,7 @@ define([AC_CACHE_LOAD],)
 define([AC_CACHE_SAVE],)
 
 AC_PREREQ([2.69])
-AC_INIT([freeture], [1.3-0], [chiara.marmo@u-psud.fr])
+AC_INIT([freeture], [1.3-1], [chiara.marmo@u-psud.fr])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_HEADERS([config.h])
 
