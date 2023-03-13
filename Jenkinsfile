@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent  {
+        docker { image 'freeture-dev' }
+    }
 
     stages {
         stage('Build') 
