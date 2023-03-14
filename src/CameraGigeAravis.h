@@ -71,7 +71,8 @@
     using namespace cv;
     using namespace std;
 
-    class CameraGigeAravis: public Camera{
+    class CameraGigeAravis: public Camera
+    {
 
         private:
 
@@ -89,9 +90,10 @@
 
             }initializer;
 
-            ArvCamera       *camera;                // Camera to control.
+            GError*         error = nullptr;        // ARAVIS API Error
+            ArvCamera*      camera;                // Camera to control.
             ArvPixelFormat  pixFormat;              // Image format.
-            ArvStream       *stream;                // Object for video stream reception.
+            ArvStream*      stream;                // Object for video stream reception.
             int             mStartX;                // Crop starting X.
             int             mStartY;                // Crop starting Y.
             int             mWidth;                 // Camera region's width.
@@ -102,7 +104,7 @@
             unsigned int    payload;                // Width x height.
             double          exposureMin;            // Camera's minimum exposure time.
             double          exposureMax;            // Camera's maximum exposure time.
-            const char      *capsString;
+            const char*     capsString;
             int             gain;                   // Camera's gain.
             double          exp;                    // Camera's exposure time.
             bool            shiftBitsImage;         // For example : bits are shifted for dmk's frames.

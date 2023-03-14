@@ -1115,7 +1115,7 @@ void CfgParam::loadDetParam() {
                 e = true;
                 param.det.errormsg.push_back("- ACQ_MASK_PATH : Fail to load value.");
             }else {
-                Mat tempmask = imread(param.det.ACQ_MASK_PATH, CV_LOAD_IMAGE_GRAYSCALE);
+                Mat tempmask = imread(param.det.ACQ_MASK_PATH, IMREAD_GRAYSCALE);
 
                 if(!tempmask.data) {
                     e = true;
@@ -1141,20 +1141,20 @@ void CfgParam::loadDetParam() {
                                         for(int i = 0; i < param.vidInput.INPUT_VIDEO_PATH.size(); i++) {
                                             VideoCapture cap = VideoCapture(param.vidInput.INPUT_VIDEO_PATH.at(i));
                                             if(cap.isOpened()) {
-                                                if(cap.get(CV_CAP_PROP_FRAME_HEIGHT) != tempmask.rows) {
+                                                if(cap.get(cv::CAP_PROP_FRAME_HEIGHT) != tempmask.rows) {
                                                     e = true;
                                                     param.det.errormsg.push_back("- ACQ_MASK_PATH : Mask's height (" +
                                                         Conversion::intToString(tempmask.rows) +
                                                         ") is not correct with " + param.vidInput.INPUT_VIDEO_PATH.at(i) + " (" +
-                                                        Conversion::intToString(cap.get(CV_CAP_PROP_FRAME_HEIGHT)) + ")");
+                                                        Conversion::intToString(cap.get(cv::CAP_PROP_FRAME_HEIGHT)) + ")");
                                                 }
 
-                                                if(cap.get(CV_CAP_PROP_FRAME_WIDTH) != tempmask.cols) {
+                                                if(cap.get(cv::CAP_PROP_FRAME_WIDTH) != tempmask.cols) {
                                                     e = true;
                                                     param.det.errormsg.push_back("- ACQ_MASK_PATH : Mask's width (" +
                                                         Conversion::intToString(tempmask.cols) +
                                                         ") is not correct with " + param.vidInput.INPUT_VIDEO_PATH.at(i) + " (" +
-                                                        Conversion::intToString(cap.get(CV_CAP_PROP_FRAME_WIDTH)) + ")");
+                                                        Conversion::intToString(cap.get(cv::CAP_PROP_FRAME_WIDTH)) + ")");
                                                 }
                                             }else{
                                                 e = true;

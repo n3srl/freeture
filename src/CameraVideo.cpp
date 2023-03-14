@@ -106,9 +106,9 @@ bool CameraVideo::loadNextDataSet(string &location){
 
         }
 
-        mFrameHeight = mCap.get(CV_CAP_PROP_FRAME_HEIGHT);
+        mFrameHeight = mCap.get(cv::CAP_PROP_FRAME_HEIGHT);
 
-        mFrameWidth = mCap.get(CV_CAP_PROP_FRAME_WIDTH);
+        mFrameWidth = mCap.get(cv::CAP_PROP_FRAME_WIDTH);
 
         mReadDataStatus = false;
 
@@ -129,20 +129,20 @@ bool CameraVideo::grabImage(Frame &img){
     if(mCap.read(frame)) {
 
         //BGR (3 channels) to G (1 channel)
-        cvtColor(frame, frame, CV_BGR2GRAY);
+        cvtColor(frame, frame, cv::COLOR_BGRA2GRAY);
 
         boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
 
         Frame f = Frame(frame, 0, 0, to_iso_extended_string(time));
 
         img = f;
-        img.mFrameNumber = mCap.get(CV_CAP_PROP_POS_FRAMES);
-        img.mFrameRemaining = mCap.get(CV_CAP_PROP_FRAME_COUNT) - mCap .get(CV_CAP_PROP_POS_FRAMES);
+        img.mFrameNumber = mCap.get(cv::CAP_PROP_POS_FRAMES);
+        img.mFrameRemaining = mCap.get(cv::CAP_PROP_FRAME_COUNT) - mCap .get(cv::CAP_PROP_POS_FRAMES);
         return true;
 
     }
 
-    if(mCap.get(CV_CAP_PROP_FRAME_COUNT) - mCap .get(CV_CAP_PROP_POS_FRAMES) <=0) {
+    if(mCap.get(cv::CAP_PROP_FRAME_COUNT) - mCap .get(cv::CAP_PROP_POS_FRAMES) <=0) {
 
         mVideoID++;
         mReadDataStatus = true;

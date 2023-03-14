@@ -31,8 +31,16 @@
 * \version 1.0
 * \date    03/06/2014
 */
+#include <vector>
+
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/imgcodecs/legacy/constants_c.h>
 
 #include "SaveImg.h"
+
+
+using namespace std;
+using namespace cv;
 
 bool SaveImg::saveJPEG(Mat img, string name){
 

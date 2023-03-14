@@ -34,16 +34,16 @@
 
 #pragma once
 
-#include "opencv2/highgui/highgui.hpp"
-#include <opencv2/imgproc/imgproc.hpp>
 #include <iostream>
+
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "Conversion.h"
 #include "SaveImg.h"
 
-using namespace cv;
-using namespace std;
 
 class Circle {
 
@@ -54,11 +54,11 @@ class Circle {
 
     public :
 
-        Circle(Point center, int radius):mPos(center), mRadius(radius) {
+        Circle(cv::Point center, int radius):mPos(center), mRadius(radius) {
 
         }
 
-        Point getCenter() { return mPos;};
+        cv::Point getCenter() { return mPos;};
         int getRadius() { return mRadius;};
 
         bool computeDiskSurfaceIntersection(    Circle c2,
@@ -68,10 +68,10 @@ class Circle {
                                                 bool enableDebug,
                                                 string debugPath) {
 
-            Mat map;
+            cv::Mat map;
             bool res = false;
             bool displayIntersectedSurface = false;
-            if(enableDebug) map = Mat(480, 640, CV_8UC3, Scalar(0,0,0));
+            if(enableDebug) map = cv::Mat(480, 640, CV_8UC3, Scalar(0,0,0));
 
             surfaceCircle1 = 0.0;
             surfaceCircle2 = 0.0;
@@ -86,19 +86,19 @@ class Circle {
             // No intersections.
             if(distPcNc > c2.getRadius() + mRadius) {
 
-                if(enableDebug) putText(map, "No intersections." , cvPoint(15,15),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
+                if(enableDebug) putText(map, "No intersections." , cv::Point(15,15),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0,0,255), 1, cv::LINE_AA);
                 res = false;
 
             // Circles coincide.
             }else if(distPcNc == 0 && c2.getRadius() == mRadius) {
 
-                if(enableDebug) putText(map, "Circles coincides." , cvPoint(15,15),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
+                if(enableDebug) putText(map, "Circles coincides." , cv::Point(15,15),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0,0,255), 1, cv::LINE_AA);
                 res = true;
 
             // A circle is contained inside the other.
             }else if(distPcNc < abs(c2.getRadius() - mRadius)) {
 
-                if(enableDebug) putText(map, "A circle is contained whithin the other." , cvPoint(15,15),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
+                if(enableDebug) putText(map, "A circle is contained whithin the other." , cv::Point(15,15),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0,0,255), 1, cv::LINE_AA);
                 res = true;
 
             }else {
@@ -131,7 +131,7 @@ class Circle {
                         float resY1 = N - resX1 * ((x0-x1)/(y0-y1));
                         float resY2 = N - resX2 * ((x0-x1)/(y0-y1));
 
-                        if(enableDebug) line(map, Point(resX1,resY1 ), Point(resX2,resY2 ), Scalar(255,255,255), 1, CV_AA);
+                        if(enableDebug) line(map, Point(resX1,resY1 ), Point(resX2,resY2 ), Scalar(255,255,255), 1, cv::LINE_AA);
 
                         // Circle1 more inside the other
                         if(distPcNc > abs(c2.getRadius() - mRadius) && distPcNc < c2.getRadius() && c2.getRadius() > mRadius) {
@@ -221,7 +221,7 @@ class Circle {
                         float resX1 = (pow(R1,2) - pow(R0,2) - pow(x1,2) + pow(x0,2) - pow(y1,2) + pow(y0,2))/(2*(x0-x1));
                         float resX2 = (pow(R1,2) - pow(R0,2) - pow(x1,2) + pow(x0,2) - pow(y1,2) + pow(y0,2))/(2*(x0-x1));
 
-                        if(enableDebug) line(map, Point(resX1,resY1 ), Point(resX2,resY2 ), Scalar(255,255,255), 1, CV_AA);
+                        if(enableDebug) line(map, Point(resX1,resY1 ), Point(resX2,resY2 ), Scalar(255,255,255), 1, cv::LINE_AA);
 
                         // Circle neg more inside the other
                         if(distPcNc > abs(c2.getRadius() - mRadius) && distPcNc < c2.getRadius() && c2.getRadius() > mRadius) {
@@ -299,11 +299,11 @@ class Circle {
 
             if(enableDebug && displayIntersectedSurface) {
 
-                putText(map, "Intersected surface : " , cvPoint(15,15),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
+                putText(map, "Intersected surface : " , cv::Point(15,15),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0,0,255), 1, cv::LINE_AA);
                 string msg1 = "- Green circle : " + Conversion::floatToString((intersectedSurface * 100) / surfaceCircle1) + "%" ;
-                putText(map, msg1 , cvPoint(15,30),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
+                putText(map, msg1 , cv::Point(15,30),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0,0,255), 1, cv::LINE_AA);
                 string msg2 = "- Red circle : " + Conversion::floatToString((intersectedSurface * 100) / surfaceCircle2)+ "%";
-                putText(map, msg2 , cvPoint(15,45),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0,0,255), 1, CV_AA);
+                putText(map, msg2 , cv::Point(15,45),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0,0,255), 1, cv::LINE_AA);
 
             }
 

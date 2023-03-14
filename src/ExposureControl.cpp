@@ -274,9 +274,9 @@ bool ExposureControl::controlExposureTime(Device *camera, Mat image, TimeDate::D
 
                             if(saveFrame.type() == CV_16U) saveFrame = Conversion::convertTo8UC1(saveFrame);
 
-                            putText(saveFrame, "BEFORE EC -> MSV : " + Conversion::floatToString(msv), cvPoint(20,20),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(255), 1, CV_AA);
+                            putText(saveFrame, "BEFORE EC -> MSV : " + Conversion::floatToString(msv), cv::Point(20,20),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(255), 1, cv::LINE_AA);
 
-                            putText(saveFrame, "EXP : ? " /*Conversion::intToString(camera->mCam->getExposureTime())*/, cvPoint(20,40),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(255), 1, CV_AA);
+                            putText(saveFrame, "EXP : ? " /*Conversion::intToString(camera->mCam->getExposureTime())*/, cv::Point(20,40),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(255), 1, cv::LINE_AA);
 
                             if(checkDataLocation(imageDate))
                                 SaveImg::saveBMP(saveFrame, finalDataLocation + "expControl_" + TimeDate::getYYYYMMDDThhmmss(imageDate) + "_before");
@@ -541,9 +541,9 @@ bool ExposureControl::controlExposureTime(Device *camera, Mat image, TimeDate::D
 
                                 if(saveFrame.type() == CV_16U) saveFrame = Conversion::convertTo8UC1(saveFrame);
 
-                                putText(saveFrame, "AFTER EC -> MSV : " + Conversion::floatToString(msv), cvPoint(20,20),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(255), 1, CV_AA);
+                                putText(saveFrame, "AFTER EC -> MSV : " + Conversion::floatToString(msv), cv::Point(20,20),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(255), 1, cv::LINE_AA);
 
-                                putText(saveFrame, "EXP : " + Conversion::intToString(finalExposureTime), cvPoint(20,40),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(255), 1, CV_AA);
+                                putText(saveFrame, "EXP : " + Conversion::intToString(finalExposureTime), cv::Point(20,40),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(255), 1, cv::LINE_AA);
 
                                 if(checkDataLocation(imageDate))
                                     SaveImg::saveBMP(saveFrame, finalDataLocation + "expControl_" + TimeDate::getYYYYMMDDThhmmss(imageDate) + "_after" );

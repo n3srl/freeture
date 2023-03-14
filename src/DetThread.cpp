@@ -563,7 +563,7 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
     VideoWriter *video = NULL;
 
     if(mdtp.DET_SAVE_AVI) {
-        video = new VideoWriter(mEventPath + "video.avi", CV_FOURCC('M', 'J', 'P', 'G'), 5, Size(static_cast<int>(frameBuffer->front().mImg.cols), static_cast<int>(frameBuffer->front().mImg.rows)), false);
+        video = new VideoWriter(mEventPath + "video.avi", VideoWriter::fourcc('M', 'J', 'P', 'G'), 5, Size(static_cast<int>(frameBuffer->front().mImg.cols), static_cast<int>(frameBuffer->front().mImg.rows)), false);
     }
 
     // Init fits 3D.

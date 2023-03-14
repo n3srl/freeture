@@ -32,7 +32,10 @@
 * \date    26/11/2014
 */
 
+#include <opencv2/imgcodecs.hpp>
+
 #include "Mask.h"
+
 
 Mask::Mask(int timeInterval, bool customMask, string customMaskPath, bool downsampleMask, CamPixFmt format, bool updateMask):
 mUpdateInterval(timeInterval), mUpdateMask(updateMask) {
@@ -45,7 +48,7 @@ mUpdateInterval(timeInterval), mUpdateMask(updateMask) {
     // Load a mask from file.
     if(customMask) {
 
-        mOriginalMask = imread(customMaskPath, CV_LOAD_IMAGE_GRAYSCALE);
+        mOriginalMask = imread(customMaskPath, cv::ImreadModes::IMREAD_GRAYSCALE);
         //SaveImg::saveJPEG(mOriginalMask, "/home/mOriginalMask");
         if(!mOriginalMask.data)
             throw "Fail to load the mask from its path.";

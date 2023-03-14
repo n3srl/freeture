@@ -34,11 +34,9 @@
 
 #pragma once
 
-#include "opencv2/highgui/highgui.hpp"
-#include <opencv2/imgproc/imgproc.hpp>
+#include <string>
+#include <opencv2/core/mat.hpp>
 
-using namespace std;
-using namespace cv;
 
 class SaveImg{
 
@@ -52,7 +50,7 @@ class SaveImg{
         * @param name Path and name of the file to save.
         * @return Success status to save image.
         */
-        static bool saveJPEG(Mat img, string name);
+        static bool saveJPEG(cv::Mat img, std::string name);
 
 
         /**
@@ -62,7 +60,7 @@ class SaveImg{
         * @param name Path and name of the file to save.
         * @return Success status to save image.
         */
-        static bool saveBMP(Mat img, string name);
+        static bool saveBMP(cv::Mat img, std::string name);
 
 
         /**
@@ -72,6 +70,6 @@ class SaveImg{
         * @param name Path and name of the file to save.
         * @return Success status to save image.
         */
-        static bool savePNG(Mat img, string name);
+        static bool savePNG(cv::Mat img, std::string name);
 
 };
