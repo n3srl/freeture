@@ -35,13 +35,7 @@
 
 #pragma once
 
-#include <sstream>
-#include <algorithm>
-#include <boost/archive/iterators/base64_from_binary.hpp>
-#include <boost/archive/iterators/transform_width.hpp>
-#include <boost/archive/iterators/ostream_iterator.hpp>
-
-using namespace std;
+#include <string>
 
 class Base64 {
 
@@ -63,8 +57,6 @@ class Base64 {
          * @param data String to encode.
          * @return Encoded string.
          */
-        static string encodeBase64(string data);
+        static std::string encodeBase64(std::string data);
 
 };
-
-

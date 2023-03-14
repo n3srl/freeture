@@ -52,9 +52,6 @@
 #include "Fits2D.h"
 #include "SParam.h"
 
-using namespace cv;
-using namespace std;
-
 class AcqThread {
 
     private :

@@ -35,6 +35,10 @@
 
 #include "AcqThread.h"
 
+using namespace cv;
+using namespace std;
+
+
 boost::log::sources::severity_logger< LogSeverityLevel >  AcqThread::logger;
 
 AcqThread::Init AcqThread::initializer;
