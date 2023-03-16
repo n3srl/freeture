@@ -1,23 +1,28 @@
+
 #include "CameraGigeAravis.h"
+
 
 class ErrorManager
 {
     public:
-        static void CheckAravisError(GError** error)
+        static void CheckAravisError(GError** gError)
         {
-            if (error!=nullptr)
+
+            if (gError!=nullptr)
             {
+                GError* gError_ptr = *gError;
+
                 //todo: log error
 
-                if (*error != nullptr)
+                if ( gError_ptr != nullptr)
                 {
-                    delete *error;
-                    *error = nullptr;
+                    GError& _error = *gError_ptr;
+                    cout  << "> GError - Domain: " << _error.domain << ", code: "<<_error.code << ", message: "<<_error.message  << endl;
+                    //BOOST_LOG_SEV(m_Logger, error) << "> GError - Domain: " << _error.domain << ", code: "<<_error.code << ", message: "<<_error.message;
+                    delete gError_ptr;
+                    gError_ptr= nullptr;
                 }
             }
         }
 
-    protected:
-
-    private:
 };

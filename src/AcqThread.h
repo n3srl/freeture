@@ -74,7 +74,7 @@ class AcqThread {
         boost::mutex        mMustStopMutex;
         boost::thread       *mThread;               // Acquisition thread.
         bool                mThreadTerminated;      // Terminated status of the thread.
-        Device              *mDevice;               // Device used for acquisition.
+        freeture::Device    *mDevice;               // Device used for acquisition.
         int                 mDeviceID;              // Index of the device to use.
         scheduleParam       mNextAcq;               // Next scheduled acquisition.
         int                 mNextAcqIndex;

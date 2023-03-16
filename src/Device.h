@@ -79,9 +79,9 @@
 #include "ECamSdkType.h"
 #include "SParam.h"
 
-using namespace boost::filesystem;
-using namespace cv;
-using namespace std;
+namespace freeture
+{
+
 
 class Device {
 
@@ -133,6 +133,8 @@ class Device {
         InputDeviceType mDeviceType;
         double      mMinExposureTime;
         double      mMaxExposureTime;
+        double      mMinFPS;
+        double      mMaxFPS;
         int         mMinGain;
         int         mMaxGain;
         //int         mNbFrame;
@@ -175,6 +177,10 @@ class Device {
 
         void getCameraExposureBounds();
 
+        bool getCameraFPSBounds(double &min, double &max);
+
+        void getCameraFPSBounds();
+
         bool getDeviceName();
 
         bool recreateCamera();
@@ -192,6 +198,8 @@ class Device {
         bool setCameraExposureTime(double value);
 
         bool setCameraGain(int value);
+
+        bool setCameraFPS(double value);
 
         bool setCameraFPS();
 
@@ -225,3 +233,4 @@ class Device {
         bool createDevicesWith(CamSdkType sdk);
 
 };
+}

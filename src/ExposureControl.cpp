@@ -216,7 +216,7 @@ float ExposureControl::computeMSV(){
 
 }
 
-bool ExposureControl::controlExposureTime(Device *camera, Mat image, TimeDate::Date imageDate, Mat mask, double minExposureTime, double fps){
+bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, TimeDate::Date imageDate, Mat mask, double minExposureTime, double fps){
 
     try {
 

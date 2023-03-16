@@ -35,105 +35,84 @@
 
 #pragma once
 
-#include <fstream>
-#include <string>
-#include <iostream>
-#include <map>
-#include <boost/filesystem.hpp>
-#include "opencv2/highgui/highgui.hpp"
-#include <opencv2/imgproc/imgproc.hpp>
-#include <stdlib.h>
-#include "ECamPixFmt.h"
-#include "ETimeMode.h"
-#include "EImgFormat.h"
-#include "EDetMeth.h"
-#include "ELogSeverityLevel.h"
-#include "EStackMeth.h"
-#include "ESmtpSecurity.h"
-#include <vector>
-#include "CfgLoader.h"
-#include "Device.h"
 #include "EInputDeviceType.h"
-#include "SParam.h"
-#include "ECamSdkType.h"
+#include "CfgParam.h"
+#include <vector>
 
-using namespace boost::filesystem;
-using namespace std;
-using namespace cv;
+namespace freeture {
 
-class CfgParam{
+    class CfgParam{
 
-    private :
+        private :
+            static class Init {
 
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
+                public :
 
-        static class Init {
+                    Init() {
 
-            public :
+                        m_Logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CfgParam"));
 
-                Init() {
+                    }
 
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CfgParam"));
+            }initializer;
 
-                }
+            static boost::log::sources::severity_logger< LogSeverityLevel > m_Logger;
+            std::vector<string> m_EMsg;
 
-        }initializer;
+            CfgLoader m_Cfg;
+            parameters m_Param;
+            InputDeviceType m_InputType;
 
-        CfgLoader cfg;
-        parameters param;
+            void loadDeviceID();
+            void loadDataParam();
+            void loadLogParam();
+            void loadFramesParam();
+            void loadVidParam();
+            void loadCamParam();
+            void loadDetParam();
+            void loadStackParam();
+            void loadStationParam();
+            void loadFitskeysParam();
+            void loadMailParam();
 
-        InputDeviceType inputType;
 
-        void loadDeviceID();
-        void loadDataParam();
-        void loadLogParam();
-        void loadFramesParam();
-        void loadVidParam();
-        void loadCamParam();
-        void loadDetParam();
-        void loadStackParam();
-        void loadStationParam();
-        void loadFitskeysParam();
-        void loadMailParam();
 
-        vector<string> emsg;
+        public :
 
-    public :
+            bool showErrors;
 
-        bool showErrors;
+            /**
+             * Constructor.
+             *
+             */
+            CfgParam(string cfgFilePath);
 
-        /**
-         * Constructor.
-         *
-         */
-        CfgParam(string cfgFilePath);
+            int             getDeviceID();
+            dataParam       getDataParam();
+            logParam        getLogParam();
+            framesParam     getFramesParam();
+            videoParam      getVidParam();
+            cameraParam     getCamParam();
+            detectionParam  getDetParam();
+            stackParam      getStackParam();
+            stationParam    getStationParam();
+            fitskeysParam   getFitskeysParam();
+            mailParam       getMailParam();
+            parameters      getAllParam();
 
-        int             getDeviceID();
-        dataParam       getDataParam();
-        logParam        getLogParam();
-        framesParam     getFramesParam();
-        videoParam      getVidParam();
-        cameraParam     getCamParam();
-        detectionParam  getDetParam();
-        stackParam      getStackParam();
-        stationParam    getStationParam();
-        fitskeysParam   getFitskeysParam();
-        mailParam       getMailParam();
-        parameters      getAllParam();
+            bool deviceIdIsCorrect();
+            bool dataParamIsCorrect();
+            bool logParamIsCorrect();
+            bool framesParamIsCorrect();
+            bool vidParamIsCorrect();
+            bool camParamIsCorrect();
+            bool detParamIsCorrect();
+            bool stackParamIsCorrect();
+            bool stationParamIsCorrect();
+            bool fitskeysParamIsCorrect();
+            bool mailParamIsCorrect();
+            bool allParamAreCorrect();
+            bool inputIsCorrect();
 
-        bool deviceIdIsCorrect();
-        bool dataParamIsCorrect();
-        bool logParamIsCorrect();
-        bool framesParamIsCorrect();
-        bool vidParamIsCorrect();
-        bool camParamIsCorrect();
-        bool detParamIsCorrect();
-        bool stackParamIsCorrect();
-        bool stationParamIsCorrect();
-        bool fitskeysParamIsCorrect();
-        bool mailParamIsCorrect();
-        bool allParamAreCorrect();
-        bool inputIsCorrect();
-
-};
-
+    };
+}

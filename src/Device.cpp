@@ -33,14 +33,21 @@
 * \date    19/03/2018
 * \brief
 */
+#include <regex>
 
 #include "Device.h"
 
-boost::log::sources::severity_logger< LogSeverityLevel >  Device::logger;
+#include "CameraLucidArena_PHX016S.h"
 
-Device::Init Device::initializer;
+using namespace boost::filesystem;
+using namespace cv;
+using namespace std;
 
-Device::Device(cameraParam cp, framesParam fp, videoParam vp, int cid) {
+boost::log::sources::severity_logger< LogSeverityLevel >  freeture::Device::logger;
+
+freeture::Device::Init freeture::Device::initializer;
+
+freeture::Device::Device(cameraParam cp, framesParam fp, videoParam vp, int cid) {
 
     mCam        = NULL;
     mCamID      = 0;
@@ -70,7 +77,7 @@ Device::Device(cameraParam cp, framesParam fp, videoParam vp, int cid) {
     //mNbFrame = 0;
 }
 
-Device::Device() {
+freeture::Device::Device() {
 
     mFormat         = MONO8;
     mNightExposure  = 0;
@@ -102,14 +109,14 @@ Device::Device() {
 
 }
 
-Device::~Device(){
+freeture::Device::~Device(){
 
     if(mCam != NULL)
         delete mCam;
 
 }
 
-bool Device::createCamera(int id, bool create) {
+bool freeture::Device::createCamera(int id, bool create) {
 
     if(id >=0 && id < mDevices.size()) {
 
@@ -141,7 +148,7 @@ bool Device::createCamera(int id, bool create) {
 
 }
 
-bool Device::createCamera() {
+bool freeture::Device::createCamera() {
 
     if(mGenCamID >=0 && mGenCamID < mDevices.size()) {
 
@@ -168,7 +175,7 @@ bool Device::createCamera() {
 
 }
 
-bool Device::recreateCamera() {
+bool freeture::Device::recreateCamera() {
 
     if(mGenCamID >=0 && mGenCamID < mDevices.size()) {
 
@@ -191,13 +198,13 @@ bool Device::recreateCamera() {
 
 }
 
-void Device::setVerbose(bool status) {
+void freeture::Device::setVerbose(bool status) {
 
     mVerbose = status;
 
 }
 
-CamSdkType Device::getDeviceSdk(int id){
+CamSdkType freeture::Device::getDeviceSdk(int id){
 
     if(id >=0 && id < mDevices.size()) {
         return mDevices.at(id).second.second;
@@ -207,7 +214,7 @@ CamSdkType Device::getDeviceSdk(int id){
 
 }
 
-bool Device::createDevicesWith(CamSdkType sdk) {
+bool freeture::Device::createDevicesWith(CamSdkType sdk) {
 
     switch(sdk) {
 
@@ -265,6 +272,15 @@ bool Device::createDevicesWith(CamSdkType sdk) {
 
             break;
 
+        case LUCID_ARENA :
+
+            {
+                #ifdef LINUX
+                    mCam = new CameraLucidArena_PHX016S(mShiftBits);
+                #endif
+            }
+
+            break;
         case PYLONGIGE :
 
             {
@@ -295,7 +311,7 @@ bool Device::createDevicesWith(CamSdkType sdk) {
 
 }
 
-InputDeviceType Device::getDeviceType(CamSdkType t) {
+InputDeviceType freeture::Device::getDeviceType(CamSdkType t) {
 
     switch(t){
 
@@ -310,6 +326,7 @@ InputDeviceType Device::getDeviceType(CamSdkType t) {
         case V4L2 :
         case VIDEOINPUT :
         case ARAVIS :
+        case LUCID_ARENA :
         case PYLONGIGE :
         case TIS :
             return CAMERA;
@@ -323,7 +340,7 @@ InputDeviceType Device::getDeviceType(CamSdkType t) {
     return UNDEFINED_INPUT_TYPE;
 }
 
-void Device::listDevices(bool printInfos) {
+void freeture::Device::listDevices(bool printInfos) {
 
     int nbCam = 0;
     mNbDev = 0;
@@ -387,11 +404,31 @@ void Device::listDevices(bool printInfos) {
 
         createDevicesWith(ARAVIS);
         listCams = mCam->getCamerasList();
-        for(int i = 0; i < listCams.size(); i++) {
-            elem.first = mNbDev; elem.second = ARAVIS;
-            subElem.first = listCams.at(i).first; subElem.second = elem;
+        for(int i = 0; i < listCams.size(); i++)
+        {
+
+            elem.first = mNbDev;
+            subElem.first = listCams.at(i).first;
+
+
+            string lucid ("Lucid Vision Labs-PHX");
+
+            string camera_name =  listCams.at(i).second;
+
+            if (camera_name.find(lucid) != std::string::npos )
+            {
+                elem.second = LUCID_ARENA;
+                camera_name = std::regex_replace(camera_name, std::regex("ARAVIS"), "LUCID_ARENA"); // replace 'ARAVIS' -> 'LUCID_ARENA'
+            }
+            else
+            {
+                elem.second = ARAVIS;
+            }
+
+            subElem.second = elem;
+
             mDevices.push_back(subElem);
-            if(printInfos) cout << "[" << mNbDev << "]    " << listCams.at(i).second << endl;
+            if(printInfos) cout << "[" << mNbDev << "]    " << camera_name << endl;
             mNbDev++;
         }
         delete mCam;
@@ -431,13 +468,13 @@ void Device::listDevices(bool printInfos) {
 
 }
 
-bool Device::getDeviceName() {
+bool freeture::Device::getDeviceName() {
 
     return mCam->getCameraName();
 
 }
 
-bool Device::setCameraPixelFormat() {
+bool freeture::Device::setCameraPixelFormat() {
 
     if(!mCam->setPixelFormat(mFormat)){
         mCam->grabCleanse();
@@ -448,7 +485,7 @@ bool Device::setCameraPixelFormat() {
     return true;
 }
 
-bool Device::getSupportedPixelFormats() {
+bool freeture::Device::getSupportedPixelFormats() {
 
 
     mCam->getAvailablePixelFormats();
@@ -456,37 +493,50 @@ bool Device::getSupportedPixelFormats() {
 
 }
 
-InputDeviceType Device::getDeviceType() {
+InputDeviceType freeture::Device::getDeviceType() {
 
     return mCam->getDeviceType();
 
 }
 
-bool Device::getCameraExposureBounds(double &min, double &max) {
+bool freeture::Device::getCameraExposureBounds(double &min, double &max) {
 
     mCam->getExposureBounds(min, max);
     return true;
 }
 
-void Device::getCameraExposureBounds() {
+void freeture::Device::getCameraExposureBounds() {
 
     mCam->getExposureBounds(mMinExposureTime, mMaxExposureTime);
 
 }
 
-bool Device::getCameraGainBounds(int &min, int &max) {
+bool freeture::Device::getCameraFPSBounds(double &min, double &max) {
+
+    mCam->getFPSBounds(min, max);
+    return true;
+}
+
+void freeture::Device::getCameraFPSBounds() {
+
+    mCam->getExposureBounds(mMinFPS, mMaxFPS);
+
+}
+
+
+bool freeture::Device::getCameraGainBounds(int &min, int &max) {
 
     mCam->getGainBounds(min, max);
     return true;
 }
 
-void Device::getCameraGainBounds() {
+void freeture::Device::getCameraGainBounds() {
 
     mCam->getGainBounds(mMinGain, mMaxGain);
 
 }
 
-bool Device::setCameraNightExposureTime() {
+bool freeture::Device::setCameraNightExposureTime() {
 
     if(!mCam->setExposureTime(mNightExposure)) {
         BOOST_LOG_SEV(logger, fail) << "Fail to set night exposure time to " << mNightExposure;
@@ -498,7 +548,7 @@ bool Device::setCameraNightExposureTime() {
 
 }
 
-bool Device::setCameraDayExposureTime() {
+bool freeture::Device::setCameraDayExposureTime() {
 
     if(!mCam->setExposureTime(mDayExposure)) {
         BOOST_LOG_SEV(logger, fail) << "Fail to set day exposure time to " << mDayExposure;
@@ -510,7 +560,7 @@ bool Device::setCameraDayExposureTime() {
 
 }
 
-bool Device::setCameraNightGain() {
+bool freeture::Device::setCameraNightGain() {
 
     if(!mCam->setGain(mNightGain)) {
         BOOST_LOG_SEV(logger, fail) << "Fail to set night gain to " << mNightGain;
@@ -522,7 +572,7 @@ bool Device::setCameraNightGain() {
 
 }
 
-bool Device::setCameraDayGain() {
+bool freeture::Device::setCameraDayGain() {
 
     if(!mCam->setGain(mDayGain)) {
         BOOST_LOG_SEV(logger, fail) << "Fail to set day gain to " << mDayGain;
@@ -534,7 +584,20 @@ bool Device::setCameraDayGain() {
 
 }
 
-bool Device::setCameraExposureTime(double value) {
+bool freeture::Device::setCameraFPS(double value) {
+
+    if(!mCam->setFPS(value)) {
+        BOOST_LOG_SEV(logger, fail) << "Fail to set fps to " << value;
+        mCam->grabCleanse();
+        return false;
+    }
+
+    return true;
+
+}
+
+
+bool freeture::Device::setCameraExposureTime(double value) {
 
     if(!mCam->setExposureTime(value)) {
         BOOST_LOG_SEV(logger, fail) << "Fail to set exposure time to " << value;
@@ -546,7 +609,7 @@ bool Device::setCameraExposureTime(double value) {
 
 }
 
-bool Device::setCameraGain(int value) {
+bool freeture::Device::setCameraGain(int value) {
 
     if(!mCam->setGain(value)) {
         BOOST_LOG_SEV(logger, fail) << "Fail to set gain to " << value;
@@ -558,7 +621,7 @@ bool Device::setCameraGain(int value) {
 
 }
 
-bool Device::setCameraFPS() {
+bool freeture::Device::setCameraFPS() {
 
     if(!mCam->setFPS(mFPS)) {
         BOOST_LOG_SEV(logger, fail) << "Fail to set FPS to " << mFPS;
@@ -570,7 +633,7 @@ bool Device::setCameraFPS() {
 
 }
 
-bool Device::initializeCamera() {
+bool freeture::Device::initializeCamera() {
 
     if(!mCam->grabInitialization()){
         BOOST_LOG_SEV(logger, fail) << "Fail to initialize camera.";
@@ -582,7 +645,7 @@ bool Device::initializeCamera() {
 
 }
 
-bool Device::startCamera() {
+bool freeture::Device::startCamera() {
 
     BOOST_LOG_SEV(logger, notification) << "Starting camera...";
     if(!mCam->acqStart())
@@ -592,7 +655,7 @@ bool Device::startCamera() {
 
 }
 
-bool Device::stopCamera() {
+bool freeture::Device::stopCamera() {
 
     BOOST_LOG_SEV(logger, notification) << "Stopping camera...";
     mCam->acqStop();
@@ -601,7 +664,7 @@ bool Device::stopCamera() {
 
 }
 
-bool Device::runContinuousCapture(Frame &img) {
+bool freeture::Device::runContinuousCapture(Frame &img) {
 
     if(mCam->grabImage(img)) {
         //img.mFrameNumber = mNbFrame;
@@ -613,7 +676,7 @@ bool Device::runContinuousCapture(Frame &img) {
 
 }
 
-bool Device::runSingleCapture(Frame &img) {
+bool freeture::Device::runSingleCapture(Frame &img) {
 
     if(mCam->grabSingleImage(img, mCamID))
         return true;
@@ -622,7 +685,7 @@ bool Device::runSingleCapture(Frame &img) {
 
 }
 
-bool Device::setCameraSize() {
+bool freeture::Device::setCameraSize() {
 
     if(!mCam->setSize(mStartX, mStartY, mSizeWidth, mSizeHeight, mCustomSize)) {
         BOOST_LOG_SEV(logger, fail) << "Fail to set camera size.";
@@ -633,7 +696,7 @@ bool Device::setCameraSize() {
 
 }
 
-bool Device::setCameraSize(int x, int y, int w, int h) {
+bool freeture::Device::setCameraSize(int x, int y, int w, int h) {
 
     if(!mCam->setSize(x, y, w, h, true)) {
         BOOST_LOG_SEV(logger, fail) << "Fail to set camera size.";
@@ -644,7 +707,7 @@ bool Device::setCameraSize(int x, int y, int w, int h) {
 
 }
 
-bool Device::getCameraFPS(double &fps) {
+bool freeture::Device::getCameraFPS(double &fps) {
 
     if(!mCam->getFPS(fps)) {
         //BOOST_LOG_SEV(logger, fail) << "Fail to get fps value from camera.";
@@ -655,31 +718,31 @@ bool Device::getCameraFPS(double &fps) {
 
 }
 
-bool Device::getCameraStatus() {
+bool freeture::Device::getCameraStatus() {
 
     return mCam->getStopStatus();
 
 }
 
-bool Device::getCameraDataSetStatus() {
+bool freeture::Device::getCameraDataSetStatus() {
 
     return mCam->getDataSetStatus();
 
 }
 
-bool Device::loadNextCameraDataSet(string &location) {
+bool freeture::Device::loadNextCameraDataSet(string &location) {
 
     return mCam->loadNextDataSet(location);
 
 }
 
-bool Device::getExposureStatus() {
+bool freeture::Device::getExposureStatus() {
 
     return mCam->mExposureAvailable;
 
 }
 
-bool Device::getGainStatus() {
+bool freeture::Device::getGainStatus() {
 
     return mCam->mGainAvailable;
 

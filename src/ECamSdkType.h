@@ -30,6 +30,7 @@
 enum CamSdkType{
 
     ARAVIS,
+    LUCID_ARENA,
     PYLONGIGE,
     TIS,
     VIDEOFILE,

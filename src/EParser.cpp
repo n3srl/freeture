@@ -109,6 +109,7 @@ template<> EParser<ImgFormat>::EParser() {
 template<> EParser<CamSdkType>::EParser() {
 
     enumMap["ARAVIS"]        = ARAVIS;
+    enumMap["LUCID_ARENA"]   = LUCID_ARENA;
     enumMap["PYLONGIGE"]     = PYLONGIGE;
     enumMap["TIS"]           = TIS;
     enumMap["VIDEOFILE"]     = VIDEOFILE;

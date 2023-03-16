@@ -37,7 +37,7 @@
 
 using namespace cv;
 using namespace std;
-
+using namespace freeture;
 
 boost::log::sources::severity_logger< LogSeverityLevel >  AcqThread::logger;
 
@@ -1118,6 +1118,7 @@ bool AcqThread::prepareAcquisitionOnDevice() {
         return false;
 
     // LOAD GET BOUNDS
+    mDevice->getCameraFPSBounds();
     mDevice->getCameraExposureBounds();
     mDevice->getCameraGainBounds();
 

@@ -4,12 +4,13 @@ cmake_minimum_required(VERSION 2.6)
 project(freeture)
 #------------------------------------------------
 # The version number.
-set(VERSION 1.1.0)
+set(VERSION 1.1.337)
 # Configuration file default path
 set(CFG_PATH /usr/local/share/freeture/ )
 #------------------------------------------------
 # Executable name.
-set(EXE_NAME FreeTure)
+set(EXE_NAME freeture)
+
 #------------------------------------------------
 # Sources.
 file(
@@ -21,6 +22,8 @@ message("> SOURCES : " ${SRC_FILES})
 #------------------------------------------------
 # To see the command line CMake produces :
 set(CMAKE_VERBOSE_MAKEFILE on)
+set(CMAKE_BUILD_TYPE Debug)
+
 #------------------------------------------------
 # Output path.
 set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})

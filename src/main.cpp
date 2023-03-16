@@ -112,6 +112,7 @@ namespace keywords  = boost::log::keywords;
 
 using boost::shared_ptr;
 using namespace std;
+using namespace freeture;
 
 bool sigTermFlag = false;
 

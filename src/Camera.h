@@ -168,6 +168,14 @@ class Camera {
         * @param eMax Return maximum exposure time value.
         */
         virtual void getExposureBounds(double &eMin, double &eMax) {};
+        /**
+        * Get device's frame acquisition bounds.
+        *
+        * @param eMin Return minimum frame acquisition value.
+        * @param eMax Return maximum frame acquisition value.
+        */
+        virtual void getFPSBounds(double &fMin, double &fMax) {};
+
 
         /**
         * Get device's gain bounds.
