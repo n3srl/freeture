@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<FileVersion major="1" minor="0" />
+	<ActiveTarget name="freeture" />
+	<File name="../src/SaveImg.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1221" topLine="5" />
+		</Cursor>
+	</File>
+	<File name="../src/CameraGigeAravis.h" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3718" topLine="62" />
+		</Cursor>
+	</File>
+	<File name="../src/ErrorManager.cpp" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="224" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../src/EParser.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3028" topLine="83" />
+		</Cursor>
+	</File>
+	<File name="../src/EInputDeviceType.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1086" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../src/SParam.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="8231" topLine="262" />
+		</Cursor>
+	</File>
+	<File name="../src/CameraFrames.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="8827" topLine="290" />
+		</Cursor>
+	</File>
+	<File name="../src/sdk/ArenaSDK/Arena/ArenaApi.h" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="889" topLine="1" />
+		</Cursor>
+	</File>
+	<File name="../src/SaveImg.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1222" topLine="25" />
+		</Cursor>
+	</File>
+	<File name="../src/CameraLucidArena.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1364" topLine="6" />
+		</Cursor>
+	</File>
+	<File name="../src/CameraFrames.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3045" topLine="84" />
+		</Cursor>
+	</File>
+	<File name="../src/Camera.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3322" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../src/CameraLucidArena.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1628" topLine="62" />
+		</Cursor>
+	</File>
+	<File name="../src/CameraLucidArena_PHX016S.cpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="42763" topLine="1196" />
+		</Cursor>
+	</File>
+	<File name="../src/Stack.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="10625" topLine="274" />
+		</Cursor>
+	</File>
+	<File name="../src/ExposureControl.cpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="20525" topLine="516" />
+		</Cursor>
+	</File>
+	<File name="../src/CameraLucidArena_PHX016S.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="211" topLine="4" />
+		</Cursor>
+	</File>
+	<File name="../src/Mask.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1206" topLine="21" />
+		</Cursor>
+	</File>
+	<File name="../src/Device.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2686" topLine="89" />
+		</Cursor>
+	</File>
+	<File name="../src/CameraV4l2.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="25200" topLine="857" />
+		</Cursor>
+	</File>
+	<File name="../src/CameraV4l2.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3857" topLine="132" />
+		</Cursor>
+	</File>
+	<File name="../src/CameraVideo.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3185" topLine="102" />
+		</Cursor>
+	</File>
+	<File name="../src/CameraVideo.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2926" topLine="96" />
+		</Cursor>
+	</File>
+	<File name="Modules/FindGLIB2.cmake" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="695" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../src/CfgParam.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="4" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6615" topLine="211" />
+		</Cursor>
+	</File>
+	<File name="../src/CfgParam.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2434" topLine="73" />
+		</Cursor>
+	</File>
+	<File name="../src/AcqThread.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="40650" topLine="1083" />
+		</Cursor>
+	</File>
+	<File name="CMakeLists.txt" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="10029" topLine="267" />
+		</Cursor>
+	</File>
+	<File name="../src/Circle.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="12687" topLine="276" />
+		</Cursor>
+	</File>
+	<File name="../src/main.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="12774" topLine="260" />
+		</Cursor>
+		<Folding>
+			<Collapse line="185" />
+			<Collapse line="320" />
+			<Collapse line="328" />
+			<Collapse line="347" />
+		</Folding>
+	</File>
+	<File name="../src/DetThread.cpp" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="19583" topLine="533" />
+		</Cursor>
+	</File>
+	<File name="../src/EParser.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1617" topLine="77" />
+		</Cursor>
+	</File>
+	<File name="../src/ECamSdkType.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1101" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="../src/CameraGigeAravis.cpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1551" topLine="27" />
+		</Cursor>
+	</File>
+	<File name="../src/Device.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="10713" topLine="400" />
+		</Cursor>
+	</File>
+</CodeBlocks_layout_file>

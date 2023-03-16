@@ -290,6 +290,21 @@ ELSE(${OperatingSystem} MATCHES "Windows")
 	#link_directories(${OPENSSL_LIBRARY_DIRS})
 	target_link_libraries(${EXE_NAME} ${V4L2_LIBRARIES})
 
+
+	#ARENA SDK
+	message("> Searching ArenaSDK...")
+    include(FindArenaSDK)
+	find_package( ArenaSDK REQUIRED)
+	message ("ARENASDK_FOUND : " ${ARENASDK_FOUND})
+	message ("ARENASDK_INCLUDE_DIR : " ${ARENASDK_INCLUDE_DIR})
+	message ("ARENASDK_LIBRARIES : " ${ARENASDK_LIBRARIES})
+	message ("ARENASDK_LIBRARY : " ${ARENASDK_LIBRARY})
+	include_directories(${ARENASDK_INCLUDE_DIR})
+	#link_directories(${OPENSSL_LIBRARY_DIRS})
+	target_link_libraries(${EXE_NAME} ${ARENASDK_LIBRARIES})
+
+
+
 	ENDIF(${OperatingSystem} MATCHES "Linux")
 ENDIF(${OperatingSystem} MATCHES "Windows")
 

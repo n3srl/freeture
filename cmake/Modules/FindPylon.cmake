@@ -22,7 +22,7 @@ ENDIF(${OperatingSystem} MATCHES "Windows")
 
 FIND_PATH(	PYLON_INCLUDE_DIR pylon/PylonBase.h
 			PATHS
-			/opt/pylon3/include
+			/opt/arenasdk/include
 			"$ENV{PYLON_ROOT}/include"
 )
 

@@ -1,0 +1,531 @@
+Category    : 'Root'
+    Category    : 'AnalogControls'
+        Enumeration : 'GainAuto'
+            EnumEntry   : 'Continuous'
+            EnumEntry   : 'Once'
+            EnumEntry   : 'Off'
+        Enumeration : 'GainSelector'
+              * GainRaw
+            EnumEntry   : 'All'
+        Integer     : 'GainRaw'
+        Enumeration : 'BlackLevelSelector'
+              * BlackLevelRaw
+            EnumEntry   : 'All'
+        Integer     : 'BlackLevelRaw'
+        Boolean     : 'GammaEnable'
+        Enumeration : 'GammaSelector'
+            EnumEntry   : 'sRGB'
+            EnumEntry   : 'User'
+        Float       : 'Gamma'
+        Integer     : 'DigitalShift'
+    Category    : 'ImageFormat'
+        Enumeration : 'PixelFormat'
+            EnumEntry   : 'BayerBG12Packed' (Not available)
+            EnumEntry   : 'BayerRG12Packed' (Not available)
+            EnumEntry   : 'BayerGR12Packed' (Not available)
+            EnumEntry   : 'BayerGB12Packed' (Not available)
+            EnumEntry   : 'YUV422_YUYV_Packed'
+            EnumEntry   : 'YUV422Packed'
+            EnumEntry   : 'BayerBG12' (Not available)
+            EnumEntry   : 'BayerGB12' (Not available)
+            EnumEntry   : 'BayerRG12' (Not available)
+            EnumEntry   : 'BayerGR12' (Not available)
+            EnumEntry   : 'BayerBG8' (Not available)
+            EnumEntry   : 'BayerGB8' (Not available)
+            EnumEntry   : 'BayerRG8' (Not available)
+            EnumEntry   : 'BayerGR8' (Not available)
+            EnumEntry   : 'Mono12Packed'
+            EnumEntry   : 'Mono12'
+            EnumEntry   : 'Mono10' (Not available)
+            EnumEntry   : 'Mono8'
+        Enumeration : 'PixelSize'
+            EnumEntry   : 'Bpp16'
+            EnumEntry   : 'Bpp12'
+            EnumEntry   : 'Bpp8'
+        Enumeration : 'PixelColorFilter'
+            EnumEntry   : 'None'
+        Integer     : 'PixelDynamicRangeMin'
+        Integer     : 'PixelDynamicRangeMax'
+        Boolean     : 'ReverseX'
+        Enumeration : 'TestImageSelector'
+            EnumEntry   : 'Testimage5'
+            EnumEntry   : 'Testimage4'
+            EnumEntry   : 'Testimage3'
+            EnumEntry   : 'Testimage2'
+            EnumEntry   : 'Testimage1'
+            EnumEntry   : 'Off'
+    Category    : 'AOI'
+        Integer     : 'Width'
+        Integer     : 'Height'
+        Integer     : 'OffsetX'
+        Integer     : 'OffsetY'
+        Boolean     : 'CenterX'
+        Boolean     : 'CenterY'
+        Integer     : 'BinningHorizontal'
+        Integer     : 'BinningVertical'
+    Category    : 'ColorImprovementsControl'
+        Float       : 'BalanceRatioAbs'
+        Float       : 'ColorTransformationValue'
+        Float       : 'ColorTransformationMatrixFactor'
+        Integer     : 'ColorTransformationMatrixFactorRaw'
+        Float       : 'ColorAdjustmentHue'
+        Float       : 'ColorAdjustmentSaturation'
+    Category    : 'AcquisitionTrigger'
+        Enumeration : 'AcquisitionMode'
+              * AcquisitionStart
+              * AcquisitionStop
+            EnumEntry   : 'Continuous'
+            EnumEntry   : 'SingleFrame'
+        Command     : 'AcquisitionStart'
+        Command     : 'AcquisitionStop'
+        Integer     : 'AcquisitionFrameCount'
+        Enumeration : 'TriggerSelector'
+              * TriggerMode
+              * TriggerSoftware
+              * TriggerSource
+              * TriggerActivation
+              * TriggerDelayAbs
+            EnumEntry   : 'FrameStart'
+            EnumEntry   : 'AcquisitionStart'
+        Enumeration : 'TriggerMode'
+            EnumEntry   : 'On'
+            EnumEntry   : 'Off'
+        Command     : 'TriggerSoftware'
+        Enumeration : 'TriggerSource'
+            EnumEntry   : 'Line1'
+            EnumEntry   : 'Software'
+        Enumeration : 'TriggerActivation'
+            EnumEntry   : 'FallingEdge'
+            EnumEntry   : 'RisingEdge'
+        Float       : 'TriggerDelayAbs'
+        Enumeration : 'ExposureMode'
+            EnumEntry   : 'TriggerWidth'
+            EnumEntry   : 'Timed'
+        Enumeration : 'ExposureAuto'
+            EnumEntry   : 'Continuous'
+            EnumEntry   : 'Once'
+            EnumEntry   : 'Off'
+        Float       : 'ExposureTimeAbs'
+        Integer     : 'ExposureTimeRaw'
+        Float       : 'ReadoutTimeAbs'
+        Float       : 'ExposureOverlapTimeMaxAbs'
+        Integer     : 'ExposureOverlapTimeMaxRaw' (Not available)
+        Boolean     : 'AcquisitionFrameRateEnable'
+        Float       : 'AcquisitionFrameRateAbs'
+        Float       : 'ResultingFrameRateAbs'
+        Enumeration : 'AcquisitionStatusSelector'
+              * AcquisitionStatus
+            EnumEntry   : 'ExposureActive' (Not available)
+            EnumEntry   : 'FrameTransfer' (Not available)
+            EnumEntry   : 'FrameActive' (Not available)
+            EnumEntry   : 'FrameTriggerWait'
+            EnumEntry   : 'AcquisitionTransfer' (Not available)
+            EnumEntry   : 'AcquisitionActive' (Not available)
+            EnumEntry   : 'AcquisitionTriggerWait'
+        Boolean     : 'AcquisitionStatus'
+    Category    : 'DigitalIO'
+        Enumeration : 'LineSelector'
+              * LineMode
+              * LineDebouncerTimeAbs
+              * LineDebouncerTimeRaw
+              * LineInverter
+              * LineTermination
+              * LineStatus
+              * LineSource
+              * LineFormat
+            EnumEntry   : 'Out1'
+            EnumEntry   : 'Line1'
+        Enumeration : 'LineMode'
+            EnumEntry   : 'Output'
+        Enumeration : 'LineLogic'
+            EnumEntry   : 'Negative'
+            EnumEntry   : 'Positive'
+        Enumeration : 'LineFormat'
+            EnumEntry   : 'OptoCoupled'
+        Enumeration : 'LineSource'
+            EnumEntry   : 'FlashWindow'
+            EnumEntry   : 'AcquisitionTriggerWait'
+            EnumEntry   : 'UserOutput'
+            EnumEntry   : 'TimerActive'
+            EnumEntry   : 'FrameTriggerWait'
+            EnumEntry   : 'ExposureActive'
+        Boolean     : 'LineInverter'
+        Boolean     : 'LineStatus'
+        Integer     : 'LineStatusAll'
+        Enumeration : 'UserOutputSelector'
+              * UserOutputValue
+            EnumEntry   : 'UserOutput1'
+        Boolean     : 'UserOutputValue'
+        Integer     : 'UserOutputValueAll'
+    Category    : 'SequenceControl'
+        Boolean     : 'SequenceEnable'
+        Integer     : 'SequenceCurrentSet' (Not available)
+        Command     : 'SequenceAsyncRestart' (Not available)
+        Command     : 'SequenceAsyncAdvance' (Not available)
+        Category    : 'SequenceControlConfiguration'
+            Enumeration : 'SequenceAdvanceMode'
+                EnumEntry   : 'FreeSelection'
+                EnumEntry   : 'Controlled'
+                EnumEntry   : 'Auto'
+            Enumeration : 'SequenceControlSelector' (Not available)
+                EnumEntry   : 'Advance' (Not available)
+                EnumEntry   : 'Restart' (Not available)
+            Enumeration : 'SequenceControlSource' (Not available)
+            Enumeration : 'SequenceAddressBitSelector' (Not available)
+                EnumEntry   : 'Bit3' (Not available)
+                EnumEntry   : 'Bit2' (Not available)
+                EnumEntry   : 'Bit1' (Not available)
+                EnumEntry   : 'Bit0' (Not available)
+            Enumeration : 'SequenceAddressBitSource' (Not available)
+        Integer     : 'SequenceSetTotalNumber'
+        Integer     : 'SequenceSetIndex'
+        Command     : 'SequenceSetStore'
+        Command     : 'SequenceSetLoad'
+        Integer     : 'SequenceSetExecutions'
+    Category    : 'TimerControls'
+        Float       : 'TimerDelayTimebaseAbs'
+        Float       : 'TimerDurationTimebaseAbs'
+        Enumeration : 'TimerSelector'
+              * TimerDurationAbs
+              * TimerDurationRaw
+              * TimerDelayAbs
+              * TimerDelayRaw
+              * TimerTriggerSource
+              * TimerTriggerActivation
+            EnumEntry   : 'Timer1'
+        Float       : 'TimerDelayAbs'
+        Integer     : 'TimerDelayRaw'
+        Float       : 'TimerDurationAbs'
+        Integer     : 'TimerDurationRaw'
+        Enumeration : 'TimerTriggerSource'
+            EnumEntry   : 'ExposureStart'
+        Enumeration : 'TimerTriggerActivation'
+            EnumEntry   : 'RisingEdge'
+        Enumeration : 'CounterSelector'
+              * CounterEventSource
+              * CounterReset
+              * CounterResetSource
+            EnumEntry   : 'Counter2'
+            EnumEntry   : 'Counter1'
+        Enumeration : 'CounterEventSource'
+            EnumEntry   : 'FrameTrigger'
+        Enumeration : 'CounterResetSource'
+            EnumEntry   : 'Line1'
+            EnumEntry   : 'Software'
+            EnumEntry   : 'Off'
+        Command     : 'CounterReset' (Not available)
+    Category    : 'LUTControls'
+        Enumeration : 'LUTSelector'
+              * LUTEnable
+              * LUTIndex
+              * LUTValue
+              * LUTValueAll
+            EnumEntry   : 'Luminance'
+        Boolean     : 'LUTEnable'
+        Integer     : 'LUTIndex'
+              * LUTValue
+        Integer     : 'LUTValue'
+        Register    : 'LUTValueAll'
+    Category    : 'UserDefinedValues'
+        Enumeration : 'UserDefinedValueSelector'
+              * UserDefinedValue
+            EnumEntry   : 'Value5'
+            EnumEntry   : 'Value4'
+            EnumEntry   : 'Value3'
+            EnumEntry   : 'Value2'
+            EnumEntry   : 'Value1'
+        Integer     : 'UserDefinedValue'
+    Category    : 'DeviceInformation'
+        StringReg   : 'DeviceVendorName'
+        StringReg   : 'DeviceModelName'
+        StringReg   : 'DeviceManufacturerInfo'
+        StringReg   : 'DeviceVersion'
+        StringReg   : 'DeviceFirmwareVersion'
+        StringReg   : 'DeviceID'
+        StringReg   : 'DeviceUserID'
+        Enumeration : 'DeviceScanType'
+            EnumEntry   : 'Linescan'
+            EnumEntry   : 'Areascan'
+        Command     : 'DeviceReset'
+        Integer     : 'SensorWidth'
+        Integer     : 'SensorHeight'
+        Integer     : 'WidthMax'
+        Integer     : 'HeightMax'
+    Category    : 'ChunkDataStreams'
+        Boolean     : 'ChunkModeActive'
+        Enumeration : 'ChunkSelector' (Not available)
+            EnumEntry   : 'SequenceSetIndex'
+            EnumEntry   : 'PayloadCRC16'
+            EnumEntry   : 'Triggerinputcounter'
+            EnumEntry   : 'Framecounter'
+            EnumEntry   : 'LineStatusAll'
+            EnumEntry   : 'Timestamp'
+        Boolean     : 'ChunkEnable' (Not available)
+    Category    : 'ChunkData'
+        Integer     : 'ChunkStride'
+        Integer     : 'ChunkSequenceSetIndex'
+        Integer     : 'ChunkOffsetX'
+        Integer     : 'ChunkOffsetY'
+        Integer     : 'ChunkWidth'
+        Integer     : 'ChunkHeight'
+        Integer     : 'ChunkDynamicRangeMin'
+        Integer     : 'ChunkDynamicRangeMax'
+        Enumeration : 'ChunkPixelFormat'
+            EnumEntry   : 'BayerBG12Packed'
+            EnumEntry   : 'BayerRG12Packed'
+            EnumEntry   : 'BayerGR12Packed'
+            EnumEntry   : 'BayerGB12Packed'
+            EnumEntry   : 'YUV422_YUYV_Packed'
+            EnumEntry   : 'YUV422Packed'
+            EnumEntry   : 'BayerBG12'
+            EnumEntry   : 'BayerGB12'
+            EnumEntry   : 'BayerRG12'
+            EnumEntry   : 'BayerGR12'
+            EnumEntry   : 'BayerBG8'
+            EnumEntry   : 'BayerGB8'
+            EnumEntry   : 'BayerRG8'
+            EnumEntry   : 'BayerGR8'
+            EnumEntry   : 'Mono12Packed'
+            EnumEntry   : 'Mono12'
+            EnumEntry   : 'Mono10'
+            EnumEntry   : 'Mono8'
+        Integer     : 'ChunkTimestamp'
+        Integer     : 'ChunkFramecounter'
+        Integer     : 'ChunkLineStatusAll'
+        Integer     : 'ChunkTriggerinputcounter'
+        Integer     : 'ChunkLineTriggerIgnoredCounter'
+        Integer     : 'ChunkFrameTriggerIgnoredCounter'
+        Integer     : 'ChunkFrameTriggerCounter'
+        Integer     : 'ChunkFramesPerTriggerCounter'
+        Integer     : 'ChunkLineTriggerEndToEndCounter'
+        Integer     : 'ChunkInputStatusAtLineTriggerBitsPerLine'
+        Integer     : 'ChunkInputStatusAtLineTriggerIndex'
+        Integer     : 'ChunkInputStatusAtLineTriggerValue'
+        Integer     : 'ChunkShaftEncoderCounter'
+        Float       : 'ChunkExposureTime' (Not available)
+        Integer     : 'ChunkPayloadCRC16'
+    Category    : 'EventsGeneration'
+        Enumeration : 'EventSelector'
+              * EventNotification
+            EnumEntry   : 'EventOverrun'
+            EnumEntry   : 'AcquisitionStart'
+            EnumEntry   : 'FrameStart'
+            EnumEntry   : 'AcquisitionStartOvertrigger'
+            EnumEntry   : 'FrameStartOvertrigger'
+            EnumEntry   : 'ExposureEnd'
+        Enumeration : 'EventNotification'
+            EnumEntry   : 'On'
+            EnumEntry   : 'GenICamEvent'
+            EnumEntry   : 'Off'
+        Category    : 'ExposureEndEventData'
+            Integer     : 'ExposureEndEventStreamChannelIndex'
+            Integer     : 'ExposureEndEventFrameID'
+            Integer     : 'ExposureEndEventTimestamp'
+        Category    : 'LineStartOvertriggerEventData'
+            Integer     : 'LineStartOvertriggerEventStreamChannelIndex'
+            Integer     : 'LineStartOvertriggerEventTimestamp'
+        Category    : 'FrameStartOvertriggerEventData'
+            Integer     : 'FrameStartOvertriggerEventStreamChannelIndex'
+            Integer     : 'FrameStartOvertriggerEventTimestamp'
+        Category    : 'AcquisitionStartOvertriggerEventData'
+            Integer     : 'AcquisitionStartOvertriggerEventStreamChannelIndex'
+            Integer     : 'AcquisitionStartOvertriggerEventTimestamp'
+        Category    : 'FrameTimeoutEventData'
+            Integer     : 'FrameTimeoutEventStreamChannelIndex'
+            Integer     : 'FrameTimeoutEventTimestamp'
+        Category    : 'EventOverrunEventData'
+            Integer     : 'EventOverrunEventStreamChannelIndex'
+            Integer     : 'EventOverrunEventFrameID'
+            Integer     : 'EventOverrunEventTimestamp'
+    Category    : 'UserSets'
+        Enumeration : 'UserSetSelector'
+              * UserSetLoad
+              * UserSetSave
+            EnumEntry   : 'UserSet3'
+            EnumEntry   : 'UserSet2'
+            EnumEntry   : 'UserSet1'
+            EnumEntry   : 'Default'
+        Command     : 'UserSetLoad'
+        Command     : 'UserSetSave'
+        Enumeration : 'UserSetDefaultSelector'
+            EnumEntry   : 'UserSet3'
+            EnumEntry   : 'UserSet2'
+            EnumEntry   : 'UserSet1'
+            EnumEntry   : 'Default'
+        Enumeration : 'DefaultSetSelector'
+            EnumEntry   : 'Color' (Not available)
+            EnumEntry   : 'AutoFunctions'
+            EnumEntry   : 'HighGain'
+            EnumEntry   : 'Standard'
+    Category    : 'TransportLayer'
+        Integer     : 'PayloadSize'
+        Integer     : 'GevSCPSPacketSize'
+        Integer     : 'GevSCPD'
+        Integer     : 'GevSCFTD'
+        Integer     : 'GevSCBWR'
+        Integer     : 'GevSCBWRA'
+        Integer     : 'GevSCBWA'
+        Integer     : 'GevSCDMT'
+        Integer     : 'GevSCDCT'
+        Integer     : 'GevSCFJM'
+        Integer     : 'GevVersionMajor'
+        Integer     : 'GevVersionMinor'
+        Boolean     : 'GevDeviceModeIsBigEndian'
+        Integer     : 'GevDeviceModeCharacterSet'
+        Enumeration : 'GevInterfaceSelector'
+              * GevMACAddress
+              * GevSupportedIPConfigurationLLA
+              * GevSupportedIPConfigurationDHCP
+              * GevSupportedIPConfigurationPersistentIP
+              * GevCurrentIPConfiguration
+              * GevCurrentIPAddress
+              * GevCurrentSubnetMask
+              * GevCurrentDefaultGateway
+              * GevPersistentIPAddress
+              * GevPersistentSubnetMask
+              * GevPersistentDefaultGateway
+              * GevLinkSpeed
+              * GevLinkMaster
+              * GevLinkFullDuplex
+              * GevLinkCrossover
+            EnumEntry   : 'NetworkInterface0'
+        Integer     : 'GevMACAddress'
+        Boolean     : 'GevSupportedIPConfigurationLLA'
+        Boolean     : 'GevSupportedIPConfigurationDHCP'
+        Boolean     : 'GevSupportedIPConfigurationPersistentIP'
+        Integer     : 'GevCurrentIPConfiguration'
+        Integer     : 'GevCurrentIPAddress'
+        Integer     : 'GevCurrentSubnetMask'
+        Integer     : 'GevCurrentDefaultGateway'
+        Integer     : 'GevPersistentIPAddress'
+        Integer     : 'GevPersistentSubnetMask'
+        Integer     : 'GevPersistentDefaultGateway'
+        Integer     : 'GevLinkSpeed'
+        Boolean     : 'GevLinkMaster'
+        Boolean     : 'GevLinkFullDuplex'
+        Boolean     : 'GevLinkCrossover'
+        StringReg   : 'GevFirstURL'
+        StringReg   : 'GevSecondURL'
+        Integer     : 'GevNumberOfInterfaces'
+        Integer     : 'GevMessageChannelCount'
+        Integer     : 'GevStreamChannelCount'
+        Boolean     : 'GevSupportedOptionalCommandsEVENTDATA'
+        Boolean     : 'GevSupportedOptionalCommandsEVENT'
+        Boolean     : 'GevSupportedOptionalCommandsPACKETRESEND'
+        Boolean     : 'GevSupportedOptionalCommandsWRITEMEM'
+        Boolean     : 'GevSupportedOptionalCommandsConcatenation'
+        Integer     : 'GevHeartbeatTimeout'
+        Integer     : 'GevTimestampTickFrequency'
+        Command     : 'GevTimestampControlLatch'
+        Command     : 'GevTimestampControlReset'
+        Command     : 'GevTimestampControlLatchReset'
+        Integer     : 'GevTimestampValue'
+        Enumeration : 'GevCCP'
+            EnumEntry   : 'ExclusiveControl'
+            EnumEntry   : 'Control'
+            EnumEntry   : 'Exclusive'
+        Enumeration : 'GevStreamChannelSelector'
+              * GevSCPInterfaceIndex
+              * GevSCPHostPort
+              * GevSCPSFireTestPacket
+              * GevSCPSDoNotFragment
+              * GevSCPSBigEndian
+              * GevSCPSPacketSize
+              * GevSCPD
+              * GevSCFTD
+              * GevSCDA
+              * GevSCBWR
+              * GevSCBWRA
+              * GevSCBWA
+              * GevSCDMT
+              * GevSCDCT
+              * GevSCFJM
+            EnumEntry   : 'StreamChannel0'
+        Integer     : 'GevSCPInterfaceIndex'
+        Integer     : 'GevSCDA'
+        Integer     : 'GevSCPHostPort'
+        Command     : 'GevSCPSFireTestPacket'
+        Boolean     : 'GevSCPSDoNotFragment'
+        Boolean     : 'GevSCPSBigEndian'
+        Integer     : 'TLParamsLocked'
+    Category    : 'FileAccessControl'
+        Enumeration : 'FileSelector'
+              * FileOperationSelector
+              * FileOpenMode
+              * FileAccessBuffer
+              * FileAccessOffset
+              * FileAccessLength
+              * FileOperationStatus
+              * FileOperationResult
+              * FileSize
+              * FileOperationExecute
+            EnumEntry   : 'UserGainShading2' (Not available)
+            EnumEntry   : 'UserGainShading1' (Not available)
+            EnumEntry   : 'UserSet3'
+            EnumEntry   : 'UserSet2'
+            EnumEntry   : 'UserSet1'
+        Enumeration : 'FileOperationSelector'
+              * FileAccessOffset
+              * FileAccessLength
+              * FileOperationStatus
+              * FileOperationResult
+              * FileOperationExecute
+            EnumEntry   : 'Write' (Not available)
+            EnumEntry   : 'Read' (Not available)
+            EnumEntry   : 'Close' (Not available)
+            EnumEntry   : 'Open'
+        Enumeration : 'FileOpenMode'
+            EnumEntry   : 'Write'
+            EnumEntry   : 'Read'
+        Register    : 'FileAccessBuffer'
+        Integer     : 'FileAccessOffset'
+        Integer     : 'FileAccessLength'
+        Enumeration : 'FileOperationStatus'
+            EnumEntry   : 'Failure'
+            EnumEntry   : 'Success'
+        Integer     : 'FileOperationResult'
+        Integer     : 'FileSize'
+        Command     : 'FileOperationExecute'
+    Category    : 'AutoFunctions'
+        Integer     : 'AutoTargetValue'
+        Integer     : 'AutoGainRawLowerLimit'
+        Integer     : 'AutoGainRawUpperLimit'
+        Float       : 'AutoExposureTimeAbsLowerLimit'
+        Float       : 'AutoExposureTimeAbsUpperLimit'
+        Enumeration : 'AutoFunctionProfile'
+            EnumEntry   : 'ExposureMinimum'
+            EnumEntry   : 'GainMinimum'
+        Category    : 'AutoFunctionAOIs'
+            Enumeration : 'AutoFunctionAOISelector'
+                  * AutoFunctionAOIWidth
+                  * AutoFunctionAOIHeight
+                  * AutoFunctionAOIOffsetX
+                  * AutoFunctionAOIOffsetY
+                  * AutoFunctionAOIUsageIntensity
+                  * AutoFunctionAOIUsageWhiteBalance
+                  * AutoFunctionAOIUsageRedLightCorrection
+                EnumEntry   : 'AOI2'
+                EnumEntry   : 'AOI1'
+            Integer     : 'AutoFunctionAOIWidth'
+            Integer     : 'AutoFunctionAOIHeight'
+            Integer     : 'AutoFunctionAOIOffsetX'
+            Integer     : 'AutoFunctionAOIOffsetY'
+            Boolean     : 'AutoFunctionAOIUsageIntensity'
+            Boolean     : 'AutoFunctionAOIUsageWhiteBalance'
+    Category    : 'RemoveParamLimits'
+        Enumeration : 'ParameterSelector'
+              * RemoveLimits
+            EnumEntry   : 'Gain'
+        Boolean     : 'RemoveLimits'
+    Category    : 'ExpertFeatureAccess'
+        Enumeration : 'ExpertFeatureAccessSelector'
+              * ExpertFeatureEnable
+              * ExpertFeatureAccessKey
+            EnumEntry   : 'ExpertFeature5'
+            EnumEntry   : 'ExpertFeature4'
+            EnumEntry   : 'ExpertFeature3'
+            EnumEntry   : 'ExpertFeature2'
+            EnumEntry   : 'ExpertFeature1'
+            EnumEntry   : 'ExpertFeature1_Legacy'
+        Integer     : 'ExpertFeatureAccessKey'
+        Boolean     : 'ExpertFeatureEnable' (Not available)
