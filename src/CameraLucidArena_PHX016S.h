@@ -14,6 +14,9 @@
 
 #include <ArenaApi.h>
 
+#define IMAGE_TIMEOUT 40000
+
+
 namespace freeture
 {
     class CameraLucidArena_PHX016S: public Camera
@@ -35,33 +38,40 @@ namespace freeture
 
             }initializer;
 
-            Arena::ISystem* m_ArenaSDKSystem=nullptr;
-            Arena::IDevice* m_Camera =nullptr;
+            Arena::ISystem* m_ArenaSDKSystem    = nullptr;
+            Arena::IDevice* m_Camera            = nullptr;
+            int m_Id                            = -1;
 
-            GError*         error = nullptr;        // ARAVIS API Error
-            ArvCamera*      camera;                // Camera to control.
-            ArvPixelFormat  pixFormat;              // Image format.
-            ArvStream*      stream;                // Object for video stream reception.
-            int             mStartX;                // Crop starting X.
-            int             mStartY;                // Crop starting Y.
-            int             mWidth;                 // Camera region's width.
-            int             mHeight;                // Camera region's height.
-            double          fps;                    // Camera acquisition frequency.
-            double          gainMin;                // Camera minimum gain.
-            double          gainMax;                // Camera maximum gain.
-            unsigned int    payload;                // Width x height.
-            double          exposureMin;            // Camera's minimum exposure time.
-            double          exposureMax;            // Camera's maximum exposure time.
-            double          fpsMin;                 // Camera's minimum frame rate.
-            double          fpsMax;                 // Camera's maximum frame rate.
-            const char*     capsString;
-            int             gain;                   // Camera's gain.
-            double          exp;                    // Camera's exposure time.
-            bool            shiftBitsImage;         // For example : bits are shifted for dmk's frames.
-            guint64         nbCompletedBuffers;     // Number of frames successfully received.
-            guint64         nbFailures;             // Number of frames failed to be received.
-            guint64         nbUnderruns;
-            int             frameCounter;           // Counter of success received frames.
+            int             mStartX             = 0;        // Crop starting X.
+            int             mStartY             = 0;        // Crop starting Y.
+            int             mWidth              = 0;        // Camera region's width.
+            int             mHeight             = 0;        // Camera region's height.
+            double          fps                 = 0;        // Camera acquisition frequency.
+            double          gainMin             = 0;        // Camera minimum gain.
+            double          gainMax             = 0;        // Camera maximum gain.
+            double          exposureMin         = 0;        // Camera's minimum exposure time.
+            double          exposureMax         = 0;        // Camera's maximum exposure time.
+            double          fpsMin              = 0;        // Camera's minimum frame rate.
+            double          fpsMax              = 0;        // Camera's maximum frame rate.
+            int             gain                = 0;        // Camera's gain.
+            double          exp                 = 0;        // Camera's exposure time.
+
+            guint64         nbCompletedBuffers  = 0;        // Number of frames successfully received.
+            guint64         nbFailures          = 0;        // Number of frames failed to be received.
+            guint64         nbUnderruns         = 0;
+
+            GenICam::gcstring   pixFormat;                  // Image format.
+
+
+
+            GError*         error               = nullptr;  // ARAVIS API Error
+            ArvCamera*      camera              = nullptr;  // Camera to control.
+            ArvStream*      stream              = nullptr;  // Object for video stream reception.
+
+            unsigned int    payload;                        // Width x height.
+            const char*     capsString          = nullptr;
+            bool            shiftBitsImage;                 // For example : bits are shifted for dmk's frames.
+            int             frameCounter;                   // Counter of success received frames.
 
         public :
 
@@ -71,57 +81,74 @@ namespace freeture
 
             ~CameraLucidArena_PHX016S();
 
-            std::vector<std::pair<int,std::string>> getCamerasList();
+            std::vector<std::pair<int,std::string>> getCamerasList() override;
 
-            bool listCameras();
+            void getAvailablePixelFormats() override;
 
-            bool createDevice(int id);
+            bool listCameras() override;
 
-            bool grabInitialization();
+            //getInfos
 
-            void grabCleanse();
+            bool createDevice(int id) override;
 
-            bool acqStart();
+            bool getDeviceNameById(int id, std::string &device) override;
 
-            void acqStop();
+            //getCameraName
 
-            bool grabImage(Frame& newFrame);
+            //getDeviceType
 
-            bool grabSingleImage(Frame &frame, int camID);
+            //getStopStatus
 
-            bool getDeviceNameById(int id, std::string &device);
+            bool grabInitialization() override;
 
-            void getExposureBounds(double &eMin, double &eMax);
+            bool acqStart() override;
 
-            void getFPSBounds(double &fMin, double &fMax);
+            void acqStop() override;
 
-            void getGainBounds(int &gMin, int &gMax);
+            void grabCleanse() override;
 
-            bool getPixelFormat(CamPixFmt &format);
+            bool grabImage(Frame& newFrame) override;
 
-            bool getFrameSize(int &x, int &y, int &w, int &h);
+            bool grabSingleImage(Frame &frame, int camID) override;
 
-            bool getFPS(double &value);
+            void getExposureBounds(double &eMin, double &eMax) override;
 
-            std::string getModelName();
+            void getFPSBounds(double &fMin, double &fMax) override;
 
-            double getExposureTime();
+            void getGainBounds(double &gMin, double &gMax) override;
 
-            bool setExposureTime(double exp);
+            bool getPixelFormat(CamPixFmt &format) override;
 
-            bool setGain(int gain);
+            bool getFrameSize(int &x, int &y, int &w, int &h) override;
 
-            bool setFPS(double fps);
+            bool getFPS(double &value) override;
 
-            bool setFrameSize(int startx, int starty, int width, int height, bool customSize);
+            //getFPSenum
 
-            bool setPixelFormat(CamPixFmt depth);
+            std::string getModelName() override;
 
-            void saveGenicamXml(std::string p);
+            double getGain() override;
 
-            bool setSize(int startx, int starty, int width, int height, bool customSize);
+            double getExposureTime() override;
 
-            void getAvailablePixelFormats();
+            bool setExposureTime(double exp) override;
+
+            bool setGain(double gain) override;
+
+            bool setFPS(double fps) override;
+
+            bool setSize( int, int, int, int, bool) override;
+
+            bool setPixelFormat(CamPixFmt depth) override;
+
+            //getDataSetStatus
+            //loadNextDataSet
+
+            //test
+        private:
+            bool setCustomFrameSize( int, int, int, int );
+            bool setDefaultFrameSize();
+
 
     };
 }

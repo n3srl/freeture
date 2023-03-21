@@ -82,6 +82,7 @@
 namespace freeture
 {
 
+#define ARENA_SDK false    //Set this to true to use Arena SDK instead of aravis for LUCID cameras
 
 class Device {
 
@@ -135,8 +136,8 @@ class Device {
         double      mMaxExposureTime;
         double      mMinFPS;
         double      mMaxFPS;
-        int         mMinGain;
-        int         mMaxGain;
+        double         mMinGain;
+        double         mMaxGain;
         //int         mNbFrame;
 
     public :
@@ -169,7 +170,7 @@ class Device {
 
         bool setCameraPixelFormat();
 
-        bool getCameraGainBounds(int &min, int &max);
+        bool getCameraGainBounds(double &min, double &max);
 
         void getCameraGainBounds();
 
@@ -197,7 +198,7 @@ class Device {
 
         bool setCameraExposureTime(double value);
 
-        bool setCameraGain(int value);
+        bool setCameraGain(double value);
 
         bool setCameraFPS(double value);
 

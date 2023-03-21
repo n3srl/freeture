@@ -125,7 +125,7 @@
 
             void getExposureBounds(double &eMin, double &eMax);
 
-            void getGainBounds(int &gMin, int &gMax);
+            void getGainBounds(double &gMin, double &gMax);
 
             bool getFPS(double &value);
 

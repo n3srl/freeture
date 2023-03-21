@@ -34,6 +34,7 @@
 */
 
 #include "StackThread.h"
+#include "NodeExporterMetrics.h"
 
 boost::log::sources::severity_logger< LogSeverityLevel >  StackThread::logger;
 
@@ -250,7 +251,7 @@ void StackThread::operator()(){
     try{
 
         do{
-
+            string cDate ="";
             try {
 
                 // Thread is sleeping...
@@ -261,7 +262,7 @@ void StackThread::operator()(){
 
                 // First reference date.
                 boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
-                string cDate = to_simple_string(time);
+                cDate = to_simple_string(time);
                 string dateDelimiter = ".";
                 string refDate = cDate.substr(0, cDate.find(dateDelimiter));
 
@@ -323,7 +324,7 @@ void StackThread::operator()(){
                     secTime = td.total_seconds();
                     cout << "NEXT STACK : " << (int)(msp.STACK_TIME - secTime) << "s" <<  endl;
 
-                }while(secTime <= msp.STACK_TIME);
+                } while(secTime <= msp.STACK_TIME);
 
                 // Stack finished. Save it.
                 if(buildStackDataDirectory(frameStack.getDateFirstFrame())) {
@@ -342,19 +343,20 @@ void StackThread::operator()(){
 
                 }
 
-            }catch(const boost::thread_interrupted&){
+            } catch(const boost::thread_interrupted&) {
 
                 BOOST_LOG_SEV(logger,notification) << "Stack thread INTERRUPTED";
                 cout << "Stack thread INTERRUPTED" << endl;
-
             }
 
             // Get the "must stop" state (thread-safe)
             mustStopMutex.lock();
             stop = mustStop;
             mustStopMutex.unlock();
+            NodeExporterMetrics::GetInstance().UpdateMetrics(completeDataPath,cDate);
+            NodeExporterMetrics::GetInstance().WriteMetrics();
 
-        }while(!stop);
+        } while(!stop);
 
     }catch(const char * msg){
 

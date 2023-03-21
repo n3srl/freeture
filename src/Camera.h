@@ -183,7 +183,7 @@ class Camera {
         * @param gMin Return minimum gain value.
         * @param gMax Return maximum gain value.
         */
-        virtual void getGainBounds(int &gMin, int &gMax) {};
+        virtual void getGainBounds(double &gMin, double &gMax) {};
 
         /**
         * Get device's image format.
@@ -200,7 +200,7 @@ class Camera {
         * @param frame's height
         * @return Success to get frame'size.
         */
-        virtual bool getFrameSize(int &w, int &h) {return false;};
+        virtual bool getFrameSize(int &x, int &y, int &w, int &h) {return false;};
 
         /**
         * Get device's acquisition frequency.
@@ -228,7 +228,7 @@ class Camera {
         *
         * @return Device's gain.
         */
-        virtual int getGain() {return 0;};
+        virtual double getGain() {return 0;};
 
         /**
         * Get device's exposure time value.
@@ -251,7 +251,7 @@ class Camera {
         * @param value New gain value.
         * @return Success status to set new gain.
         */
-        virtual bool setGain(int value) {return false;};
+        virtual bool setGain(double value) {return false;};
 
         /**
         * Set device's acquisition frequency.

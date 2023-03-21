@@ -225,7 +225,8 @@ void freeture::CfgParam::loadDeviceID() {
     }else{
         try{
             EParser<CamSdkType> cam_string;
-            CamSdkType cType = cam_string.parseEnum("CAMERA_ID", cString);
+
+            CamSdkType cType = device->getDeviceSdk(cId);
 
             if(cType == VIDEOFILE) {
                 cId = device->mNbDev - 2;
@@ -552,7 +553,7 @@ void freeture::CfgParam::loadCamParam() {
         e = true;
     }
 
-    int ming= -1, maxg = -1;
+    double ming= -1, maxg = -1;
     double mine = -1, maxe = -1;
     double minf = -1, maxf = -1;
 

@@ -58,5 +58,4 @@ class Base64 {
          * @return Encoded string.
          */
         static std::string encodeBase64(std::string data);
-
 };

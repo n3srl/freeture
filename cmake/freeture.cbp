@@ -2994,6 +2994,45 @@
 		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/lib/Linux64_x64/liblog4cpp_gcc54_v3_3_LUCID.so">
 			<Option target="freeture"/>
 		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/arenasdk.conf">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavcodec.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavcodec.so.58">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavcodec.so.58.18.100">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavformat.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavformat.so.58">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavformat.so.58.12.100">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavutil.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavutil.so.56">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavutil.so.56.14.100">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libswresample.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libswresample.so.3">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libswresample.so.3.1.100">
+			<Option target="freeture"/>
+		</Unit>
 		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/Arena.h">
 			<Option target="freeture"/>
 		</Unit>

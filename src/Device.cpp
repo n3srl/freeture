@@ -37,7 +37,11 @@
 
 #include "Device.h"
 
+#if ARENA_SDK
 #include "CameraLucidArena_PHX016S.h"
+#else
+#include "CameraLucidArena.h"
+#endif
 
 using namespace boost::filesystem;
 using namespace cv;
@@ -276,7 +280,13 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
 
             {
                 #ifdef LINUX
+
+                #if ARENA_SDK
                     mCam = new CameraLucidArena_PHX016S(mShiftBits);
+                #else
+                    mCam = new CameraLucidArena(mShiftBits);
+                #endif
+
                 #endif
             }
 
@@ -524,7 +534,7 @@ void freeture::Device::getCameraFPSBounds() {
 }
 
 
-bool freeture::Device::getCameraGainBounds(int &min, int &max) {
+bool freeture::Device::getCameraGainBounds(double &min, double &max) {
 
     mCam->getGainBounds(min, max);
     return true;
@@ -609,7 +619,7 @@ bool freeture::Device::setCameraExposureTime(double value) {
 
 }
 
-bool freeture::Device::setCameraGain(int value) {
+bool freeture::Device::setCameraGain(double value) {
 
     if(!mCam->setGain(value)) {
         BOOST_LOG_SEV(logger, fail) << "Fail to set gain to " << value;

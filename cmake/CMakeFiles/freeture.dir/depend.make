@@ -48,6 +48,8 @@ CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/AcqThread.cpp.o: /home
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/AcqThread.cpp.o: /home/nova/Repository/freeture/src/ImgProcessing.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/AcqThread.cpp.o: /home/nova/Repository/freeture/src/LocalEvent.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/AcqThread.cpp.o: /home/nova/Repository/freeture/src/Mask.h
+CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/AcqThread.cpp.o: /home/nova/Repository/freeture/src/NodeExporterMetrics.cpp
+CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/AcqThread.cpp.o: /home/nova/Repository/freeture/src/NodeExporterMetrics.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/AcqThread.cpp.o: /home/nova/Repository/freeture/src/OpenSSL.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/AcqThread.cpp.o: /home/nova/Repository/freeture/src/PixFmtConv.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/AcqThread.cpp.o: /home/nova/Repository/freeture/src/SMTPClient.h
@@ -2443,6 +2445,7 @@ CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/DetThread.cpp.o: /home
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/DetThread.cpp.o: /home/nova/Repository/freeture/src/ImgProcessing.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/DetThread.cpp.o: /home/nova/Repository/freeture/src/LocalEvent.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/DetThread.cpp.o: /home/nova/Repository/freeture/src/Mask.h
+CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/DetThread.cpp.o: /home/nova/Repository/freeture/src/NodeExporterMetrics.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/DetThread.cpp.o: /home/nova/Repository/freeture/src/OpenSSL.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/DetThread.cpp.o: /home/nova/Repository/freeture/src/SMTPClient.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/DetThread.cpp.o: /home/nova/Repository/freeture/src/SParam.h
@@ -2624,6 +2627,7 @@ CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/Device.cpp.o: /home/no
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/Device.cpp.o: /home/nova/Repository/freeture/src/CameraGigeAravis.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/Device.cpp.o: /home/nova/Repository/freeture/src/CameraGigePylon.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/Device.cpp.o: /home/nova/Repository/freeture/src/CameraGigeTis.h
+CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/Device.cpp.o: /home/nova/Repository/freeture/src/CameraLucidArena.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/Device.cpp.o: /home/nova/Repository/freeture/src/CameraLucidArena_PHX016S.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/Device.cpp.o: /home/nova/Repository/freeture/src/CameraV4l2.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/Device.cpp.o: /home/nova/Repository/freeture/src/CameraVideo.h
@@ -4567,6 +4571,7 @@ CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/StackThread.cpp.o: /ho
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/StackThread.cpp.o: /home/nova/Repository/freeture/src/Fits.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/StackThread.cpp.o: /home/nova/Repository/freeture/src/Fits2D.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/StackThread.cpp.o: /home/nova/Repository/freeture/src/Frame.h
+CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/StackThread.cpp.o: /home/nova/Repository/freeture/src/NodeExporterMetrics.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/StackThread.cpp.o: /home/nova/Repository/freeture/src/SParam.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/StackThread.cpp.o: /home/nova/Repository/freeture/src/SaveImg.h
 CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/StackThread.cpp.o: /home/nova/Repository/freeture/src/Stack.h

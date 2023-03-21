@@ -49,6 +49,8 @@ CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/AcqThread.cpp.o
  /home/nova/Repository/freeture/src/ImgProcessing.h
  /home/nova/Repository/freeture/src/LocalEvent.h
  /home/nova/Repository/freeture/src/Mask.h
+ /home/nova/Repository/freeture/src/NodeExporterMetrics.cpp
+ /home/nova/Repository/freeture/src/NodeExporterMetrics.h
  /home/nova/Repository/freeture/src/OpenSSL.h
  /home/nova/Repository/freeture/src/PixFmtConv.h
  /home/nova/Repository/freeture/src/SMTPClient.h
@@ -2444,6 +2446,7 @@ CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/DetThread.cpp.o
  /home/nova/Repository/freeture/src/ImgProcessing.h
  /home/nova/Repository/freeture/src/LocalEvent.h
  /home/nova/Repository/freeture/src/Mask.h
+ /home/nova/Repository/freeture/src/NodeExporterMetrics.h
  /home/nova/Repository/freeture/src/OpenSSL.h
  /home/nova/Repository/freeture/src/SMTPClient.h
  /home/nova/Repository/freeture/src/SParam.h
@@ -2625,6 +2628,7 @@ CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/Device.cpp.o
  /home/nova/Repository/freeture/src/CameraGigeAravis.h
  /home/nova/Repository/freeture/src/CameraGigePylon.h
  /home/nova/Repository/freeture/src/CameraGigeTis.h
+ /home/nova/Repository/freeture/src/CameraLucidArena.h
  /home/nova/Repository/freeture/src/CameraLucidArena_PHX016S.h
  /home/nova/Repository/freeture/src/CameraV4l2.h
  /home/nova/Repository/freeture/src/CameraVideo.h
@@ -4568,6 +4572,7 @@ CMakeFiles/freeture.dir/home/nova/Repository/freeture/src/StackThread.cpp.o
  /home/nova/Repository/freeture/src/Fits.h
  /home/nova/Repository/freeture/src/Fits2D.h
  /home/nova/Repository/freeture/src/Frame.h
+ /home/nova/Repository/freeture/src/NodeExporterMetrics.h
  /home/nova/Repository/freeture/src/SParam.h
  /home/nova/Repository/freeture/src/SaveImg.h
  /home/nova/Repository/freeture/src/Stack.h

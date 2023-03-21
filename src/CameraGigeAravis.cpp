@@ -928,7 +928,8 @@
         return result;
     }
 
-    void CameraGigeAravis::getGainBounds(int &gMin, int &gMax){
+    void CameraGigeAravis::getGainBounds(double &gMin, double &gMax)
+    {
         GError* error=nullptr;
 
         double gainMin = 0.0;
@@ -1050,7 +1051,7 @@
         return false;
     }
 
-    bool CameraGigeAravis::setGain(int val){
+    bool CameraGigeAravis::setGain(double val){
 
         double gMin, gMax;
 

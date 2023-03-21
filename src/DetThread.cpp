@@ -35,6 +35,7 @@
 */
 
 #include "DetThread.h"
+#include "NodeExporterMetrics.h"
 
 boost::log::sources::severity_logger< LogSeverityLevel >  DetThread::logger;
 
@@ -177,7 +178,7 @@ void DetThread::operator ()(){
     try{
 
         do{
-
+            double t = 0.0;
             try {
 
                 /// Wait new frame from AcqThread.
@@ -204,7 +205,7 @@ void DetThread::operator ()(){
                     if(frameBuffer->size() > 2) lastFrame = frameBuffer->back();
                     lock2.unlock();
 
-                    double t = (double)getTickCount();
+                    t = (double)getTickCount();
 
                     if(lastFrame.mImg.data) {
                         mFormat = lastFrame.mFormat;
@@ -298,6 +299,8 @@ void DetThread::operator ()(){
             stopThread = mMustStop;
             mMustStopMutex.unlock();
 
+            NodeExporterMetrics::GetInstance().UpdateMetrics(mNbDetection,t);
+            NodeExporterMetrics::GetInstance().WriteMetrics();
         }while(!stopThread);
 
         if(mDetectionResults.size() == 0) {

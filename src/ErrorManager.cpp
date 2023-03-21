@@ -1,10 +1,19 @@
 
 #include "CameraGigeAravis.h"
 
-
 class ErrorManager
 {
     public:
+        static void ArenaSDKError(std::string message)
+        {
+            cout  << "> ArenaSDKError - "<< message << endl;
+        }
+
+        static void Exception(std::exception& e)
+        {
+            cout  << "> Freeture - "<< e.what() << endl;
+        }
+
         static void CheckAravisError(GError** gError)
         {
 

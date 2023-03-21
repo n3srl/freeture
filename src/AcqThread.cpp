@@ -34,6 +34,7 @@
 */
 
 #include "AcqThread.h"
+#include "NodeExporterMetrics.cpp"
 
 using namespace cv;
 using namespace std;
@@ -200,6 +201,9 @@ void AcqThread::operator()(){
 
                 // Time counter of grabbing a frame.
                 double tacq = (double)getTickCount();
+                double fps;
+                vector<int> nextSunset;
+                vector<int> nextSunrise;
 
                 // Grab a frame.
                 if(mDevice->runContinuousCapture(newFrame)) {
@@ -483,7 +487,7 @@ void AcqThread::operator()(){
 
                             // Print time before sunrise.
                             if(currentTimeInSec < mStartSunriseTime || currentTimeInSec > mStopSunsetTime ) {
-                                vector<int> nextSunrise;
+                                nextSunrise.clear();
                                 if(currentTimeInSec < mStartSunriseTime)
                                     nextSunrise = TimeDate::HdecimalToHMS((mStartSunriseTime - currentTimeInSec) / 3600.0);
                                 if(currentTimeInSec > mStopSunsetTime)
@@ -494,7 +498,8 @@ void AcqThread::operator()(){
 
                             // Print time before sunset.
                             if(currentTimeInSec > mStopSunriseTime && currentTimeInSec < mStartSunsetTime){
-                                vector<int> nextSunset;
+
+                                nextSunset.clear();
                                 nextSunset = TimeDate::HdecimalToHMS((mStartSunsetTime - currentTimeInSec) / 3600.0);
                                 cout << "NEXT SUNSET : " << nextSunset.at(0) << "h" << nextSunset.at(1) << "m" << nextSunset.at(2) << "s" << endl;
 
@@ -532,14 +537,18 @@ void AcqThread::operator()(){
                 }
 
                 tacq = (((double)getTickCount() - tacq)/getTickFrequency())*1000;
-                std::cout << " [ TIME ACQ ] : " << tacq << " ms   ~cFPS("  << (1.0/(tacq/1000.0)) << ")" <<  endl;
+                fps = (1.0/(tacq/1000.0)) ;
+                std::cout << " [ TIME ACQ ] : " << tacq << " ms   ~cFPS("  << fps << ")" <<  endl;
                 BOOST_LOG_SEV(logger, normal) << " [ TIME ACQ ] : " << tacq << " ms";
 
                 mMustStopMutex.lock();
                 stop = mMustStop;
                 mMustStopMutex.unlock();
 
-            }while(stop == false && !mDevice->getCameraStatus());
+                NodeExporterMetrics::GetInstance().UpdateMetrics( fps, tacq,&nextSunrise, &nextSunset );
+                NodeExporterMetrics::GetInstance().WriteMetrics();
+
+            } while(stop == false && !mDevice->getCameraStatus());
 
             // Reset detection process to prepare the analyse of a new data set.
             if(pDetection != NULL) {
@@ -556,8 +565,7 @@ void AcqThread::operator()(){
             boost::mutex::scoped_lock lock(*frameBuffer_mutex);
             frameBuffer->clear();
             lock.unlock();
-
-        }while(mDevice->getCameraDataSetStatus() && stop == false);
+        } while(mDevice->getCameraDataSetStatus() && stop == false);
 
     }catch(const boost::thread_interrupted&){
 
@@ -584,7 +592,7 @@ void AcqThread::operator()(){
 
 }
 
-void AcqThread::selectNextAcquisitionSchedule(TimeDate::Date date){
+void AcqThread::selectNextAcquisitionSchedule(TimeDate::Date date) {
 
     if(mcp.schcap.ACQ_SCHEDULE.size() != 0){
 

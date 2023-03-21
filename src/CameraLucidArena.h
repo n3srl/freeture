@@ -117,7 +117,7 @@
 
             void getFPSBounds(double &fMin, double &fMax);
 
-            void getGainBounds(int &gMin, int &gMax);
+            void getGainBounds(double &gMin, double &gMax);
 
             bool getPixelFormat(CamPixFmt &format);
 
@@ -131,7 +131,7 @@
 
             bool setExposureTime(double exp);
 
-            bool setGain(int gain);
+            bool setGain(double gain);
 
             bool setFPS(double fps);
 

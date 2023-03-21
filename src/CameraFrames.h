@@ -115,7 +115,7 @@ class CameraFrames: public Camera {
 
         bool setExposureTime(double exp){return true;};
 
-        bool setGain(int gain) {return true;};
+        bool setGain(double gain) {return true;};
 
         bool setFPS(double fps){return true;};
 

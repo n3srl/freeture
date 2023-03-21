@@ -962,7 +962,7 @@
         return result;
     }
 
-    void CameraLucidArena::getGainBounds(int &gMin, int &gMax){
+    void CameraLucidArena::getGainBounds(double &gMin, double &gMax){
 
         double gainMin = 0.0;
         double gainMax = 0.0;
@@ -1081,7 +1081,7 @@
         return false;
     }
 
-    bool CameraLucidArena::setGain(int val){
+    bool CameraLucidArena::setGain(double val){
 
         double gMin, gMax;
 

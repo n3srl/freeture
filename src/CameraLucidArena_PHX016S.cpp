@@ -83,23 +83,6 @@
     }
 
     /**
-     * DTor.
-     */
-    freeture::CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S()
-    {
-
-        if(stream != NULL)
-            g_object_unref(stream);
-
-        if(camera != NULL)
-            g_object_unref(camera);
-
-        m_ArenaSDKSystem->DestroyDevice(m_Camera);
-		Arena::CloseSystem(m_ArenaSDKSystem);
-    }
-
-    /**
-     * Uses ARAVIS.
      * Called to get the current reachable cameras.
      * Lucid cameras are GigEVision cameras and a specific tag into the name. "PHX016S"
      */
@@ -107,8 +90,15 @@
     {
         vector<pair<int,string>> camerasList;
 
-        if (m_ArenaSDKSystem==nullptr)
-            m_ArenaSDKSystem =  Arena::OpenSystem();
+        try
+        {
+            if (m_ArenaSDKSystem == nullptr)
+                m_ArenaSDKSystem =  Arena::OpenSystem();
+        }
+        catch (std::exception& e)
+        {
+            ErrorManager::Exception(e);
+        }
 
         //arv_update_device_list();
         m_ArenaSDKSystem->UpdateDevices(100);
@@ -137,52 +127,6 @@
         }
 
        return camerasList;
-
-    }
-    /**
-     * Uses ARAVIS.
-     *
-     */
-    bool freeture::CameraLucidArena_PHX016S::listCameras()
-    {
-
-        ArvInterface *interface;
-        //arv_update_device_list();
-
-        int ni = arv_get_n_interfaces ();
-
-        cout << endl << "------------ GIGE CAMERAS WITH LUCID ARENA ----------" << endl << endl;
-
-        for (int j = 0; j< ni; j++)
-        {
-
-            interface = arv_gv_interface_get_instance();
-            arv_interface_update_device_list(interface);
-            //int nb = arv_get_n_devices();
-
-            int nb = arv_interface_get_n_devices(interface);
-            const char* name = arv_get_interface_id (j);
-            for(int i = 0; i < nb; i++)
-            {
-                if (strcmp(name,"GigEVision") == 0 && strcmp(name,"PHX016S") == 0)
-                {
-
-                cout << "-> [" << i << "] " << arv_interface_get_device_id(interface,i)<< endl;
-                //cout << "-> [" << i << "] " << arv_get_device_id(i)<< endl;
-                }
-            }
-
-            if(nb == 0) {
-                cout << "-> No cameras detected..." << endl;
-                return false;
-            }
-            delete interface;
-        }
-
-        cout << endl << "------------------------------------------------" << endl << endl;
-
-        return true;
-
     }
 
     /**
@@ -190,12 +134,27 @@
      */
     bool freeture::CameraLucidArena_PHX016S::createDevice(int id)
     {
+        try
+        {
+            if (m_ArenaSDKSystem == nullptr)
+                m_ArenaSDKSystem =  Arena::OpenSystem();
+        }
+        catch (std::exception& e)
+        {
+            ErrorManager::Exception(e);
+        }
+
         string deviceName;
 
         if(!getDeviceNameById(id, deviceName))
             return false;
 
-        if(m_Camera == NULL)
+        vector<Arena::DeviceInfo> deviceInfos = m_ArenaSDKSystem->GetDevices();
+        Arena::DeviceInfo& device_info = deviceInfos[id];
+        m_Camera = m_ArenaSDKSystem->CreateDevice(device_info);
+        m_Id = id;
+
+        if(m_Camera == nullptr)
         {
 
             BOOST_LOG_SEV(logger, fail) << "Fail to connect the camera.";
@@ -208,119 +167,711 @@
         return true;
     }
 
-    bool freeture::CameraLucidArena_PHX016S::setSize(int startx, int starty, int width, int height, bool customSize) {
-        if(customSize) {
-
-
-            arv_camera_set_region(camera, startx, starty, width, height,&error);
-            ErrorManager::CheckAravisError(&error);
-
-            arv_camera_get_region (camera, &mStartX, &mStartY, &mWidth, &mHeight,&error);
-            ErrorManager::CheckAravisError(&error);
-
-            BOOST_LOG_SEV(logger, notification) << "Camera region size : " << mWidth << "x" << mHeight;
-            if (arv_device_get_feature(arv_camera_get_device(camera), "OffsetX")) {
-                BOOST_LOG_SEV(logger, notification) << "Starting from : " << mStartX << "," << mStartY;
-            } else {
-                BOOST_LOG_SEV(logger, warning) << "OffsetX, OffsetY are not available: cannot set offset.";
-            }
-
-
-        // Default is maximum size
-        } else {
-
-            int sensor_width, sensor_height;
-
-            arv_camera_get_sensor_size(camera, &sensor_width, &sensor_height, &error);
-            ErrorManager::CheckAravisError(&error);
-
-            BOOST_LOG_SEV(logger, notification) << "Camera sensor size : " << sensor_width << "x" << sensor_height;
-
-            arv_camera_set_region(camera, 0, 0,sensor_width,sensor_height,&error);
-            ErrorManager::CheckAravisError(&error);
-
-            arv_camera_get_region (camera, NULL, NULL, &mWidth, &mHeight,&error);
-            ErrorManager::CheckAravisError(&error);
+    void freeture::CameraLucidArena_PHX016S::getFPSBounds(double &fMin, double &fMax)
+    {
+        if (m_Camera == nullptr)
+        {
+            ErrorManager::ArenaSDKError("Camera is nullptr");
+            return;
         }
 
-        return true;
+       double fpsMin = 0.0;
+       double fpsMax = 0.0;
 
+       GenApi::CFloatPtr pAcquisitionFrameRate = m_Camera->GetNodeMap()->GetNode("AcquisitionFrameRate");
+
+       if (!pAcquisitionFrameRate)
+       {
+            ErrorManager::ArenaSDKError("AcquisitionFrameRateEnable node not found");
+            return;
+       }
+
+       fpsMax = pAcquisitionFrameRate->GetMax();
+       fpsMin = pAcquisitionFrameRate->GetMin();
+
+       fMin = fpsMin;
+       fMax = fpsMax;
+    }
+
+    bool freeture::CameraLucidArena_PHX016S::setFPS(double fps)
+    {
+        if (m_Camera == nullptr)
+        {
+            ErrorManager::ArenaSDKError("Camera is nullptr");
+            return false;        }
+
+
+        bool pAcquisitionFrameRateEnable = m_Camera->GetNodeMap()->GetNode("AcquisitionFrameRateEnable");
+
+        if (!pAcquisitionFrameRateEnable)
+        {
+            ErrorManager::ArenaSDKError("AcquisitionFrameRateEnable node not found");
+            return false;
+        }
+
+        Arena::SetNodeValue<double>(m_Camera->GetNodeMap(), "AcquisitionFrameRate", fps);
+
+        return true;
     }
 
     bool freeture::CameraLucidArena_PHX016S::getDeviceNameById(int id, string &device)
     {
-		vector<Arena::DeviceInfo> deviceInfos = m_ArenaSDKSystem->GetDevices();
+        try
+        {
+            if (m_ArenaSDKSystem == nullptr)
+                m_ArenaSDKSystem =  Arena::OpenSystem();
+        }
+        catch (std::exception& e)
+        {
+            ErrorManager::Exception(e);
+        }
+
+        m_ArenaSDKSystem->UpdateDevices(100);
+
+        vector<Arena::DeviceInfo> deviceInfos = m_ArenaSDKSystem->GetDevices();
         int n_devices = deviceInfos.size();
 
         for(int i = 0; i< n_devices; i++){
 
             if(id == i){
-
                 device = deviceInfos[i].ModelName();
                 return true;
 
             }
         }
 
+
         BOOST_LOG_SEV(logger, fail) << "Fail to retrieve camera with this ID.";
         return false;
+    }
 
+    string freeture::CameraLucidArena_PHX016S::getModelName()
+    {
+        vector<Arena::DeviceInfo> deviceInfos = m_ArenaSDKSystem->GetDevices();
+        Arena::DeviceInfo& device_info = deviceInfos[m_Id];
+
+        return device_info.ModelName().c_str();
+    }
+
+    void freeture::CameraLucidArena_PHX016S::getExposureBounds(double &eMin, double &eMax)
+    {
+        if (m_Camera == nullptr)
+        {
+            ErrorManager::ArenaSDKError("Camera is nullptr");
+            return;
+        }
+
+        double exposureMin = 0.0;
+        double exposureMax = 0.0;
+
+        GenApi::CFloatPtr pExposureTime = m_Camera->GetNodeMap()->GetNode("ExposureTime");
+
+        if (!pExposureTime)
+        {
+            ErrorManager::ArenaSDKError("ExposureTime node not found");
+            return;
+        }
+
+        exposureMax = pExposureTime->GetMax();
+        exposureMin = pExposureTime->GetMin();
+
+        eMin = exposureMin;
+        eMax = exposureMax;
+    }
+
+    double freeture::CameraLucidArena_PHX016S::getExposureTime()
+    {
+        if (m_Camera == nullptr)
+        {
+            ErrorManager::ArenaSDKError("Camera is nullptr");
+            return -1.0;
+        }
+
+    	GenApi::CFloatPtr pExposureTime = m_Camera->GetNodeMap()->GetNode("ExposureTime");
+
+        if (!pExposureTime)
+        {
+            ErrorManager::ArenaSDKError("ExposureTime node not found");
+            return -1;
+        }
+
+        double result = pExposureTime->GetValue();
+
+        return result;
+    }
+
+    bool freeture::CameraLucidArena_PHX016S::setExposureTime( double val )
+    {
+        if (m_Camera == nullptr)
+        {
+            ErrorManager::ArenaSDKError("Camera is nullptr");
+            return false;
+        }
+
+        double expMin, expMax;
+
+        GenApi::CFloatPtr pExposureTime = m_Camera->GetNodeMap()->GetNode("ExposureTime");
+
+        if (! pExposureTime)
+        {
+            ErrorManager::ArenaSDKError("ExposureTime node not found");
+            return false;
+        }
+
+        expMax = pExposureTime->GetMax();
+        expMin = pExposureTime->GetMin();
+
+        if(val >= expMin && val <= expMax)
+        {
+            exp = val;
+
+            Arena::SetNodeValue<double>( m_Camera->GetNodeMap(), "ExposureTime", exp );
+        }
+        else
+        {
+            cout << "> Exposure value (" << val << ") is not in range [ " << expMin << " - " << expMax << " ]" << endl;
+            return false;
+        }
+
+        return true;
+    }
+
+    bool freeture::CameraLucidArena_PHX016S::setGain(double val)
+    {
+        if (m_Camera == nullptr)
+        {
+            ErrorManager::ArenaSDKError("Camera is nullptr");
+            return false;
+        }
+
+        double gMin, gMax;
+
+        GenApi::CFloatPtr pGain = m_Camera->GetNodeMap()->GetNode("Gain");
+
+        if (!pGain )
+        {
+             ErrorManager::ArenaSDKError("Gain node not found");
+             return false;
+        }
+
+
+        gMax=pGain->GetMax();
+        gMin=pGain->GetMin();
+
+
+        if((double)val >= gMin && (double)val <= gMax)
+        {
+            gain = val;
+            Arena::SetNodeValue<double>( m_Camera->GetNodeMap(), "Gain", exp );
+        }
+        else
+        {
+            cout << "> Gain value (" << val << ") is not in range [ " << gMin << " - " << gMax << " ]" << endl;
+            BOOST_LOG_SEV(logger, fail) << "> Gain value (" << val << ") is not in range [ " << gMin << " - " << gMax << " ]";
+            return false;
+        }
+
+        return true;
+    }
+
+    double freeture::CameraLucidArena_PHX016S::getGain()
+    {
+        if (m_Camera == nullptr)
+        {
+            ErrorManager::ArenaSDKError("Camera is nullptr");
+            return false;
+        }
+
+        GenApi::CFloatPtr pGain = m_Camera->GetNodeMap()->GetNode("Gain");
+
+        if (!pGain )
+        {
+             ErrorManager::ArenaSDKError("Gain node not found");
+             return false;
+        }
+
+        return pGain->GetValue();
     }
 
 
+    void freeture::CameraLucidArena_PHX016S::getGainBounds(double &gMin, double &gMax)
+    {
+
+        if (m_Camera == nullptr)
+        {
+            ErrorManager::ArenaSDKError("Camera is nullptr");
+            return;
+        }
+
+        double gainMin = 0.0;
+        double gainMax = 0.0;
+
+        GenApi::CFloatPtr pGain = m_Camera->GetNodeMap()->GetNode("Gain");
+
+        if (!pGain )
+        {
+             ErrorManager::ArenaSDKError("Gain node not found");
+             return;
+        }
+
+        gainMax=pGain->GetMax();
+        gainMin=pGain->GetMin();
+
+        gMin = gainMin;
+        gMax = gainMax;
+
+    }
+
+    bool freeture::CameraLucidArena_PHX016S::getFPS(double &value)
+    {
+        if (m_Camera == nullptr)
+        {
+            ErrorManager::ArenaSDKError("Camera is nullptr");
+            return false;
+        }
+
+        GenApi::CFloatPtr pAcquisitionFrameRate = m_Camera->GetNodeMap()->GetNode("AcquisitionFrameRate");
+
+        if (!pAcquisitionFrameRate )
+        {
+             ErrorManager::ArenaSDKError("AcquisitionFrameRate node not found");
+             return false;
+        }
+
+        value = pAcquisitionFrameRate->GetValue();
+
+        return true;
+    }
+
+    bool freeture::CameraLucidArena_PHX016S::getFrameSize(int &x, int &y, int &w, int &h)
+    {
+
+        if (m_Camera == nullptr)
+        {
+            ErrorManager::ArenaSDKError("Camera is nullptr");
+            return false;
+        }
+
+        int64_t ww = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "Width");
+        int64_t hh = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "Height");
+
+        int64_t xx = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "OffsetX");
+        int64_t yy = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "OffsetY");
+
+        x = xx;
+        y = yy;
+        w = ww;
+        h = hh;
+
+        return true;
+    }
+
+    bool freeture::CameraLucidArena_PHX016S::setCustomFrameSize(int startx, int starty, int width, int height)
+    {
+        int64_t xx = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "OffsetX");
+
+        if (xx>0)
+        {
+            cout << "Starting from : " << mStartX << "," << mStartY;
+            BOOST_LOG_SEV(logger, notification) << "Starting from : " << mStartX << "," << mStartY;
+        }
+        else
+        {
+            BOOST_LOG_SEV(logger, warning) << "OffsetX, OffsetY are not available: cannot set offset.";
+            return false;
+        }
+
+        Arena::SetNodeValue<int64_t>( m_Camera->GetNodeMap(), "OffsetX", startx );
+        Arena::SetNodeValue<int64_t>( m_Camera->GetNodeMap(), "OffsetY", starty );
+        Arena::SetNodeValue<int64_t>( m_Camera->GetNodeMap(), "Width"  , width );
+        Arena::SetNodeValue<int64_t>( m_Camera->GetNodeMap(), "Height" , height );
+
+
+        mStartX = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "OffsetX");
+        mStartY = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "OffsetY");
+        mWidth  = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "Width");
+        mHeight = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "Height");
+
+
+        BOOST_LOG_SEV(logger, notification) << "Camera region size : " << mWidth << "x" << mHeight;
+
+        return true;
+    }
+
+    bool freeture::CameraLucidArena_PHX016S::setDefaultFrameSize()
+    {
+        int64_t sensor_width  = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "SensorWidth");
+        int64_t sensor_height = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "SensorHeigth");
+
+        BOOST_LOG_SEV(logger, notification) << "Camera sensor size : " << sensor_width << "x" << sensor_height;
+
+        Arena::SetNodeValue<int64_t>( m_Camera->GetNodeMap(), "OffsetX", 0 );
+        Arena::SetNodeValue<int64_t>( m_Camera->GetNodeMap(), "OffsetY", 0 );
+
+        Arena::SetNodeValue<int64_t>( m_Camera->GetNodeMap(), "Width" , sensor_width );
+        Arena::SetNodeValue<int64_t>( m_Camera->GetNodeMap(), "Height", sensor_height );
+
+        mWidth  = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "Width");
+        mHeight = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "Height");
+    }
+
+    bool freeture::CameraLucidArena_PHX016S::setSize(int startx, int starty, int width, int height, bool customSize)
+    {
+
+        if (m_Camera == nullptr)
+        {
+            ErrorManager::ArenaSDKError("Camera is nullptr");
+            return false;
+        }
+
+        if(customSize)
+        {
+            return setCustomFrameSize(startx,starty,width,height);
+        }
+        else
+        {
+            return setDefaultFrameSize();
+        }
+
+        return true;
+    }
+
+    bool freeture::CameraLucidArena_PHX016S::getPixelFormat(CamPixFmt &format)
+    {
+
+        if (m_Camera == nullptr)
+        {
+            ErrorManager::ArenaSDKError("Camera is nullptr");
+            return false;
+        }
+
+    	GenICam::gcstring _pixFormat = Arena::GetNodeValue<GenICam::gcstring>(m_Camera->GetNodeMap(), "PixelFormat");
+
+        string pixFormat (_pixFormat.c_str());
+
+        if (pixFormat == "Mono8")
+            format = MONO8;
+        else
+        if (pixFormat == "Mono12")
+            format = MONO12;
+        else
+        if (pixFormat == "Mono16")
+            format = MONO16;
+        else
+            return false;
+
+        return true;
+    }
+
+    bool freeture::CameraLucidArena_PHX016S::setPixelFormat(CamPixFmt depth)
+    {
+
+        if (m_Camera == nullptr)
+        {
+            ErrorManager::ArenaSDKError("Camera is nullptr");
+            return false;
+        }
+
+
+        switch(depth)
+        {
+
+            case MONO8 :
+            {
+                Arena::SetNodeValue<GenICam::gcstring>(m_Camera->GetNodeMap(), "PixelFormat", "Mono8");
+            }
+            break;
+
+            case MONO12 :
+            {
+                Arena::SetNodeValue<GenICam::gcstring>(m_Camera->GetNodeMap(), "PixelFormat", "Mono12");
+            }
+            break;
+            case MONO16 :
+            {
+                Arena::SetNodeValue<GenICam::gcstring>(m_Camera->GetNodeMap(), "PixelFormat", "Mono16");
+            }
+            break;
+        }
+
+
+
+        return true;
+    }
+
+    void freeture::CameraLucidArena_PHX016S::getAvailablePixelFormats()
+    {
+                cout << ">> Device pixel formats (firmware ver: 1.65.0 - 01/2023  :" << endl;
+                cout << "- Mono8" << endl;
+                cout << "- Mono10" << endl;
+                cout << "- Mono10p" << endl;
+                cout << "- Mono10Packed" << endl;
+                cout << "- Mono12" << endl;
+                cout << "- Mono12p" << endl;
+                cout << "- Mono12Packed" << endl;
+                cout << "- Mono16" << endl;
+                cout << "- Mono24" << endl;
+                cout << "- PolarizeMono8" << endl;
+                cout << "- PolarizeMono12" << endl;
+                cout << "- PolarizeMono12p" << endl;
+                cout << "- PolarizeMono12Packed" << endl;
+                cout << "- PolarizeMono16" << endl;
+                cout << "- BayerGR8" << endl;
+                cout << "- BayerRG8" << endl;
+                cout << "- BayerGB8" << endl;
+                cout << "- BayerBG8" << endl;
+                cout << "- BayerGR10" << endl;
+                cout << "- BayerRG10" << endl;
+                cout << "- BayerGB10" << endl;
+                cout << "- BayerBG10" << endl;
+                cout << "- BayerGR10p" << endl;
+                cout << "- BayerRG10p" << endl;
+                cout << "- BayerGB10p" << endl;
+                cout << "- BayerBG10p" << endl;
+                cout << "- BayerGR10Packed" << endl;
+                cout << "- BayerRG10Packed" << endl;
+                cout << "- BayerGB10Packed" << endl;
+                cout << "- BayerBG10Packed" << endl;
+                cout << "- BayerGR12" << endl;
+                cout << "- BayerRG12" << endl;
+                cout << "- BayerGB12" << endl;
+                cout << "- BayerBG12" << endl;
+                cout << "- BayerGR12p" << endl;
+                cout << "- BayerRG12p" << endl;
+                cout << "- BayerGB12p" << endl;
+                cout << "- BayerBG12p" << endl;
+                cout << "- BayerGR12Packed" << endl;
+                cout << "- BayerRG12Packed" << endl;
+                cout << "- BayerGB12Packed" << endl;
+                cout << "- BayerBG12Packed" << endl;
+                cout << "- BayerGR16" << endl;
+                cout << "- BayerRG16" << endl;
+                cout << "- BayerGB16" << endl;
+                cout << "- BayerBG16" << endl;
+                cout << "- BayerGR24" << endl;
+                cout << "- BayerRG24" << endl;
+                cout << "- BayerGB24" << endl;
+                cout << "- BayerBG24" << endl;
+                cout << "- RGB8" << endl;
+                cout << "- RGB12p" << endl;
+                cout << "- RGB16" << endl;
+                cout << "- RGB24" << endl;
+                cout << "- BGR8" << endl;
+                cout << "- BGR12p" << endl;
+                cout << "- BGR16" << endl;
+                cout << "- BGR24" << endl;
+                cout << "- YCbCr8" << endl;
+                cout << "- YCbCr8_CbYCr" << endl;
+                cout << "- YUV422_8" << endl;
+                cout << "- YUV422_8_UYVY" << endl;
+                cout << "- YCbCr411_8" << endl;
+                cout << "- YUV411_8_UYYVYY" << endl;
+                cout << "- PolarizedAngles_0d_45d_90d_135d_Mono8" << endl;
+                cout << "- PolarizedAngles_0d_45d_90d_135d_Mono12p" << endl;
+                cout << "- PolarizedAngles_0d_45d_90d_135d_Mono16" << endl;
+                cout << "- PolarizedStokes_S0_S1_S2_Mono8" << endl;
+                cout << "- PolarizedStokes_S0_S1_S2_Mono12p" << endl;
+                cout << "- PolarizedStokes_S0_S1_S2_Mono16" << endl;
+                cout << "- PolarizedStokes_S0_S1_S2_S3_Mono8" << endl;
+                cout << "- PolarizedStokes_S0_S1_S2_S3_Mono12p" << endl;
+                cout << "- PolarizedStokes_S0_S1_S2_S3_Mono16" << endl;
+                cout << "- PolarizedDolpAolp_Mono8" << endl;
+                cout << "- PolarizedDolpAolp_Mono12p" << endl;
+                cout << "- PolarizedDolp_Mono8" << endl;
+                cout << "- PolarizedDolp_Mono12p" << endl;
+                cout << "- PolarizedAolp_Mono8" << endl;
+                cout << "- PolarizedAolp_Mono12p" << endl;
+                cout << "- PolarizedAngles_0d_45d_90d_135d_BayerRG8" << endl;
+                cout << "- PolarizedAngles_0d_45d_90d_135d_BayerRG12p" << endl;
+                cout << "- PolarizedAngles_0d_45d_90d_135d_BayerRG16" << endl;
+                cout << "- PolarizedStokes_S0_S1_S2_BayerRG8" << endl;
+                cout << "- PolarizedStokes_S0_S1_S2_BayerRG12p" << endl;
+                cout << "- PolarizedStokes_S0_S1_S2_BayerRG16" << endl;
+                cout << "- PolarizedStokes_S0_S1_S2_S3_BayerRG8" << endl;
+                cout << "- PolarizedStokes_S0_S1_S2_S3_BayerRG12p" << endl;
+                cout << "- PolarizedStokes_S0_S1_S2_S3_BayerRG16" << endl;
+                cout << "- PolarizedDolpAolp_BayerRG8" << endl;
+                cout << "- PolarizedDolpAolp_BayerRG12p" << endl;
+                cout << "- PolarizedDolp_BayerRG8" << endl;
+                cout << "- PolarizedDolp_BayerRG12p" << endl;
+                cout << "- PolarizedAolp_BayerRG8" << endl;
+                cout << "- PolarizedAolp_BayerRG12p" << endl;
+                cout << "- Raw24" << endl;
+                cout << "- Raw16" << endl;
+                cout << "- YCbCr422_8_CbYCrY" << endl;
+                cout << "- YCbCr422_16_CbYCrY" << endl;
+                cout << "- YCbCr422_24_CbYCrY" << endl;
+                cout << "- YCbCr411_8_CbYYCrYY" << endl;
+                cout << "- YCbCr411_16_CbYYCrYY" << endl;
+                cout << "- YCbCr411_24_CbYYCrYY" << endl;
+                cout << "- PolarizedDolpAngle_Mono8" << endl;
+                cout << "- PolarizedDolpAngle_Mono12p" << endl;
+                cout << "- PolarizedDolpAngle_Mono16" << endl;
+                cout << "- PolarizedDolpAngle_BayerRG8" << endl;
+                cout << "- PolarizedDolpAngle_BayerRG12p" << endl;
+                cout << "- PolarizedDolpAngle_BayerRG16" << endl;
+
+                // Compare found pixel formats to currently formats supported by freeture
+
+                cout << endl <<  ">> Available pixel formats :" << endl;
+                cout << "- MONO8 available --> ID : Mono8 "<< endl;
+                cout << "- MONO12 available --> ID : Mono12 " << endl;
+                cout << "- MONO16 available --> ID : Mono16" << endl;
+
+    }
+
+    void freeture::CameraLucidArena_PHX016S::grabCleanse()
+    {
+    }
+
+    void freeture::CameraLucidArena_PHX016S::acqStop()
+    {
+        if (m_Camera == nullptr)
+        {
+            ErrorManager::ArenaSDKError("Camera is nullptr");
+            return;
+        }
+
+        //arv_stream_get_statistics(stream, &nbCompletedBuffers, &nbFailures, &nbUnderruns);
+
+        //cout << "Completed buffers = " << (unsigned long long) nbCompletedBuffers   << endl;
+        //cout << "Failures          = " << (unsigned long long) nbFailures           << endl;
+        //cout << "Underruns         = " << (unsigned long long) nbUnderruns          << endl;
+
+        BOOST_LOG_SEV(logger, notification) << "Completed buffers = " << (unsigned long long) nbCompletedBuffers;
+        BOOST_LOG_SEV(logger, notification) << "Failures          = " << (unsigned long long) nbFailures;
+        BOOST_LOG_SEV(logger, notification) << "Underruns         = " << (unsigned long long) nbUnderruns;
+
+        BOOST_LOG_SEV(logger, notification) << "Stopping acquisition...";
+
+      	m_Camera->StopStream();
+
+        BOOST_LOG_SEV(logger, notification) << "Acquisition stopped.";
+
+        BOOST_LOG_SEV(logger, notification) << "Unreferencing stream.";
+        //g_object_unref(stream);
+        //stream = NULL;
+
+        BOOST_LOG_SEV(logger, notification) << "Unreferencing camera.";
+        m_ArenaSDKSystem->DestroyDevice(m_Camera);
+        m_Camera = nullptr;
+    }
+
+    bool freeture::CameraLucidArena_PHX016S::acqStart()
+    {
+        if (m_Camera == nullptr)
+        {
+            ErrorManager::ArenaSDKError("Camera is nullptr");
+            return false;
+        }
+
+    	// Set acquisition mode
+        //    Set acquisition mode before starting the stream. Starting the stream
+        //    requires the acquisition mode to be set beforehand. The acquisition
+        //    mode controls the number of images a device acquires once the stream
+        //    has been started. Setting the acquisition mode to 'Continuous' keeps
+        //    the stream from stopping. This example returns the camera to its
+        //    initial acquisition mode near the end of the example.
+        BOOST_LOG_SEV(logger, notification) << "Set camera to CONTINUOUS MODE";
+      	Arena::SetNodeValue<GenICam::gcstring>( m_Camera->GetNodeMap(), "AcquisitionMode", "Continuous");
+
+      	// Set buffer handling mode
+        //    Set buffer handling mode before starting the stream. Starting the
+        //    stream requires the buffer handling mode to be set beforehand. The
+        //    buffer handling mode determines the order and behavior of buffers in
+        //    the underlying stream engine. Setting the buffer handling mode to
+        //    'NewestOnly' ensures the most recent image is delivered, even if it
+        //    means skipping frames.
+      	BOOST_LOG_SEV(logger, notification) << "Set buffer handling mode to 'NewestOnly'";
+        Arena::SetNodeValue<GenICam::gcstring>( m_Camera->GetTLStreamNodeMap(), "StreamBufferHandlingMode", "NewestOnly");
+
+        // Enable stream auto negotiate packet size
+		//    Setting the stream packet size is done before starting the stream.
+		//    Setting the stream to automatically negotiate packet size instructs
+		//    the camera to receive the largest packet size that the system will
+		//    allow. This generally increases frame rate and results in fewer
+		//    interrupts per image, thereby reducing CPU load on the host system.
+		//    Ethernet settings may also be manually changed to allow for a
+		//    larger packet size.
+        BOOST_LOG_SEV(logger, notification) << "Enable stream to auto negotiate packet size";
+
+        // Disable stream packet resend
+		//    Enable stream packet resend before starting the stream. Images are
+		//    sent from the camera to the host in packets using UDP protocol,
+		//    which includes a header image number, packet number, and timestamp
+		//    information. If a packet is missed while receiving an image, a
+		//    packet resend is requested and this information is used to retrieve
+		//    and redeliver the missing packet in the correct order.
+        BOOST_LOG_SEV(logger, notification) << "Disable stream packet resend";
+		Arena::SetNodeValue<bool>( m_Camera->GetTLStreamNodeMap(), "StreamPacketResendEnable", false);
+
+
+		Arena::SetNodeValue<bool>( m_Camera->GetTLStreamNodeMap(), "StreamAutoNegotiatePacketSize", true);
+
+        BOOST_LOG_SEV(logger, notification) << "Set camera TriggerMode to Off";
+        Arena::SetNodeValue<GenICam::gcstring>( m_Camera->GetNodeMap(), "TriggerMode", "Off");
+
+        // Start stream
+        //    Start the stream before grabbing any images. Starting the stream
+        //    allocates buffers, which can be passed in as an argument (default: 10),
+        //    and begins filling them with data. Starting the stream blocks write
+        //    access to many features such as width, height, and pixel format, as
+        //    well as acquisition and buffer handling modes, among others. The stream
+        //    needs to be stopped later.
+        BOOST_LOG_SEV(logger, notification) << "Start acquisition on camera";
+        m_Camera->StartStream();
+
+        return true;
+    }
 
     bool freeture::CameraLucidArena_PHX016S::grabInitialization()
     {
         frameCounter = 0;
 
-        payload = arv_camera_get_payload (camera, &error);
-        ErrorManager::CheckAravisError(&error);
+        BOOST_LOG_SEV(logger, notification) << "Camera payload (NOT USED): " << payload;
 
-        BOOST_LOG_SEV(logger, notification) << "Camera payload : " << payload;
+        pixFormat == Arena::GetNodeValue<GenICam::gcstring>(m_Camera->GetNodeMap(), "PixelFormat");
 
-        pixFormat = arv_camera_get_pixel_format(camera, &error);
-        ErrorManager::CheckAravisError(&error);
+        getFPSBounds(fpsMin,fpsMax);
 
-        arv_camera_get_frame_rate_bounds(camera, &fpsMin, &fpsMax, &error);
-        ErrorManager::CheckAravisError(&error);
+        BOOST_LOG_SEV(logger, notification) << "Camera FPS bound min : " << fpsMin;
+        BOOST_LOG_SEV(logger, notification) << "Camera FPS bound max : " << fpsMax;
 
-        arv_camera_get_exposure_time_bounds (camera, &exposureMin, &exposureMax, &error);
-        ErrorManager::CheckAravisError(&error);
+        getExposureBounds(exposureMin,exposureMax);
 
         BOOST_LOG_SEV(logger, notification) << "Camera exposure bound min : " << exposureMin;
         BOOST_LOG_SEV(logger, notification) << "Camera exposure bound max : " << exposureMax;
 
-        arv_camera_get_gain_bounds (camera, &gainMin, &gainMax, &error);
-        ErrorManager::CheckAravisError(&error);
+        getGainBounds(gainMin,gainMax);
 
         BOOST_LOG_SEV(logger, notification) << "Camera gain bound min : " << gainMin;
         BOOST_LOG_SEV(logger, notification) << "Camera gain bound max : " << gainMax;
 
         BOOST_LOG_SEV(logger, notification) << "Camera frame rate : " << fps;
 
-        capsString = arv_pixel_format_to_gst_caps_string(pixFormat);
+        capsString = pixFormat.c_str();
+
         BOOST_LOG_SEV(logger, notification) << "Camera format : " << capsString;
 
-        gain = arv_camera_get_gain(camera,&error);
-        ErrorManager::CheckAravisError(&error);
+        gain = getGain();
 
         BOOST_LOG_SEV(logger, notification) << "Camera gain : " << gain;
 
-        exp = arv_camera_get_exposure_time(camera, &error);
-        ErrorManager::CheckAravisError(&error);
+        exp = getExposureTime();
 
         BOOST_LOG_SEV(logger, notification) << "Camera exposure : " << exp;
 
         cout << endl;
 
-        cout << "DEVICE SELECTED : " << arv_camera_get_device_id(camera,&error)    << endl;
-        ErrorManager::CheckAravisError(&error);
+        cout << "DEVICE SELECTED : " << m_Id    << endl;
 
-        cout << "DEVICE NAME     : " << arv_camera_get_model_name(camera,&error)   << endl;
-        ErrorManager::CheckAravisError(&error);
+        string model_name;
 
-        cout << "DEVICE VENDOR   : " << arv_camera_get_vendor_name(camera,&error)  << endl;
-        ErrorManager::CheckAravisError(&error);
+        getDeviceNameById(m_Id, model_name);
+
+        cout << "DEVICE NAME     : " << model_name  << endl;
+
+        cout << "DEVICE VENDOR   : " << "Lucid" << endl;
 
         cout << "PAYLOAD         : " << payload                             << endl;
         cout << "Start X         : " << mStartX                             << endl
@@ -336,291 +887,47 @@
 
         cout << endl;
 
+
+      	// Set buffer handling mode
+        //    Set buffer handling mode before starting the stream. Starting the
+        //    stream requires the buffer handling mode to be set beforehand. The
+        //    buffer handling mode determines the order and behavior of buffers in
+        //    the underlying stream engine. Setting the buffer handling mode to
+        //    'NewestOnly' ensures the most recent image is delivered, even if it
+        //    means skipping frames.
+      	BOOST_LOG_SEV(logger, notification) << "Set buffer handling mode to 'NewestOnly'";
+        Arena::SetNodeValue<GenICam::gcstring>( m_Camera->GetTLStreamNodeMap(), "StreamBufferHandlingMode", "NewestOnly");
+
+        // Enable stream auto negotiate packet size
+		//    Setting the stream packet size is done before starting the stream.
+		//    Setting the stream to automatically negotiate packet size instructs
+		//    the camera to receive the largest packet size that the system will
+		//    allow. This generally increases frame rate and results in fewer
+		//    interrupts per image, thereby reducing CPU load on the host system.
+		//    Ethernet settings may also be manually changed to allow for a
+		//    larger packet size.
+        BOOST_LOG_SEV(logger, notification) << "Enable stream to auto negotiate packet size";
+		Arena::SetNodeValue<bool>( m_Camera->GetTLStreamNodeMap(), "StreamAutoNegotiatePacketSize", true);
+
+        // Disable stream packet resend
+		//    Enable stream packet resend before starting the stream. Images are
+		//    sent from the camera to the host in packets using UDP protocol,
+		//    which includes a header image number, packet number, and timestamp
+		//    information. If a packet is missed while receiving an image, a
+		//    packet resend is requested and this information is used to retrieve
+		//    and redeliver the missing packet in the correct order.
+        BOOST_LOG_SEV(logger, notification) << "Disable stream packet resend";
+		Arena::SetNodeValue<bool>( m_Camera->GetTLStreamNodeMap(), "StreamPacketResendEnable", false);
+
         // Create a new stream object. Open stream on Camera.
-        stream = arv_camera_create_stream(camera, NULL, NULL,&error);
-        ErrorManager::CheckAravisError(&error);
+        m_Camera->StartStream();
 
-        if(stream == NULL){
+        Arena::IImage* pImage = m_Camera->GetImage(IMAGE_TIMEOUT);
 
-            BOOST_LOG_SEV(logger, critical) << "Fail to create stream with arv_camera_create_stream()";
-            return false;
-
-        }
-
-        if (ARV_IS_GV_STREAM(stream)){
-
-            bool            arv_option_auto_socket_buffer   = true;
-            bool            arv_option_no_packet_resend     = true;
-            unsigned int    arv_option_packet_timeout       = 20;
-            unsigned int    arv_option_frame_retention      = 100;
-
-            if(arv_option_auto_socket_buffer){
-
-                g_object_set(stream,
-                            // ARV_GV_STREAM_SOCKET_BUFFER_FIXED : socket buffer is set to a given fixed value.
-                            // ARV_GV_STREAM_SOCKET_BUFFER_AUTO: socket buffer is set with respect to the payload size.
-                            "socket-buffer", ARV_GV_STREAM_SOCKET_BUFFER_AUTO,
-                            // Socket buffer size, in bytes.
-                            // Allowed values: >= G_MAXULONG
-                            // Default value: 0
-                            "socket-buffer-size", 0, NULL);
-
-            }
-
-            if(arv_option_no_packet_resend){
-
-                // # packet-resend : Enables or disables the packet resend mechanism
-
-                // If packet resend is disabled and a packet has been lost during transmission,
-                // the grab result for the returned buffer holding the image will indicate that
-                // the grab failed and the image will be incomplete.
-                //
-                // If packet resend is enabled and a packet has been lost during transmission,
-                // a request is sent to the camera. If the camera still has the packet in its
-                // buffer, it will resend the packet. If there are several lost packets in a
-                // row, the resend requests will be combined.
-
-                g_object_set(stream,
-                            // ARV_GV_STREAM_PACKET_RESEND_NEVER: never request a packet resend
-                            // ARV_GV_STREAM_PACKET_RESEND_ALWAYS: request a packet resend if a packet was missing
-                            // Default value: ARV_GV_STREAM_PACKET_RESEND_ALWAYS
-                            "packet-resend", ARV_GV_STREAM_PACKET_RESEND_NEVER, NULL);
-
-            }
-
-            g_object_set(stream,
-                        // # packet-timeout
-
-                        // The Packet Timeout parameter defines how long (in milliseconds) we will wait for
-                        // the next expected packet before it initiates a resend request.
-
-                        // Packet timeout, in µs.
-                        // Allowed values: [1000,10000000]
-                        // Default value: 40000
-                        "packet-timeout",/* (unsigned) arv_option_packet_timeout * 1000*/(unsigned)40000,
-                        // # frame-retention
-
-                        // The Frame Retention parameter sets the timeout (in milliseconds) for the
-                        // frame retention timer. Whenever detection of the leader is made for a frame,
-                        // the frame retention timer starts. The timer resets after each packet in the
-                        // frame is received and will timeout after the last packet is received. If the
-                        // timer times out at any time before the last packet is received, the buffer for
-                        // the frame will be released and will be indicated as an unsuccessful grab.
-
-                        // Packet retention, in µs.
-                        // Allowed values: [1000,10000000]
-                        // Default value: 200000
-                        "frame-retention", /*(unsigned) arv_option_frame_retention * 1000*/(unsigned) 200000,NULL);
-
-        }else
-            return false;
-
-        // Push 50 buffer in the stream input buffer queue.
-        for (int i = 0; i < 50; i++)
-            arv_stream_push_buffer(stream, arv_buffer_new(payload, NULL));
-
-
+        m_Camera->RequeueBuffer(pImage);
 
         return true;
     }
-
-    void freeture::CameraLucidArena_PHX016S::grabCleanse(){}
-
-    bool freeture::CameraLucidArena_PHX016S::acqStart()
-    {
-
-        BOOST_LOG_SEV(logger, notification) << "Set camera to CONTINUOUS MODE";
-        arv_camera_set_acquisition_mode(camera, ARV_ACQUISITION_MODE_CONTINUOUS, &error);
-        ErrorManager::CheckAravisError(&error);
-
-        BOOST_LOG_SEV(logger, notification) << "Set camera TriggerMode to Off";
-        arv_device_set_string_feature_value(arv_camera_get_device (camera), "TriggerMode" , "Off", &error);
-        ErrorManager::CheckAravisError(&error);
-
-        BOOST_LOG_SEV(logger, notification) << "Start acquisition on camera";
-        arv_camera_start_acquisition(camera, &error);
-        ErrorManager::CheckAravisError(&error);
-
-        return true;
-    }
-
-    void freeture::CameraLucidArena_PHX016S::acqStop()
-    {
-        arv_stream_get_statistics(stream, &nbCompletedBuffers, &nbFailures, &nbUnderruns);
-
-        //cout << "Completed buffers = " << (unsigned long long) nbCompletedBuffers   << endl;
-        //cout << "Failures          = " << (unsigned long long) nbFailures           << endl;
-        //cout << "Underruns         = " << (unsigned long long) nbUnderruns          << endl;
-
-        BOOST_LOG_SEV(logger, notification) << "Completed buffers = " << (unsigned long long) nbCompletedBuffers;
-        BOOST_LOG_SEV(logger, notification) << "Failures          = " << (unsigned long long) nbFailures;
-        BOOST_LOG_SEV(logger, notification) << "Underruns         = " << (unsigned long long) nbUnderruns;
-
-        BOOST_LOG_SEV(logger, notification) << "Stopping acquisition...";
-        arv_camera_stop_acquisition(camera, &error);
-        ErrorManager::CheckAravisError(&error);
-
-        BOOST_LOG_SEV(logger, notification) << "Acquisition stopped.";
-
-        BOOST_LOG_SEV(logger, notification) << "Unreferencing stream.";
-        g_object_unref(stream);
-        stream = NULL;
-
-        BOOST_LOG_SEV(logger, notification) << "Unreferencing camera.";
-        g_object_unref(camera);
-        camera = NULL;
-
-    }
-
-    bool freeture::CameraLucidArena_PHX016S::grabImage(Frame &newFrame){
-
-        ArvBuffer *arv_buffer;
-        //exp = arv_camera_get_exposure_time(camera);
-
-        arv_buffer = arv_stream_timeout_pop_buffer(stream,2000000); //us
-        char *buffer_data;
-        size_t buffer_size;
-
-        if(arv_buffer == NULL){
-
-            throw runtime_error("arv_buffer is NULL");
-            return false;
-
-        }else{
-
-            try{
-
-                if ( arv_buffer_get_status(arv_buffer) == ARV_BUFFER_STATUS_SUCCESS )
-                {
-
-                    //BOOST_LOG_SEV(logger, normal) << "Success to grab a frame.";
-
-                    buffer_data = (char *) arv_buffer_get_data (arv_buffer, &buffer_size);
-
-                    //Timestamping.
-                    //string acquisitionDate = TimeDate::localDateTime(microsec_clock::universal_time(),"%Y:%m:%d:%H:%M:%S");
-                    //BOOST_LOG_SEV(logger, normal) << "Date : " << acquisitionDate;
-                    boost::posix_time::ptime time =  boost::posix_time::microsec_clock::universal_time();
-                    string acquisitionDate = to_iso_extended_string(time);
-                    //BOOST_LOG_SEV(logger, normal) << "Date : " << acqDateInMicrosec;
-
-                    Mat image;
-                    CamPixFmt imgDepth = MONO8;
-                    int saturateVal = 0;
-
-                    if(pixFormat == ARV_PIXEL_FORMAT_MONO_8)
-                    {
-                        //BOOST_LOG_SEV(logger, normal) << "Creating Mat 8 bits ...";
-                        image = Mat(mHeight, mWidth, CV_8UC1, buffer_data);
-                        imgDepth = MONO8;
-                        saturateVal = 255;
-
-                    }
-                    else if(pixFormat == ARV_PIXEL_FORMAT_MONO_12)
-                    {
-
-                        //BOOST_LOG_SEV(logger, normal) << "Creating Mat 16 bits ...";
-                        image = Mat(mHeight, mWidth, CV_16UC1, buffer_data);
-                        imgDepth = MONO12;
-                        saturateVal = 4095;
-
-                        //double t3 = (double)getTickCount();
-
-                        if(shiftBitsImage){
-
-                            //BOOST_LOG_SEV(logger, normal) << "Shifting bits ...";
-
-
-                                unsigned short * p;
-
-                                for(int i = 0; i < image.rows; i++){
-                                    p = image.ptr<unsigned short>(i);
-                                    for(int j = 0; j < image.cols; j++)
-                                        p[j] = p[j] >> 4;
-                                }
-
-                            //BOOST_LOG_SEV(logger, normal) << "Bits shifted.";
-
-                        }
-
-                        //t3 = (((double)getTickCount() - t3)/getTickFrequency())*1000;
-                        //cout << "> Time shift : " << t3 << endl;
-                    }
-                    else if(pixFormat == ARV_PIXEL_FORMAT_MONO_16)
-                    {
-                        //BOOST_LOG_SEV(logger, normal) << "Creating Mat 16 bits ...";
-                        image = Mat(mHeight, mWidth, CV_16UC1, buffer_data);
-                        imgDepth = MONO16;
-                        saturateVal = 65535;
-
-                        //double t3 = (double)getTickCount();
-                        //t3 = (((double)getTickCount() - t3)/getTickFrequency())*1000;
-                        //cout << "> Time shift : " << t3 << endl;
-                    }
-
-                    //BOOST_LOG_SEV(logger, normal) << "Creating frame object ...";
-                    newFrame = Frame(image, gain, exp, acquisitionDate);
-                    //BOOST_LOG_SEV(logger, normal) << "Setting date of frame ...";
-                    //newFrame.setAcqDateMicro(acqDateInMicrosec);
-                    //BOOST_LOG_SEV(logger, normal) << "Setting fps of frame ...";
-                    newFrame.mFps = fps;
-                    newFrame.mFormat = imgDepth;
-                    //BOOST_LOG_SEV(logger, normal) << "Setting saturated value of frame ...";
-                    newFrame.mSaturatedValue = saturateVal;
-                    newFrame.mFrameNumber = frameCounter;
-                    frameCounter++;
-
-                    //BOOST_LOG_SEV(logger, normal) << "Re-pushing arv buffer in stream ...";
-                    arv_stream_push_buffer(stream, arv_buffer);
-
-                    return true;
-
-                }else{
-
-                    switch(arv_buffer_get_status(arv_buffer)){
-
-                        case 0 :
-                            cout << "ARV_BUFFER_STATUS_SUCCESS : the buffer contains a valid image"<<endl;
-                            break;
-                        case 1 :
-                            cout << "ARV_BUFFER_STATUS_CLEARED: the buffer is cleared"<<endl;
-                            break;
-                        case 2 :
-                            cout << "ARV_BUFFER_STATUS_TIMEOUT: timeout was reached before all packets are received"<<endl;
-                            break;
-                        case 3 :
-                            cout << "ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets"<<endl;
-                            break;
-                        case 4 :
-                            cout << "ARV_BUFFER_STATUS_WRONG_PACKET_ID: stream has packet with wrong id"<<endl;
-                            break;
-                        case 5 :
-                            cout << "ARV_BUFFER_STATUS_SIZE_MISMATCH: the received image didn't fit in the buffer data space"<<endl;
-                            break;
-                        case 6 :
-                            cout << "ARV_BUFFER_STATUS_FILLING: the image is currently being filled"<<endl;
-                            break;
-                        case 7 :
-                            cout << "ARV_BUFFER_STATUS_ABORTED: the filling was aborted before completion"<<endl;
-                            break;
-
-                    }
-
-                    arv_stream_push_buffer(stream, arv_buffer);
-
-                    return false;
-                }
-
-            }catch(exception& e){
-
-                cout << e.what() << endl;
-                BOOST_LOG_SEV(logger, critical) << e.what() ;
-                return false;
-
-            }
-        }
-    }
-
 
     bool freeture::CameraLucidArena_PHX016S::grabSingleImage(Frame &frame, int camID)
     {
@@ -638,64 +945,62 @@
         if(!setGain(frame.mGain))
             return false;
 
-        if(frame.mWidth > 0 && frame.mHeight > 0) {
-
-            setFrameSize(frame.mStartX, frame.mStartY, frame.mWidth, frame.mHeight,1);
-            //arv_camera_set_region(camera, frame.mStartX, frame.mStartY, frame.mWidth, frame.mHeight);
-            //arv_camera_get_region (camera, NULL, NULL, &mWidth, &mHeight);
-
-        }else{
-
-            int sensor_width, sensor_height;
-
-            arv_camera_get_sensor_size(camera, &sensor_width, &sensor_height, &error);
-            ErrorManager::CheckAravisError(&error);
-
-            // Use maximum sensor size.
-            arv_camera_set_region(camera, 0, 0,sensor_width,sensor_height, &error);
-            ErrorManager::CheckAravisError(&error);
-
-            arv_camera_get_region (camera, NULL, NULL, &mWidth, &mHeight, &error);
-            ErrorManager::CheckAravisError(&error);
-
+        if(frame.mWidth > 0 && frame.mHeight > 0)
+        {
+            setCustomFrameSize(frame.mStartX, frame.mStartY, frame.mWidth, frame.mHeight);
+        }
+        else
+        {
+            setDefaultFrameSize();
         }
 
-        payload = arv_camera_get_payload (camera, &error);
-        ErrorManager::CheckAravisError(&error);
+   		Arena::IImage* pImage = m_Camera->GetImage(IMAGE_TIMEOUT);
 
-        pixFormat = arv_camera_get_pixel_format (camera, &error);
-        ErrorManager::CheckAravisError(&error);
+        size_t size = pImage->GetSizeFilled();
+		size_t width = pImage->GetWidth();
+		size_t height = pImage->GetHeight();
 
-        arv_camera_get_exposure_time_bounds (camera, &exposureMin, &exposureMax, &error);
-        ErrorManager::CheckAravisError(&error);
+		pixFormat = GetPixelFormatName(static_cast<PfncFormat>(pImage->GetPixelFormat()));
 
-        arv_camera_get_gain_bounds (camera, &gainMin, &gainMax, &error);
-        ErrorManager::CheckAravisError(&error);
+		uint64_t timestampNs = pImage->GetTimestampNs();
 
-        arv_camera_set_frame_rate(camera, frame.mFps, &error); /* Regular captures */
-        ErrorManager::CheckAravisError(&error);
+		std::cout << " (" << size << " bytes; " << width << "x" << height << "; " << pixFormat << "; timestamp (ns): " << timestampNs << ")";
 
-        fps = arv_camera_get_frame_rate(camera, &error);
-        ErrorManager::CheckAravisError(&error);
+		// Requeue image buffer
+		//    Requeue an image buffer when access to it is no longer needed.
+		//    Notice that failing to requeue buffers may cause memory to leak and
+		//    may also result in the stream engine being starved due to there
+		//    being no available buffers.
+		std::cout << " and requeue\n";
 
-        capsString = arv_pixel_format_to_gst_caps_string(pixFormat);
+		m_Camera->RequeueBuffer(pImage);
 
-        gain    = arv_camera_get_gain(camera, &error);
-        ErrorManager::CheckAravisError(&error);
 
-        exp     = arv_camera_get_exposure_time(camera, &error);
-        ErrorManager::CheckAravisError(&error);
+        getExposureBounds(exposureMin,exposureMax);
+        getGainBounds(gainMin, gainMax);
+
+        setFPS( frame.mFps); /* Regular captures */
+
+        getFPS(fps);
+
+        capsString =  pixFormat.c_str();
+
+        gain = getGain();
+
+        exp     = getExposureTime();
 
         cout << endl;
 
-        cout << "DEVICE SELECTED : " << arv_camera_get_device_id(camera, &error)    << endl;
-        ErrorManager::CheckAravisError(&error);
+        cout << "DEVICE SELECTED : " << m_Id    << endl;
 
-        cout << "DEVICE NAME     : " << arv_camera_get_model_name(camera, &error)   << endl;
-        ErrorManager::CheckAravisError(&error);
+        string model_name;
 
-        cout << "DEVICE VENDOR   : " << arv_camera_get_vendor_name(camera, &error)  << endl;
-        ErrorManager::CheckAravisError(&error);
+        getDeviceNameById(m_Id, model_name);
+
+
+        cout << "DEVICE NAME     : " << model_name   << endl;
+
+        cout << "DEVICE VENDOR   : " << "LUCID" << endl;
 
         cout << "PAYLOAD         : " << payload                             << endl;
         cout << "Start X         : " << mStartX                             << endl
@@ -711,52 +1016,45 @@
 
         cout << endl;
 
-        if(arv_camera_is_gv_device (camera)) {
+      	// Set buffer handling mode
+        //    Set buffer handling mode before starting the stream. Starting the
+        //    stream requires the buffer handling mode to be set beforehand. The
+        //    buffer handling mode determines the order and behavior of buffers in
+        //    the underlying stream engine. Setting the buffer handling mode to
+        //    'NewestOnly' ensures the most recent image is delivered, even if it
+        //    means skipping frames.
+      	BOOST_LOG_SEV(logger, notification) << "Set buffer handling mode to 'NewestOnly'";
+        Arena::SetNodeValue<GenICam::gcstring>( m_Camera->GetTLStreamNodeMap(), "StreamBufferHandlingMode", "NewestOnly");
 
-            // http://www.baslerweb.com/media/documents/AW00064902000%20Control%20Packet%20Timing%20With%20Delays.pdf
-            // https://github.com/GNOME/aravis/blob/06ac777fc6d98783680340f1c3f3ea39d2780974/src/arvcamera.c
+        // Enable stream auto negotiate packet size
+		//    Setting the stream packet size is done before starting the stream.
+		//    Setting the stream to automatically negotiate packet size instructs
+		//    the camera to receive the largest packet size that the system will
+		//    allow. This generally increases frame rate and results in fewer
+		//    interrupts per image, thereby reducing CPU load on the host system.
+		//    Ethernet settings may also be manually changed to allow for a
+		//    larger packet size.
+        BOOST_LOG_SEV(logger, notification) << "Enable stream to auto negotiate packet size";
+		Arena::SetNodeValue<bool>( m_Camera->GetTLStreamNodeMap(), "StreamAutoNegotiatePacketSize", true);
 
-            // Configure the inter packet delay to insert between each packet for the current stream
-            // channel. This can be used as a crude flow-control mechanism if the application or the network
-            // infrastructure cannot keep up with the packets coming from the device.
-            arv_camera_gv_set_packet_delay (camera, 4000, &error);
-            ErrorManager::CheckAravisError(&error);
+        // Disable stream packet resend
+		//    Enable stream packet resend before starting the stream. Images are
+		//    sent from the camera to the host in packets using UDP protocol,
+		//    which includes a header image number, packet number, and timestamp
+		//    information. If a packet is missed while receiving an image, a
+		//    packet resend is requested and this information is used to retrieve
+		//    and redeliver the missing packet in the correct order.
+        BOOST_LOG_SEV(logger, notification) << "Disable stream packet resend";
+		Arena::SetNodeValue<bool>( m_Camera->GetTLStreamNodeMap(), "StreamPacketResendEnable", false);
 
-            // Specifies the stream packet size, in bytes, to send on the selected channel for a GVSP transmitter
-            // or specifies the maximum packet size supported by a GVSP receiver.
-            arv_camera_gv_set_packet_size (camera, 1444, &error);
-            ErrorManager::CheckAravisError(&error);
-
-        }
+		m_Camera->StartStream();
 
         // Create a new stream object. Open stream on Camera.
         stream = arv_camera_create_stream(camera, NULL, NULL, &error);
         ErrorManager::CheckAravisError(&error);
 
-        if(stream != NULL){
-
-            if(ARV_IS_GV_STREAM(stream)){
-
-                bool            arv_option_auto_socket_buffer   = true;
-                bool            arv_option_no_packet_resend     = true;
-                unsigned int    arv_option_packet_timeout       = 20;
-                unsigned int    arv_option_frame_retention      = 100;
-
-                if(arv_option_auto_socket_buffer){
-
-                    g_object_set(stream, "socket-buffer", ARV_GV_STREAM_SOCKET_BUFFER_AUTO, "socket-buffer-size", 0, NULL);
-
-                }
-
-                if(arv_option_no_packet_resend){
-
-                    g_object_set(stream, "packet-resend", ARV_GV_STREAM_PACKET_RESEND_NEVER, NULL);
-
-                }
-
-                g_object_set(stream, "packet-timeout", (unsigned)40000, "frame-retention", (unsigned) 200000,NULL);
-
-            }
+        if(stream != NULL)
+        {
 
             // Push 50 buffer in the stream input buffer queue.
             arv_stream_push_buffer(stream, arv_buffer_new(payload, NULL));
@@ -789,19 +1087,20 @@
                     //Timestamping.
                     boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
 
-                    if(pixFormat == ARV_PIXEL_FORMAT_MONO_8){
+                    if(pixFormat == "Mono8"){
 
                         Mat image = Mat(mHeight, mWidth, CV_8UC1, buffer_data);
                         image.copyTo(frame.mImg);
 
-                    }else if(pixFormat == ARV_PIXEL_FORMAT_MONO_12 || pixFormat == ARV_PIXEL_FORMAT_MONO_16) {
+                    }else if(pixFormat == "Mono12" || pixFormat == "Mono16") {
 
                         // Unsigned short image.
                         Mat image = Mat(mHeight, mWidth, CV_16UC1, buffer_data);
 
                         // http://www.theimagingsource.com/en_US/support/documentation/icimagingcontrol-class/PixelformatY16.htm
                         // Some sensors only support 10-bit or 12-bit pixel data. In this case, the least significant bits are don't-care values.
-                        if(shiftBitsImage && pixFormat != ARV_PIXEL_FORMAT_MONO_16 ){
+                        if(shiftBitsImage && pixFormat != "Mono16" )
+                        {
                             unsigned short * p;
                             for(int i = 0; i < image.rows; i++){
                                 p = image.ptr<unsigned short>(i);
@@ -908,373 +1207,218 @@
 
     }
 
-    void freeture::CameraLucidArena_PHX016S::saveGenicamXml(string p){
+    //
+    // TO BE PORTED TO ARENA SDK
+    //
+    //
+    //
 
-        const char *xml;
+    /**
+     * DTor.
+     */
+    freeture::CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S()
+    {
 
-        size_t size;
+        if(stream != nullptr)
+            g_object_unref(stream);
 
-        xml = arv_device_get_genicam_xml (arv_camera_get_device(camera), &size);
+        m_ArenaSDKSystem->DestroyDevice(m_Camera);
+		Arena::CloseSystem(m_ArenaSDKSystem);
+    }
 
-        if (xml != NULL){
+    bool freeture::CameraLucidArena_PHX016S::listCameras()
+    {
 
-            ofstream infFile;
-            string infFilePath = p + "genicam.xml";
-            infFile.open(infFilePath.c_str());
-            infFile << string ( xml, size );
-            infFile.close();
+        ArvInterface *interface;
+        //arv_update_device_list();
 
+        int ni = arv_get_n_interfaces ();
+
+        cout << endl << "------------ GIGE CAMERAS WITH LUCID ARENA ----------" << endl << endl;
+
+        for (int j = 0; j< ni; j++)
+        {
+
+            interface = arv_gv_interface_get_instance();
+            arv_interface_update_device_list(interface);
+            //int nb = arv_get_n_devices();
+
+            int nb = arv_interface_get_n_devices(interface);
+            const char* name = arv_get_interface_id (j);
+            for(int i = 0; i < nb; i++)
+            {
+                if (strcmp(name,"GigEVision") == 0 && strcmp(name,"PHX016S") == 0)
+                {
+
+                cout << "-> [" << i << "] " << arv_interface_get_device_id(interface,i)<< endl;
+                //cout << "-> [" << i << "] " << arv_get_device_id(i)<< endl;
+                }
+            }
+
+            if(nb == 0) {
+                cout << "-> No cameras detected..." << endl;
+                return false;
+            }
+            delete interface;
         }
+
+        cout << endl << "------------------------------------------------" << endl << endl;
+
+        return true;
 
     }
 
-    //https://github.com/GNOME/aravis/blob/b808d34691a18e51eee72d8cac6cfa522a945433/src/arvtool.c
-    void freeture::CameraLucidArena_PHX016S::getAvailablePixelFormats() {
+    bool freeture::CameraLucidArena_PHX016S::grabImage(Frame &newFrame)
+    {
 
-        ArvGc *genicam;
-        ArvDevice *device;
-        ArvGcNode *node;
+        ArvBuffer *arv_buffer;
+        //exp = arv_camera_get_exposure_time(camera);
 
-        if(camera != NULL) {
+        arv_buffer = arv_stream_timeout_pop_buffer(stream,2000000); //us
 
-            device = arv_camera_get_device(camera);
-            genicam = arv_device_get_genicam(device);
-            node = arv_gc_get_node(genicam, "PixelFormat");
+        char *buffer_data;
+        size_t buffer_size;
 
-            if (ARV_IS_GC_ENUMERATION (node)) {
+        if(arv_buffer == NULL){
 
-                const GSList *childs;
-                const GSList *iter;
-                vector<string> pixfmt;
+            throw runtime_error("arv_buffer is NULL");
+            return false;
 
-                cout << ">> Device pixel formats :" << endl;
+        }
+        else
+        {
 
-                childs = arv_gc_enumeration_get_entries (ARV_GC_ENUMERATION (node));
-                for (iter = childs; iter != NULL; iter = iter->next) {
-                    if (arv_gc_feature_node_is_implemented (ARV_GC_FEATURE_NODE (iter->data), NULL)) {
+            try{
 
-                        if(arv_gc_feature_node_is_available (ARV_GC_FEATURE_NODE (iter->data), NULL)) {
+                if ( arv_buffer_get_status(arv_buffer) == ARV_BUFFER_STATUS_SUCCESS )
+                {
 
-                            {
-                                string fmt = string(arv_gc_feature_node_get_name(ARV_GC_FEATURE_NODE (iter->data)));
-                                transform(fmt.begin(), fmt.end(),fmt.begin(), ::toupper);
-                                pixfmt.push_back(fmt);
-                                cout << "- " << fmt << endl;
+                    //BOOST_LOG_SEV(logger, normal) << "Success to grab a frame.";
 
-                            }
+                    buffer_data = (char *) arv_buffer_get_data (arv_buffer, &buffer_size);
+
+                    //Timestamping.
+                    //string acquisitionDate = TimeDate::localDateTime(microsec_clock::universal_time(),"%Y:%m:%d:%H:%M:%S");
+                    //BOOST_LOG_SEV(logger, normal) << "Date : " << acquisitionDate;
+                    boost::posix_time::ptime time =  boost::posix_time::microsec_clock::universal_time();
+                    string acquisitionDate = to_iso_extended_string(time);
+                    //BOOST_LOG_SEV(logger, normal) << "Date : " << acqDateInMicrosec;
+
+                    Mat image;
+                    CamPixFmt imgDepth = MONO8;
+                    int saturateVal = 0;
+
+                    if(pixFormat == "Mono8")
+                    {
+                        //BOOST_LOG_SEV(logger, normal) << "Creating Mat 8 bits ...";
+                        image = Mat(mHeight, mWidth, CV_8UC1, buffer_data);
+                        imgDepth = MONO8;
+                        saturateVal = 255;
+
+                    }
+                    else if(pixFormat == "Mono12")
+                    {
+
+                        //BOOST_LOG_SEV(logger, normal) << "Creating Mat 16 bits ...";
+                        image = Mat(mHeight, mWidth, CV_16UC1, buffer_data);
+                        imgDepth = MONO12;
+                        saturateVal = 4095;
+
+                        //double t3 = (double)getTickCount();
+
+                        if(shiftBitsImage){
+
+                            //BOOST_LOG_SEV(logger, normal) << "Shifting bits ...";
+
+
+                                unsigned short * p;
+
+                                for(int i = 0; i < image.rows; i++){
+                                    p = image.ptr<unsigned short>(i);
+                                    for(int j = 0; j < image.cols; j++)
+                                        p[j] = p[j] >> 4;
+                                }
+
+                            //BOOST_LOG_SEV(logger, normal) << "Bits shifted.";
+
                         }
+
+                        //t3 = (((double)getTickCount() - t3)/getTickFrequency())*1000;
+                        //cout << "> Time shift : " << t3 << endl;
                     }
+                    else if(pixFormat == "Mono16")
+                    {
+                        //BOOST_LOG_SEV(logger, normal) << "Creating Mat 16 bits ...";
+                        image = Mat(mHeight, mWidth, CV_16UC1, buffer_data);
+                        imgDepth = MONO16;
+                        saturateVal = 65535;
+
+                        //double t3 = (double)getTickCount();
+                        //t3 = (((double)getTickCount() - t3)/getTickFrequency())*1000;
+                        //cout << "> Time shift : " << t3 << endl;
+                    }
+
+                    //BOOST_LOG_SEV(logger, normal) << "Creating frame object ...";
+                    newFrame = Frame(image, gain, exp, acquisitionDate);
+                    //BOOST_LOG_SEV(logger, normal) << "Setting date of frame ...";
+                    //newFrame.setAcqDateMicro(acqDateInMicrosec);
+                    //BOOST_LOG_SEV(logger, normal) << "Setting fps of frame ...";
+                    newFrame.mFps = fps;
+                    newFrame.mFormat = imgDepth;
+                    //BOOST_LOG_SEV(logger, normal) << "Setting saturated value of frame ...";
+                    newFrame.mSaturatedValue = saturateVal;
+                    newFrame.mFrameNumber = frameCounter;
+                    frameCounter++;
+
+                    //BOOST_LOG_SEV(logger, normal) << "Re-pushing arv buffer in stream ...";
+                    arv_stream_push_buffer(stream, arv_buffer);
+
+                    return true;
+
+                }else{
+
+                    switch(arv_buffer_get_status(arv_buffer)){
+
+                        case 0 :
+                            cout << "ARV_BUFFER_STATUS_SUCCESS : the buffer contains a valid image"<<endl;
+                            break;
+                        case 1 :
+                            cout << "ARV_BUFFER_STATUS_CLEARED: the buffer is cleared"<<endl;
+                            break;
+                        case 2 :
+                            cout << "ARV_BUFFER_STATUS_TIMEOUT: timeout was reached before all packets are received"<<endl;
+                            break;
+                        case 3 :
+                            cout << "ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets"<<endl;
+                            break;
+                        case 4 :
+                            cout << "ARV_BUFFER_STATUS_WRONG_PACKET_ID: stream has packet with wrong id"<<endl;
+                            break;
+                        case 5 :
+                            cout << "ARV_BUFFER_STATUS_SIZE_MISMATCH: the received image didn't fit in the buffer data space"<<endl;
+                            break;
+                        case 6 :
+                            cout << "ARV_BUFFER_STATUS_FILLING: the image is currently being filled"<<endl;
+                            break;
+                        case 7 :
+                            cout << "ARV_BUFFER_STATUS_ABORTED: the filling was aborted before completion"<<endl;
+                            break;
+
+                    }
+
+                    arv_stream_push_buffer(stream, arv_buffer);
+
+                    return false;
                 }
 
-                // Compare found pixel formats to currently formats supported by freeture
+            }catch(exception& e){
 
-                cout << endl <<  ">> Available pixel formats :" << endl;
-                EParser<CamPixFmt> fmt;
-
-                for( int i = 0; i != pixfmt.size(); i++ ) {
-
-                    if(fmt.isEnumValue(pixfmt.at(i))) {
-
-                        cout << "- " << pixfmt.at(i) << " available --> ID : " << fmt.parseEnum(pixfmt.at(i)) << endl;
-
-                    }
-
-                }
-
-            }else {
-
-                cout << ">> Available pixel formats not found." << endl;
-
-            }
-
-            g_object_unref(device);
-
-        }
-
-    }
-
-
-    void freeture::CameraLucidArena_PHX016S::getFPSBounds(double &fMin, double &fMax)
-    {
-
-        double fpsMin = 0.0;
-        double fpsMax = 0.0;
-
-        arv_camera_get_frame_rate_bounds(camera, &fpsMin, &fpsMax, &error);
-        ErrorManager::CheckAravisError(&error);
-
-        fMin = fpsMin;
-        fMax = fpsMax;
-    }
-
-
-
-    void freeture::CameraLucidArena_PHX016S::getExposureBounds(double &eMin, double &eMax)
-    {
-
-        double exposureMin = 0.0;
-        double exposureMax = 0.0;
-
-        arv_camera_get_exposure_time_bounds(camera, &exposureMin, &exposureMax, &error);
-        ErrorManager::CheckAravisError(&error);
-
-        eMin = exposureMin;
-        eMax = exposureMax;
-
-    }
-
-    double freeture::CameraLucidArena_PHX016S::getExposureTime()
-    {
-        double result = arv_camera_get_exposure_time(camera, &error);
-        ErrorManager::CheckAravisError(&error);
-        return result;
-    }
-
-    void freeture::CameraLucidArena_PHX016S::getGainBounds(int &gMin, int &gMax){
-
-        double gainMin = 0.0;
-        double gainMax = 0.0;
-
-        arv_camera_get_gain_bounds(camera, &gainMin, &gainMax, &error);
-        ErrorManager::CheckAravisError(&error);
-
-        gMin = gainMin;
-        gMax = gainMax;
-
-    }
-
-    bool freeture::CameraLucidArena_PHX016S::getPixelFormat(CamPixFmt &format){
-
-        ArvPixelFormat pixFormat = arv_camera_get_pixel_format(camera, &error);
-        ErrorManager::CheckAravisError(&error);
-
-        switch(pixFormat){
-
-            case ARV_PIXEL_FORMAT_MONO_8 :
-
-                format = MONO8;
-
-                break;
-
-            case ARV_PIXEL_FORMAT_MONO_12 :
-
-                format = MONO12;
-
-                break;
-           case ARV_PIXEL_FORMAT_MONO_16 :
-
-                format = MONO16;
-
-                break;
-
-            default :
-
-                return false;
-
-                break;
-
-        }
-
-        return true;
-    }
-
-
-    bool freeture::CameraLucidArena_PHX016S::getFrameSize(int &x, int &y, int &w, int &h) {
-
-        if(camera != NULL) {
-
-            int ww = 0, hh = 0, xx = 0, yy = 0;
-            arv_camera_get_region(camera, &x, &y, &w, &h,&error);
-            ErrorManager::CheckAravisError(&error);
-            x = xx;
-            y = yy;
-            w = ww;
-            h = hh;
-
-        }
-
-        return false;
-
-    }
-
-    bool freeture::CameraLucidArena_PHX016S::getFPS(double &value){
-
-        if(camera != NULL) {
-
-            value = arv_camera_get_frame_rate(camera,&error);
-            ErrorManager::CheckAravisError(&error);
-
-            return true;
-
-        }
-
-        return false;
-    }
-
-    string freeture::CameraLucidArena_PHX016S::getModelName(){
-        string result =  arv_camera_get_model_name(camera,&error);
-        ErrorManager::CheckAravisError(&error);
-
-        return result;
-    }
-
-    bool freeture::CameraLucidArena_PHX016S::setExposureTime(double val)
-    {
-
-        double expMin, expMax;
-
-        arv_camera_get_exposure_time_bounds(camera, &expMin, &expMax,&error);
-        ErrorManager::CheckAravisError(&error);
-
-
-        if(camera != NULL){
-
-            if(val >= expMin && val <= expMax) {
-
-                exp = val;
-                arv_camera_set_exposure_time(camera, val, &error);
-                ErrorManager::CheckAravisError(&error);
-
-            }else{
-
-                cout << "> Exposure value (" << val << ") is not in range [ " << expMin << " - " << expMax << " ]" << endl;
+                cout << e.what() << endl;
+                BOOST_LOG_SEV(logger, critical) << e.what() ;
                 return false;
 
             }
-
-            return true;
-
         }
-
-        return false;
     }
 
-    bool freeture::CameraLucidArena_PHX016S::setGain(int val){
-
-        double gMin, gMax;
-
-        arv_camera_get_gain_bounds (camera, &gMin, &gMax, &error);
-        ErrorManager::CheckAravisError(&error);
-
-        if (camera != NULL){
-
-            if((double)val >= gMin && (double)val <= gMax){
-
-                gain = val;
-                arv_camera_set_gain (camera, (double)val,&error);
-                ErrorManager::CheckAravisError(&error);
-
-            }else{
-
-                cout << "> Gain value (" << val << ") is not in range [ " << gMin << " - " << gMax << " ]" << endl;
-                BOOST_LOG_SEV(logger, fail) << "> Gain value (" << val << ") is not in range [ " << gMin << " - " << gMax << " ]";
-                return false;
-
-            }
-
-        return true;
-
-        }
-
-        return false;
-
-    }
-
-    bool freeture::CameraLucidArena_PHX016S::setFPS(double fps){
-
-        if (camera != NULL){
-
-            arv_camera_set_frame_rate(camera, fps, &error);
-            ErrorManager::CheckAravisError(&error);
-
-            double setfps = arv_camera_get_frame_rate(camera, &error);
-            ErrorManager::CheckAravisError(&error);
-
-            if (setfps!=fps) {
-                cout << "> Frame rate value (" << fps << ") can't be set! Please check genicam features." << endl;
-                BOOST_LOG_SEV(logger, warning) << "> Frame rate value (" << fps << ") can't be set!";
-            }
-
-            return true;
-
-        }
-
-        return false;
-
-    }
-
-    bool freeture::CameraLucidArena_PHX016S::setPixelFormat(CamPixFmt depth){
-
-        if (camera != NULL){
-
-            switch(depth){
-
-                case MONO8 :
-                    {
-                        arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_8,&error);
-                        ErrorManager::CheckAravisError(&error);
-                    }
-                    break;
-
-                case MONO12 :
-                    {
-                        arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_12,&error);
-                        ErrorManager::CheckAravisError(&error);
-                    }
-                    break;
-                case MONO16 :
-                    {
-                        arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_16,&error);
-                        ErrorManager::CheckAravisError(&error);
-                    }
-                    break;
-            }
-
-            return true;
-        }
-
-        return false;
-
-    }
-
-    bool freeture::CameraLucidArena_PHX016S::setFrameSize(int startx, int starty, int width, int height, bool customSize) {
-
-        if (camera != NULL){
-            if(customSize) {
-
-                if (arv_device_get_feature(arv_camera_get_device(camera), "OffsetX")) {
-                    cout << "Starting from : " << mStartX << "," << mStartY;
-                    BOOST_LOG_SEV(logger, notification) << "Starting from : " << mStartX << "," << mStartY;
-                } else {
-                    BOOST_LOG_SEV(logger, warning) << "OffsetX, OffsetY are not available: cannot set offset.";
-                }
-
-                arv_camera_set_region(camera, startx, starty, width, height,&error);
-                ErrorManager::CheckAravisError(&error);
-
-                arv_camera_get_region (camera, &mStartX, &mStartY, &mWidth, &mHeight,&error);
-                ErrorManager::CheckAravisError(&error);
-
-            // Default is maximum size
-            } else {
-
-                int sensor_width, sensor_height;
-
-                arv_camera_get_sensor_size(camera, &sensor_width, &sensor_height, &error);
-                ErrorManager::CheckAravisError(&error);
-
-                BOOST_LOG_SEV(logger, notification) << "Camera sensor size : " << sensor_width << "x" << sensor_height;
-
-                arv_camera_set_region(camera, 0, 0,sensor_width,sensor_height,&error);
-                ErrorManager::CheckAravisError(&error);
-
-                arv_camera_get_region (camera, NULL, NULL, &mWidth, &mHeight,&error);
-                ErrorManager::CheckAravisError(&error);
-
-            }
-            return true;
-        }
-        return false;
-    }
-
-#endif
+ #endif

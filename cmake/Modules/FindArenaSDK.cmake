@@ -8,12 +8,14 @@ IF(${OperatingSystem} MATCHES "Windows")
 	IF( CMAKE_SIZEOF_VOID_P EQUAL 8 )
 		set( ARENASDK_LIBRARY "$ENV{ARENASDK_ROOT}/lib/x64" )
 		set( GENICAM_LIBRARY "$ENV{ARENASDK_ROOT}/lib/x64" )
+		set( FFMPEG_LIBRARY "$ENV{ARENASDK_ROOT}/lib/x64" )
 	ENDIF( CMAKE_SIZEOF_VOID_P EQUAL 8 )
 ELSE(${OperatingSystem} MATCHES "Windows")
 	IF(${OperatingSystem} MATCHES "Linux")
 		IF( CMAKE_SIZEOF_VOID_P EQUAL 8 )
 			set( ARENASDK_LIBRARY "/opt/arenasdk/lib64" )
 			set( GENICAM_ROOT_LIBRARY "/opt/arenasdk/GenICam/library/lib/Linux64_x64" )
+			set( FFMPEG_ROOT_LIBRARY "/opt/arenasdk/ffmpeg" )
 		ENDIF( CMAKE_SIZEOF_VOID_P EQUAL 8 )
 	ENDIF(${OperatingSystem} MATCHES "Linux")
 ENDIF(${OperatingSystem} MATCHES "Windows")
@@ -59,6 +61,25 @@ FIND_LIBRARY(	GENICAM_LIBRARY
 				PATHS
 				${GENICAM_ROOT_LIBRARY}
 )
+
+FIND_LIBRARY(	FFMPEG_LIBRARY 
+				NAMES 
+				libavcodec.so
+				libavcodec.so.58
+				libavcodec.so.58.18.100
+				libavformat.so
+				libavformat.so.58
+				libavformat.so.58.12.100
+				libavutil.so
+				libavutil.so.56
+				libavutil.so.56.14.100
+				libswresample.so
+				libswresample.so.3
+				libswresample.so.3.1.100
+				PATHS
+				${FFMPEG_ROOT_LIBRARY}
+)
+
 
 FIND_LIBRARY(	ARENAAPI_LIBRARY 
 				NAMES 
