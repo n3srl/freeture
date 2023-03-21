@@ -47,6 +47,9 @@ void NodeExporterMetrics::UpdateMetrics(std::string CompleteDataPath , std::stri
 
 void NodeExporterMetrics::WriteMetrics()
 {
+        try
+        {
+
             //multi thread mutex
             if (!m_Writing)
             {
@@ -79,4 +82,8 @@ void NodeExporterMetrics::WriteMetrics()
 
                m_Writing = false;
            }
+           }catch(exception& e){
+
+                cout << e.what() << endl;
+            }
 }

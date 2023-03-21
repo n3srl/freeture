@@ -674,14 +674,20 @@ bool freeture::Device::stopCamera() {
 
 }
 
-bool freeture::Device::runContinuousCapture(Frame &img) {
-
+bool freeture::Device::runContinuousCapture(Frame &img)
+{
+    try
+    {
     if(mCam->grabImage(img)) {
         //img.mFrameNumber = mNbFrame;
         //mNbFrame++;
         return true;
     }
-
+    }
+    catch (exception& ex)
+    {
+        BOOST_LOG_SEV(logger, fail) << "Exception grabImage..." << ex.what();
+    }
     return false;
 
 }

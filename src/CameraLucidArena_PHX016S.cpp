@@ -1417,6 +1417,12 @@
                 BOOST_LOG_SEV(logger, critical) << e.what() ;
                 return false;
 
+            }catch(exception& e){
+
+                cout << e.what() << endl;
+                BOOST_LOG_SEV(logger, critical) << e.what() ;
+                return false;
+
             }
         }
     }
