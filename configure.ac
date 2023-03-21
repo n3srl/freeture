@@ -174,7 +174,7 @@ PKG_CHECK_MODULES(OPENSSL, openssl,
 	[AC_MSG_ERROR([$OPENSSL_ERROR Exiting.])])
 	
 ###################### handle the ARAVIS library ######################
-PKG_CHECK_MODULES(ARV, aravis-0.8,
+PKG_CHECK_MODULES(ARV, libaravis-0.8-0,
 	[LIBS="$ARV_LIBS $LIBS"]
 	[AM_CPPFLAGS="$AM_CPPFLAGS $ARV_CFLAGS"],
 	[AC_MSG_ERROR([$ARV_ERROR Exiting.])])
