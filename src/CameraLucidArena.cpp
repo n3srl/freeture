@@ -33,104 +33,40 @@
         mInputDeviceType = CAMERA;
     }
 
-    CameraLucidArena::~CameraLucidArena(){
+    CameraLucidArena::~CameraLucidArena()
+    {
+
 
         if(stream != NULL)
             g_object_unref(stream);
 
         if(camera != NULL)
+        {
+            BOOST_LOG_SEV(logger, notification) << "Unreferencing camera.";
             g_object_unref(camera);
-
-    }
-
-    vector<pair<int,string>> CameraLucidArena::getCamerasList() {
-
-        vector<pair<int,string>> camerasList;
-
-        ArvInterface *interface;
-
-        //arv_update_device_list();
-
-        int ni = arv_get_n_interfaces();
-
-
-        for (int j = 0; j< ni; j++){
-
-            const char* name = arv_get_interface_id (j);
-            if (strcmp(name,"GigEVision") == 0) {
-                interface = arv_gv_interface_get_instance();
-                arv_interface_update_device_list(interface);
-                //int nb = arv_get_n_devices();
-
-                int nb = arv_interface_get_n_devices(interface);
-
-                for(int i = 0; i < nb; i++){
-
-                    pair<int,string> c;
-                    c.first = i;
-                    //const char* str = arv_get_device_id(i);
-                    const char* str = arv_interface_get_device_id(interface,i);
-                    const char* addr = arv_interface_get_device_address(interface,i);
-                    std::string s = str;
-                    c.second = "NAME[" + s + "] SDK[ARAVIS] IP: " + addr;
-                    camerasList.push_back(c);
-                }
-            }
         }
-
-       return camerasList;
-
-    }
-
-    bool CameraLucidArena::listCameras(){
-
-        ArvInterface *interface;
-        //arv_update_device_list();
-
-        int ni = arv_get_n_interfaces ();
-
-        cout << endl << "------------ GIGE CAMERAS WITH ARAVIS ----------" << endl << endl;
-
-        for (int j = 0; j< ni; j++){
-
-            interface = arv_gv_interface_get_instance();
-            arv_interface_update_device_list(interface);
-            //int nb = arv_get_n_devices();
-
-            int nb = arv_interface_get_n_devices(interface);
-            for(int i = 0; i < nb; i++){
-
-                cout << "-> [" << i << "] " << arv_interface_get_device_id(interface,i)<< endl;
-                //cout << "-> [" << i << "] " << arv_get_device_id(i)<< endl;
-
-            }
-
-            if(nb == 0) {
-                cout << "-> No cameras detected..." << endl;
-                return false;
-            }
-        }
-        cout << endl << "------------------------------------------------" << endl << endl;
-
-        return true;
 
     }
 
     bool CameraLucidArena::createDevice(int id){
+       cout << "CameraLucidArena::createDevice"<< endl;
+
         string deviceName;
 
         if(!getDeviceNameById(id, deviceName))
             return false;
 
-        camera = arv_camera_new(deviceName.c_str(),&error);
-        ErrorManager::CheckAravisError(&error);
-
-        if(camera == NULL)
+        if (camera == nullptr)
         {
+            cout << "CameraLucidArena::createDevice: Instancing arv_camera_new"<<endl;
+            camera = arv_camera_new(deviceName.c_str(),&error);
+            ErrorManager::CheckAravisError(&error);
+        }
 
+        if(camera == nullptr)
+        {
             BOOST_LOG_SEV(logger, fail) << "Fail to connect the camera.";
             return false;
-
         }
 
         getFPSBounds(fpsMin,fpsMax);
@@ -140,6 +76,8 @@
     }
 
     bool CameraLucidArena::setSize(int startx, int starty, int width, int height, bool customSize) {
+        cout << "CameraLucidArena::setSize"<< endl;
+
         if(customSize) {
 
 
@@ -178,7 +116,9 @@
 
     }
 
-    bool CameraLucidArena::getDeviceNameById(int id, string &device){
+    bool CameraLucidArena::getDeviceNameById(int id, string &device)
+    {
+        cout << "CameraLucidArena::getDeviceNameById [#"<< id<<"]"<< endl;
 
         arv_update_device_list();
 
@@ -203,6 +143,8 @@
 
     bool CameraLucidArena::grabInitialization()
     {
+        cout << "CameraLucidArena::grabInitialization"<< endl;
+
         frameCounter = 0;
 
         payload = arv_camera_get_payload (camera, &error);
@@ -263,6 +205,7 @@
         cout << "Exp             : " << exp                                 << endl;
         cout << "Gain Range      : [" << gainMin        << " - " << gainMax       << "]"  << endl;
         cout << "Gain            : " << gain                                << endl;
+        cout << "Fps Range       : [" << fpsMin    << " - " << fpsMax   << "]"  << endl;
         cout << "Fps             : " << fps                                 << endl;
         cout << "Type            : " << capsString                         << endl;
 
@@ -356,10 +299,13 @@
         return true;
     }
 
-    void CameraLucidArena::grabCleanse(){}
+    void CameraLucidArena::grabCleanse(){
+       cout << "CameraLucidArena::grabCleanse"<< endl;
+    }
 
     bool CameraLucidArena::acqStart()
     {
+        cout << "CameraLucidArena::acqStart"<< endl;
 
         BOOST_LOG_SEV(logger, notification) << "Set camera to CONTINUOUS MODE";
         arv_camera_set_acquisition_mode(camera, ARV_ACQUISITION_MODE_CONTINUOUS, &error);
@@ -378,6 +324,8 @@
 
     void CameraLucidArena::acqStop()
     {
+        cout << "CameraLucidArena::acqStop"<< endl;
+
         arv_stream_get_statistics(stream, &nbCompletedBuffers, &nbFailures, &nbUnderruns);
 
         //cout << "Completed buffers = " << (unsigned long long) nbCompletedBuffers   << endl;
@@ -398,13 +346,11 @@
         g_object_unref(stream);
         stream = NULL;
 
-        BOOST_LOG_SEV(logger, notification) << "Unreferencing camera.";
-        g_object_unref(camera);
-        camera = NULL;
-
     }
 
-    bool CameraLucidArena::grabImage(Frame &newFrame){
+    bool CameraLucidArena::grabImage(Frame &newFrame)
+    {
+        //cout << "CameraLucidArena::grabImage"<< endl;
 
         ArvBuffer *arv_buffer;
         //exp = arv_camera_get_exposure_time(camera);
@@ -556,6 +502,8 @@
 
     bool CameraLucidArena::grabSingleImage(Frame &frame, int camID)
     {
+        cout << "CameraLucidArena::grabSingleImage"<< endl;
+
         bool res = false;
 
         if(!createDevice(camID))
@@ -638,6 +586,7 @@
         cout << "Exp             : " << exp                                 << endl;
         cout << "Gain Range      : [" << gainMin        << " - " << gainMax       << "]"  << endl;
         cout << "Gain            : " << gain                                << endl;
+        cout << "Fps Range      : [" << fpsMin        << " - " << fpsMax       << "]"  << endl;
         cout << "Fps             : " << fps                                 << endl;
         cout << "Type            : " << capsString                         << endl;
 
@@ -841,6 +790,7 @@
     }
 
     void CameraLucidArena::saveGenicamXml(string p){
+        cout << "CameraLucidArena::saveGenicamXml"<< endl;
 
         const char *xml;
 
@@ -862,6 +812,7 @@
 
     //https://github.com/GNOME/aravis/blob/b808d34691a18e51eee72d8cac6cfa522a945433/src/arvtool.c
     void CameraLucidArena::getAvailablePixelFormats() {
+        cout << "CameraLucidArena::getAvailablePixelFormats"<< endl;
 
         ArvGc *genicam;
         ArvDevice *device;
@@ -928,6 +879,7 @@
 
     void CameraLucidArena::getFPSBounds(double &fMin, double &fMax)
     {
+        cout << "CameraLucidArena::getFPSBounds ";
 
         double fpsMin = 0.0;
         double fpsMax = 0.0;
@@ -937,12 +889,16 @@
 
         fMin = fpsMin;
         fMax = fpsMax;
+
+        cout <<"["<< fpsMin<<", "<< fpsMax<<"]"<<endl;
     }
 
 
 
     void CameraLucidArena::getExposureBounds(double &eMin, double &eMax)
     {
+
+        cout << "CameraLucidArena::getExposureBounds ";
 
         double exposureMin = 0.0;
         double exposureMax = 0.0;
@@ -952,17 +908,21 @@
 
         eMin = exposureMin;
         eMax = exposureMax;
-
+        cout <<"["<< exposureMin<<", "<< exposureMax<<"]"<<endl;
     }
 
     double CameraLucidArena::getExposureTime()
     {
+        cout << "CameraLucidArena::getExposureTime"<< endl;
+
         double result = arv_camera_get_exposure_time(camera, &error);
         ErrorManager::CheckAravisError(&error);
         return result;
     }
 
     void CameraLucidArena::getGainBounds(double &gMin, double &gMax){
+        cout << "CameraLucidArena::getGainBounds"<< endl;
+
 
         double gainMin = 0.0;
         double gainMax = 0.0;
@@ -976,6 +936,7 @@
     }
 
     bool CameraLucidArena::getPixelFormat(CamPixFmt &format){
+        cout << "CameraLucidArena::getPixelFormat"<< endl;
 
         ArvPixelFormat pixFormat = arv_camera_get_pixel_format(camera, &error);
         ErrorManager::CheckAravisError(&error);
@@ -1012,6 +973,7 @@
 
 
     bool CameraLucidArena::getFrameSize(int &x, int &y, int &w, int &h) {
+        cout << "CameraLucidArena::getFrameSize"<< endl;
 
         if(camera != NULL) {
 
@@ -1030,6 +992,7 @@
     }
 
     bool CameraLucidArena::getFPS(double &value){
+        cout << "CameraLucidArena::getFPS"<< endl;
 
         if(camera != NULL) {
 
@@ -1044,6 +1007,8 @@
     }
 
     string CameraLucidArena::getModelName(){
+        cout << "CameraLucidArena::getModelName"<< endl;
+
         string result =  arv_camera_get_model_name(camera,&error);
         ErrorManager::CheckAravisError(&error);
 
@@ -1052,14 +1017,17 @@
 
     bool CameraLucidArena::setExposureTime(double val)
     {
+        cout << "CameraLucidArena::setExposureTime ["<< val<<"]" << endl;
 
         double expMin, expMax;
 
         arv_camera_get_exposure_time_bounds(camera, &expMin, &expMax,&error);
         ErrorManager::CheckAravisError(&error);
 
+        cout << "arv_camera_get_exposure_time_bounds ["<< expMin<< ", "<< expMax<<"]" << endl;
 
-        if(camera != NULL){
+        if(camera != NULL) {
+
 
             if(val >= expMin && val <= expMax) {
 
@@ -1067,7 +1035,10 @@
                 arv_camera_set_exposure_time(camera, val, &error);
                 ErrorManager::CheckAravisError(&error);
 
-            }else{
+                double min, max;
+                getFPSBounds(min,max);
+
+            } else {
 
                 cout << "> Exposure value (" << val << ") is not in range [ " << expMin << " - " << expMax << " ]" << endl;
                 return false;
@@ -1082,6 +1053,7 @@
     }
 
     bool CameraLucidArena::setGain(double val){
+        cout << "CameraLucidArena::setGain"<< endl;
 
         double gMin, gMax;
 
@@ -1112,17 +1084,30 @@
 
     }
 
-    bool CameraLucidArena::setFPS(double fps){
+    bool CameraLucidArena::setFPS(double fps)
+    {
+        cout << "CameraLucidArena::setFPS"<<" ["<<fps<<"]";
 
-        if (camera != NULL){
+        if (camera != NULL)
+        {
+            //ADDED FOR DEBUG
+            double minFps,maxFps;
+            getFPSBounds(minFps,maxFps);
+
+            //NEED TO ENABLE FRAME RATE  SETUP
+            arv_device_set_boolean_feature_value(arv_camera_get_device (camera), "AcquisitionFrameRateEnable" , true, &error);
 
             arv_camera_set_frame_rate(camera, fps, &error);
             ErrorManager::CheckAravisError(&error);
 
             double setfps = arv_camera_get_frame_rate(camera, &error);
             ErrorManager::CheckAravisError(&error);
+            cout << "=="<<setfps<<endl;
 
-            if (setfps!=fps) {
+            int fps_test_l = (int) setfps;
+            int fps_test_r = (int) fps;
+
+            if (fps_test_l!=fps_test_r) {
                 cout << "> Frame rate value (" << fps << ") can't be set! Please check genicam features." << endl;
                 BOOST_LOG_SEV(logger, warning) << "> Frame rate value (" << fps << ") can't be set!";
             }
@@ -1136,6 +1121,7 @@
     }
 
     bool CameraLucidArena::setPixelFormat(CamPixFmt depth){
+        cout << "CameraLucidArena::setPixelFormat"<< endl;
 
         if (camera != NULL){
 
@@ -1170,6 +1156,7 @@
     }
 
     bool CameraLucidArena::setFrameSize(int startx, int starty, int width, int height, bool customSize) {
+        cout << "CameraLucidArena::setFrameSize"<< endl;
 
         if (camera != NULL){
             if(customSize) {

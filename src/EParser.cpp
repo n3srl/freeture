@@ -108,15 +108,15 @@ template<> EParser<ImgFormat>::EParser() {
 
 template<> EParser<CamSdkType>::EParser() {
 
-    enumMap["ARAVIS"]        = ARAVIS;
-    enumMap["LUCID_ARENA"]   = LUCID_ARENA;
-    enumMap["PYLONGIGE"]     = PYLONGIGE;
-    enumMap["TIS"]           = TIS;
-    enumMap["VIDEOFILE"]     = VIDEOFILE;
-    enumMap["FRAMESDIR"]     = FRAMESDIR;
-    enumMap["V4L2"]          = V4L2;
-    enumMap["VIDEOINPUT"]    = VIDEOINPUT;
-    enumMap["UNKNOWN"]       = UNKNOWN;
+    enumMap["ARAVIS"]        = CamSdkType::ARAVIS;
+    enumMap["LUCID_ARENA"]   = CamSdkType::LUCID_ARENA;
+    enumMap["PYLONGIGE"]     = CamSdkType::PYLONGIGE;
+    enumMap["TIS"]           = CamSdkType::TIS;
+    enumMap["VIDEOFILE"]     = CamSdkType::VIDEOFILE;
+    enumMap["FRAMESDIR"]     = CamSdkType::FRAMESDIR;
+    enumMap["V4L2"]          = CamSdkType::V4L2;
+    enumMap["VIDEOINPUT"]    = CamSdkType::VIDEOINPUT;
+    enumMap["UNKNOWN"]       = CamSdkType::UNKNOWN;
 
 }
 

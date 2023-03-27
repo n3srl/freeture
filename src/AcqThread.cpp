@@ -33,8 +33,11 @@
 * \brief   Acquisition thread.
 */
 
+#include "Constants.h"
+
 #include "AcqThread.h"
-#include "NodeExporterMetrics.cpp"
+
+#include "NodeExporterMetrics.h"
 
 using namespace cv;
 using namespace std;
@@ -63,8 +66,10 @@ AcqThread::AcqThread(   boost::circular_buffer<Frame>       *fb,
                         cameraParam                         acq,
                         framesParam                         fp,
                         videoParam                          vp,
-                        fitskeysParam                       fkp) {
-
+                        fitskeysParam                       fkp,
+                        Device*                             device )
+{
+    cout << "AcqThread::AcqThread"<<endl;
     frameBuffer             = fb;
     frameBuffer_mutex       = fb_m;
     frameBuffer_condition   = fb_c;
@@ -78,7 +83,7 @@ AcqThread::AcqThread(   boost::circular_buffer<Frame>       *fb,
     pStack                  = stack;
     mThread                 = NULL;
     mMustStop               = false;
-    mDevice                 = NULL;
+    mDevice                 = device;
     mThreadTerminated       = false;
     mNextAcqIndex           = 0;
     pExpCtrl                = NULL;
@@ -94,7 +99,7 @@ AcqThread::AcqThread(   boost::circular_buffer<Frame>       *fb,
 }
 
 AcqThread::~AcqThread(void){
-
+    cout << "AcqThread::~AcqThread"<<endl;
     if(mDevice != NULL)
         delete mDevice;
 
@@ -107,7 +112,7 @@ AcqThread::~AcqThread(void){
 }
 
 void AcqThread::stopThread(){
-
+    cout << "AcqThread::stopThread"<<endl;
     mMustStopMutex.lock();
     mMustStop = true;
     mMustStopMutex.unlock();
@@ -119,9 +124,10 @@ void AcqThread::stopThread(){
 }
 
 bool AcqThread::startThread() {
+    cout << "AcqThread::startThread(" << endl;
 
     // Create a device.
-    mDevice = new Device(mcp, mfp, mvp, mDeviceID);
+    mDevice->Setup(mcp, mfp, mvp, mDeviceID);
 
     // Search available devices.
     mDevice->listDevices(false);
@@ -142,9 +148,8 @@ bool AcqThread::startThread() {
 }
 
 bool AcqThread::getThreadStatus(){
-
+    cout << "AcqThread::getThreadStatus"<<endl;
     return mThreadTerminated;
-
 }
 
 void AcqThread::operator()(){
@@ -208,8 +213,11 @@ void AcqThread::operator()(){
                 // Grab a frame.
                 if(mDevice->runContinuousCapture(newFrame)) {
 
-                    BOOST_LOG_SEV(logger, normal)   << "============= FRAME " << newFrame.mFrameNumber << " ============= ";
-                    cout                            << "============= FRAME " << newFrame.mFrameNumber << " ============= " << endl;
+                    if (LOG_FRAME_STATUS)
+                    {
+                        BOOST_LOG_SEV(logger, normal)   << "============= FRAME " << newFrame.mFrameNumber << " ============= ";
+                        cout                            << "============= FRAME " << newFrame.mFrameNumber << " ============= " << endl;
+                    }
 
                     // If camera type in input is FRAMES or VIDEO.
                     if(mDevice->mVideoFramesInput) {
@@ -383,7 +391,9 @@ void AcqThread::operator()(){
 
                             boost::posix_time::time_duration td = t2 - t1;
                             long secTime = td.total_seconds();
-                            cout << "NEXT REGCAP : " << (int)(mcp.regcap.ACQ_REGULAR_CFG.interval - secTime) << "s" <<  endl;
+
+                            if (LOG_FRAME_STATUS)
+                                cout << "NEXT REGCAP : " << (int)(mcp.regcap.ACQ_REGULAR_CFG.interval - secTime) << "s" <<  endl;
 
                             // Check it's time to run a regular capture.
                             if(secTime >= mcp.regcap.ACQ_REGULAR_CFG.interval) {
@@ -423,12 +433,13 @@ void AcqThread::operator()(){
 
                             if(next < 0) {
                                 next = (24 * 3600) - (newFrame.mDate.hours * 3600 + newFrame.mDate.minutes * 60 + newFrame.mDate.seconds) + (mNextAcq.hours * 3600 + mNextAcq.min * 60 + mNextAcq.sec);
-                                cout << "next : " << next << endl;
+                                if (LOG_FRAME_STATUS)
+                                    cout << "next : " << next << endl;
                             }
 
                             vector<int>tsch = TimeDate::HdecimalToHMS(next/3600.0);
-
-                            cout << "NEXT SCHCAP : " << tsch.at(0) << "h" << tsch.at(1) << "m" << tsch.at(2) << "s" <<  endl;
+                            if (LOG_FRAME_STATUS)
+                                cout << "NEXT SCHCAP : " << tsch.at(0) << "h" << tsch.at(1) << "m" << tsch.at(2) << "s" <<  endl;
 
                             // It's time to run scheduled acquisition.
                             if( mNextAcq.hours == newFrame.mDate.hours &&
@@ -492,8 +503,8 @@ void AcqThread::operator()(){
                                     nextSunrise = TimeDate::HdecimalToHMS((mStartSunriseTime - currentTimeInSec) / 3600.0);
                                 if(currentTimeInSec > mStopSunsetTime)
                                     nextSunrise = TimeDate::HdecimalToHMS(((24*3600 - currentTimeInSec) + mStartSunriseTime ) / 3600.0);
-
-                                cout << "NEXT SUNRISE : " << nextSunrise.at(0) << "h" << nextSunrise.at(1) << "m" << nextSunrise.at(2) << "s" << endl;
+                                if (LOG_FRAME_STATUS)
+                                    cout << "NEXT SUNRISE : " << nextSunrise.at(0) << "h" << nextSunrise.at(1) << "m" << nextSunrise.at(2) << "s" << endl;
                             }
 
                             // Print time before sunset.
@@ -501,7 +512,8 @@ void AcqThread::operator()(){
 
                                 nextSunset.clear();
                                 nextSunset = TimeDate::HdecimalToHMS((mStartSunsetTime - currentTimeInSec) / 3600.0);
-                                cout << "NEXT SUNSET : " << nextSunset.at(0) << "h" << nextSunset.at(1) << "m" << nextSunset.at(2) << "s" << endl;
+                                if (LOG_FRAME_STATUS)
+                                    cout << "NEXT SUNSET : " << nextSunset.at(0) << "h" << nextSunset.at(1) << "m" << nextSunset.at(2) << "s" << endl;
 
                             }
 
@@ -538,7 +550,8 @@ void AcqThread::operator()(){
 
                 tacq = (((double)getTickCount() - tacq)/getTickFrequency())*1000;
                 fps = (1.0/(tacq/1000.0)) ;
-                std::cout << " [ TIME ACQ ] : " << tacq << " ms   ~cFPS("  << fps << ")" <<  endl;
+                if (LOG_FRAME_STATUS)
+                    std::cout << " [ TIME ACQ ] : " << tacq << " ms   ~cFPS("  << fps << ")" <<  endl;
                 BOOST_LOG_SEV(logger, normal) << " [ TIME ACQ ] : " << tacq << " ms";
 
                 mMustStopMutex.lock();
@@ -593,6 +606,7 @@ void AcqThread::operator()(){
 }
 
 void AcqThread::selectNextAcquisitionSchedule(TimeDate::Date date) {
+    cout << "AcqThread::selectNextAcquisitionSchedule"<<endl;
 
     if(mcp.schcap.ACQ_SCHEDULE.size() != 0){
 
@@ -630,6 +644,7 @@ void AcqThread::selectNextAcquisitionSchedule(TimeDate::Date date) {
 }
 
 bool AcqThread::buildAcquisitionDirectory(string YYYYMMDD){
+    cout << "AcqThread::buildAcquisitionDirectory"<<endl;
 
     namespace fs = boost::filesystem;
     string root = mdp.DATA_PATH + mstp.STATION_NAME + "_" + YYYYMMDD +"/";
@@ -744,7 +759,7 @@ bool AcqThread::buildAcquisitionDirectory(string YYYYMMDD){
 }
 
 void AcqThread::runImageCapture(int imgNumber, int imgExposure, int imgGain, CamPixFmt imgFormat, ImgFormat imgOutput, string imgPrefix) {
-
+    cout << "AcqThread::runImageCapture"<<endl;
     // Stop camera
     mDevice->stopCamera();
 
@@ -828,7 +843,6 @@ void AcqThread::runImageCapture(int imgNumber, int imgExposure, int imgGain, Cam
         throw "Fail to restart camera.";
 
     prepareAcquisitionOnDevice();
-
 }
 
 void AcqThread::saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, string imgPrefix) {
@@ -965,6 +979,7 @@ void AcqThread::saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, 
 }
 
 bool AcqThread::computeSunTimes() {
+    cout << "AcqThread::computeSunTimes"<<endl;
 
     int sunriseStartH = 0, sunriseStartM = 0, sunriseStopH = 0, sunriseStopM = 0,
         sunsetStartH = 0, sunsetStartM = 0, sunsetStopH = 0, sunsetStopM = 0;
@@ -1115,7 +1130,7 @@ bool AcqThread::computeSunTimes() {
 }
 
 bool AcqThread::prepareAcquisitionOnDevice() {
-
+    cout << "AcqThread::prepareAcquisitionOnDevice" << endl;
 
     // SET SIZE
     if(!mDevice->setCameraSize())

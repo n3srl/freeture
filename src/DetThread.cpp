@@ -33,6 +33,7 @@
 * \date    12/03/2018
 * \brief   Detection thread.
 */
+#include "Constants.h"
 
 #include "DetThread.h"
 #include "NodeExporterMetrics.h"
@@ -271,9 +272,11 @@ void DetThread::operator ()(){
                     }
 
                     t = (((double)getTickCount() - t)/getTickFrequency())*1000;
-                    cout << " [ TIME DET ] : " << std::setprecision(3) << std::fixed << t << " ms " << endl;
-                    BOOST_LOG_SEV(logger,normal) << " [ TIME DET ] : " << std::setprecision(3) << std::fixed << t << " ms ";
-
+                    if (LOG_FRAME_STATUS)
+                    {
+                        cout << " [ TIME DET ] : " << std::setprecision(3) << std::fixed << t << " ms " << endl;
+                        BOOST_LOG_SEV(logger,normal) << " [ TIME DET ] : " << std::setprecision(3) << std::fixed << t << " ms ";
+                    }
                 }else{
 
                     // reset method

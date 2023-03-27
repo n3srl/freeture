@@ -35,9 +35,12 @@
 
 #pragma once
 
+#include <vector>
+
 #include "EInputDeviceType.h"
 #include "CfgParam.h"
-#include <vector>
+#include "CfgLoader.h"
+#include "Device.h"
 
 namespace freeture {
 
@@ -55,11 +58,13 @@ namespace freeture {
                     }
 
             }initializer;
+            std::string m_CfgFilePath;
 
             static boost::log::sources::severity_logger< LogSeverityLevel > m_Logger;
             std::vector<string> m_EMsg;
 
             CfgLoader m_Cfg;
+            Device* mDevice;
             parameters m_Param;
             InputDeviceType m_InputType;
 
@@ -85,7 +90,7 @@ namespace freeture {
              * Constructor.
              *
              */
-            CfgParam(string cfgFilePath);
+            CfgParam(Device*,string);
 
             int             getDeviceID();
             dataParam       getDataParam();

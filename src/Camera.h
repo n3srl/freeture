@@ -37,11 +37,16 @@
 #pragma once
 
 #include "config.h"
-#include "opencv2/highgui/highgui.hpp"
-#include <opencv2/imgproc/imgproc.hpp>
+
 #include "ECamPixFmt.h"
-#include "Frame.h"
 #include "EInputDeviceType.h"
+#include "ECamSdkType.h"
+#include "CameraScanner.h"
+#include "Frame.h"
+
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
 
 using namespace cv;
 using namespace std;
@@ -49,6 +54,7 @@ using namespace std;
 class Camera {
 
     public :
+        static CameraScanner*       Scanner;
 
         bool                mExposureAvailable;
         bool                mGainAvailable;
@@ -71,20 +77,8 @@ class Camera {
 
         virtual ~Camera() {};
 
-        virtual vector<pair<int,string>> getCamerasList() {
-
-            vector<pair<int,string>> v;
-            return v;
-
-        }
-
         virtual void getAvailablePixelFormats() {};
 
-        /**
-        * List connected GigE devices.
-        *
-        */
-        virtual bool listCameras() {return false;};
 
         /**
         * Get informations about a specific device.

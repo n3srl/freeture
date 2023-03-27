@@ -11,44 +11,40 @@
 #include <time.h>
 #include <algorithm>
 
+#include "config.h"
+
+
+#include "ELogSeverityLevel.h"
+#include "EParser.h"
+
 #include "Frame.h"
 #include "TimeDate.h"
 #include "Camera.h"
-#include "EParser.h"
 #include "ErrorManager.cpp"
+
 #include "CameraLucidArena_PHX016S.h"
 
-#ifdef LINUX
+#include <ArenaApi.h>
+#include <SaveApi.h>
 
-    #include "config.h"
-
-    #include "arv.h"
-    #include "arvinterface.h"
-
-    #include <ArenaApi.h>
-    #include <SaveApi.h>
-
-    #include <opencv2/highgui/highgui.hpp>
-    #include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 
-    #define BOOST_LOG_DYN_LINK 1
+#define BOOST_LOG_DYN_LINK 1
+#include <boost/log/common.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/utility/setup/file.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/attributes/named_scope.hpp>
+#include <boost/log/attributes.hpp>
+#include <boost/log/sinks.hpp>
+#include <boost/log/sources/logger.hpp>
+#include <boost/log/core.hpp>
 
-    #include <boost/log/common.hpp>
-    #include <boost/log/expressions.hpp>
-    #include <boost/log/utility/setup/file.hpp>
-    #include <boost/log/utility/setup/console.hpp>
-    #include <boost/log/utility/setup/common_attributes.hpp>
-    #include <boost/log/attributes/named_scope.hpp>
-    #include <boost/log/attributes.hpp>
-    #include <boost/log/sinks.hpp>
-    #include <boost/log/sources/logger.hpp>
-    #include <boost/log/core.hpp>
-
-    #include "ELogSeverityLevel.h"
-
-    using namespace freeture;
-    using namespace std;
+using namespace freeture;
+using namespace std;
 
 
 
@@ -82,52 +78,6 @@
         mInputDeviceType = CAMERA;
     }
 
-    /**
-     * Called to get the current reachable cameras.
-     * Lucid cameras are GigEVision cameras and a specific tag into the name. "PHX016S"
-     */
-    vector<pair<int,string>> freeture::CameraLucidArena_PHX016S::getCamerasList()
-    {
-        vector<pair<int,string>> camerasList;
-
-        try
-        {
-            if (m_ArenaSDKSystem == nullptr)
-                m_ArenaSDKSystem =  Arena::OpenSystem();
-        }
-        catch (std::exception& e)
-        {
-            ErrorManager::Exception(e);
-        }
-
-        //arv_update_device_list();
-        m_ArenaSDKSystem->UpdateDevices(100);
-
-      	vector<Arena::DeviceInfo> deviceInfos = m_ArenaSDKSystem->GetDevices();
-
-        int ni =  deviceInfos.size();
-
-
-        for (int i = 0; i< ni; i++)
-        {
-            Arena::DeviceInfo& device_info = deviceInfos[i];
-            const char* name = device_info.ModelName();
-
-            if (strcmp(name,"PHX016S") == 0)
-            {
-                    pair<int,string> c;
-                    c.first = i;
-                    //const char* str = arv_get_device_id(i);
-                    const char* str = name;
-                    const char* addr = device_info.IpAddressStr();
-                    string s = str;
-                    c.second = "NAME[" + s + "] SDK[LUCID_ARENA] IP: " + addr;
-                    camerasList.push_back(c);
-            }
-        }
-
-       return camerasList;
-    }
 
     /**
      *
@@ -1226,48 +1176,6 @@
 		Arena::CloseSystem(m_ArenaSDKSystem);
     }
 
-    bool freeture::CameraLucidArena_PHX016S::listCameras()
-    {
-
-        ArvInterface *interface;
-        //arv_update_device_list();
-
-        int ni = arv_get_n_interfaces ();
-
-        cout << endl << "------------ GIGE CAMERAS WITH LUCID ARENA ----------" << endl << endl;
-
-        for (int j = 0; j< ni; j++)
-        {
-
-            interface = arv_gv_interface_get_instance();
-            arv_interface_update_device_list(interface);
-            //int nb = arv_get_n_devices();
-
-            int nb = arv_interface_get_n_devices(interface);
-            const char* name = arv_get_interface_id (j);
-            for(int i = 0; i < nb; i++)
-            {
-                if (strcmp(name,"GigEVision") == 0 && strcmp(name,"PHX016S") == 0)
-                {
-
-                cout << "-> [" << i << "] " << arv_interface_get_device_id(interface,i)<< endl;
-                //cout << "-> [" << i << "] " << arv_get_device_id(i)<< endl;
-                }
-            }
-
-            if(nb == 0) {
-                cout << "-> No cameras detected..." << endl;
-                return false;
-            }
-            delete interface;
-        }
-
-        cout << endl << "------------------------------------------------" << endl << endl;
-
-        return true;
-
-    }
-
     bool freeture::CameraLucidArena_PHX016S::grabImage(Frame &newFrame)
     {
 
@@ -1427,4 +1335,3 @@
         }
     }
 
- #endif

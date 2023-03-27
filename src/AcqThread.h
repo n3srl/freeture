@@ -51,6 +51,7 @@
 #include "Ephemeris.h"
 #include "Fits2D.h"
 #include "SParam.h"
+#include "Device.h"
 
 class AcqThread {
 
@@ -135,7 +136,8 @@ class AcqThread {
                     cameraParam                         acq,
                     framesParam                         fp,
                     videoParam                          vp,
-                    fitskeysParam                       fkp);
+                    fitskeysParam                       fkp,
+                    freeture::Device*                           device  );
 
         ~AcqThread(void);
 

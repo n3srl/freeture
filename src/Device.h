@@ -36,14 +36,22 @@
 
 #pragma once
 
+#include <vector>
+#include <algorithm>
+#include <string>
+#include <iterator>
+
+
 #include "config.h"
+
 
 #ifdef LINUX
 #define BOOST_LOG_DYN_LINK 1
 #endif
 
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+
 #include <boost/log/common.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/utility/setup/file.hpp>
@@ -54,6 +62,10 @@
 #include <boost/log/sinks.hpp>
 #include <boost/log/sources/logger.hpp>
 #include <boost/log/core.hpp>
+#include <boost/tokenizer.hpp>
+#include <boost/circular_buffer.hpp>
+#include <boost/filesystem.hpp>
+
 #include "ELogSeverityLevel.h"
 #include "EImgBitDepth.h"
 #include "ECamPixFmt.h"
@@ -67,14 +79,6 @@
 #include "CameraV4l2.h"
 #include "CameraFrames.h"
 #include "CameraWindows.h"
-#include <vector>
-#include <algorithm>
-#include <string>
-#include <boost/filesystem.hpp>
-#include <iterator>
-#include <algorithm>
-#include <boost/tokenizer.hpp>
-#include <boost/circular_buffer.hpp>
 #include "EInputDeviceType.h"
 #include "ECamSdkType.h"
 #include "SParam.h"
@@ -91,6 +95,7 @@ class Device {
         bool mVideoFramesInput; // TRUE if input is a video file or frames directories.
 
     private :
+        vector<CameraDescription> listCams;
 
         static boost::log::sources::severity_logger< LogSeverityLevel > logger;
 
@@ -106,7 +111,7 @@ class Device {
 
         } initializer;
 
-        vector<pair<int,pair<int,CamSdkType>>> mDevices;
+        std::vector<pair<int,pair<int,CamSdkType>>> mDevices;
 
         bool        mCustomSize;
         int         mStartX;
@@ -126,11 +131,12 @@ class Device {
         framesParam mfp;
         videoParam  mvp;
 
+        void mergeList(std::vector<CameraDescription>&);
     public :
 
         int         mNbDev;
         CamPixFmt   mFormat;
-        string      mCfgPath;
+        std::string      mCfgPath;
         InputDeviceType mDeviceType;
         double      mMinExposureTime;
         double      mMaxExposureTime;
@@ -140,9 +146,7 @@ class Device {
         double         mMaxGain;
         //int         mNbFrame;
 
-    public :
-
-        Device(cameraParam cp, framesParam fp, videoParam vp, int cid);
+        void Setup(cameraParam cp, framesParam fp, videoParam vp, int cid);
 
         Device();
 
@@ -214,7 +218,7 @@ class Device {
 
         bool getSupportedPixelFormats();
 
-        bool loadNextCameraDataSet(string &location);
+        bool loadNextCameraDataSet(std::string &location);
 
         bool getExposureStatus();
 

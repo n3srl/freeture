@@ -27,12 +27,11 @@
 
 #pragma once
 
-enum LogSeverityLevel{
-
+enum LogSeverityLevel
+{
     normal,
     notification,
     warning,
     fail,
     critical
-
 };

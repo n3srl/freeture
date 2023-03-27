@@ -34,165 +34,300 @@
 
 #pragma once
 
-#include <boost/filesystem.hpp>
+#include <algorithm>
+#include <cstdlib>
+#include <functional>
+#include <iostream>
+#include <memory>
+#include <ostream>
+#include <iomanip>
+#include <fstream>
+#include <cstring>
 #include <string>
 #include <numeric>
-#include "TimeDate.h"
+#include <iterator>
+#include <vector>
+#include <filesystem>
+
+#include <boost/log/common.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/utility/setup/file.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/attributes/named_scope.hpp>
+#include <boost/log/attributes.hpp>
+#include <boost/log/sinks.hpp>
+#include <boost/log/sources/logger.hpp>
+#include <boost/log/core.hpp>
+#include <boost/filesystem.hpp>
 #include <boost/date_time/gregorian/greg_date.hpp>
 #include <boost/bind.hpp>
 #include <boost/iterator/transform_iterator.hpp>
+
 #include "TimeDate.h"
-#include "Conversion.h"
 
-class Logger {
 
-    private :
 
-        string mLogPath;
-        int mTimeLimit;
-        int mSizeLimit;
-        vector<string> mLogFiles;
-        vector<int> mRefDate;
+namespace fs        = boost::filesystem;
 
-    public :
+namespace freeture
+{
 
-        /**
-        * Constructor.
-        *
-        */
-        Logger(string logPath, int timeLimit, int sizeLimit, vector<string> logFiles):
-        mLogPath(logPath), mTimeLimit(timeLimit), mSizeLimit(sizeLimit), mLogFiles(logFiles) {
 
-            mRefDate = TimeDate::splitStringToInt(TimeDate::localDateTime(microsec_clock::universal_time(),"%Y:%m:%d:%H:%M:%S"));
+    enum class Level
+    {
+        WARNING,
+        ERROR,
+        DEBUG,
+        INFO
+    };
 
-        }
+    class Logger
+    {
 
-        void monitorLog() {
+        private :
 
-            vector<int> currDate = TimeDate::splitStringToInt(TimeDate::localDateTime(microsec_clock::universal_time(),"%Y:%m:%d:%H:%M:%S"));
+            std::string mLogPath;
+            int mTimeLimit;
+            int mSizeLimit;
+            std::vector<std::string> mLogFiles;
+            std::vector<int> mRefDate;
 
-            //cout << "REFDATE : " << mRefDate.at(0) << mRefDate.at(1) << mRefDate.at(2) << endl;
-            //cout << "CURDATE : " << currDate.at(0) << currDate.at(1) << currDate.at(2) << endl;
+            void  getFoldersize(std::string rootFolder,unsigned long long & f_size)
+            {
+                fs::path folderPath(rootFolder);
 
-            // Create log date directories when date changes.
-            if(mRefDate.at(0) != currDate.at(0) || mRefDate.at(1) != currDate.at(1) || mRefDate.at(2) != currDate.at(2)) {
+                if (fs::exists(folderPath)) {
 
-                string rDate = Conversion::numbering(2, mRefDate.at(0)) + Conversion::intToString(mRefDate.at(0)) + Conversion::numbering(2, mRefDate.at(1)) + Conversion::intToString(mRefDate.at(1)) + Conversion::numbering(2, mRefDate.at(2)) + Conversion::intToString(mRefDate.at(2));
-                //cout << rDate << endl;
-                if(create_directory(path(mLogPath + "/LOG_" + rDate)) || exists(path(mLogPath + "/LOG_" + rDate))) {
+                    fs::directory_iterator end_itr;
 
-                    //cout << mLogPath << "/LOG_" << rDate << " created." << endl;
+                    for (fs::directory_iterator dirIte(rootFolder); dirIte != end_itr; ++dirIte ) {
 
-                    for(int i = 0; i < mLogFiles.size(); i++) {
+                        fs::path filePath(complete (dirIte->path(), folderPath));
 
-                        try {
+                        try{
 
-                            rename(path(mLogPath + "/" + mLogFiles.at(i)), path(mLogPath + "/LOG_" + rDate + "/" + mLogFiles.at(i)));
-                            //cout << "RENAME : " << mLogPath << "/" << mLogFiles.at(i) << " TO " << mLogPath << "/LOG_" << rDate << "/" + mLogFiles.at(i) << endl;
-
-                        }catch(boost::filesystem::filesystem_error e) {
-
-                            cout <<"filesystem error" << endl;
-
-                        }
-                    }
-
-                    // Clean logs directories
-
-                    boost::posix_time::ptime t1(boost::posix_time::from_iso_string(rDate + "T000000"));
-                    int dirNb = 0;
-                    vector<string> dirToRemove;
-                    path pDir(mLogPath);
-                    //cout << ">> LOOP DIR :  "<< endl;
-                    for(directory_iterator file(pDir);file!= directory_iterator(); ++file) {
-
-                        path curr(file->path());
-                        //cout << "-> " << curr << endl;
-
-                        if(is_directory(curr)) {
-
-                            string dirName = curr.filename().string();
-
-                            vector<string> output;
-                            typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
-                            boost::char_separator<char> sep("_");
-                            tokenizer tokens(dirName, sep);
-
-                            for (tokenizer::iterator tok_iter = tokens.begin();tok_iter != tokens.end(); ++tok_iter) {
-                                output.push_back(*tok_iter);
+                            if (!is_directory(dirIte->status()) ){
+                                f_size = f_size + file_size(filePath);
+                            }else{
+                                getFoldersize(filePath.string(),f_size);
                             }
 
-                            if(output.size() == 2 && output.back().size() == 8) {
+                        }catch(std::exception& e){  std::cout << e.what() << std::endl; }
+                    }
+                }
+            }
 
-                                boost::posix_time::ptime t2(boost::posix_time::from_iso_string(output.back() + "T000000"));
+        public :
 
-                                boost::posix_time::time_duration td = t1 - t2;
-                                long secTime = td.total_seconds();
-                                //cout << secTime << endl;
+            static void LogLevel(freeture::Level level)
+            {
+                switch (level)
+                {
+                    case Level::DEBUG:   std::cout<< "DEBUG: "; break;
+                    case Level::ERROR:   std::cout<< "ERROR: "; break;
+                    case Level::INFO:    std::cout<< "INFO: "; break;
+                    case Level::WARNING: std::cout<< "WARNING: "; break;
+                }
+            }
 
-                                if(abs(secTime) > mTimeLimit * 24 * 3600) {
-                                    dirToRemove.push_back(curr.string());
+            /**
+            * Constructor.
+            *
+            */
+            Logger(std::string logPath, int timeLimit, int sizeLimit, std::vector<std::string> logFiles):
+            mLogPath(logPath), mTimeLimit(timeLimit), mSizeLimit(sizeLimit), mLogFiles(logFiles) {
+
+                mRefDate = TimeDate::splitStringToInt(TimeDate::localDateTime(microsec_clock::universal_time(),"%Y:%m:%d:%H:%M:%S"));
+
+            }
+
+            void monitorLog() {
+
+                vector<int> currDate = TimeDate::splitStringToInt(TimeDate::localDateTime(microsec_clock::universal_time(),"%Y:%m:%d:%H:%M:%S"));
+
+                //cout << "REFDATE : " << mRefDate.at(0) << mRefDate.at(1) << mRefDate.at(2) << endl;
+                //cout << "CURDATE : " << currDate.at(0) << currDate.at(1) << currDate.at(2) << endl;
+
+                // Create log date directories when date changes.
+                if(mRefDate.at(0) != currDate.at(0) || mRefDate.at(1) != currDate.at(1) || mRefDate.at(2) != currDate.at(2)) {
+
+                    std::string rDate = Conversion::numbering(2, mRefDate.at(0)) + Conversion::intToString(mRefDate.at(0)) + Conversion::numbering(2, mRefDate.at(1)) + Conversion::intToString(mRefDate.at(1)) + Conversion::numbering(2, mRefDate.at(2)) + Conversion::intToString(mRefDate.at(2));
+                    //cout << rDate << endl;
+                    if(fs::create_directory(fs::path(mLogPath + "/LOG_" + rDate)) || fs::exists(fs::path(mLogPath + "/LOG_" + rDate))) {
+
+                        //cout << mLogPath << "/LOG_" << rDate << " created." << endl;
+
+                        for(int i = 0; i < mLogFiles.size(); i++) {
+
+                            try {
+
+                                rename(fs::path(mLogPath + "/" + mLogFiles.at(i)), fs::path(mLogPath + "/LOG_" + rDate + "/" + mLogFiles.at(i)));
+                                //cout << "RENAME : " << mLogPath << "/" << mLogFiles.at(i) << " TO " << mLogPath << "/LOG_" << rDate << "/" + mLogFiles.at(i) << endl;
+
+                            }catch(boost::filesystem::filesystem_error e) {
+
+                                std::cout <<"filesystem error" << std::endl;
+
+                            }
+                        }
+
+                        // Clean logs directories
+
+                        boost::posix_time::ptime t1(boost::posix_time::from_iso_string(rDate + "T000000"));
+                        int dirNb = 0;
+                        std::vector<std::string> dirToRemove;
+                        fs::path pDir(mLogPath);
+                        //cout << ">> LOOP DIR :  "<< endl;
+                        for(fs::directory_iterator file(pDir);file!= fs::directory_iterator(); ++file) {
+
+                            fs::path curr(file->path());
+                            //cout << "-> " << curr << endl;
+
+                            if(fs::is_directory(curr)) {
+
+                                std::string dirName = curr.filename().string();
+
+                                std::vector<std::string> output;
+                                typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+                                boost::char_separator<char> sep("_");
+                                tokenizer tokens(dirName, sep);
+
+                                for (tokenizer::iterator tok_iter = tokens.begin();tok_iter != tokens.end(); ++tok_iter) {
+                                    output.push_back(*tok_iter);
                                 }
 
-                            }else{
-                                dirToRemove.push_back(curr.string());
-                                //cout << "remove : " << curr.string() << endl;
+                                if(output.size() == 2 && output.back().size() == 8) {
+
+                                    boost::posix_time::ptime t2(boost::posix_time::from_iso_string(output.back() + "T000000"));
+
+                                    boost::posix_time::time_duration td = t1 - t2;
+                                    long secTime = td.total_seconds();
+                                    //cout << secTime << endl;
+
+                                    if(abs(secTime) > mTimeLimit * 24 * 3600) {
+                                        dirToRemove.push_back(curr.string());
+                                    }
+
+                                }else{
+                                    dirToRemove.push_back(curr.string());
+                                    //cout << "remove : " << curr.string() << endl;
+                                }
                             }
                         }
-                    }
 
-                    //cout << ">> SIZE dirToRemove : " << dirToRemove.size() << endl;
+                        //cout << ">> SIZE dirToRemove : " << dirToRemove.size() << endl;
 
-                    for(int i = 0; i < dirToRemove.size(); i++) {
+                        for(int i = 0; i < dirToRemove.size(); i++) {
 
-                        //cout << ">> REMOVE : " << dirToRemove.at(i) << endl;
-                        boost::filesystem::remove_all(path(dirToRemove.at(i)));
+                            //cout << ">> REMOVE : " << dirToRemove.at(i) << endl;
+                            boost::filesystem::remove_all(fs::path(dirToRemove.at(i)));
 
-                    }
-
-                    mRefDate = currDate;
-
-                }/*else
-                    cout << "DIR not exists" << endl;*/
-
-            }
-
-            // Check log size.
-            unsigned long long logSize = 0;
-            getFoldersize(mLogPath, logSize);
-            //cout << "LOG SIZE : " <<  logSize << endl;
-            if((logSize/1024.0)/1024.0 > mSizeLimit) {
-                boost::filesystem::path path_to_remove(mLogPath);
-                for (boost::filesystem::directory_iterator end_dir_it, it(path_to_remove); it!=end_dir_it; ++it) {
-                    boost::filesystem::remove_all(it->path());
-                }
-            }
-        }
-
-    private :
-
-        void  getFoldersize(string rootFolder,unsigned long long & f_size) {
-
-           path folderPath(rootFolder);
-
-           if (exists(folderPath)) {
-
-                directory_iterator end_itr;
-
-                for (directory_iterator dirIte(rootFolder); dirIte != end_itr; ++dirIte ) {
-
-                    path filePath(complete (dirIte->path(), folderPath));
-
-                    try{
-
-                        if (!is_directory(dirIte->status()) ){
-                            f_size = f_size + file_size(filePath);
-                        }else{
-                            getFoldersize(filePath.string(),f_size);
                         }
 
-                    }catch(exception& e){  cout << e.what() << endl; }
+                        mRefDate = currDate;
+
+                    }/*else
+                        cout << "DIR not exists" << endl;*/
+
+                }
+
+                // Check log size.
+                unsigned long long logSize = 0;
+                getFoldersize(mLogPath, logSize);
+                //cout << "LOG SIZE : " <<  logSize << endl;
+                if((logSize/1024.0)/1024.0 > mSizeLimit) {
+                    boost::filesystem::path path_to_remove(mLogPath);
+                    for (boost::filesystem::directory_iterator end_dir_it, it(path_to_remove); it!=end_dir_it; ++it) {
+                        boost::filesystem::remove_all(it->path());
+                    }
                 }
             }
-        }
-};
+
+
+
+
+    };
+
+
+    template<typename T>
+    void Log(T &&t)
+    {
+        std::cout << t << endl;
+    }
+
+    template<typename T>
+    void LogError(T &&t)
+    {
+        freeture::Logger::LogLevel(Level::ERROR);
+        std::cout << t << endl;
+    }
+
+    template<typename T>
+    void LogInfo(T &&t)
+    {
+        freeture::Logger::LogLevel(Level::INFO);
+        std::cout << t << endl;
+    }
+
+    template<typename T>
+    void LogWarning(T &&t)
+    {
+        freeture::Logger::LogLevel(Level::WARNING);
+        std::cout << t << endl;
+    }
+
+    template<typename T>
+    void LogDebug(T &&t)
+    {
+        freeture::Logger::LogLevel(Level::DEBUG);
+        std::cout << t << endl;
+    }
+
+    template<typename Head, typename... Tail>
+    void LogInfo(Head &&head, Tail&&... tail)
+    {
+        freeture::Logger::LogLevel(Level::INFO);
+        std::cout << head;
+        std::cout << " ";
+        freeture::Log(std::forward<Tail>(tail)...);
+    }
+
+    template<typename Head, typename... Tail>
+    void Log(Head &&head, Tail&&... tail)
+    {
+        std::cout << head;
+        std::cout << " ";
+        freeture::Log(std::forward<Tail>(tail)...);
+    }
+
+
+    template<typename Head, typename... Tail>
+    void LogError(Head &&head, Tail&&... tail)
+    {
+        Logger::LogLevel(Level::ERROR);
+        std::cout << head;
+        std::cout << " ";
+        freeture::Log(std::forward<Tail>(tail)...);
+    }
+
+
+    template<typename Head, typename... Tail>
+    void LogDebug(Head &&head, Tail&&... tail)
+    {
+        Logger::LogLevel(Level::DEBUG);
+        std::cout << head;
+        std::cout << " ";
+        freeture::Log(std::forward<Tail>(tail)...);
+    }
+
+    template<typename Head, typename... Tail>
+    void LogWarning(Head &&head, Tail&&... tail)
+    {
+        Logger::LogLevel(Level::WARNING);
+        std::cout << head;
+        std::cout << " ";
+        freeture::Log(std::forward<Tail>(tail)...);
+    }
+
+}

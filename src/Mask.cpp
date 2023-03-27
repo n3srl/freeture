@@ -34,6 +34,7 @@
 
 #include <opencv2/imgcodecs.hpp>
 
+#include "Constants.h"
 #include "Mask.h"
 
 
@@ -141,7 +142,8 @@ bool Mask::applyMask(Mat &currFrame) {
 
         }
 
-        cout << "NEXT MASK : " << (mUpdateInterval - (int)diffTime) << "s" << endl;
+        if (LOG_FRAME_STATUS)
+            cout << "NEXT MASK : " << (mUpdateInterval - (int)diffTime) << "s" << endl;
 
     }
 

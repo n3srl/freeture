@@ -35,41 +35,39 @@
 */
 
 #pragma once
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <time.h>
+
+#include <boost/log/common.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/utility/setup/file.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/attributes/named_scope.hpp>
+#include <boost/log/attributes.hpp>
+#include <boost/log/sinks.hpp>
+#include <boost/log/sources/logger.hpp>
+#include <boost/log/core.hpp>
+
+#define BOOST_LOG_DYN_LINK 1
 
 #include "config.h"
+#include "ELogSeverityLevel.h"
+#include "EParser.h"
+#include "Camera.h"
+#include "Frame.h"
+#include "TimeDate.h"
+
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #ifdef LINUX
 
-    #include "opencv2/highgui/highgui.hpp"
-    #include <opencv2/imgproc/imgproc.hpp>
+#include "arv.h"
+#include "arvinterface.h"
 
-    #include <iostream>
-    #include <string>
-    #include "Frame.h"
-    #include "TimeDate.h"
-    #include "Camera.h"
-    #include "arv.h"
-    #include "arvinterface.h"
-    #include <time.h>
-    #include <algorithm>
-    #include "EParser.h"
-
-    #define BOOST_LOG_DYN_LINK 1
-
-    #include <boost/log/common.hpp>
-    #include <boost/log/expressions.hpp>
-    #include <boost/log/utility/setup/file.hpp>
-    #include <boost/log/utility/setup/console.hpp>
-    #include <boost/log/utility/setup/common_attributes.hpp>
-    #include <boost/log/attributes/named_scope.hpp>
-    #include <boost/log/attributes.hpp>
-    #include <boost/log/sinks.hpp>
-    #include <boost/log/sources/logger.hpp>
-    #include <boost/log/core.hpp>
-    #include "ELogSeverityLevel.h"
-
-    using namespace cv;
-    using namespace std;
 
     class CameraGigeAravis: public Camera
     {
@@ -121,10 +119,6 @@
 
             ~CameraGigeAravis();
 
-            vector<pair<int,string>> getCamerasList();
-
-            bool listCameras();
-
             bool createDevice(int id);
 
             bool grabInitialization();
@@ -139,7 +133,7 @@
 
             bool grabSingleImage(Frame &frame, int camID);
 
-            bool getDeviceNameById(int id, string &device);
+            bool getDeviceNameById(int id, std::string &device);
 
             void getExposureBounds(double &eMin, double &eMax);
 
@@ -151,7 +145,7 @@
 
             bool getFPS(double &value);
 
-            string getModelName();
+            std::string getModelName();
 
             double getExposureTime();
 
@@ -165,7 +159,7 @@
 
             bool setPixelFormat(CamPixFmt depth);
 
-            void saveGenicamXml(string p);
+            void saveGenicamXml(std::string p);
 
             bool setSize(int startx, int starty, int width, int height, bool customSize);
 

@@ -82,8 +82,9 @@ void NodeExporterMetrics::WriteMetrics()
 
                m_Writing = false;
            }
-           }catch(exception& e){
-
-                cout << e.what() << endl;
-            }
+        }
+        catch(exception& e)
+        {
+            cout << e.what() << endl;
+        }
 }

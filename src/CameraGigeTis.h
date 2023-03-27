@@ -115,8 +115,6 @@
 
             ~CameraGigeTis();
 
-            vector<pair<int,string>> getCamerasList();
-
             bool grabSingleImage(Frame &frame, int camID);
 
             bool createDevice(int id);

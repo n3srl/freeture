@@ -126,6 +126,123 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/AcqSchedule.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/AcqThread.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Base64.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CameraFrames.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CameraGigeAravis.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CameraGigePylon.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CameraGigeTis.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CameraV4l2.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CameraVideo.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CameraWindows.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CfgLoader.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CfgParam.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Conversion.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/DetThread.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/DetectionTemplate.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/DetectionTemporal.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Device.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/EParser.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Ephemeris.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/ExposureControl.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Fits.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Fits2D.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Fits3D.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Frame.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/GlobalEvent.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Histogram.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/HistogramGray.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/HistogramRGB.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/ImgProcessing.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/LocalEvent.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Mask.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/OpenSSL.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/PixFmtConv.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/SMTPClient.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/SaveImg.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Stack.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/StackThread.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/TimeDate.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/main.Po">
+			<Option target="freeture"/>
+		</Unit>
 		<Unit filename="/home/nova/Repository/freeture/src/AcqSchedule.cpp">
 			<Option target="freeture"/>
 		</Unit>
@@ -159,6 +276,12 @@
 		<Unit filename="/home/nova/Repository/freeture/src/CameraGigeAravis.h">
 			<Option target="freeture"/>
 		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraGigeAravisScanner.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraGigeAravisScanner.h">
+			<Option target="freeture"/>
+		</Unit>
 		<Unit filename="/home/nova/Repository/freeture/src/CameraGigePylon.cpp">
 			<Option target="freeture"/>
 		</Unit>
@@ -177,10 +300,28 @@
 		<Unit filename="/home/nova/Repository/freeture/src/CameraLucidArena.h">
 			<Option target="freeture"/>
 		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraLucidArenaScanner.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraLucidArenaScanner.h">
+			<Option target="freeture"/>
+		</Unit>
 		<Unit filename="/home/nova/Repository/freeture/src/CameraLucidArena_PHX016S.cpp">
 			<Option target="freeture"/>
 		</Unit>
 		<Unit filename="/home/nova/Repository/freeture/src/CameraLucidArena_PHX016S.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraLucidArena_PHX016SScanner.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraLucidArena_PHX016SScanner.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraScanner.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraScanner.h">
 			<Option target="freeture"/>
 		</Unit>
 		<Unit filename="/home/nova/Repository/freeture/src/CameraV4l2.cpp">
@@ -214,6 +355,9 @@
 			<Option target="freeture"/>
 		</Unit>
 		<Unit filename="/home/nova/Repository/freeture/src/Circle.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Constants.h">
 			<Option target="freeture"/>
 		</Unit>
 		<Unit filename="/home/nova/Repository/freeture/src/Conversion.cpp">
@@ -330,6 +474,12 @@
 		<Unit filename="/home/nova/Repository/freeture/src/Frame.h">
 			<Option target="freeture"/>
 		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Freeture.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Freeture.h">
+			<Option target="freeture"/>
+		</Unit>
 		<Unit filename="/home/nova/Repository/freeture/src/GlobalEvent.cpp">
 			<Option target="freeture"/>
 		</Unit>
@@ -369,6 +519,9 @@
 		<Unit filename="/home/nova/Repository/freeture/src/Logger.h">
 			<Option target="freeture"/>
 		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Makefile">
+			<Option target="freeture"/>
+		</Unit>
 		<Unit filename="/home/nova/Repository/freeture/src/Makefile.am">
 			<Option target="freeture"/>
 		</Unit>
@@ -379,6 +532,12 @@
 			<Option target="freeture"/>
 		</Unit>
 		<Unit filename="/home/nova/Repository/freeture/src/Mask.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/NodeExporterMetrics.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/NodeExporterMetrics.h">
 			<Option target="freeture"/>
 		</Unit>
 		<Unit filename="/home/nova/Repository/freeture/src/OpenSSL.cpp">

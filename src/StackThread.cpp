@@ -32,7 +32,7 @@
 * \date    19/06/2014
 * \brief   Stack frames.
 */
-
+#include "Constants.h"
 #include "StackThread.h"
 #include "NodeExporterMetrics.h"
 
@@ -238,7 +238,6 @@ bool StackThread::getRunStatus(){
 }
 
 void StackThread::operator()(){
-
     bool stop = false;
     isRunning = true;
 
@@ -298,8 +297,10 @@ void StackThread::operator()(){
                         frameStack.addFrame(newFrame);
 
                         t = (((double)getTickCount() - t)/getTickFrequency())*1000;
-                        std::cout << "[ TIME STACK ] : " << std::setprecision(5) << std::fixed << t << " ms" << endl;
-                        BOOST_LOG_SEV(logger,normal) << "[ TIME STACK ] : " << std::setprecision(5) << std::fixed << t << " ms" ;
+                        if (LOG_FRAME_STATUS){
+                            std::cout << "[ TIME STACK ] : " << std::setprecision(5) << std::fixed << t << " ms" << endl;
+                            BOOST_LOG_SEV(logger,normal) << "[ TIME STACK ] : " << std::setprecision(5) << std::fixed << t << " ms" ;
+                        }
 
                     }else{
 
@@ -322,7 +323,8 @@ void StackThread::operator()(){
                     boost::posix_time::ptime t2(boost::posix_time::time_from_string(nowDate));
                     boost::posix_time::time_duration td = t2 - t1;
                     secTime = td.total_seconds();
-                    cout << "NEXT STACK : " << (int)(msp.STACK_TIME - secTime) << "s" <<  endl;
+                    if (LOG_FRAME_STATUS)
+                        cout << "NEXT STACK : " << (int)(msp.STACK_TIME - secTime) << "s" <<  endl;
 
                 } while(secTime <= msp.STACK_TIME);
 

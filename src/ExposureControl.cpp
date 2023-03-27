@@ -344,7 +344,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
 
                                 BOOST_LOG_SEV(logger,notification) << "Set EXP to : " << exposureValue;
 
-                            }else{
+                            } else {
 
                                 BOOST_LOG_SEV(logger,notification) << "STEP 1 : Analyse msv";
                                 BOOST_LOG_SEV(logger,notification) << "MSV ARRAY1 SIZE : " << msvArray_1.size() << "EXP ARRAY1 SIZE " << expArray_1.size();

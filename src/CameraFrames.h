@@ -99,8 +99,6 @@ class CameraFrames: public Camera {
 
         bool createDevice(int id) { return true;};
 
-        bool listCameras() {return true;};
-
         bool grabInitialization();
 
         bool grabImage(Frame &img);

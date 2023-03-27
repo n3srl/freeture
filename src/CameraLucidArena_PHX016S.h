@@ -13,12 +13,14 @@
 #include <string>
 
 #include <ArenaApi.h>
+#include "Camera.h"
 
 #define IMAGE_TIMEOUT 40000
 
 
 namespace freeture
 {
+
     class CameraLucidArena_PHX016S: public Camera
     {
 
@@ -81,11 +83,8 @@ namespace freeture
 
             ~CameraLucidArena_PHX016S();
 
-            std::vector<std::pair<int,std::string>> getCamerasList() override;
 
             void getAvailablePixelFormats() override;
-
-            bool listCameras() override;
 
             //getInfos
 

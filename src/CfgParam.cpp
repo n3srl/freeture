@@ -58,6 +58,8 @@
 #include "SParam.h"
 #include "ECamSdkType.h"
 #include "CfgParam.h"
+#include "Logger.h"
+
 
 using namespace boost::filesystem;
 using namespace std;
@@ -67,9 +69,13 @@ boost::log::sources::severity_logger< LogSeverityLevel >  freeture::CfgParam::m_
 
 freeture::CfgParam::Init freeture::CfgParam::initializer;
 
-freeture::CfgParam::CfgParam(string cfgFilePath) {
+freeture::CfgParam::CfgParam(Device* device, string cfgFilePath)
+{
+    assert(device!=nullptr);
 
+    m_CfgFilePath = cfgFilePath;
     // Initialize parameters.
+    mDevice = device;
 
     showErrors = false;
 
@@ -106,13 +112,13 @@ freeture::CfgParam::CfgParam(string cfgFilePath) {
     m_Param.camInput.ACQ_DAY_GAIN = 0;
     m_Param.camInput.ACQ_FORMAT = MONO8;
     m_Param.camInput.ACQ_FPS = 30;
-    m_Param.camInput.ACQ_HEIGHT = 480;
+    m_Param.camInput.ACQ_HEIGHT = 1080;
     m_Param.camInput.ACQ_NIGHT_EXPOSURE = 0;
     m_Param.camInput.ACQ_NIGHT_GAIN = 0;
     m_Param.camInput.ACQ_RES_CUSTOM_SIZE = false;
     m_Param.camInput.ACQ_STARTX = 0;
     m_Param.camInput.ACQ_STARTY = 0;
-    m_Param.camInput.ACQ_WIDTH = 640;
+    m_Param.camInput.ACQ_WIDTH = 1440;
     m_Param.camInput.ephem.EPHEMERIS_ENABLED = false;
     m_Param.camInput.ephem.SUNRISE_DURATION = 3600;
     vector<int>sunrisetime, sunsettime;
@@ -158,13 +164,12 @@ freeture::CfgParam::CfgParam(string cfgFilePath) {
             if(m_Param.DEVICE_ID.first.second) {
 
                 // Get input type according to device number.
-                Device *device = new Device();
-                device->setVerbose(false);
-                device->listDevices(false);
-                m_InputType = device->getDeviceType(device->getDeviceSdk(m_Param.DEVICE_ID.first.first));
-                delete device;
+                mDevice->setVerbose(false);
+                mDevice->listDevices(false);
+                m_InputType = mDevice->getDeviceType(mDevice->getDeviceSdk(m_Param.DEVICE_ID.first.first));
 
-                switch(m_InputType) {
+                switch(m_InputType)
+                {
 
                     case VIDEO :
                             loadVidParam();
@@ -195,7 +200,8 @@ freeture::CfgParam::CfgParam(string cfgFilePath) {
         }
     }else{
         m_EMsg.push_back("Configuration file path not exists : " + cfgFilePath);
-        cout << "Configuration file path not exists : " << cfgFilePath << endl;
+        //cout << "Configuration file path not exists : " << cfgFilePath << endl;
+        freeture::LogError("Configuration file path not exists : " , cfgFilePath);
     }
 }
 
@@ -205,9 +211,9 @@ void freeture::CfgParam::loadDeviceID() {
     pair<pair<int,bool>,string> var2;
     m_Param.DEVICE_ID = var2;
 
-    Device *device = new Device();
-    device->setVerbose(false);
-    device->listDevices(false);
+
+    mDevice->setVerbose(false);
+    mDevice->listDevices(false);
 
     int cId;
     string cString;
@@ -226,12 +232,12 @@ void freeture::CfgParam::loadDeviceID() {
         try{
             EParser<CamSdkType> cam_string;
 
-            CamSdkType cType = device->getDeviceSdk(cId);
+            CamSdkType cType = mDevice->getDeviceSdk(cId);
 
-            if(cType == VIDEOFILE) {
-                cId = device->mNbDev - 2;
-            }else if(cType == FRAMESDIR){
-                cId = device->mNbDev - 1;
+            if(cType == CamSdkType::VIDEOFILE) {
+                cId = mDevice->mNbDev - 2;
+            }else if(cType == CamSdkType::FRAMESDIR){
+                cId = mDevice->mNbDev - 1;
             }else{
                 failmsg += "Not correct input.\n";
                 failStringId = true;
@@ -245,22 +251,17 @@ void freeture::CfgParam::loadDeviceID() {
 
     if(failIntId && failStringId) {
         m_Param.DEVICE_ID.second = failmsg;
-        delete device;
         return;
     }
 
-    if(device->mNbDev < 0 || cId > (device->mNbDev - 1)){
+    if(mDevice->mNbDev < 0 || cId > (mDevice->mNbDev - 1)){
         m_Param.DEVICE_ID.second = "- CAMERA_ID's value not exist.";
-        delete device;
         return;
     }
 
     m_Param.DEVICE_ID.first.first = cId;
     m_Param.DEVICE_ID.first.second = true;
     m_Param.DEVICE_ID.second = "";
-
-    delete device;
-
 }
 
 void freeture::CfgParam::loadDataParam() {
@@ -432,12 +433,10 @@ void freeture::CfgParam::loadCamParam() {
         }
     }
 
-    Device *device = new Device();
-    device->setVerbose(false);
-    device->listDevices(false);
+    mDevice->setVerbose(false);
+    mDevice->listDevices(false);
 
-    if(!device->createCamera(m_Param.DEVICE_ID.first.first, true)) {
-        delete device;
+    if(!mDevice->createCamera(m_Param.DEVICE_ID.first.first, true)) {
         return;
     }
 
@@ -538,10 +537,10 @@ void freeture::CfgParam::loadCamParam() {
             }
         }else {
 
-            m_Param.camInput.ACQ_STARTX = 1;
-            m_Param.camInput.ACQ_STARTY = 1;
-            m_Param.camInput.ACQ_HEIGHT = 480;
-            m_Param.camInput.ACQ_WIDTH = 640;
+            m_Param.camInput.ACQ_STARTX = 0;
+            m_Param.camInput.ACQ_STARTY = 0;
+            m_Param.camInput.ACQ_HEIGHT = 1080;
+            m_Param.camInput.ACQ_WIDTH = 1440;
 
         }
     }
@@ -557,10 +556,10 @@ void freeture::CfgParam::loadCamParam() {
     double mine = -1, maxe = -1;
     double minf = -1, maxf = -1;
 
-    device->getCameraFPSBounds(minf, maxf);
-    device->setCameraDayGain();
-    device->getCameraGainBounds(ming, maxg);
-    device->getCameraExposureBounds(mine, maxe);
+    mDevice->getCameraFPSBounds(minf, maxf);
+    mDevice->setCameraDayGain();
+    mDevice->getCameraGainBounds(ming, maxg);
+    mDevice->getCameraExposureBounds(mine, maxe);
 
 
     //-------------------------------------------------------------------
@@ -1121,10 +1120,6 @@ void freeture::CfgParam::loadCamParam() {
         }
     }
 
-    if(device != NULL) {
-        delete device;
-    }
-
     if(!e) m_Param.camInput.status = true;
 }
 
@@ -1159,11 +1154,9 @@ void freeture::CfgParam::loadDetParam() {
                     tempmask.copyTo(m_Param.det.MASK);
 
                     if(m_Param.DEVICE_ID.first.second) {
-
-                        Device *device = new Device();
-                        device->setVerbose(false);
-                        device->listDevices(false);
-                        m_InputType = device->getDeviceType(device->getDeviceSdk(m_Param.DEVICE_ID.first.first));
+                        mDevice->setVerbose(false);
+                        mDevice->listDevices(false);
+                        m_InputType = mDevice->getDeviceType(mDevice->getDeviceSdk(m_Param.DEVICE_ID.first.first));
 
                         switch(m_InputType) {
 
@@ -1279,7 +1272,7 @@ void freeture::CfgParam::loadDetParam() {
 
                         }
 
-                        delete device;
+
 
                     }else {
                         e = true;
@@ -1940,11 +1933,21 @@ bool freeture::CfgParam::inputIsCorrect() {
     return false;
 }
 
-bool freeture::CfgParam::allParamAreCorrect() {
+bool freeture::CfgParam::allParamAreCorrect()
+{
+    //check configuration file
+    boost::filesystem::path pcfg(m_CfgFilePath);
+
+    if(!boost::filesystem::exists(pcfg))
+    {
+       cout << ">> Error. Configuration file not exists at "<< m_CfgFilePath << " use -c to set a different location. " <<endl;
+       cout << "Checking command line parameter." << endl;
+    }
 
     bool eFound = false;
 
-    if(!deviceIdIsCorrect()){
+    if(!deviceIdIsCorrect())
+    {
         eFound = true;
         cout << ">> Errors on device ID. " << endl;
     }

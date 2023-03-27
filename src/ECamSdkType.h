@@ -27,10 +27,12 @@
 
 #pragma once
 
-enum CamSdkType{
+enum class CamSdkType
+{
 
-    ARAVIS,
-    LUCID_ARENA,
+    ARAVIS,         //Generic implementation of ARAVIS camera
+    LUCID_ARENA,    //Arena SDK for lucid camera
+    LUCID_ARAVIS,   //Specific implementation implementation for lucid cameras with ARAVIS
     PYLONGIGE,
     TIS,
     VIDEOFILE,
