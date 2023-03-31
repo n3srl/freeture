@@ -1,6 +1,6 @@
 #!/bin/bash
 BASEDIR=$(dirname "$0")
-ARENASDK_ROOT="/opt/arenasdk/"
+ARENASDK_ROOT="/usr/include/"
 
 if [ ! -d $ARENASDK_ROOT ] 
 then
@@ -11,7 +11,7 @@ ARENALIB=$ARENASDK_ROOT"lib64"
 GENICAMLIB=$ARENASDK_ROOT"GenICam/library/lib/Linux64_x64"
 FFMPEGLIB=$ARENASDK_ROOT"ffmpeg"
 
-cp -R $BASEDIR/include $ARENASDK_ROOT
+cp -R $BASEDIR/include/* $ARENASDK_ROOT
 cp -R $BASEDIR/lib64 $ARENASDK_ROOT
 cp -R $BASEDIR/GenICam $ARENASDK_ROOT/GenICam
 cp -R $BASEDIR/ffmpeg $ARENASDK_ROOT/ffmpeg
