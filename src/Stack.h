@@ -40,7 +40,7 @@
 #define BOOST_LOG_DYN_LINK 1
 #endif
 
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/log/common.hpp>
@@ -63,7 +63,7 @@
 
 using namespace boost::filesystem;
 
-using namespace std;
+
 using namespace cv;
 
 class Stack {
@@ -94,7 +94,7 @@ class Stack {
         CamPixFmt       format;
         bool            varExpTime;
         double          sumExpTime;
-        string          mFitsCompressionMethod;
+        std::string          mFitsCompressionMethod;
         stationParam mstp;
         fitskeysParam mfkp;
 
@@ -104,7 +104,7 @@ class Stack {
         * Constructor.
         *
         */
-        Stack(string fitsCompression, fitskeysParam fkp, stationParam stp);
+        Stack(std::string fitsCompression, fitskeysParam fkp, stationParam stp);
 
         /**
         * Destructor.
@@ -136,7 +136,7 @@ class Stack {
         * @param stackReduction Enable stack reduction.
         * @return Success status.
         */
-        bool saveStack(string path, StackMeth stackMthd, bool stackReduction);
+        bool saveStack(std::string path, StackMeth stackMthd, bool stackReduction);
 
         /**
         * Get number of frames in the stack.

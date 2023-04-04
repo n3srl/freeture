@@ -35,7 +35,7 @@
 
 #pragma once
 
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <iostream>
 #include "Conversion.h"
@@ -45,7 +45,6 @@
 #include <boost/filesystem.hpp>
 #include "TimeDate.h"
 
-using namespace std;
 using namespace cv;
 
 class ExposureControl {
@@ -82,11 +81,11 @@ class ExposureControl {
         bool            autoExposureInitialized;
         bool            autoExposureSaveImage;
         bool            autoExposureSaveInfos;
-        string          autoExposureDataLocation;
-        vector<float>   msvArray_1;
-        vector<double>  expArray_1;
-        vector<float>   msvArray_2;
-        vector<double>  expArray_2;
+        std::string          autoExposureDataLocation;
+        std::vector<float>   msvArray_1;
+        std::vector<double>  expArray_1;
+        std::vector<float>   msvArray_2;
+        std::vector<double>  expArray_2;
         bool            incrementExposureTimeValue ;
         float           msvMin_1;
         float           msvMax_1;
@@ -98,11 +97,11 @@ class ExposureControl {
         double          expMax_2;
         bool            step1;
         bool            step2;
-        string          finalDataLocation;
-        string          stationName;
+        std::string          finalDataLocation;
+        std::string          stationName;
         double          finalExposureTime;
         int mNbFramesControlled;
-        string mRefDate;
+        std::string mRefDate;
         long mSecTime;
 
     public:
@@ -116,7 +115,7 @@ class ExposureControl {
         * @param file Path of the configuration file.
         * @param file Path of the configuration file.
         */
-        ExposureControl(int timeInterval, bool saveImage, bool saveInfos, string dataPath, string station);
+        ExposureControl(int timeInterval, bool saveImage, bool saveInfos, std::string dataPath, std::string station);
 
         bool calculate(Mat& image, Mat &mask);
 

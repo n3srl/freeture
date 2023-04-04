@@ -41,13 +41,12 @@
 #include <map>
 #include <stdlib.h>
 
-using namespace std;
 
 class CfgLoader{
 
     private :
 
-        map<string,string> mData; // Container.
+        std::map<std::string,std::string> mData; // Container.
 
     public :
 
@@ -69,7 +68,7 @@ class CfgLoader{
          * @param file Path of the configuration file.
          * @return Success status to load parameters.
          */
-        bool Load(const string& file);
+        bool Load(const std::string& file);
 
         /**
          * Check if value associated with given key exists.
@@ -77,7 +76,7 @@ class CfgLoader{
          * @param key Freeture's parameter.
          * @return Key has a value or not.
          */
-        bool Contains(const string& key) const;
+        bool Contains(const std::string& key) const;
 
         /**
          * Get string value associated with given key
@@ -86,7 +85,7 @@ class CfgLoader{
          * @param value Key's value.
          * @return Success to get value associated with given key.
          */
-        bool Get(const string& key, string& value) const;
+        bool Get(const std::string& key, std::string& value) const;
 
         /**
          * Get int value associated with given key
@@ -95,7 +94,7 @@ class CfgLoader{
          * @param value Key's value.
          * @return Success to get value associated with given key.
          */
-        bool Get(const string& key, int& value) const;
+        bool Get(const std::string& key, int& value) const;
 
         /**
          * Get long value associated with given key
@@ -104,7 +103,7 @@ class CfgLoader{
          * @param value Key's value.
          * @return Success to get value associated with given key.
          */
-        bool Get(const string& key, long& value) const;
+        bool Get(const std::string& key, long& value) const;
 
         /**
          * Get double value associated with given key
@@ -113,7 +112,7 @@ class CfgLoader{
          * @param value Key's value.
          * @return Success to get value associated with given key.
          */
-        bool Get(const string& key, double& value) const;
+        bool Get(const std::string& key, double& value) const;
 
         /**
          * Get bool value associated with given key
@@ -122,7 +121,7 @@ class CfgLoader{
          * @param value Key's value.
          * @return Success to get value associated with given key.
          */
-        bool Get(const string& key, bool& value) const;
+        bool Get(const std::string& key, bool& value) const;
 
     private :
 
@@ -132,7 +131,7 @@ class CfgLoader{
          * @param str Configuration file's line.
          * @return String without space.
          */
-        static string Trim(const string& str);
+        static std::string Trim(const std::string& str);
 
 };
 

@@ -203,7 +203,7 @@ Mat ImgProcessing::thresholding(Mat &img, Mat &mask, int factor, Thresh threshTy
 }
 
 // Create n * n region in a frame ( n is a pair value)
-void ImgProcessing::subdivideFrame(vector<Point> &sub, int n, int imgH, int imgW) {
+void ImgProcessing::subdivideFrame(std::vector<Point> &sub, int n, int imgH, int imgW) {
 
     /*
 
@@ -282,13 +282,13 @@ void ImgProcessing::subdivideFrame(vector<Point> &sub, int n, int imgH, int imgW
 
 Mat ImgProcessing::subdivideFrame(Mat img, int n) {
 
-    vector<Point> listSubPos;
+    std::vector<Point> listSubPos;
 
     int subW = img.cols/n;
     int subH = img.rows/n;
 
-    cout << "subW : " << subW << endl;
-    cout << "subH : " << subH << endl;
+    std::cout << "subW : " << subW << std::endl;
+    std::cout << "subH : " << subH << std::endl;
 
     for(int j = 0; j < n; j++) {
 

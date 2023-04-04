@@ -45,7 +45,7 @@
 #include "ECamPixFmt.h"
 #include <boost/filesystem.hpp>
 
-using namespace std;
+
 using namespace boost::filesystem;
 
 class Mask {
@@ -60,14 +60,14 @@ class Mask {
         int mUpdateInterval;
         bool mUpdateMask;
         bool mMaskToCreate;
-        string refDate;
+        std::string refDate;
         bool updateStatus;
         int saturatedValue;
         boost::circular_buffer<Mat> satMap;
 
     public :
 
-        Mask(int timeInterval, bool customMask, string customMaskPath, bool downsampleMask, CamPixFmt format, bool updateMask);
+        Mask(int timeInterval, bool customMask, std::string customMaskPath, bool downsampleMask, CamPixFmt format, bool updateMask);
 
         bool applyMask(Mat &currFrame);
 

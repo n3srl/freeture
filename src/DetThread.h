@@ -60,7 +60,7 @@
 
 using namespace boost::filesystem;
 using namespace cv;
-using namespace std;
+
 using namespace boost::posix_time;
 
 class DetThread {
@@ -85,14 +85,14 @@ class DetThread {
         Detection                       *pDetMthd;                  // Pointer on detection method.
         bool                            mMustStop;
         boost::mutex                    mMustStopMutex;
-        string                          mStationName;               // Name of the station              (parameter from configuration file).
+        std::string                          mStationName;               // Name of the station              (parameter from configuration file).
         CamPixFmt                       mFormat;                    // Acquisition bit depth            (parameter from configuration file).
         Fits                            mFitsHeader;
         bool                            mIsRunning;                 // Detection thread running status.
         bool                            mWaitFramesToCompleteEvent;
         int                             mNbWaitFrames;
-        string                          mCfgPath;
-        string                          mEventPath;                 // Path of the last detected event.
+        std::string                          mCfgPath;
+        std::string                          mEventPath;                 // Path of the last detected event.
         TimeDate::Date                  mEventDate;                 // Date of the last detected event.
         int                             mNbDetection;               // Number of detection.
         bool                            mInterruptionStatus;
@@ -103,8 +103,8 @@ class DetThread {
         bool                            *detSignal;
         boost::mutex                    *detSignal_mutex;
         boost::condition_variable       *detSignal_condition;
-        string                          mCurrentDataSetLocation;
-        vector<pair<string,int>>        mDetectionResults;
+        std::string                          mCurrentDataSetLocation;
+        std::vector<std::pair<std::string,int>>        mDetectionResults;
         bool                            mForceToReset;
         detectionParam                  mdtp;
         dataParam                       mdp;
@@ -172,13 +172,13 @@ class DetThread {
 
             if(mCurrentDataSetLocation != "") {
 
-                mDetectionResults.push_back(pair<string,int>(mCurrentDataSetLocation, mNbDetection));
+                mDetectionResults.push_back(std::pair<std::string,int>(mCurrentDataSetLocation, mNbDetection));
                 mNbDetection = 0;
 
             }
         };
 
-        void setCurrentDataSet(string location) {
+        void setCurrentDataSet(std::string location) {
 
             mCurrentDataSetLocation = location;
 

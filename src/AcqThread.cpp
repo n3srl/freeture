@@ -40,7 +40,6 @@
 #include "NodeExporterMetrics.h"
 
 using namespace cv;
-using namespace std;
 using namespace freeture;
 
 boost::log::sources::severity_logger< LogSeverityLevel >  AcqThread::logger;
@@ -69,7 +68,7 @@ AcqThread::AcqThread(   boost::circular_buffer<Frame>       *fb,
                         fitskeysParam                       fkp,
                         Device*                             device )
 {
-    cout << "AcqThread::AcqThread"<<endl;
+    std::cout << "AcqThread::AcqThread"<<std::endl;
     frameBuffer             = fb;
     frameBuffer_mutex       = fb_m;
     frameBuffer_condition   = fb_c;
@@ -99,7 +98,7 @@ AcqThread::AcqThread(   boost::circular_buffer<Frame>       *fb,
 }
 
 AcqThread::~AcqThread(void){
-    cout << "AcqThread::~AcqThread"<<endl;
+    std::cout << "AcqThread::~AcqThread"<<std::endl;
     if(mDevice != NULL)
         delete mDevice;
 
@@ -112,7 +111,7 @@ AcqThread::~AcqThread(void){
 }
 
 void AcqThread::stopThread(){
-    cout << "AcqThread::stopThread"<<endl;
+    std::cout << "AcqThread::stopThread"<<std::endl;
     mMustStopMutex.lock();
     mMustStop = true;
     mMustStopMutex.unlock();
@@ -124,7 +123,7 @@ void AcqThread::stopThread(){
 }
 
 bool AcqThread::startThread() {
-    cout << "AcqThread::startThread(" << endl;
+    std::cout << "AcqThread::startThread(" << std::endl;
 
     // Create a device.
     mDevice->Setup(mcp, mfp, mvp, mDeviceID);
@@ -148,7 +147,7 @@ bool AcqThread::startThread() {
 }
 
 bool AcqThread::getThreadStatus(){
-    cout << "AcqThread::getThreadStatus"<<endl;
+    std::cout << "AcqThread::getThreadStatus"<<std::endl;
     return mThreadTerminated;
 }
 
@@ -188,7 +187,7 @@ void AcqThread::operator()(){
         do {
 
             // Location of a video or frames if input type is FRAMES or VIDEO.
-            string location = "";
+            std::string location = "";
 
             // Load videos file or frames directory if input type is FRAMES or VIDEO
             if(!mDevice->loadNextCameraDataSet(location)) break;
@@ -196,8 +195,8 @@ void AcqThread::operator()(){
             if(pDetection != NULL) pDetection->setCurrentDataSet(location);
 
             // Reference time to compute interval between regular captures.
-            string cDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
-            string refDate = cDate.substr(0, cDate.find("."));
+            std::string cDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
+            std::string refDate = cDate.substr(0, cDate.find("."));
 
             do {
 
@@ -207,8 +206,8 @@ void AcqThread::operator()(){
                 // Time counter of grabbing a frame.
                 double tacq = (double)getTickCount();
                 double fps;
-                vector<int> nextSunset;
-                vector<int> nextSunrise;
+                std::vector<int> nextSunset;
+                std::vector<int> nextSunrise;
 
                 // Grab a frame.
                 if(mDevice->runContinuousCapture(newFrame)) {
@@ -216,7 +215,7 @@ void AcqThread::operator()(){
                     if (LOG_FRAME_STATUS)
                     {
                         BOOST_LOG_SEV(logger, normal)   << "============= FRAME " << newFrame.mFrameNumber << " ============= ";
-                        cout                            << "============= FRAME " << newFrame.mFrameNumber << " ============= " << endl;
+                        std::cout                            << "============= FRAME " << newFrame.mFrameNumber << " ============= " << std::endl;
                     }
 
                     // If camera type in input is FRAMES or VIDEO.
@@ -282,7 +281,7 @@ void AcqThread::operator()(){
                                     boost::mutex::scoped_lock lock(*detSignal_mutex);
                                     *detSignal = false;
                                     lock.unlock();
-                                    cout << "Send interruption signal to detection process " << endl;
+                                    std::cout << "Send interruption signal to detection process " << std::endl;
                                     pDetection->interruptThread();
 
                                 }else if(mdtp.DET_MODE == currentTimeMode || mdtp.DET_MODE == DAYNIGHT) {
@@ -307,7 +306,7 @@ void AcqThread::operator()(){
                                     lock.unlock();
 
                                     // Force interruption.
-                                    cout << "Send interruption signal to stack " << endl;
+                                    std::cout << "Send interruption signal to stack " << std::endl;
                                     pStack->interruptThread();
 
                                 }else if(msp.STACK_MODE == currentTimeMode || msp.STACK_MODE == DAYNIGHT) {
@@ -335,7 +334,7 @@ void AcqThread::operator()(){
                                     lock.unlock();
 
                                     // Force interruption.
-                                    cout << "Send interruption signal to stack " << endl;
+                                    std::cout << "Send interruption signal to stack " << std::endl;
                                     pStack->interruptThread();
 
                                 }
@@ -346,13 +345,13 @@ void AcqThread::operator()(){
                                     boost::mutex::scoped_lock lock(*detSignal_mutex);
                                     *detSignal = false;
                                     lock.unlock();
-                                    cout << "Sending interruption signal to detection process... " << endl;
+                                    std::cout << "Sending interruption signal to detection process... " << std::endl;
                                     pDetection->interruptThread();
 
                                 }
 
                                 // Reset framebuffer.
-                                cout << "Cleaning frameBuffer..." << endl;
+                                std::cout << "Cleaning frameBuffer..." << std::endl;
                                 boost::mutex::scoped_lock lock(*frameBuffer_mutex);
                                 frameBuffer->clear();
                                 lock.unlock();
@@ -370,7 +369,7 @@ void AcqThread::operator()(){
                             exposureControlStatus = pExpCtrl->controlExposureTime(mDevice, newFrame.mImg, newFrame.mDate, mdtp.MASK, mDevice->mMinExposureTime, mcp.ACQ_FPS);
 
                         // Get current date YYYYMMDD.
-                        string currentFrameDate =   TimeDate::getYYYYMMDD(newFrame.mDate);
+                        std::string currentFrameDate =   TimeDate::getYYYYMMDD(newFrame.mDate);
 
                         // If the date has changed, sun ephemeris must be updated.
                         if(currentFrameDate != mCurrentDate) {
@@ -384,7 +383,7 @@ void AcqThread::operator()(){
                         if(mcp.regcap.ACQ_REGULAR_ENABLED && !mDevice->mVideoFramesInput) {
 
                             cDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
-                            string nowDate = cDate.substr(0, cDate.find("."));
+                            std::string nowDate = cDate.substr(0, cDate.find("."));
 
                             boost::posix_time::ptime t1(boost::posix_time::time_from_string(refDate));
                             boost::posix_time::ptime t2(boost::posix_time::time_from_string(nowDate));
@@ -393,7 +392,7 @@ void AcqThread::operator()(){
                             long secTime = td.total_seconds();
 
                             if (LOG_FRAME_STATUS)
-                                cout << "NEXT REGCAP : " << (int)(mcp.regcap.ACQ_REGULAR_CFG.interval - secTime) << "s" <<  endl;
+                                std::cout << "NEXT REGCAP : " << (int)(mcp.regcap.ACQ_REGULAR_CFG.interval - secTime) << "s" <<  std::endl;
 
                             // Check it's time to run a regular capture.
                             if(secTime >= mcp.regcap.ACQ_REGULAR_CFG.interval) {
@@ -434,12 +433,12 @@ void AcqThread::operator()(){
                             if(next < 0) {
                                 next = (24 * 3600) - (newFrame.mDate.hours * 3600 + newFrame.mDate.minutes * 60 + newFrame.mDate.seconds) + (mNextAcq.hours * 3600 + mNextAcq.min * 60 + mNextAcq.sec);
                                 if (LOG_FRAME_STATUS)
-                                    cout << "next : " << next << endl;
+                                    std::cout << "next : " << next << std::endl;
                             }
 
-                            vector<int>tsch = TimeDate::HdecimalToHMS(next/3600.0);
+                            std::vector<int>tsch = TimeDate::HdecimalToHMS(next/3600.0);
                             if (LOG_FRAME_STATUS)
-                                cout << "NEXT SCHCAP : " << tsch.at(0) << "h" << tsch.at(1) << "m" << tsch.at(2) << "s" <<  endl;
+                                std::cout << "NEXT SCHCAP : " << tsch.at(0) << "h" << tsch.at(1) << "m" << tsch.at(2) << "s" <<  std::endl;
 
                             // It's time to run scheduled acquisition.
                             if( mNextAcq.hours == newFrame.mDate.hours &&
@@ -504,7 +503,7 @@ void AcqThread::operator()(){
                                 if(currentTimeInSec > mStopSunsetTime)
                                     nextSunrise = TimeDate::HdecimalToHMS(((24*3600 - currentTimeInSec) + mStartSunriseTime ) / 3600.0);
                                 if (LOG_FRAME_STATUS)
-                                    cout << "NEXT SUNRISE : " << nextSunrise.at(0) << "h" << nextSunrise.at(1) << "m" << nextSunrise.at(2) << "s" << endl;
+                                    std::cout << "NEXT SUNRISE : " << nextSunrise.at(0) << "h" << nextSunrise.at(1) << "m" << nextSunrise.at(2) << "s" << std::endl;
                             }
 
                             // Print time before sunset.
@@ -513,7 +512,7 @@ void AcqThread::operator()(){
                                 nextSunset.clear();
                                 nextSunset = TimeDate::HdecimalToHMS((mStartSunsetTime - currentTimeInSec) / 3600.0);
                                 if (LOG_FRAME_STATUS)
-                                    cout << "NEXT SUNSET : " << nextSunset.at(0) << "h" << nextSunset.at(1) << "m" << nextSunset.at(2) << "s" << endl;
+                                    std::cout << "NEXT SUNSET : " << nextSunset.at(0) << "h" << nextSunset.at(1) << "m" << nextSunset.at(2) << "s" << std::endl;
 
                             }
 
@@ -551,7 +550,7 @@ void AcqThread::operator()(){
                 tacq = (((double)getTickCount() - tacq)/getTickFrequency())*1000;
                 fps = (1.0/(tacq/1000.0)) ;
                 if (LOG_FRAME_STATUS)
-                    std::cout << " [ TIME ACQ ] : " << tacq << " ms   ~cFPS("  << fps << ")" <<  endl;
+                    std::cout << " [ TIME ACQ ] : " << tacq << " ms   ~cFPS("  << fps << ")" <<  std::endl;
                 BOOST_LOG_SEV(logger, normal) << " [ TIME ACQ ] : " << tacq << " ms";
 
                 mMustStopMutex.lock();
@@ -583,16 +582,16 @@ void AcqThread::operator()(){
     }catch(const boost::thread_interrupted&){
 
         BOOST_LOG_SEV(logger,notification) << "AcqThread ended.";
-        cout << "AcqThread ended." <<endl;
+        std::cout << "AcqThread ended." <<std::endl;
 
-    }catch(exception& e){
+    }catch(std::exception& e){
 
-        cout << "An exception occured : " << e.what() << endl;
+        std::cout << "An exception occured : " << e.what() << std::endl;
         BOOST_LOG_SEV(logger, critical) << "An exception occured : " << e.what();
 
     }catch(const char * msg) {
 
-        cout << endl << msg << endl;
+        std::cout << std::endl << msg << std::endl;
 
     }
 
@@ -600,13 +599,13 @@ void AcqThread::operator()(){
 
     mThreadTerminated = true;
 
-    std::cout << "Acquisition Thread TERMINATED." << endl;
+    std::cout << "Acquisition Thread TERMINATED." << std::endl;
     BOOST_LOG_SEV(logger,notification) << "Acquisition Thread TERMINATED";
 
 }
 
 void AcqThread::selectNextAcquisitionSchedule(TimeDate::Date date) {
-    cout << "AcqThread::selectNextAcquisitionSchedule"<<endl;
+    std::cout << "AcqThread::selectNextAcquisitionSchedule"<<std::endl;
 
     if(mcp.schcap.ACQ_SCHEDULE.size() != 0){
 
@@ -643,14 +642,14 @@ void AcqThread::selectNextAcquisitionSchedule(TimeDate::Date date) {
 
 }
 
-bool AcqThread::buildAcquisitionDirectory(string YYYYMMDD){
-    cout << "AcqThread::buildAcquisitionDirectory"<<endl;
+bool AcqThread::buildAcquisitionDirectory(std::string YYYYMMDD){
+    std::cout << "AcqThread::buildAcquisitionDirectory"<<std::endl;
 
     namespace fs = boost::filesystem;
-    string root = mdp.DATA_PATH + mstp.STATION_NAME + "_" + YYYYMMDD +"/";
+    std::string root = mdp.DATA_PATH + mstp.STATION_NAME + "_" + YYYYMMDD +"/";
 
-    string subDir = "captures/";
-    string finalPath = root + subDir;
+    std::string subDir = "captures/";
+    std::string finalPath = root + subDir;
 
     mOutputDataPath = finalPath;
     BOOST_LOG_SEV(logger,notification) << "CompleteDataPath : " << mOutputDataPath;
@@ -758,8 +757,8 @@ bool AcqThread::buildAcquisitionDirectory(string YYYYMMDD){
     return true;
 }
 
-void AcqThread::runImageCapture(int imgNumber, int imgExposure, int imgGain, CamPixFmt imgFormat, ImgFormat imgOutput, string imgPrefix) {
-    cout << "AcqThread::runImageCapture"<<endl;
+void AcqThread::runImageCapture(int imgNumber, int imgExposure, int imgGain, CamPixFmt imgFormat, ImgFormat imgOutput, std::string imgPrefix) {
+    std::cout << "AcqThread::runImageCapture"<<std::endl;
     // Stop camera
     mDevice->stopCamera();
 
@@ -817,7 +816,7 @@ void AcqThread::runImageCapture(int imgNumber, int imgExposure, int imgGain, Cam
         if(mDevice->runSingleCapture(frame)) {
 
             BOOST_LOG_SEV(logger, notification) << "Single capture succeed !";
-            cout << "Single capture succeed !" << endl;
+            std::cout << "Single capture succeed !" << std::endl;
             saveImageCaptured(frame, i, imgOutput, imgPrefix);
 
         }else{
@@ -845,15 +844,15 @@ void AcqThread::runImageCapture(int imgNumber, int imgExposure, int imgGain, Cam
     prepareAcquisitionOnDevice();
 }
 
-void AcqThread::saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, string imgPrefix) {
+void AcqThread::saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, std::string imgPrefix) {
 
     if(img.mImg.data) {
 
-        string  YYYYMMDD = TimeDate::getYYYYMMDD(img.mDate);
+        std::string  YYYYMMDD = TimeDate::getYYYYMMDD(img.mDate);
 
         if(buildAcquisitionDirectory(YYYYMMDD)) {
 
-            string fileName = imgPrefix + "_" + TimeDate::getYYYYMMDDThhmmss(img.mDate) + "_UT-" + Conversion::intToString(imgNum);
+            std::string fileName = imgPrefix + "_" + TimeDate::getYYYYMMDDThhmmss(img.mDate) + "_UT-" + Conversion::intToString(imgNum);
 
             switch(outputType) {
 
@@ -950,7 +949,7 @@ void AcqThread::saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, 
 
                                     // Create FITS image with BITPIX = SHORT_IMG (16-bits signed integers), pixel with TSHORT (signed short)
                                     if(newFits.writeFits(newMat, S16, fileName))
-                                        cout << ">> Fits saved in : " << mOutputDataPath << fileName << endl;
+                                        std::cout << ">> Fits saved in : " << mOutputDataPath << fileName << std::endl;
 
                                 }
 
@@ -961,7 +960,7 @@ void AcqThread::saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, 
                                 {
 
                                    if(newFits.writeFits(img.mImg, UC8, fileName))
-                                        cout << ">> Fits saved in : " << mOutputDataPath << fileName << endl;
+                                        std::cout << ">> Fits saved in : " << mOutputDataPath << fileName << std::endl;
 
                                 }
 
@@ -979,23 +978,23 @@ void AcqThread::saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, 
 }
 
 bool AcqThread::computeSunTimes() {
-    cout << "AcqThread::computeSunTimes"<<endl;
+    std::cout << "AcqThread::computeSunTimes"<<std::endl;
 
     int sunriseStartH = 0, sunriseStartM = 0, sunriseStopH = 0, sunriseStopM = 0,
         sunsetStartH = 0, sunsetStartM = 0, sunsetStopH = 0, sunsetStopM = 0;
 
     boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
-    string date = to_iso_extended_string(time);
-    vector<int> intDate = TimeDate::getIntVectorFromDateString(date);
+    std::string date = to_iso_extended_string(time);
+    std::vector<int> intDate = TimeDate::getIntVectorFromDateString(date);
 
-    string month = Conversion::intToString(intDate.at(1));
+    std::string month = Conversion::intToString(intDate.at(1));
     if(month.size() == 1) month = "0" + month;
-    string day = Conversion::intToString(intDate.at(2));
+    std::string day = Conversion::intToString(intDate.at(2));
     if(day.size() == 1) day = "0" + day;
     mCurrentDate = Conversion::intToString(intDate.at(0)) + month + day;
     mCurrentTime = intDate.at(3) * 3600 + intDate.at(4) * 60 + intDate.at(5);
 
-    cout << "LOCAL DATE      :  " << mCurrentDate << endl;
+    std::cout << "LOCAL DATE      :  " << mCurrentDate << std::endl;
 
     if(mcp.ephem.EPHEMERIS_ENABLED) {
 
@@ -1117,8 +1116,8 @@ bool AcqThread::computeSunTimes() {
 
     }
 
-    cout << "SUNRISE         :  " << sunriseStartH << "H" << sunriseStartM << " - " << sunriseStopH << "H" << sunriseStopM << endl;
-    cout << "SUNSET          :  " << sunsetStartH << "H" << sunsetStartM << " - " << sunsetStopH << "H" << sunsetStopM << endl;
+    std::cout << "SUNRISE         :  " << sunriseStartH << "H" << sunriseStartM << " - " << sunriseStopH << "H" << sunriseStopM << std::endl;
+    std::cout << "SUNSET          :  " << sunsetStartH << "H" << sunsetStartM << " - " << sunsetStopH << "H" << sunsetStopM << std::endl;
 
     mStartSunriseTime = sunriseStartH * 3600 + sunriseStartM * 60;
     mStopSunriseTime = sunriseStopH * 3600 + sunriseStopM * 60;
@@ -1130,7 +1129,7 @@ bool AcqThread::computeSunTimes() {
 }
 
 bool AcqThread::prepareAcquisitionOnDevice() {
-    cout << "AcqThread::prepareAcquisitionOnDevice" << endl;
+    std::cout << "AcqThread::prepareAcquisitionOnDevice" << std::endl;
 
     // SET SIZE
     if(!mDevice->setCameraSize())

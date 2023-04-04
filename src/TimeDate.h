@@ -44,7 +44,7 @@
 #include <list>
 #include "Conversion.h"
 
-using namespace std;
+
 using namespace boost::posix_time;
 
 class TimeDate {
@@ -71,14 +71,14 @@ class TimeDate {
         * @param format "%Y:%m:%d:%H:%M:%S"
         * @return Date time in string.
         */
-        static string localDateTime(::boost::posix_time::ptime pt, string format);
+        static std::string localDateTime(::boost::posix_time::ptime pt, std::string format);
 
         /**
         * Get date in UT
         *
         * @return YYYY, MM, DD.
         */
-        static string getCurrentDateYYYYMMDD();
+        static std::string getCurrentDateYYYYMMDD();
 
         /**
         * Convert gregorian date to julian date.
@@ -112,7 +112,7 @@ class TimeDate {
         * @param val Decimal hours.
         * @return Vector of Hours:Minutes:seconds.
         */
-        static vector<int> HdecimalToHMS(double val);
+        static std::vector<int> HdecimalToHMS(double val);
 
         /**
         * Get local sideral time.
@@ -143,7 +143,7 @@ class TimeDate {
         * @param str String to split. Its format is YYYY:MM:DD:HH:MM:SS
         * @return Vector of int values.
         */
-        static vector<int> splitStringToInt(string str);
+        static std::vector<int> splitStringToInt(std::string str);
 
         /**
         * Get YYYYMMDD from date string.
@@ -151,10 +151,10 @@ class TimeDate {
         * @param date Date with the following format : YYYY-MM-DDTHH:MM:SS.fffffffff
         * @return YYYYMMDD.
         */
-        static string getYYYYMMDDfromDateString(string date);
+        static std::string getYYYYMMDDfromDateString(std::string date);
 
         // output : YYYYMMDD
-        static string getYYYYMMDD(Date date);
+        static std::string getYYYYMMDD(Date date);
 
         /**
         * Get year, month, date, hours, minutes and seconds from date string.
@@ -162,7 +162,7 @@ class TimeDate {
         * @param date Date with the following format : YYYY-MM-DDTHH:MM:SS.fffffffff
         * @return Vector of int values.
         */
-        static vector<int> getIntVectorFromDateString(string date);
+        static std::vector<int> getIntVectorFromDateString(std::string date);
 
         /**
         * Get YYYYMMJJTHHMMSS date.
@@ -170,7 +170,7 @@ class TimeDate {
         * @param date YYYYMMJJTHHMMSS.fffffffff
         * @return YYYYMMJJTHHMMSS.
         */
-        static string getYYYYMMDDThhmmss(string date);
+        static std::string getYYYYMMDDThhmmss(std::string date);
 
         /**
         * Get YYYYMMJJTHHMMSS date.
@@ -178,11 +178,11 @@ class TimeDate {
         * @param date YYYYMMJJTHHMMSS.fffffffff
         * @return YYYYMMJJTHHMMSS.
         */
-        static string getYYYYMMDDThhmmss(Date date);
+        static std::string getYYYYMMDDThhmmss(Date date);
 
-        static Date splitIsoExtendedDate(string date);
+        static Date splitIsoExtendedDate(std::string date);
 
-        static string getIsoExtendedFormatDate(Date date);
+        static std::string getIsoExtendedFormatDate(Date date);
 
         /**
         * Get seconds between two dates

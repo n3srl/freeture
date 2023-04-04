@@ -138,7 +138,7 @@ void DetectionTemporal::createDebugDirectories(bool cleanDebugDirectory){
     if(!boost::filesystem::exists(p1))
         boost::filesystem::create_directories(p1);
 
-    vector<string> debugSubDir;
+    std::vector<std::string> debugSubDir;
     debugSubDir.push_back("original");
     debugSubDir.push_back("absolute_difference");
     debugSubDir.push_back("event_map_initial");
@@ -161,7 +161,7 @@ void DetectionTemporal::createDebugDirectories(bool cleanDebugDirectory){
 
 }
 
-void DetectionTemporal::saveDetectionInfos(string p, int nbFramesAround){
+void DetectionTemporal::saveDetectionInfos(std::string p, int nbFramesAround){
 
     // Save ge map.
     if(mdtp.temporal.DET_SAVE_GEMAP) {
@@ -219,13 +219,13 @@ void DetectionTemporal::saveDetectionInfos(string p, int nbFramesAround){
     if(mdtp.temporal.DET_SAVE_POS) {
 
         boost::filesystem::ofstream posFile;
-        string posFilePath = p + "positions.txt";
+        std::string posFilePath = p + "positions.txt";
         posFile.open(posFilePath.c_str());
 
         // Number of the first frame associated to the event.
         int numFirstFrame = -1;
 
-        vector<LocalEvent>::iterator itLe;
+        std::vector<LocalEvent>::iterator itLe;
         for(itLe = (*mGeToSave).LEList.begin(); itLe!=(*mGeToSave).LEList.end(); ++itLe) {
 
             if(numFirstFrame == -1)
@@ -242,7 +242,7 @@ void DetectionTemporal::saveDetectionInfos(string p, int nbFramesAround){
             }
 
             // NUM_FRAME    POSITIONX     POSITIONY (inversed)
-            string line = Conversion::intToString((*itLe).getNumFrame() - numFirstFrame + nbFramesAround) + "               (" + Conversion::intToString(pos.x)  + ";" + Conversion::intToString(positionY) + ")                 " + TimeDate::getIsoExtendedFormatDate((*itLe).mFrameAcqDate)+ "\n";
+            std::string line = Conversion::intToString((*itLe).getNumFrame() - numFirstFrame + nbFramesAround) + "               (" + Conversion::intToString(pos.x)  + ";" + Conversion::intToString(positionY) + ")                 " + TimeDate::getIsoExtendedFormatDate((*itLe).mFrameAcqDate)+ "\n";
             posFile << line;
 
         }
@@ -252,7 +252,7 @@ void DetectionTemporal::saveDetectionInfos(string p, int nbFramesAround){
     }
 }
 
-vector<string> DetectionTemporal::getDebugFiles() {
+std::vector<std::string> DetectionTemporal::getDebugFiles() {
 
     return debugFiles;
 
@@ -420,8 +420,8 @@ bool DetectionTemporal::runDetection(Frame &c) {
             // Once the list of Local Event has been completed :
             // Analyze each local event in order to check that pixels can be clearly split in two groups (negative, positive).
 
-            vector <LocalEvent> listLocalEvents;
-            vector<LocalEvent>::iterator itLE;
+            std::vector <LocalEvent> listLocalEvents;
+            std::vector<LocalEvent>::iterator itLE;
             tStep2 = (double)getTickCount();
 
             // Event map for the current frame.
@@ -432,7 +432,7 @@ bool DetectionTemporal::runDetection(Frame &c) {
             // ----------------------------------
 
             // Iterator on list of sub-regions.
-            vector<Point>::iterator itR;
+            std::vector<Point>::iterator itR;
 
             for(itR = mSubdivisionPos.begin(); itR != mSubdivisionPos.end(); ++itR) {
 
@@ -442,7 +442,7 @@ bool DetectionTemporal::runDetection(Frame &c) {
                 // Check if there is white pixels.
                 if(countNonZero(subdivision) > 0){
 
-                    string debugMsg = "";
+                    std::string debugMsg = "";
                     analyseRegion(  subdivision,
                                     absDiffBinaryMap,
                                     eventMap,
@@ -471,10 +471,10 @@ bool DetectionTemporal::runDetection(Frame &c) {
             int leNumber = listLocalEvents.size();
 
             // Iterator list on localEvent list : localEvent contains a positive or negative cluster.
-            vector<vector<LocalEvent>::iterator > itLePos, itLeNeg;
+            std::vector<std::vector<LocalEvent>::iterator > itLePos, itLeNeg;
 
             // Association of a positive cluster localEvent with a negative cluster localEvent.
-            vector<pair<vector<LocalEvent>::iterator, vector<LocalEvent>::iterator> > itPair;
+            std::vector<std::pair<std::vector<LocalEvent>::iterator, std::vector<LocalEvent>::iterator> > itPair;
 
             itLE = listLocalEvents.begin();
 
@@ -499,10 +499,10 @@ bool DetectionTemporal::runDetection(Frame &c) {
 
                 int nbPotentialNeg = 0;
 
-                vector<LocalEvent>::iterator itChoose;
-                vector<vector<LocalEvent>::iterator >::iterator c;
+                std::vector<LocalEvent>::iterator itChoose;
+                std::vector<std::vector<LocalEvent>::iterator >::iterator c;
 
-                for(vector<vector<LocalEvent>::iterator >::iterator j = itLeNeg.begin(); j != itLeNeg.end();) {
+                for(std::vector<std::vector<LocalEvent>::iterator >::iterator j = itLeNeg.begin(); j != itLeNeg.end();) {
 
                     Point A = (*itLePos.at(i)).getMassCenter();
                     Point B = (*(*j)).getMassCenter();
@@ -603,7 +603,7 @@ bool DetectionTemporal::runDetection(Frame &c) {
             // If attached, check the positive-negative couple of the global event.
 
             // Iterator on list of global event.
-            vector<GlobalEvent>::iterator itGE;
+            std::vector<GlobalEvent>::iterator itGE;
 
             tStep3 = (double)getTickCount();
 
@@ -612,7 +612,7 @@ bool DetectionTemporal::runDetection(Frame &c) {
             while(itLE != listLocalEvents.end()) {
 
                 bool LELinked = false;
-                vector<GlobalEvent>::iterator itGESelected;
+                std::vector<GlobalEvent>::iterator itGESelected;
                 bool GESelected = false;
 
                 (*itLE).setNumFrame(c.mFrameNumber);
@@ -628,19 +628,19 @@ bool DetectionTemporal::runDetection(Frame &c) {
                         // The current LE has found a possible global event.
                         if(GESelected){
 
-                            //cout << "The current LE has found a possible global event."<< endl;
+                            //std::cout << "The current LE has found a possible global event."<< std::endl;
 
                             // Choose the older global event.
                             if((*itGE).getAge() > (*itGESelected).getAge()){
 
-                                //cout << "Choose the older global event."<< endl;
+                                //std::cout << "Choose the older global event."<< std::endl;
                                 itGESelected = itGE;
 
                             }
 
                         }else{
 
-                            //cout << "Keep same"<< endl;
+                            //std::cout << "Keep same"<< std::endl;
                             itGESelected = itGE;
                             GESelected = true;
 
@@ -654,13 +654,13 @@ bool DetectionTemporal::runDetection(Frame &c) {
                 // Add current LE to an existing GE
                 if(GESelected){
 
-                    //cout << "Add current LE to an existing GE ... "<< endl;
+                    //std::cout << "Add current LE to an existing GE ... "<< std::endl;
                     // Add LE.
                     (*itGESelected).addLE((*itLE));
-                    //cout << "Flag to indicate that a local event has been added ... "<< endl;
+                    //std::cout << "Flag to indicate that a local event has been added ... "<< std::endl;
                     // Flag to indicate that a local event has been added.
                     (*itGESelected).setNewLEStatus(true);
-                    //cout << "reset age of the last local event received by the global event.... "<< endl;
+                    //std::cout << "reset age of the last local event received by the global event.... "<< std::endl;
                     // reset age of the last local event received by the global event.
                     (*itGESelected).setAgeLastElem(0);
 
@@ -669,15 +669,15 @@ bool DetectionTemporal::runDetection(Frame &c) {
                     // The current LE has not been linked. It became a new GE.
                     if(mListGlobalEvents.size() < mdtp.temporal.DET_GE_MAX){
 
-                        //cout << "Selecting last available color ... "<< endl;
+                        //std::cout << "Selecting last available color ... "<< std::endl;
                         Scalar geColor = Scalar(255,255,255);//availableGeColor.back();
-                        //cout << "Deleting last available color ... "<< endl;
+                        //std::cout << "Deleting last available color ... "<< std::endl;
                         //availableGeColor.pop_back();
-                        //cout << "Creating new GE ... "<< endl;
+                        //std::cout << "Creating new GE ... "<< std::endl;
                         GlobalEvent newGE(c.mDate, c.mFrameNumber, currImg.rows, currImg.cols, geColor);
-                        //cout << "Adding current LE ... "<< endl;
+                        //std::cout << "Adding current LE ... "<< std::endl;
                         newGE.addLE((*itLE));
-                        //cout << "Pushing new LE to GE list  ... "<< endl;
+                        //std::cout << "Pushing new LE to GE list  ... "<< std::endl;
                         //Add the new globalEvent to the globalEvent's list
                         mListGlobalEvents.push_back(newGE);
 
@@ -714,7 +714,7 @@ bool DetectionTemporal::runDetection(Frame &c) {
                     (*itGE).setNewLEStatus(false);
                 }
 
-                string msgGe = "";
+                std::string msgGe = "";
 
                 // CASE 1 : FINISHED EVENT.
                 if((*itGE).getAgeLastElem() > 5){
@@ -754,7 +754,7 @@ bool DetectionTemporal::runDetection(Frame &c) {
 
                             TimeDate::Date gedate = (*itGE).getDate();
                             BOOST_LOG_SEV(logger, notification) << "# GE deleted because max time reached : ";
-                                                       string m = "- (*itGE).getDate() : "
+                                                       std::string m = "- (*itGE).getDate() : "
                                                                 + Conversion::numbering(4, gedate.year) + Conversion::intToString(gedate.year)
                                                                 + Conversion::numbering(2, gedate.month) + Conversion::intToString(gedate.month)
                                                                 + Conversion::numbering(2, gedate.day) + Conversion::intToString(gedate.day) + "T"
@@ -818,7 +818,7 @@ bool DetectionTemporal::runDetection(Frame &c) {
 
 }
 
-vector<Scalar> DetectionTemporal::getColorInEventMap(Mat &eventMap, Point roiCenter) {
+std::vector<Scalar> DetectionTemporal::getColorInEventMap(Mat &eventMap, Point roiCenter) {
 
     // ROI in the eventMap.
     Mat roi;
@@ -830,7 +830,7 @@ vector<Scalar> DetectionTemporal::getColorInEventMap(Mat &eventMap, Point roiCen
 
     int cn = roi.channels();
 
-    vector<Scalar> listColor;
+    std::vector<Scalar> listColor;
 
     bool exist = false;
 
@@ -909,11 +909,11 @@ void DetectionTemporal::analyseRegion(  Mat &subdivision,
                                     int posDiffThreshold,
                                     Mat &negDiff,
                                     int negDiffThreshold,
-                                    vector<LocalEvent> &listLE,
+                                    std::vector<LocalEvent> &listLE,
                                     Point subdivisionPos,     // Origin position of a region in frame (corner top left)
                                     int maxNbLE,
                                     int numFrame,
-                                    string &msg,
+                                    std::string &msg,
                                     TimeDate::Date cFrameDate){
 
 int situation = 0;
@@ -949,7 +949,7 @@ for(int i = 0; i < subdivision.rows; i++) {
                 nbROI++;
                 roicounter++;
                 // Get colors in eventMap at the current ROI location.
-                vector<Scalar> listColorInRoi = getColorInEventMap(eventMap, Point(subdivisionPos.x + j, subdivisionPos.y + i));
+                std::vector<Scalar> listColorInRoi = getColorInEventMap(eventMap, Point(subdivisionPos.x + j, subdivisionPos.y + i));
 
                 if(listColorInRoi.size() == 0)  situation = 0;  // black color = create a new local event
                 if(listColorInRoi.size() == 1)  situation = 1;  // one color = add the current roi to an existing local event
@@ -979,7 +979,7 @@ for(int i = 0; i < subdivision.rows; i++) {
                                                             mRoiSize);
 
                                 // Extract white pixels in ROI.
-                                vector<Point> whitePixAbsDiff,whitePixPosDiff, whitePixNegDiff;
+                                std::vector<Point> whitePixAbsDiff,whitePixPosDiff, whitePixNegDiff;
                                 Mat roiAbsDiff, roiPosDiff, roiNegDiff;
 
                                 absDiffBinaryMap(Rect(subdivisionPos.x + j - mRoiSize[0]/2, subdivisionPos.y + i - mRoiSize[1]/2, mRoiSize[0], mRoiSize[1])).copyTo(roiAbsDiff);
@@ -1074,7 +1074,7 @@ for(int i = 0; i < subdivision.rows; i++) {
 
                         {
 
-                            vector<LocalEvent>::iterator it;
+                            std::vector<LocalEvent>::iterator it;
                             int index = 0;
                             for(it=listLE.begin(); it!=listLE.end(); ++it){
 
@@ -1086,7 +1086,7 @@ for(int i = 0; i < subdivision.rows; i++) {
                                         +  Conversion::intToString(subdivisionPos.x + j) + ";" + Conversion::intToString(subdivisionPos.y + i) + ") with LE " + Conversion::intToString(index) + "\n";
 
                                     // Extract white pixels in ROI.
-                                    vector<Point> whitePixAbsDiff,whitePixPosDiff, whitePixNegDiff;
+                                    std::vector<Point> whitePixAbsDiff,whitePixPosDiff, whitePixNegDiff;
                                     Mat roiAbsDiff, roiPosDiff, roiNegDiff;
 
                                     absDiffBinaryMap(Rect(subdivisionPos.x + j - mRoiSize[0]/2, subdivisionPos.y + i - mRoiSize[1]/2, mRoiSize[0], mRoiSize[1])).copyTo(roiAbsDiff);

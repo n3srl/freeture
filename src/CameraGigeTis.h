@@ -39,7 +39,7 @@
 
 #ifdef WINDOWS
 
-    #include "opencv2/highgui/highgui.hpp"
+    #include <opencv2/highgui/highgui.hpp>
     #include <opencv2/imgproc/imgproc.hpp>
     #include <iostream>
     #include <string>
@@ -65,7 +65,6 @@
     #define NUMBER_OF_BUFFERS 1
 
     using namespace cv;
-    using namespace std;
 
     class CameraGigeTis: public Camera {
 

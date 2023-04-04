@@ -75,7 +75,6 @@
 #include <boost/log/core.hpp>
 #include "ELogSeverityLevel.h"
 
-using namespace std;
 
 class OpenSSL {
 
@@ -97,8 +96,8 @@ class OpenSSL {
 
     public :
 
-        unique_ptr< SSL_CTX, decltype(SSL_CTX_free)*> ctx_;
-        unique_ptr< SSL, decltype( SSL_free )* > ssl_;
+        std::unique_ptr< SSL_CTX, decltype(SSL_CTX_free)*> ctx_;
+        std::unique_ptr< SSL, decltype( SSL_free )* > ssl_;
         enum {
             errorBufSize = 256,
             readBufSize = 256
@@ -116,7 +115,7 @@ class OpenSSL {
         *
         * @param msg Data to write.
         */
-        void Write(const string &msg);
+        void Write(const std::string &msg);
 
         /**
         * Read data on the SSL connection.
@@ -124,10 +123,10 @@ class OpenSSL {
         * @param isDoneReceiving Struct to handle response.
         * @return Response.
         */
-        template<typename IsDoneReceivingFunctorType> string Read(IsDoneReceivingFunctorType isDoneReceiving) {
+        template<typename IsDoneReceivingFunctorType> std::string Read(IsDoneReceivingFunctorType isDoneReceiving) {
 
             char buf[readBufSize];
-            string read;
+            std::string read;
 
             while(true) {
 
@@ -139,7 +138,7 @@ class OpenSSL {
                 }
                 if(0>rstRead && SSL_ERROR_WANT_READ == SSL_get_error(ssl_.get(), rstRead))
                     continue;
-                read+= string(buf, buf + rstRead);
+                read+= std::string(buf, buf + rstRead);
                 if(isDoneReceiving(read)) return read;
             }
         }

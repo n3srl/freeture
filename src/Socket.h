@@ -69,7 +69,7 @@
 #include "ELogSeverityLevel.h"
 #include "Conversion.h"
 
-using namespace std;
+
 
 class Socket {
 
@@ -84,11 +84,11 @@ class Socket {
         * @param sever SMTP server.
         * @param port Connection port.
         */
-        Socket(string server, uint16_t port):mSocket(mIoService) {
+        Socket(std::string server, uint16_t port):mSocket(mIoService) {
 
             boost::asio::ip::tcp::resolver resolver(mIoService);
 
-            boost::asio::ip::tcp::resolver::query query(server, to_string(port));
+            boost::asio::ip::tcp::resolver::query query(server, std::to_string(port));
 
             boost::asio::ip::tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
 

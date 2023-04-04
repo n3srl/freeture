@@ -1,6 +1,6 @@
 #!/bin/bash
 BASEDIR=$(dirname "$0")
-ARENASDK_ROOT="/opt/arenasdk/"
+ARENASDK_ROOT="/usr/"
 
 if [ ! -d $ARENASDK_ROOT ] 
 then

@@ -42,7 +42,7 @@
     #define BOOST_LOG_DYN_LINK 1
 #endif
 
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include "fitsio.h"
 #include <boost/log/common.hpp>
@@ -61,7 +61,7 @@
 #include "Fits.h"
 #include "Conversion.h"
 
-using namespace std;
+
 using namespace boost::posix_time;
 
 class Fits2D : public Fits {
@@ -69,7 +69,7 @@ class Fits2D : public Fits {
     private :
 
         // Location where to save fits or path of a fits file to read.
-        string mFitsPath;
+        std::string mFitsPath;
 
         static boost::log::sources::severity_logger< LogSeverityLevel > logger;
 
@@ -91,7 +91,7 @@ class Fits2D : public Fits {
         * Constructor.
         *
         */
-        Fits2D(string path);
+        Fits2D(std::string path);
 
         /**
         * Destructor.
@@ -107,7 +107,7 @@ class Fits2D : public Fits {
         * @return Success status to create and write the file.
         *
         */
-        bool writeFits(Mat img, ImgBitDepth imgType, string fileName, string compression = "");
+        bool writeFits(Mat img, ImgBitDepth imgType, std::string fileName, std::string compression = "");
 
         /**
         * Read a Fits file in 32 bits float format.
@@ -150,7 +150,7 @@ class Fits2D : public Fits {
         * @param value Reference on the found keyword's value.
         *
         */
-        bool readIntKeyword(string keyword, int &value);
+        bool readIntKeyword(std::string keyword, int &value);
 
         /**
         * Read a keyword in string type.
@@ -158,7 +158,7 @@ class Fits2D : public Fits {
         * @param value Reference on the found keyword's value.
         *
         */
-        bool readStringKeyword(string keyword, string &value);
+        bool readStringKeyword(std::string keyword, std::string &value);
 
         /**
         * Read a keyword in double type.
@@ -166,7 +166,7 @@ class Fits2D : public Fits {
         * @param value Reference on the found keyword's value.
         *
         */
-        bool readDoubleKeyword(string keyword, double &value);
+        bool readDoubleKeyword(std::string keyword, double &value);
 
     private :
 
@@ -176,7 +176,7 @@ class Fits2D : public Fits {
         * @param errorMsg Additional information about where the error occured.
         *
         */
-        void printerror(int status, string errorMsg);
+        void printerror(int status, std::string errorMsg);
 
         /**
         * Helper function to get cfitsio error.

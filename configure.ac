@@ -102,7 +102,7 @@ PKG_CHECK_MODULES(CRYPTO, [libcrypto], [LIBS="$CRYPTO_LIBS $LIBS"]
 PKG_CHECK_MODULES(V4L2, [libv4l2], [LIBS="$V4L2_LIBS $LIBS"]
 				      [AM_CPPFLAGS="$AM_CPPFLAGS $V4L2_CFLAGS"],
 				      [AC_MSG_ERROR([$V4L2_ERROR Exiting.])])
-PKG_CHECK_MODULES(OPENCV, [opencv >= 4.0],
+PKG_CHECK_MODULES(OPENCV, [opencv4 >= 4.0],
 			  [AC_DEFINE([HAVE_OPENCV], [1], [Using OpenCV4])]
 			  [LIBS="-lopencv_core -lopencv_calib3d -lopencv_features2d -lopencv_flann -lopencv_highgui -lopencv_imgproc -lopencv_ml -lopencv_objdetect -lopencv_video -lopencv_videoio -lopencv_imgcodecs $LIBS"]
 			  [AM_CPPFLAGS="$AM_CPPFLAGS -I/usr/include/opencv4/"],

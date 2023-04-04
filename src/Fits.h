@@ -40,28 +40,28 @@
 #include <boost/filesystem.hpp>
 
 using namespace boost::filesystem;
-using namespace std;
+
 
 class Fits {
 
      public :
 
-        string  STATION;
+        std::string  STATION;
 
         // Fits Header Keywords Name.
 
-        string  kFILENAME;
-        string  kDATE;
-        string  kDATEOBS;
-        string  kOBSMODE;
+        std::string  kFILENAME;
+        std::string  kDATE;
+        std::string  kDATEOBS;
+        std::string  kOBSMODE;
         double  kELAPTIME;
         double  kEXPOSURE;
         double  kONTIME;
-        string  kFILTER;
-        string  kTELESCOP;
-        string  kOBSERVER;
-        string  kINSTRUME;
-        string  kCAMERA;
+        std::string  kFILTER;
+        std::string  kTELESCOP;
+        std::string  kOBSERVER;
+        std::string  kINSTRUME;
+        std::string  kCAMERA;
         double  kFOCAL;
         double  kAPERTURE;
         double  kSITELONG;
@@ -71,17 +71,17 @@ class Fits {
         double  kYPIXEL;
         int     kGAINDB;
         double  kSATURATE;
-        string  kPROGRAM;
-        string  kCREATOR;
+        std::string  kPROGRAM;
+        std::string  kCREATOR;
         double  kBZERO;
         double  kBSCALE;
-        string  kRADESYS;
-        string  kTIMESYS;
+        std::string  kRADESYS;
+        std::string  kTIMESYS;
         double  kEQUINOX;
-        string  kCTYPE1;
-        string  kCTYPE2;
-        string  kCTYPE3;
-        string  kTIMEUNIT;
+        std::string  kCTYPE1;
+        std::string  kCTYPE2;
+        std::string  kCTYPE3;
+        std::string  kTIMEUNIT;
         double  kCD1_1;
         double  kCD1_2;
         double  kCD2_1;
@@ -98,59 +98,59 @@ class Fits {
         double  kCRVAL2;
         double  kK1;
         double  kK2;
-        string  kCOMMENT;
+        std::string  kCOMMENT;
 
         // Fits Header Keywords Comments.
 
-        string  cFILENAME;
-        string  cDATE;
-        string  cDATEOBS;
-        string  cOBSMODE;
-        string  cELAPTIME;
-        string  cEXPOSURE;
-        string  cONTIME;
-        string  cFILTER;
-        string  cTELESCOP;
-        string  cOBSERVER;
-        string  cINSTRUME;
-        string  cCAMERA;
-        string  cFOCAL;
-        string  cAPERTURE;
-        string  cSITELONG;
-        string  cSITELAT;
-        string  cSITEELEV;
-        string  cXPIXEL;
-        string  cYPIXEL;
-        string  cGAINDB;
-        string  cSATURATE;
-        string  cPROGRAM;
-        string  cCREATOR;
-        string  cBZERO;
-        string  cBSCALE;
-        string  cRADESYS;
-        string  cTIMESYS;
-        string  cEQUINOX;
-        string  cCTYPE1;
-        string  cCTYPE2;
-        string  cCTYPE3;
-        string  cTIMEUNIT;
-        string  cCD1_1;
-        string  cCD1_2;
-        string  cCD2_1;
-        string  cCD2_2;
-        string  cCD3_3;
-        string  cCD1_3;
-        string  cCD2_3;
-        string  cCD3_1;
-        string  cCD3_2;
-        string  cCRPIX1;
-        string  cCRPIX2;
-        string  cCRPIX3;
-        string  cCRVAL1;
-        string  cCRVAL2;
-        string  cK1;
-        string  cK2;
-        string  cCOMMENT;
+        std::string  cFILENAME;
+        std::string  cDATE;
+        std::string  cDATEOBS;
+        std::string  cOBSMODE;
+        std::string  cELAPTIME;
+        std::string  cEXPOSURE;
+        std::string  cONTIME;
+        std::string  cFILTER;
+        std::string  cTELESCOP;
+        std::string  cOBSERVER;
+        std::string  cINSTRUME;
+        std::string  cCAMERA;
+        std::string  cFOCAL;
+        std::string  cAPERTURE;
+        std::string  cSITELONG;
+        std::string  cSITELAT;
+        std::string  cSITEELEV;
+        std::string  cXPIXEL;
+        std::string  cYPIXEL;
+        std::string  cGAINDB;
+        std::string  cSATURATE;
+        std::string  cPROGRAM;
+        std::string  cCREATOR;
+        std::string  cBZERO;
+        std::string  cBSCALE;
+        std::string  cRADESYS;
+        std::string  cTIMESYS;
+        std::string  cEQUINOX;
+        std::string  cCTYPE1;
+        std::string  cCTYPE2;
+        std::string  cCTYPE3;
+        std::string  cTIMEUNIT;
+        std::string  cCD1_1;
+        std::string  cCD1_2;
+        std::string  cCD2_1;
+        std::string  cCD2_2;
+        std::string  cCD3_3;
+        std::string  cCD1_3;
+        std::string  cCD2_3;
+        std::string  cCD3_1;
+        std::string  cCD3_2;
+        std::string  cCRPIX1;
+        std::string  cCRPIX2;
+        std::string  cCRPIX3;
+        std::string  cCRVAL1;
+        std::string  cCRVAL2;
+        std::string  cK1;
+        std::string  cK2;
+        std::string  cCOMMENT;
 
     public :
 

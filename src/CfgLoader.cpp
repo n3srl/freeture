@@ -43,19 +43,19 @@ void CfgLoader::Clear(){
 
 }
 
-bool CfgLoader::Load(const string& file){
+bool CfgLoader::Load(const std::string& file){
 
-    ifstream inFile(file.c_str());
+    std::ifstream inFile(file.c_str());
 
     if (!inFile.good()){
         return false;
     }
 
-    string prevKey = "";
+    std::string prevKey = "";
 
     while (inFile.good() && ! inFile.eof()){
 
-        string line;
+        std::string line;
         getline(inFile, line);
 
         // filter out comments
@@ -63,7 +63,7 @@ bool CfgLoader::Load(const string& file){
 
             int pos = line.find('#');
 
-            if (pos != string::npos){
+            if (pos != std::string::npos){
 
                 line = line.substr(0, pos);
 
@@ -76,10 +76,10 @@ bool CfgLoader::Load(const string& file){
             int pos = line.find('=');
 
             // "=" not found.
-            if (pos != string::npos){
+            if (pos != std::string::npos){
 
-                string key     = Trim(line.substr(0, pos));
-                string value   = Trim(line.substr(pos + 1));
+                std::string key     = Trim(line.substr(0, pos));
+                std::string value   = Trim(line.substr(pos + 1));
 
                 if (!key.empty() && !value.empty()){
 
@@ -99,14 +99,14 @@ bool CfgLoader::Load(const string& file){
     return true;
 }
 
-bool CfgLoader::Contains(const string& key) const{
+bool CfgLoader::Contains(const std::string& key) const{
 
     return mData.find(key) != mData.end();
 }
 
-bool CfgLoader::Get(const string& key, string& value) const{
+bool CfgLoader::Get(const std::string& key, std::string& value) const{
 
-    map<string,string>::const_iterator iter = mData.find(key);
+    std::map<std::string,std::string>::const_iterator iter = mData.find(key);
 
     if(iter != mData.end()){
 
@@ -119,9 +119,9 @@ bool CfgLoader::Get(const string& key, string& value) const{
     }
 }
 
-bool CfgLoader::Get(const string& key, int& value) const{
+bool CfgLoader::Get(const std::string& key, int& value) const{
 
-    string str;
+    std::string str;
 
     if(Get(key, str)){
 
@@ -134,9 +134,9 @@ bool CfgLoader::Get(const string& key, int& value) const{
     }
 }
 
-bool CfgLoader::Get(const string& key, long& value) const{
+bool CfgLoader::Get(const std::string& key, long& value) const{
 
-    string str;
+    std::string str;
 
     if(Get(key, str)){
 
@@ -149,9 +149,9 @@ bool CfgLoader::Get(const string& key, long& value) const{
     }
 }
 
-bool CfgLoader::Get(const string& key, double& value) const{
+bool CfgLoader::Get(const std::string& key, double& value) const{
 
-    string str;
+    std::string str;
 
     if(Get(key, str)){
 
@@ -164,9 +164,9 @@ bool CfgLoader::Get(const string& key, double& value) const{
     }
 }
 
-bool CfgLoader::Get(const string& key, bool& value) const{
+bool CfgLoader::Get(const std::string& key, bool& value) const{
 
-    string str;
+    std::string str;
 
     if(Get(key, str)){
 
@@ -179,11 +179,11 @@ bool CfgLoader::Get(const string& key, bool& value) const{
     }
 }
 
-string CfgLoader::Trim(const string& str){
+std::string CfgLoader::Trim(const std::string& str){
 
     int first = str.find_first_not_of(" \t");
 
-    if(first != string::npos){
+    if(first != std::string::npos){
 
         int last = str.find_last_not_of(" \t");
 

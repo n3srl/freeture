@@ -39,7 +39,7 @@
 
 #define CLIP(color) (unsigned char)(((color) > 0xFF) ? 0xff : (((color) < 0) ? 0 : (color)))
 
-using namespace std;
+
 
 class PixFmtConv {
 

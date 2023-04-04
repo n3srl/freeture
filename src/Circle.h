@@ -66,7 +66,7 @@ class Circle {
                                                 float &surfaceCircle2,
                                                 float &intersectedSurface,
                                                 bool enableDebug,
-                                                string debugPath) {
+                                                std::string debugPath) {
 
             cv::Mat map;
             bool res = false;
@@ -266,7 +266,7 @@ class Circle {
 
                         }else if(distPcNc  == c2.getRadius() ||  distPcNc  ==mRadius ) {
 
-                            //cout << "Le centre d'un des cercles est sur la périphérie de l'autre" << endl;
+                            //cout << "Le centre d'un des cercles est sur la pï¿½riphï¿½rie de l'autre" << endl;
 
                         }else {
 
@@ -293,16 +293,16 @@ class Circle {
 
                     }
 
-                }
+                }   
 
             }
 
             if(enableDebug && displayIntersectedSurface) {
 
                 putText(map, "Intersected surface : " , cv::Point(15,15),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0,0,255), 1, cv::LINE_AA);
-                string msg1 = "- Green circle : " + Conversion::floatToString((intersectedSurface * 100) / surfaceCircle1) + "%" ;
+                std::string msg1 = "- Green circle : " + Conversion::floatToString((intersectedSurface * 100) / surfaceCircle1) + "%" ;
                 putText(map, msg1 , cv::Point(15,30),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0,0,255), 1, cv::LINE_AA);
-                string msg2 = "- Red circle : " + Conversion::floatToString((intersectedSurface * 100) / surfaceCircle2)+ "%";
+                std::string msg2 = "- Red circle : " + Conversion::floatToString((intersectedSurface * 100) / surfaceCircle2)+ "%";
                 putText(map, msg2 , cv::Point(15,45),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0,0,255), 1, cv::LINE_AA);
 
             }

@@ -76,7 +76,7 @@ bool DetectionTemplate::runDetection(Frame &c) {
 
         if(!mPrevFrame.data) {
 
-            cout << "PrevFrame has no data ! " << endl;
+            std::cout << "PrevFrame has no data ! " << std::endl;
             currImg.copyTo(mPrevFrame);
             return false;
 
@@ -135,7 +135,7 @@ bool DetectionTemplate::runDetection(Frame &c) {
 
 }
 
-void DetectionTemplate::saveDetectionInfos(string p, int nbFramesAround) {
+void DetectionTemplate::saveDetectionInfos(std::string p, int nbFramesAround) {
 
 
 }

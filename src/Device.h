@@ -95,7 +95,7 @@ class Device {
         bool mVideoFramesInput; // TRUE if input is a video file or frames directories.
 
     private :
-        vector<CameraDescription> listCams;
+        std::vector<CameraDescription> listCams;
 
         static boost::log::sources::severity_logger< LogSeverityLevel > logger;
 
@@ -111,7 +111,7 @@ class Device {
 
         } initializer;
 
-        std::vector<pair<int,pair<int,CamSdkType>>> mDevices;
+        std::vector<std::pair<int,std::pair<int,CamSdkType>>> mDevices;
 
         bool        mCustomSize;
         int         mStartX;

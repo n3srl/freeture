@@ -106,11 +106,11 @@
             return false;
         }
 
-        cout << "Driver name     : " << caps.driver << endl;
-        cout << "Device name     : " << caps.card << endl;
-        cout << "Device location : " << caps.bus_info << endl;
+        std::cout << "Driver name     : " << caps.driver << std::endl;
+        std::cout << "Device name     : " << caps.card << std::endl;
+        std::cout << "Device location : " << caps.bus_info << std::endl;
         printf ("Driver version  : %u.%u.%u\n",(caps.version >> 16) & 0xFF, (caps.version >> 8) & 0xFF, caps.version & 0xFF);
-        cout << "Capabilities    : " << caps.capabilities << endl;
+        std::cout << "Capabilities    : " << caps.capabilities << std::endl;
 
         struct v4l2_cropcap cropcap;
         memset(&cropcap, 0, sizeof(cropcap));
@@ -172,20 +172,20 @@
 
         double eMin, eMax; int gMin, gMax;
         getExposureBounds(eMin, eMax);
-        cout << "Min exposure    : " << eMin << endl;
-        cout << "Max exposure    : " << eMax << endl;
+        std::cout << "Min exposure    : " << eMin << std::endl;
+        std::cout << "Max exposure    : " << eMax << std::endl;
 
         getGainBounds(gMin, gMax);
-        cout << "Min gain        : " << gMin << endl;
-        cout << "Max gain        : " << gMax << endl;
+        std::cout << "Min gain        : " << gMin << std::endl;
+        std::cout << "Max gain        : " << gMax << std::endl;
 
         return true;
 
     };
 
-    vector<pair<int,string>> CameraV4l2::getCamerasList() {
+    std::vector<std::pair<int,std::string>> CameraV4l2::getCamerasList() {
 
-        vector<pair<int,string>> camerasList;
+        std::vector<std::pair<int,std::string>> camerasList;
 
         bool loop = true;
         bool res = true;
@@ -193,7 +193,7 @@
 
         do {
 
-            string devicePathStr = "/dev/video" + Conversion::intToString(deviceNumber);
+            std::string devicePathStr = "/dev/video" + Conversion::intToString(deviceNumber);
 
             // http://stackoverflow.com/questions/230062/whats-the-best-way-to-check-if-a-file-exists-in-c-cross-platform
 
@@ -213,12 +213,12 @@
                     struct v4l2_capability caps = {};
 
                     if (-1 == xioctl(fd, VIDIOC_QUERYCAP, &caps)) {
-                        cout << "Fail Querying Capabilities." << endl;
+                        std::cout << "Fail Querying Capabilities." << std::endl;
                         perror("Querying Capabilities");
                         res = false;
                     }else {
 
-                        pair<int,string> c;
+                        std::pair<int,std::string> c;
                         c.first = deviceNumber;
                         std::string s( reinterpret_cast< char const* >(caps.card) ) ;
                         c.second = "NAME[" + s + "] SDK[V4L2]";
@@ -249,11 +249,11 @@
         bool res = true;
         int deviceNumber = 0;
 
-        cout << endl << "------------ USB2 CAMERAS WITH V4L2 ----------" << endl << endl;
+        std::cout << std::endl << "------------ USB2 CAMERAS WITH V4L2 ----------" << std::endl << std::endl;
 
         do {
 
-            string devicePathStr = "/dev/video" + Conversion::intToString(deviceNumber);
+            std::string devicePathStr = "/dev/video" + Conversion::intToString(deviceNumber);
 
             // http://stackoverflow.com/questions/230062/whats-the-best-way-to-check-if-a-file-exists-in-c-cross-platform
 
@@ -277,7 +277,7 @@
                         res = false;
                     }else {
 
-                        cout << "-> [" << deviceNumber << "] " << caps.card << endl;
+                        std::cout << "-> [" << deviceNumber << "] " << caps.card << std::endl;
 
                     }
                 }
@@ -290,14 +290,14 @@
 
                 // file doesn't exist
                 if(deviceNumber == 0)
-                    cout << "-> No cameras detected ..." << endl;
+                    std::cout << "-> No cameras detected ..." << std::endl;
                 loop = false;
 
             }
 
         }while(loop);
 
-        cout << endl << "------------------------------------------------" << endl << endl;
+        std::cout << std::endl << "------------------------------------------------" << std::endl << std::endl;
 
         return res;
 
@@ -305,7 +305,7 @@
 
     bool CameraV4l2::createDevice(int id){
 
-        string deviceNameStr = "/dev/video" + Conversion::intToString(id);
+        std::string deviceNameStr = "/dev/video" + Conversion::intToString(id);
         mDeviceName = deviceNameStr.c_str();
 
         struct stat st;
@@ -447,7 +447,7 @@
     }
 
 
-    bool CameraV4l2::getDeviceNameById(int id, string &device){
+    bool CameraV4l2::getDeviceNameById(int id, std::string &device){
 
         return false;
 
@@ -466,11 +466,11 @@
                 return false;
             }
 
-            cout << "Driver name     : " << caps.driver << endl;
-            cout << "Device name     : " << caps.card << endl;
-            cout << "Device location : " << caps.bus_info << endl;
+            std::cout << "Driver name     : " << caps.driver << std::endl;
+            std::cout << "Device name     : " << caps.card << std::endl;
+            std::cout << "Device location : " << caps.bus_info << std::endl;
             printf ("Driver version  : %u.%u.%u\n",(caps.version >> 16) & 0xFF, (caps.version >> 8) & 0xFF, caps.version & 0xFF);
-            cout << "Capabilities    : " << caps.capabilities << endl;
+            std::cout << "Capabilities    : " << caps.capabilities << std::endl;
 
             return true;
 
@@ -567,7 +567,7 @@
             return false;
 
         if(-1 == xioctl(fd, VIDIOC_S_FMT, &mFormat)) {
-            cout << "Fail to set fmt." << endl;
+            std::cout << "Fail to set fmt." << std::endl;
             return false;
         }
 
@@ -805,7 +805,7 @@
 
         if(frame.mHeight > 0 && frame.mWidth > 0) {
 
-            cout << "Setting size to : " << frame.mWidth << "x" << frame.mHeight << endl;
+            std::cout << "Setting size to : " << frame.mWidth << "x" << frame.mHeight << std::endl;
             mWidth = frame.mWidth;
             mHeight = frame.mHeight;
             mCustomSize = true;
@@ -816,8 +816,8 @@
 
         acqStart();
 
-        cout << ">> Height : " << mFormat.fmt.pix.height << endl;
-        cout << ">> Width  : " << mFormat.fmt.pix.width << endl;
+        std::cout << ">> Height : " << mFormat.fmt.pix.height << std::endl;
+        std::cout << ">> Width  : " << mFormat.fmt.pix.width << std::endl;
 
         if(!setPixelFormat(frame.mFormat))
             return false;
@@ -890,7 +890,7 @@
             frame.mSaturatedValue = 255;
             frame.mFrameNumber = mFrameCounter;
 
-            cout << "size image buffer : " << sizeof(buffers[buf.index].start)  << endl;
+            std::cout << "size image buffer : " << sizeof(buffers[buf.index].start)  << std::endl;
             if(!convertImage(ImageBuffer, frame.mImg))
                 grabSuccess = false;
 
@@ -1022,12 +1022,12 @@
 
         } else {
 
-            /*cout << "Name    : " << queryctrl.name << endl;
-            cout << "Min     : " << queryctrl.minimum << endl;
-            cout << "Max     : " << queryctrl.maximum << endl;
-            cout << "Step    : " << queryctrl.step << endl;
-            cout << "Default : " << queryctrl.default_value << endl;
-            cout << "Flags   : " << queryctrl.flags << endl;*/
+            /*std::cout << "Name    : " << queryctrl.name << std::endl;
+            std::cout << "Min     : " << queryctrl.minimum << std::endl;
+            std::cout << "Max     : " << queryctrl.maximum << std::endl;
+            std::cout << "Step    : " << queryctrl.step << std::endl;
+            std::cout << "Default : " << queryctrl.default_value << std::endl;
+            std::cout << "Flags   : " << queryctrl.flags << std::endl;*/
 
             eMin = queryctrl.minimum;
             eMax = queryctrl.maximum;
@@ -1086,12 +1086,12 @@
 
         } else {
 
-            /*cout << "Name    : " << queryctrl.name << endl;
-            cout << "Min     : " << queryctrl.minimum << endl;
-            cout << "Max     : " << queryctrl.maximum << endl;
-            cout << "Step    : " << queryctrl.step << endl;
-            cout << "Default : " << queryctrl.default_value << endl;
-            cout << "Flags   : " << queryctrl.flags << endl;*/
+            /*std::cout << "Name    : " << queryctrl.name << std::endl;
+            std::cout << "Min     : " << queryctrl.minimum << std::endl;
+            std::cout << "Max     : " << queryctrl.maximum << std::endl;
+            std::cout << "Step    : " << queryctrl.step << std::endl;
+            std::cout << "Default : " << queryctrl.default_value << std::endl;
+            std::cout << "Flags   : " << queryctrl.flags << std::endl;*/
 
             gMin = queryctrl.minimum;
             gMax = queryctrl.maximum;
@@ -1120,14 +1120,14 @@
         if(fmt.fmt.pix.pixelformat == V4L2_PIX_FMT_GREY) {
 
             strncpy(fourcc, (char *)&fmt.fmt.pix.pixelformat, 4);
-            cout << "Pixel format : V4L2_PIX_FMT_GREY" << endl;
+            std::cout << "Pixel format : V4L2_PIX_FMT_GREY" << std::endl;
             format = MONO_8;
 
         // http://linuxtv.org/downloads/v4l-dvb-apis/V4L2-PIX-FMT-Y12.html
         }else if(fmt.fmt.pix.pixelformat == V4L2_PIX_FMT_Y12) {
 
             strncpy(fourcc, (char *)&fmt.fmt.pix.pixelformat, 4);
-            cout << "Pixel format : V4L2_PIX_FMT_Y12" << endl;
+            std::cout << "Pixel format : V4L2_PIX_FMT_Y12" << std::endl;
             format = MONO_12;
 
         }*/
@@ -1149,7 +1149,7 @@
 
                 case V4L2_FRMSIZE_TYPE_DISCRETE :
 
-                    cout << "[" << frmsize.index << "] : " << frmsize.discrete.width << "x" << frmsize.discrete.height << endl;
+                    std::cout << "[" << frmsize.index << "] : " << frmsize.discrete.width << "x" << frmsize.discrete.height << std::endl;
                     res = true;
 
                     break;
@@ -1160,13 +1160,13 @@
 
                 case V4L2_FRMSIZE_TYPE_STEPWISE :
 
-                    cout << "Min width : " << frmsize.stepwise.min_width << endl;
-                    cout << "Max width : " << frmsize.stepwise.max_width << endl;
-                    cout << "Step width : " << frmsize.stepwise.step_width << endl;
+                    std::cout << "Min width : " << frmsize.stepwise.min_width << std::endl;
+                    std::cout << "Max width : " << frmsize.stepwise.max_width << std::endl;
+                    std::cout << "Step width : " << frmsize.stepwise.step_width << std::endl;
 
-                    cout << "Min height : " << frmsize.stepwise.min_height << endl;
-                    cout << "Max height : " << frmsize.stepwise.max_height << endl;
-                    cout << "Step height : " << frmsize.stepwise.step_height << endl;
+                    std::cout << "Min height : " << frmsize.stepwise.min_height << std::endl;
+                    std::cout << "Max height : " << frmsize.stepwise.max_height << std::endl;
+                    std::cout << "Step height : " << frmsize.stepwise.step_height << std::endl;
 
                     break;
 
@@ -1204,7 +1204,7 @@
 
     }
 
-    bool CameraV4l2::getFpsEnum(vector<double> &values){
+    bool CameraV4l2::getFpsEnum(std::vector<double> &values){
 
         bool res = false;
 
@@ -1218,7 +1218,7 @@
         if (temp.type == V4L2_FRMIVAL_TYPE_DISCRETE) {
             while (ioctl(fd, VIDIOC_ENUM_FRAMEINTERVALS, &temp) != -1) {
                 values.push_back(float(temp.discrete.denominator)/temp.discrete.numerator);
-                cout << values.back() << " fps" << endl;
+                std::cout << values.back() << " fps" << std::endl;
                 temp.index += 1;
                 res = true;
             }
@@ -1234,7 +1234,7 @@
                 stepval = float(temp.stepwise.step.numerator)/temp.stepwise.step.denominator;
             }
             for (float cval = minval; cval <= maxval; cval += stepval) {
-                cout << 1/cval << " fps" << endl;
+                std::cout << 1/cval << " fps" << std::endl;
                 values.push_back(1.0/cval);
                 res = true;
             }
@@ -1251,7 +1251,7 @@
 
         streamparm.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         if (-1 == ioctl(fd, VIDIOC_G_PARM, &streamparm)) {
-            cout << "Fail to read fps value." << endl;
+            std::cout << "Fail to read fps value." << std::endl;
             return false;
         }
 
@@ -1262,7 +1262,7 @@
         return true;
     }
 
-    string CameraV4l2::getModelName(){
+    std::string CameraV4l2::getModelName(){
 
         struct v4l2_capability caps = {};
 
@@ -1316,7 +1316,7 @@
                     return false;
                 }
 
-                cout << ">> Manual exposure setted." << endl;
+                std::cout << ">> Manual exposure setted." << std::endl;
 
             }
 
@@ -1375,12 +1375,12 @@
 
             if(expMin == -1 && expMax == -1) {
 
-                cout << "Exposure time not supported." << endl;
+                std::cout << "Exposure time not supported." << std::endl;
                 return true;
 
             }
 
-            cout << "> Exposure value (" << val << ") is not in range [ " << expMin << " - " << expMax << " ]" << endl;
+            std::cout << "> Exposure value (" << val << ") is not in range [ " << expMin << " - " << expMax << " ]" << std::endl;
 
         }
 
@@ -1433,12 +1433,12 @@
 
             if(gainMin == -1 && gainMax == -1) {
 
-                cout << "Gain not supported." << endl;
+                std::cout << "Gain not supported." << std::endl;
                 return true;
 
             }
 
-            cout << "> Gain value (" << val << ") is not in range [ " << gainMin << " - " << gainMax << " ]" << endl;
+            std::cout << "> Gain value (" << val << ") is not in range [ " << gainMin << " - " << gainMax << " ]" << std::endl;
 
         }
 
@@ -1459,7 +1459,7 @@
 
         if (temp.type == V4L2_FRMIVAL_TYPE_DISCRETE) {
 
-            vector<double> frameIntervals;
+            std::vector<double> frameIntervals;
             while (ioctl(fd, VIDIOC_ENUM_FRAMEINTERVALS, &temp) != -1) {
 
                 if(fps == (float(temp.discrete.denominator)/temp.discrete.numerator)) {
@@ -1471,12 +1471,12 @@
                     tpf = &setfps.parm.capture.timeperframe;
 
                     tpf->numerator = temp.discrete.numerator;
-                    //cout << "numerator : " << tpf->numerator << endl;
+                    //std::cout << "numerator : " << tpf->numerator << std::endl;
                     tpf->denominator = temp.discrete.denominator;//cvRound(fps);
-                    //cout << "denominator : " << tpf->denominator << endl;
+                    //std::cout << "denominator : " << tpf->denominator << std::endl;
                     //retval=1;
                     if (ioctl(fd, VIDIOC_S_PARM, &setfps) < 0) {
-                        cout << "Failed to set camera FPS:"  << strerror(errno) << endl;
+                        std::cout << "Failed to set camera FPS:"  << strerror(errno) << std::endl;
                         res = false;
                         break;
                     }
@@ -1493,7 +1493,7 @@
         float stepval = 0;
         if (temp.type == V4L2_FRMIVAL_TYPE_CONTINUOUS) {
             stepval = 1;
-            cout << "V4L2_FRMIVAL_TYPE_CONTINUOUS" << endl;
+            std::cout << "V4L2_FRMIVAL_TYPE_CONTINUOUS" << std::endl;
             struct v4l2_streamparm setfps;
             struct v4l2_fract *tpf;
             memset (&setfps, 0, sizeof (setfps));
@@ -1501,12 +1501,12 @@
             tpf = &setfps.parm.capture.timeperframe;
 
             tpf->numerator = 1000;
-            //cout << "numerator : " << tpf->numerator << endl;
+            //std::cout << "numerator : " << tpf->numerator << std::endl;
             tpf->denominator = fps*1000;//cvRound(fps);
-            //cout << "denominator : " << tpf->denominator << endl;
+            //std::cout << "denominator : " << tpf->denominator << std::endl;
             //retval=1;
             if (ioctl(fd, VIDIOC_S_PARM, &setfps) < 0) {
-                cout << "Failed to set camera FPS:"  << strerror(errno) << endl;
+                std::cout << "Failed to set camera FPS:"  << strerror(errno) << std::endl;
                 res = false;
 
             }else{
@@ -1520,14 +1520,14 @@
         }
 
         if (temp.type == V4L2_FRMIVAL_TYPE_STEPWISE) {
-            cout << "V4L2_FRMIVAL_TYPE_STEPWISE" << endl;
+            std::cout << "V4L2_FRMIVAL_TYPE_STEPWISE" << std::endl;
             float minval = float(temp.stepwise.min.numerator)/temp.stepwise.min.denominator;
             float maxval = float(temp.stepwise.max.numerator)/temp.stepwise.max.denominator;
             if (stepval == 0) {
                 stepval = float(temp.stepwise.step.numerator)/temp.stepwise.step.denominator;
             }
             /*for (float cval = minval; cval <= maxval; cval += stepval) {
-                cout << 1/cval << " fps" << endl;
+                std::cout << 1/cval << " fps" << std::endl;
 
             }*/
 
@@ -1548,13 +1548,13 @@
         char c, e;
         mFormat.fmt.pix.field = V4L2_FIELD_NONE;
         EParser<CamPixFmt> fmt;
-        string fstring = fmt.getStringEnum(depth);
+        std::string fstring = fmt.getStringEnum(depth);
 
         while (0 == xioctl(fd, VIDIOC_ENUM_FMT, &fmtdesc)) {
 
             strncpy(fourcc, (char *)&fmtdesc.pixelformat, 4);
 
-            if(string(fourcc) == fstring) {
+            if(std::string(fourcc) == fstring) {
 
                 fmtFound = true;
 
@@ -1656,14 +1656,14 @@
         struct v4l2_fmtdesc fmtdesc = {0};
         fmtdesc.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         char fourcc[5] = {0};
-        vector<string> pixfmt;
+        std::vector<std::string> pixfmt;
         char c, e;
         struct v4l2_format pfmt;
         memset(&pfmt, 0, sizeof(pfmt));
         pfmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         pfmt.fmt.pix.field = V4L2_FIELD_NONE;
 
-        cout << ">> Device pixel formats :" << endl;
+        std::cout << ">> Device pixel formats :" << std::endl;
 
         while (0 == xioctl(fd, VIDIOC_ENUM_FMT, &fmtdesc)) {
 
@@ -1672,23 +1672,23 @@
             c = fmtdesc.flags & 1? 'C' : ' ';
             e = fmtdesc.flags & 2? 'E' : ' ';
             //printf("  %s : %c%c %s\n", fourcc, c, e, fmtdesc.description);
-            string fmt = string(fourcc);
+            std::string fmt = std::string(fourcc);
             std::transform(fmt.begin(), fmt.end(),fmt.begin(), ::toupper);
             pixfmt.push_back(fmt);
-            cout << "- " << fmt << endl;
+            std::cout << "- " << fmt << std::endl;
             fmtdesc.index++;
         }
 
         // Compare found pixel formats to currently formats supported by freeture
 
-        cout << endl <<  ">> Available pixel formats :" << endl;
+        std::cout << std::endl <<  ">> Available pixel formats :" << std::endl;
         EParser<CamPixFmt> fmt;
 
         for( int i = 0; i != pixfmt.size(); i++ ) {
 
             if(fmt.isEnumValue(pixfmt.at(i))) {
 
-                cout << "- " << pixfmt.at(i) << " available --> ID : " << fmt.parseEnum(pixfmt.at(i)) << endl;
+                std::cout << "- " << pixfmt.at(i) << " available --> ID : " << fmt.parseEnum(pixfmt.at(i)) << std::endl;
 
             }
 

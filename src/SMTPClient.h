@@ -78,7 +78,7 @@
 #include <cerrno>
 #include "ESmtpSecurity.h"
 
-using namespace std;
+
 
 class SMTPClient {
 
@@ -114,14 +114,14 @@ class SMTPClient {
         * @param imgInline
         * @param securityType Use secured connection or not.
         */
-        static void sendMail(   string            server,
-                                string            login,
-                                string            password,
-                                string            from,
-                                vector<string>    to,
-                                string            subject,
-                                string            message,
-                                vector<string>    pathAttachments,
+        static void sendMail(   std::string            server,
+                                std::string            login,
+                                std::string            password,
+                                std::string            from,
+                                std::vector<std::string>    to,
+                                std::string            subject,
+                                std::string            message,
+                                std::vector<std::string>    pathAttachments,
                                 SmtpSecurity      securityType);
 
     private :
@@ -143,15 +143,15 @@ class SMTPClient {
         * @param checkAnswer
         * @param printCmd
         */
-        static void write(string data, string expectedAnswer, bool checkAnswer, boost::asio::ip::tcp::socket & socket);
+        static void write(std::string data, std::string expectedAnswer, bool checkAnswer, boost::asio::ip::tcp::socket & socket);
 
         /**
         * Create MIME message.
         *
         * @return Final message to send.
         */
-        static string buildMessage( string msg, vector<string> mMailAttachments,
-             vector<string> mMailTo,  string mMailFrom,  string mMailSubject);
+        static std::string buildMessage( std::string msg, std::vector<std::string> mMailAttachments,
+             std::vector<std::string> mMailTo,  std::string mMailFrom,  std::string mMailSubject);
 
         /**
         * Get file content.
@@ -159,15 +159,15 @@ class SMTPClient {
         * @param filename
         * @return File's content.
         */
-        static bool getFileContents(const char *filename, string &content);
+        static bool getFileContents(const char *filename, std::string &content);
 
 
         struct ReceiveFunctor{
 
             enum {codeLength = 3};
-            const string code;
+            const std::string code;
 
-            ReceiveFunctor(int expectingCode) : code (to_string(expectingCode)){
+            ReceiveFunctor(int expectingCode) : code (std::to_string(expectingCode)){
                 if(code.length() != codeLength) {
                     BOOST_LOG_SEV(logger,fail) << "SMTP code must be three-digits.";
                     throw "SMTP code must be three-digits.";
@@ -175,7 +175,7 @@ class SMTPClient {
                 }
             }
 
-            bool operator()(const string &msg) const {
+            bool operator()(const std::string &msg) const {
 
                 if(msg.length() < codeLength) return false;
                 if(code!=msg.substr(0,codeLength)) {
@@ -185,7 +185,7 @@ class SMTPClient {
                 }
 
                 const size_t posNewline = msg.find_first_of("\n", codeLength);
-                if(posNewline == string::npos) return false;
+                if(posNewline == std::string::npos) return false;
                 if(msg.at(codeLength ) == ' ') return true;
                 if(msg.at(codeLength ) == '-') return this->operator()(msg.substr(posNewline + 1));
                 throw "Unexpected return code received.";

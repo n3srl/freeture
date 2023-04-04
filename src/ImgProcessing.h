@@ -34,13 +34,13 @@
 
 #pragma once
 
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <string>
 #include <iostream>
 #include "SaveImg.h"
 
-using namespace std;
+
 using namespace cv;
 
 enum class Thresh {
@@ -77,7 +77,7 @@ class ImgProcessing {
         static Mat thresholding(Mat &img, Mat &mask, int factor, Thresh threshType);
 
         // Subdivise a frame in n regions and fetch their coordinates.
-        static void subdivideFrame(vector<Point> &sub, int n, int imgH, int imgW);
+        static void subdivideFrame(std::vector<Point> &sub, int n, int imgH, int imgW);
 
         // Subdivise a frame in n regions and draw them.
         static Mat subdivideFrame(Mat img, int n);

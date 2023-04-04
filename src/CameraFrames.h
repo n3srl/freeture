@@ -36,7 +36,7 @@
 
 #pragma once
 #include "config.h"
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
 #ifdef LINUX
@@ -59,7 +59,6 @@
 
 using namespace boost::posix_time;
 using namespace cv;
-using namespace std;
 
 class CameraFrames: public Camera {
 
@@ -79,19 +78,19 @@ class CameraFrames: public Camera {
 
         } initializer;
 
-        bool searchMinMaxFramesNumber(string location);
+        bool searchMinMaxFramesNumber(std::string location);
 
-        vector<string> mFramesDir;  // List of frames directories to process.
+        std::vector<std::string> mFramesDir;  // List of frames directories to process.
         int mNumFramePos;           // Position of the frame number in its filename.
         int mFirstFrameNum;         // First frame number in a directory.
         int mLastFrameNum;          // Last frame number in a directory.
         bool mReadDataStatus;       // Signal the end of reading data in a directory.
         int mCurrDirId;             // Id of the directory to use.
-        string mCurrDir;            // Path of the directory to use.
+        std::string mCurrDir;            // Path of the directory to use.
 
     public:
 
-        CameraFrames(vector<string> locationList, int numPos, bool verbose);
+        CameraFrames(std::vector<std::string> locationList, int numPos, bool verbose);
 
         ~CameraFrames();
 
@@ -105,7 +104,7 @@ class CameraFrames: public Camera {
 
         bool getStopStatus();
 
-        bool loadNextDataSet(string &location);
+        bool loadNextDataSet(std::string &location);
 
         bool getDataSetStatus();
 
