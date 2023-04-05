@@ -1,6 +1,6 @@
 #!/bin/bash
 BASEDIR=$(dirname "$0")
-ARENASDK_ROOT="/usr/"
+ARENASDK_ROOT="/opt/arenasdk/"
 
 if [ ! -d $ARENASDK_ROOT ] 
 then
@@ -23,3 +23,5 @@ echo -e $FFMPEGLIB >> arenasdk.conf
 cp arenasdk.conf /etc/ld.so.conf.d/
 chmod 775 $ARENALIB $GENICAMLIB $FFMPEGLIB
 ldconfig
+
+echo "Done"
