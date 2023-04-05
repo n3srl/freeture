@@ -23,3 +23,5 @@ echo -e $FFMPEGLIB >> arenasdk.conf
 cp arenasdk.conf /etc/ld.so.conf.d/
 chmod 775 $ARENALIB $GENICAMLIB $FFMPEGLIB
 ldconfig
+
+echo "Done"
