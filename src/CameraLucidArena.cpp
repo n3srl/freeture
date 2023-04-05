@@ -49,16 +49,16 @@
     }
 
     bool CameraLucidArena::createDevice(int id){
-       cout << "CameraLucidArena::createDevice"<< endl;
+       std::cout << "CameraLucidArena::createDevice"<< std::endl;
 
-        string deviceName;
+        std::string deviceName;
 
         if(!getDeviceNameById(id, deviceName))
             return false;
 
         if (camera == nullptr)
         {
-            cout << "CameraLucidArena::createDevice: Instancing arv_camera_new"<<endl;
+            std::cout << "CameraLucidArena::createDevice: Instancing arv_camera_new"<<std::endl;
             camera = arv_camera_new(deviceName.c_str(),&error);
             ErrorManager::CheckAravisError(&error);
         }
@@ -76,7 +76,7 @@
     }
 
     bool CameraLucidArena::setSize(int startx, int starty, int width, int height, bool customSize) {
-        cout << "CameraLucidArena::setSize"<< endl;
+        std::cout << "CameraLucidArena::setSize"<< std::endl;
 
         if(customSize) {
 
@@ -116,9 +116,9 @@
 
     }
 
-    bool CameraLucidArena::getDeviceNameById(int id, string &device)
+    bool CameraLucidArena::getDeviceNameById(int id, std::string &device)
     {
-        cout << "CameraLucidArena::getDeviceNameById [#"<< id<<"]"<< endl;
+        std::cout << "CameraLucidArena::getDeviceNameById [#"<< id<<"]"<< std::endl;
 
         arv_update_device_list();
 
@@ -143,7 +143,7 @@
 
     bool CameraLucidArena::grabInitialization()
     {
-        cout << "CameraLucidArena::grabInitialization"<< endl;
+        std::cout << "CameraLucidArena::grabInitialization"<< std::endl;
 
         frameCounter = 0;
 
@@ -185,31 +185,31 @@
 
         BOOST_LOG_SEV(logger, notification) << "Camera exposure : " << exp;
 
-        cout << endl;
+        std::cout << std::endl;
 
-        cout << "DEVICE SELECTED : " << arv_camera_get_device_id(camera,&error)    << endl;
+        std::cout << "DEVICE SELECTED : " << arv_camera_get_device_id(camera,&error)    << std::endl;
         ErrorManager::CheckAravisError(&error);
 
-        cout << "DEVICE NAME     : " << arv_camera_get_model_name(camera,&error)   << endl;
+        std::cout << "DEVICE NAME     : " << arv_camera_get_model_name(camera,&error)   << std::endl;
         ErrorManager::CheckAravisError(&error);
 
-        cout << "DEVICE VENDOR   : " << arv_camera_get_vendor_name(camera,&error)  << endl;
+        std::cout << "DEVICE VENDOR   : " << arv_camera_get_vendor_name(camera,&error)  << std::endl;
         ErrorManager::CheckAravisError(&error);
 
-        cout << "PAYLOAD         : " << payload                             << endl;
-        cout << "Start X         : " << mStartX                             << endl
-             << "Start Y         : " << mStartY                             << endl;
-        cout << "Width           : " << mWidth                               << endl
-             << "Height          : " << mHeight                              << endl;
-        cout << "Exp Range       : [" << exposureMin    << " - " << exposureMax   << "]"  << endl;
-        cout << "Exp             : " << exp                                 << endl;
-        cout << "Gain Range      : [" << gainMin        << " - " << gainMax       << "]"  << endl;
-        cout << "Gain            : " << gain                                << endl;
-        cout << "Fps Range       : [" << fpsMin    << " - " << fpsMax   << "]"  << endl;
-        cout << "Fps             : " << fps                                 << endl;
-        cout << "Type            : " << capsString                         << endl;
+        std::cout << "PAYLOAD         : " << payload                             << std::endl;
+        std::cout << "Start X         : " << mStartX                             << std::endl
+             << "Start Y         : " << mStartY                             << std::endl;
+        std::cout << "Width           : " << mWidth                               << std::endl
+             << "Height          : " << mHeight                              << std::endl;
+        std::cout << "Exp Range       : [" << exposureMin    << " - " << exposureMax   << "]"  << std::endl;
+        std::cout << "Exp             : " << exp                                 << std::endl;
+        std::cout << "Gain Range      : [" << gainMin        << " - " << gainMax       << "]"  << std::endl;
+        std::cout << "Gain            : " << gain                                << std::endl;
+        std::cout << "Fps Range       : [" << fpsMin    << " - " << fpsMax   << "]"  << std::endl;
+        std::cout << "Fps             : " << fps                                 << std::endl;
+        std::cout << "Type            : " << capsString                         << std::endl;
 
-        cout << endl;
+        std::cout << std::endl;
 
         // Create a new stream object. Open stream on Camera.
         stream = arv_camera_create_stream(camera, NULL, NULL,&error);
@@ -300,12 +300,12 @@
     }
 
     void CameraLucidArena::grabCleanse(){
-       cout << "CameraLucidArena::grabCleanse"<< endl;
+       std::cout << "CameraLucidArena::grabCleanse"<< std::endl;
     }
 
     bool CameraLucidArena::acqStart()
     {
-        cout << "CameraLucidArena::acqStart"<< endl;
+        std::cout << "CameraLucidArena::acqStart"<< std::endl;
 
         BOOST_LOG_SEV(logger, notification) << "Set camera to CONTINUOUS MODE";
         arv_camera_set_acquisition_mode(camera, ARV_ACQUISITION_MODE_CONTINUOUS, &error);
@@ -324,13 +324,13 @@
 
     void CameraLucidArena::acqStop()
     {
-        cout << "CameraLucidArena::acqStop"<< endl;
+        std::cout << "CameraLucidArena::acqStop"<< std::endl;
 
         arv_stream_get_statistics(stream, &nbCompletedBuffers, &nbFailures, &nbUnderruns);
 
-        //cout << "Completed buffers = " << (unsigned long long) nbCompletedBuffers   << endl;
-        //cout << "Failures          = " << (unsigned long long) nbFailures           << endl;
-        //cout << "Underruns         = " << (unsigned long long) nbUnderruns          << endl;
+        //std::cout << "Completed buffers = " << (unsigned long long) nbCompletedBuffers   << std::endl;
+        //std::cout << "Failures          = " << (unsigned long long) nbFailures           << std::endl;
+        //std::cout << "Underruns         = " << (unsigned long long) nbUnderruns          << std::endl;
 
         BOOST_LOG_SEV(logger, notification) << "Completed buffers = " << (unsigned long long) nbCompletedBuffers;
         BOOST_LOG_SEV(logger, notification) << "Failures          = " << (unsigned long long) nbFailures;
@@ -350,7 +350,7 @@
 
     bool CameraLucidArena::grabImage(Frame &newFrame)
     {
-        //cout << "CameraLucidArena::grabImage"<< endl;
+        //std::cout << "CameraLucidArena::grabImage"<< std::endl;
 
         ArvBuffer *arv_buffer;
         //exp = arv_camera_get_exposure_time(camera);
@@ -361,7 +361,7 @@
 
         if(arv_buffer == NULL){
 
-            throw runtime_error("arv_buffer is NULL");
+            throw std::runtime_error("arv_buffer is NULL");
             return false;
 
         }else{
@@ -379,7 +379,7 @@
                     //string acquisitionDate = TimeDate::localDateTime(microsec_clock::universal_time(),"%Y:%m:%d:%H:%M:%S");
                     //BOOST_LOG_SEV(logger, normal) << "Date : " << acquisitionDate;
                     boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
-                    string acquisitionDate = to_iso_extended_string(time);
+                    std::string acquisitionDate = to_iso_extended_string(time);
                     //BOOST_LOG_SEV(logger, normal) << "Date : " << acqDateInMicrosec;
 
                     Mat image;
@@ -422,7 +422,7 @@
                         }
 
                         //t3 = (((double)getTickCount() - t3)/getTickFrequency())*1000;
-                        //cout << "> Time shift : " << t3 << endl;
+                        //std::cout << "> Time shift : " << t3 << std::endl;
                     }
                     else if(pixFormat == ARV_PIXEL_FORMAT_MONO_16)
                     {
@@ -433,7 +433,7 @@
 
                         //double t3 = (double)getTickCount();
                         //t3 = (((double)getTickCount() - t3)/getTickFrequency())*1000;
-                        //cout << "> Time shift : " << t3 << endl;
+                        //std::cout << "> Time shift : " << t3 << std::endl;
                     }
 
                     //BOOST_LOG_SEV(logger, normal) << "Creating frame object ...";
@@ -458,28 +458,28 @@
                     switch(arv_buffer_get_status(arv_buffer)){
 
                         case 0 :
-                            cout << "ARV_BUFFER_STATUS_SUCCESS : the buffer contains a valid image"<<endl;
+                            std::cout << "ARV_BUFFER_STATUS_SUCCESS : the buffer contains a valid image"<<std::endl;
                             break;
                         case 1 :
-                            cout << "ARV_BUFFER_STATUS_CLEARED: the buffer is cleared"<<endl;
+                            std::cout << "ARV_BUFFER_STATUS_CLEARED: the buffer is cleared"<<std::endl;
                             break;
                         case 2 :
-                            cout << "ARV_BUFFER_STATUS_TIMEOUT: timeout was reached before all packets are received"<<endl;
+                            std::cout << "ARV_BUFFER_STATUS_TIMEOUT: timeout was reached before all packets are received"<<std::endl;
                             break;
                         case 3 :
-                            cout << "ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets"<<endl;
+                            std::cout << "ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets"<<std::endl;
                             break;
                         case 4 :
-                            cout << "ARV_BUFFER_STATUS_WRONG_PACKET_ID: stream has packet with wrong id"<<endl;
+                            std::cout << "ARV_BUFFER_STATUS_WRONG_PACKET_ID: stream has packet with wrong id"<<std::endl;
                             break;
                         case 5 :
-                            cout << "ARV_BUFFER_STATUS_SIZE_MISMATCH: the received image didn't fit in the buffer data space"<<endl;
+                            std::cout << "ARV_BUFFER_STATUS_SIZE_MISMATCH: the received image didn't fit in the buffer data space"<<std::endl;
                             break;
                         case 6 :
-                            cout << "ARV_BUFFER_STATUS_FILLING: the image is currently being filled"<<endl;
+                            std::cout << "ARV_BUFFER_STATUS_FILLING: the image is currently being filled"<<std::endl;
                             break;
                         case 7 :
-                            cout << "ARV_BUFFER_STATUS_ABORTED: the filling was aborted before completion"<<endl;
+                            std::cout << "ARV_BUFFER_STATUS_ABORTED: the filling was aborted before completion"<<std::endl;
                             break;
 
                     }
@@ -489,9 +489,9 @@
                     return false;
                 }
 
-            }catch(exception& e){
+            }catch(std::exception& e){
 
-                cout << e.what() << endl;
+                std::cout << e.what() << std::endl;
                 BOOST_LOG_SEV(logger, critical) << e.what() ;
                 return false;
 
@@ -502,7 +502,7 @@
 
     bool CameraLucidArena::grabSingleImage(Frame &frame, int camID)
     {
-        cout << "CameraLucidArena::grabSingleImage"<< endl;
+        std::cout << "CameraLucidArena::grabSingleImage"<< std::endl;
 
         bool res = false;
 
@@ -566,31 +566,31 @@
         exp     = arv_camera_get_exposure_time(camera, &error);
         ErrorManager::CheckAravisError(&error);
 
-        cout << endl;
+        std::cout << std::endl;
 
-        cout << "DEVICE SELECTED : " << arv_camera_get_device_id(camera, &error)    << endl;
+        std::cout << "DEVICE SELECTED : " << arv_camera_get_device_id(camera, &error)    << std::endl;
         ErrorManager::CheckAravisError(&error);
 
-        cout << "DEVICE NAME     : " << arv_camera_get_model_name(camera, &error)   << endl;
+        std::cout << "DEVICE NAME     : " << arv_camera_get_model_name(camera, &error)   << std::endl;
         ErrorManager::CheckAravisError(&error);
 
-        cout << "DEVICE VENDOR   : " << arv_camera_get_vendor_name(camera, &error)  << endl;
+        std::cout << "DEVICE VENDOR   : " << arv_camera_get_vendor_name(camera, &error)  << std::endl;
         ErrorManager::CheckAravisError(&error);
 
-        cout << "PAYLOAD         : " << payload                             << endl;
-        cout << "Start X         : " << mStartX                             << endl
-             << "Start Y         : " << mStartY                             << endl;
-        cout << "Width           : " << mWidth                               << endl
-             << "Height          : " << mHeight                              << endl;
-        cout << "Exp Range       : [" << exposureMin    << " - " << exposureMax   << "]"  << endl;
-        cout << "Exp             : " << exp                                 << endl;
-        cout << "Gain Range      : [" << gainMin        << " - " << gainMax       << "]"  << endl;
-        cout << "Gain            : " << gain                                << endl;
-        cout << "Fps Range      : [" << fpsMin        << " - " << fpsMax       << "]"  << endl;
-        cout << "Fps             : " << fps                                 << endl;
-        cout << "Type            : " << capsString                         << endl;
+        std::cout << "PAYLOAD         : " << payload                             << std::endl;
+        std::cout << "Start X         : " << mStartX                             << std::endl
+             << "Start Y         : " << mStartY                             << std::endl;
+        std::cout << "Width           : " << mWidth                               << std::endl
+             << "Height          : " << mHeight                              << std::endl;
+        std::cout << "Exp Range       : [" << exposureMin    << " - " << exposureMax   << "]"  << std::endl;
+        std::cout << "Exp             : " << exp                                 << std::endl;
+        std::cout << "Gain Range      : [" << gainMin        << " - " << gainMax       << "]"  << std::endl;
+        std::cout << "Gain            : " << gain                                << std::endl;
+        std::cout << "Fps Range      : [" << fpsMin        << " - " << fpsMax       << "]"  << std::endl;
+        std::cout << "Fps             : " << fps                                 << std::endl;
+        std::cout << "Type            : " << capsString                         << std::endl;
 
-        cout << endl;
+        std::cout << std::endl;
 
         if(arv_camera_is_gv_device (camera)) {
 
@@ -659,7 +659,7 @@
             char *buffer_data;
             size_t buffer_size;
 
-            cout << ">> Acquisition in progress... (Please wait)" << endl;
+            std::cout << ">> Acquisition in progress... (Please wait)" << std::endl;
 
             if (arv_buffer != NULL){
 
@@ -705,49 +705,49 @@
 
                         case 0 :
 
-                            cout << "ARV_BUFFER_STATUS_SUCCESS : the buffer contains a valid image"<<endl;
+                            std::cout << "ARV_BUFFER_STATUS_SUCCESS : the buffer contains a valid image"<<std::endl;
 
                             break;
 
                         case 1 :
 
-                            cout << "ARV_BUFFER_STATUS_CLEARED: the buffer is cleared"<<endl;
+                            std::cout << "ARV_BUFFER_STATUS_CLEARED: the buffer is cleared"<<std::endl;
 
                             break;
 
                         case 2 :
 
-                            cout << "ARV_BUFFER_STATUS_TIMEOUT: timeout was reached before all packets are received"<<endl;
+                            std::cout << "ARV_BUFFER_STATUS_TIMEOUT: timeout was reached before all packets are received"<<std::endl;
 
                             break;
 
                         case 3 :
 
-                            cout << "ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets"<<endl;
+                            std::cout << "ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets"<<std::endl;
 
                             break;
 
                         case 4 :
 
-                            cout << "ARV_BUFFER_STATUS_WRONG_PACKET_ID: stream has packet with wrong id"<<endl;
+                            std::cout << "ARV_BUFFER_STATUS_WRONG_PACKET_ID: stream has packet with wrong id"<<std::endl;
 
                             break;
 
                         case 5 :
 
-                            cout << "ARV_BUFFER_STATUS_SIZE_MISMATCH: the received image didn't fit in the buffer data space"<<endl;
+                            std::cout << "ARV_BUFFER_STATUS_SIZE_MISMATCH: the received image didn't fit in the buffer data space"<<std::endl;
 
                             break;
 
                         case 6 :
 
-                            cout << "ARV_BUFFER_STATUS_FILLING: the image is currently being filled"<<endl;
+                            std::cout << "ARV_BUFFER_STATUS_FILLING: the image is currently being filled"<<std::endl;
 
                             break;
 
                         case 7 :
 
-                            cout << "ARV_BUFFER_STATUS_ABORTED: the filling was aborted before completion"<<endl;
+                            std::cout << "ARV_BUFFER_STATUS_ABORTED: the filling was aborted before completion"<<std::endl;
 
                             break;
 
@@ -769,9 +769,9 @@
 
             arv_stream_get_statistics(stream, &nbCompletedBuffers, &nbFailures, &nbUnderruns);
 
-            cout << ">> Completed buffers = " << (unsigned long long) nbCompletedBuffers    << endl;
-            cout << ">> Failures          = " << (unsigned long long) nbFailures           << endl;
-            //cout << ">> Underruns         = " << (unsigned long long) nbUnderruns          << endl;
+            std::cout << ">> Completed buffers = " << (unsigned long long) nbCompletedBuffers    << std::endl;
+            std::cout << ">> Failures          = " << (unsigned long long) nbFailures           << std::endl;
+            //std::cout << ">> Underruns         = " << (unsigned long long) nbUnderruns          << std::endl;
 
             // Stop acquisition.
             arv_camera_stop_acquisition(camera, &error);
@@ -789,8 +789,8 @@
 
     }
 
-    void CameraLucidArena::saveGenicamXml(string p){
-        cout << "CameraLucidArena::saveGenicamXml"<< endl;
+    void CameraLucidArena::saveGenicamXml(std::string p){
+        std::cout << "CameraLucidArena::saveGenicamXml"<< std::endl;
 
         const char *xml;
 
@@ -800,10 +800,10 @@
 
         if (xml != NULL){
 
-            ofstream infFile;
-            string infFilePath = p + "genicam.xml";
+            std::ofstream infFile;
+            std::string infFilePath = p + "genicam.xml";
             infFile.open(infFilePath.c_str());
-            infFile << string ( xml, size );
+            infFile << std::string ( xml, size );
             infFile.close();
 
         }
@@ -812,7 +812,7 @@
 
     //https://github.com/GNOME/aravis/blob/b808d34691a18e51eee72d8cac6cfa522a945433/src/arvtool.c
     void CameraLucidArena::getAvailablePixelFormats() {
-        cout << "CameraLucidArena::getAvailablePixelFormats"<< endl;
+        std::cout << "CameraLucidArena::getAvailablePixelFormats"<< std::endl;
 
         ArvGc *genicam;
         ArvDevice *device;
@@ -828,9 +828,9 @@
 
                 const GSList *childs;
                 const GSList *iter;
-                vector<string> pixfmt;
+                std::vector<std::string> pixfmt;
 
-                cout << ">> Device pixel formats :" << endl;
+                std::cout << ">> Device pixel formats :" << std::endl;
 
                 childs = arv_gc_enumeration_get_entries (ARV_GC_ENUMERATION (node));
                 for (iter = childs; iter != NULL; iter = iter->next) {
@@ -839,10 +839,10 @@
                         if(arv_gc_feature_node_is_available (ARV_GC_FEATURE_NODE (iter->data), NULL)) {
 
                             {
-                                string fmt = string(arv_gc_feature_node_get_name(ARV_GC_FEATURE_NODE (iter->data)));
+                                std::string fmt = std::string(arv_gc_feature_node_get_name(ARV_GC_FEATURE_NODE (iter->data)));
                                 std::transform(fmt.begin(), fmt.end(),fmt.begin(), ::toupper);
                                 pixfmt.push_back(fmt);
-                                cout << "- " << fmt << endl;
+                                std::cout << "- " << fmt << std::endl;
 
                             }
                         }
@@ -851,14 +851,14 @@
 
                 // Compare found pixel formats to currently formats supported by freeture
 
-                cout << endl <<  ">> Available pixel formats :" << endl;
+                std::cout << std::endl <<  ">> Available pixel formats :" << std::endl;
                 EParser<CamPixFmt> fmt;
 
                 for( int i = 0; i != pixfmt.size(); i++ ) {
 
                     if(fmt.isEnumValue(pixfmt.at(i))) {
 
-                        cout << "- " << pixfmt.at(i) << " available --> ID : " << fmt.parseEnum(pixfmt.at(i)) << endl;
+                        std::cout << "- " << pixfmt.at(i) << " available --> ID : " << fmt.parseEnum(pixfmt.at(i)) << std::endl;
 
                     }
 
@@ -866,7 +866,7 @@
 
             }else {
 
-                cout << ">> Available pixel formats not found." << endl;
+                std::cout << ">> Available pixel formats not found." << std::endl;
 
             }
 
@@ -879,7 +879,7 @@
 
     void CameraLucidArena::getFPSBounds(double &fMin, double &fMax)
     {
-        cout << "CameraLucidArena::getFPSBounds ";
+        std::cout << "CameraLucidArena::getFPSBounds ";
 
         double fpsMin = 0.0;
         double fpsMax = 0.0;
@@ -890,7 +890,7 @@
         fMin = fpsMin;
         fMax = fpsMax;
 
-        cout <<"["<< fpsMin<<", "<< fpsMax<<"]"<<endl;
+        std::cout <<"["<< fpsMin<<", "<< fpsMax<<"]"<<std::endl;
     }
 
 
@@ -898,7 +898,7 @@
     void CameraLucidArena::getExposureBounds(double &eMin, double &eMax)
     {
 
-        cout << "CameraLucidArena::getExposureBounds ";
+        std::cout << "CameraLucidArena::getExposureBounds ";
 
         double exposureMin = 0.0;
         double exposureMax = 0.0;
@@ -908,12 +908,12 @@
 
         eMin = exposureMin;
         eMax = exposureMax;
-        cout <<"["<< exposureMin<<", "<< exposureMax<<"]"<<endl;
+        std::cout <<"["<< exposureMin<<", "<< exposureMax<<"]"<<std::endl;
     }
 
     double CameraLucidArena::getExposureTime()
     {
-        cout << "CameraLucidArena::getExposureTime"<< endl;
+        std::cout << "CameraLucidArena::getExposureTime"<< std::endl;
 
         double result = arv_camera_get_exposure_time(camera, &error);
         ErrorManager::CheckAravisError(&error);
@@ -921,7 +921,7 @@
     }
 
     void CameraLucidArena::getGainBounds(double &gMin, double &gMax){
-        cout << "CameraLucidArena::getGainBounds"<< endl;
+        std::cout << "CameraLucidArena::getGainBounds"<< std::endl;
 
 
         double gainMin = 0.0;
@@ -936,7 +936,7 @@
     }
 
     bool CameraLucidArena::getPixelFormat(CamPixFmt &format){
-        cout << "CameraLucidArena::getPixelFormat"<< endl;
+        std::cout << "CameraLucidArena::getPixelFormat"<< std::endl;
 
         ArvPixelFormat pixFormat = arv_camera_get_pixel_format(camera, &error);
         ErrorManager::CheckAravisError(&error);
@@ -973,7 +973,7 @@
 
 
     bool CameraLucidArena::getFrameSize(int &x, int &y, int &w, int &h) {
-        cout << "CameraLucidArena::getFrameSize"<< endl;
+        std::cout << "CameraLucidArena::getFrameSize"<< std::endl;
 
         if(camera != NULL) {
 
@@ -992,7 +992,7 @@
     }
 
     bool CameraLucidArena::getFPS(double &value){
-        cout << "CameraLucidArena::getFPS"<< endl;
+        std::cout << "CameraLucidArena::getFPS"<< std::endl;
 
         if(camera != NULL) {
 
@@ -1006,10 +1006,10 @@
         return false;
     }
 
-    string CameraLucidArena::getModelName(){
-        cout << "CameraLucidArena::getModelName"<< endl;
+    std::string CameraLucidArena::getModelName(){
+        std::cout << "CameraLucidArena::getModelName"<< std::endl;
 
-        string result =  arv_camera_get_model_name(camera,&error);
+        std::string result =  arv_camera_get_model_name(camera,&error);
         ErrorManager::CheckAravisError(&error);
 
         return result;
@@ -1017,14 +1017,14 @@
 
     bool CameraLucidArena::setExposureTime(double val)
     {
-        cout << "CameraLucidArena::setExposureTime ["<< val<<"]" << endl;
+        std::cout << "CameraLucidArena::setExposureTime ["<< val<<"]" << std::endl;
 
         double expMin, expMax;
 
         arv_camera_get_exposure_time_bounds(camera, &expMin, &expMax,&error);
         ErrorManager::CheckAravisError(&error);
 
-        cout << "arv_camera_get_exposure_time_bounds ["<< expMin<< ", "<< expMax<<"]" << endl;
+        std::cout << "arv_camera_get_exposure_time_bounds ["<< expMin<< ", "<< expMax<<"]" << std::endl;
 
         if(camera != NULL) {
 
@@ -1040,7 +1040,7 @@
 
             } else {
 
-                cout << "> Exposure value (" << val << ") is not in range [ " << expMin << " - " << expMax << " ]" << endl;
+                std::cout << "> Exposure value (" << val << ") is not in range [ " << expMin << " - " << expMax << " ]" << std::endl;
                 return false;
 
             }
@@ -1053,7 +1053,7 @@
     }
 
     bool CameraLucidArena::setGain(double val){
-        cout << "CameraLucidArena::setGain"<< endl;
+        std::cout << "CameraLucidArena::setGain"<< std::endl;
 
         double gMin, gMax;
 
@@ -1070,7 +1070,7 @@
 
             }else{
 
-                cout << "> Gain value (" << val << ") is not in range [ " << gMin << " - " << gMax << " ]" << endl;
+                std::cout << "> Gain value (" << val << ") is not in range [ " << gMin << " - " << gMax << " ]" << std::endl;
                 BOOST_LOG_SEV(logger, fail) << "> Gain value (" << val << ") is not in range [ " << gMin << " - " << gMax << " ]";
                 return false;
 
@@ -1086,7 +1086,7 @@
 
     bool CameraLucidArena::setFPS(double fps)
     {
-        cout << "CameraLucidArena::setFPS"<<" ["<<fps<<"]";
+        std::cout << "CameraLucidArena::setFPS"<<" ["<<fps<<"]";
 
         if (camera != NULL)
         {
@@ -1102,13 +1102,13 @@
 
             double setfps = arv_camera_get_frame_rate(camera, &error);
             ErrorManager::CheckAravisError(&error);
-            cout << "=="<<setfps<<endl;
+            std::cout << "=="<<setfps<<std::endl;
 
             int fps_test_l = (int) setfps;
             int fps_test_r = (int) fps;
 
             if (fps_test_l!=fps_test_r) {
-                cout << "> Frame rate value (" << fps << ") can't be set! Please check genicam features." << endl;
+                std::cout << "> Frame rate value (" << fps << ") can't be set! Please check genicam features." << std::endl;
                 BOOST_LOG_SEV(logger, warning) << "> Frame rate value (" << fps << ") can't be set!";
             }
 
@@ -1121,7 +1121,7 @@
     }
 
     bool CameraLucidArena::setPixelFormat(CamPixFmt depth){
-        cout << "CameraLucidArena::setPixelFormat"<< endl;
+        std::cout << "CameraLucidArena::setPixelFormat"<< std::endl;
 
         if (camera != NULL){
 
@@ -1156,13 +1156,13 @@
     }
 
     bool CameraLucidArena::setFrameSize(int startx, int starty, int width, int height, bool customSize) {
-        cout << "CameraLucidArena::setFrameSize"<< endl;
+        std::cout << "CameraLucidArena::setFrameSize"<< std::endl;
 
         if (camera != NULL){
             if(customSize) {
 
                 if (arv_device_get_feature(arv_camera_get_device(camera), "OffsetX")) {
-                    cout << "Starting from : " << mStartX << "," << mStartY;
+                    std::cout << "Starting from : " << mStartX << "," << mStartY;
                     BOOST_LOG_SEV(logger, notification) << "Starting from : " << mStartX << "," << mStartY;
                 } else {
                     BOOST_LOG_SEV(logger, warning) << "OffsetX, OffsetY are not available: cannot set offset.";

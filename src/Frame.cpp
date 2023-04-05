@@ -36,7 +36,7 @@
 
 #include "Frame.h"
 
-Frame::Frame(Mat capImg, int g, double e, string acquisitionDate):
+Frame::Frame(Mat capImg, int g, double e, std::string acquisitionDate):
 mExposure(e), mGain(g), mFileName("noFileName"), mFrameRemaining(0),
 mFrameNumber(0), mFps(30), mFormat(MONO8), mSaturatedValue(255) {
 

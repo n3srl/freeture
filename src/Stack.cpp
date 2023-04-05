@@ -39,7 +39,7 @@ boost::log::sources::severity_logger< LogSeverityLevel >  Stack::logger;
 
 Stack::Init Stack::initializer;
 
-Stack::Stack(string fitsCompression, fitskeysParam fkp, stationParam stp):
+Stack::Stack(std::string fitsCompression, fitskeysParam fkp, stationParam stp):
 mFitsCompressionMethod(fitsCompression),
 curFrames(0), varExpTime(false),
 sumExpTime(0.0), gainFirstFrame(0), expFirstFrame(0), fps(0), format(MONO8){
@@ -81,16 +81,16 @@ void Stack::addFrame(Frame &i){
 
         }
 
-    }catch(exception& e){
+    }catch(std::exception& e){
 
-        cout << e.what() << endl;
+        std::cout << e.what() << std::endl;
         BOOST_LOG_SEV(logger, critical) << e.what() ;
 
     }
 
 }
 
-bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
+bool Stack::saveStack(std::string path, StackMeth stackMthd, bool stackReduction){
 
 
     double  debObsInSeconds = mDateFirstFrame.hours*3600 + mDateFirstFrame.minutes*60 + mDateFirstFrame.seconds;

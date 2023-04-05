@@ -39,7 +39,7 @@ boost::log::sources::severity_logger< LogSeverityLevel > CameraFrames::logger;
 
 CameraFrames::Init CameraFrames::initializer;
 
-CameraFrames::CameraFrames(vector<string> locationList, int numPos, bool verbose):
+CameraFrames::CameraFrames(std::vector<std::string> locationList, int numPos, bool verbose):
 mNumFramePos(numPos), mReadDataStatus(false), mCurrDirId(0),
 mFirstFrameNum(0), mLastFrameNum(0) {
 
@@ -59,9 +59,9 @@ CameraFrames::~CameraFrames(void) {
 
 }
 
-bool CameraFrames::loadNextDataSet(string &location) {
+bool CameraFrames::loadNextDataSet(std::string &location) {
 
-    cout << mCurrDirId << endl;
+    std::cout << mCurrDirId << std::endl;
 
     location = mFramesDir.at(mCurrDirId);
 
@@ -93,11 +93,11 @@ bool CameraFrames::getDataSetStatus() {
 }
 
 bool CameraFrames::getCameraName() {
-    cout << "Fits frames data." << endl;
+    std::cout << "Fits frames data." << std::endl;
     return true;
 }
 
-bool CameraFrames::searchMinMaxFramesNumber(string location) {
+bool CameraFrames::searchMinMaxFramesNumber(std::string location) {
 
     namespace fs = boost::filesystem;
 
@@ -108,7 +108,7 @@ bool CameraFrames::searchMinMaxFramesNumber(string location) {
         if(mVerbose) BOOST_LOG_SEV(logger, normal) << "Frame's directory exists : " << location;
 
         int firstFrame = -1, lastFrame = 0;
-        string filename = "";
+        std::string filename = "";
 
         // Search first and last frames numbers in the directory.
         for(directory_iterator file(p);file!= directory_iterator(); ++file) {
@@ -118,10 +118,10 @@ bool CameraFrames::searchMinMaxFramesNumber(string location) {
             if(is_regular_file(curr)) {
 
                 // Get file name.
-                string fname = curr.filename().string();
+                std::string fname = curr.filename().string();
 
                 // Split file name according to the separator "_".
-                vector<string> output;
+                std::vector<std::string> output;
                 typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
                 boost::char_separator<char> sep("_");
                 tokenizer tokens(fname, sep);
@@ -145,7 +145,7 @@ bool CameraFrames::searchMinMaxFramesNumber(string location) {
                     // If the frame number is at the end (before the file extension).
                     if(j == mNumFramePos && j == output.size() - 1) {
 
-                        vector<string> output2;
+                        std::vector<std::string> output2;
                         typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
                         boost::char_separator<char> sep2(".");
                         tokenizer tokens2(output.back(), sep2);
@@ -193,7 +193,7 @@ bool CameraFrames::searchMinMaxFramesNumber(string location) {
     }else{
 
         if(mVerbose) BOOST_LOG_SEV(logger, fail) << "Frame's directory not found.";
-        if(mVerbose) cout << "Frame's directory not found." << endl;
+        if(mVerbose) std::cout << "Frame's directory not found." << std::endl;
         return false;
 
     }
@@ -217,7 +217,7 @@ bool CameraFrames::grabImage(Frame &img) {
 
     bool fileFound = false;
 
-    string filename = "";
+    std::string filename = "";
 
     path p(mFramesDir.at(mCurrDirId));
 
@@ -228,10 +228,10 @@ bool CameraFrames::grabImage(Frame &img) {
 
         if(is_regular_file(curr)){
 
-            list<string> ch;
-            string fname = curr.filename().string();
+            std::list<std::string> ch;
+            std::string fname = curr.filename().string();
             Conversion::stringTok(ch, fname.c_str(), "_");
-            list<string>::const_iterator lit(ch.begin()), lend(ch.end());
+            std::list<std::string>::const_iterator lit(ch.begin()), lend(ch.end());
             int i = 0;
             int number = 0;
 
@@ -244,7 +244,7 @@ bool CameraFrames::grabImage(Frame &img) {
 
                 if(i == ch.size() - 1){
 
-                    list<string> ch_;
+                    std::list<std::string> ch_;
                     Conversion::stringTok(ch_, (*lit).c_str(), ".");
                     number = atoi(ch_.front().c_str());
                     break;
@@ -260,7 +260,7 @@ bool CameraFrames::grabImage(Frame &img) {
                 mFirstFrameNum++;
                 fileFound = true;
 
-                cout << "FILE:" << file->path().string() << endl;
+                std::cout << "FILE:" << file->path().string() << std::endl;
                 BOOST_LOG_SEV(logger, normal) <<  "FILE:" << file->path().string();
 
                 filename = file->path().string() ;

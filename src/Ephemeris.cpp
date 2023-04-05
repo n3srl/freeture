@@ -36,7 +36,7 @@
 
 #include "Ephemeris.h"
 
-Ephemeris::Ephemeris(string date, double sunElevation, double longitude, double latitude) {
+Ephemeris::Ephemeris(std::string date, double sunElevation, double longitude, double latitude) {
 
     mPI = 4.0 * atan(1.0);
 

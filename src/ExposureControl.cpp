@@ -43,8 +43,8 @@ ExposureControl::Init ExposureControl::initializer;
 ExposureControl::ExposureControl(int timeInterval,
                                  bool saveImage,
                                  bool saveInfos,
-                                 string dataPath,
-                                 string station){
+                                 std::string dataPath,
+                                 std::string station){
 
     bin_0 = 0;
     bin_1 = 0;
@@ -95,8 +95,8 @@ ExposureControl::ExposureControl(int timeInterval,
 
     // First reference date.
     boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
-    string cDate = to_simple_string(time);
-    string dateDelimiter = ".";
+    std::string cDate = to_simple_string(time);
+    std::string dateDelimiter = ".";
     mRefDate = cDate.substr(0, cDate.find(dateDelimiter));
     mSecTime = 0;
     mNbFramesControlled = 0;
@@ -222,9 +222,9 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
 
         // Get current DATE and check number of seconds passed since last exposure control.
         boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
-        string cDate = to_simple_string(time);
-        string dateDelimiter = ".";
-        string nowDate = cDate.substr(0, cDate.find(dateDelimiter));
+        std::string cDate = to_simple_string(time);
+        std::string dateDelimiter = ".";
+        std::string nowDate = cDate.substr(0, cDate.find(dateDelimiter));
         boost::posix_time::ptime t1(boost::posix_time::time_from_string(mRefDate));
         boost::posix_time::ptime t2(boost::posix_time::time_from_string(nowDate));
         boost::posix_time::time_duration td = t2 - t1;
@@ -240,8 +240,8 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
 
                 // Get new reference DATE to count the next exposure control.
                 boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
-                string cDate = to_simple_string(time);
-                string dateDelimiter = ".";
+                std::string cDate = to_simple_string(time);
+                std::string dateDelimiter = ".";
                 mRefDate = cDate.substr(0, cDate.find(dateDelimiter));
                 mSecTime = 0;
 
@@ -555,10 +555,10 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
                                 if(checkDataLocation(imageDate)) {
 
                                     boost::filesystem::ofstream infFile;
-                                    string infFilePath = finalDataLocation + "ECInfos.txt";
+                                    std::string infFilePath = finalDataLocation + "ECInfos.txt";
                                     infFile.open(infFilePath.c_str(),std::ios_base::app);
 
-                                    string d = TimeDate::getYYYYMMDDThhmmss(imageDate);
+                                    std::string d = TimeDate::getYYYYMMDDThhmmss(imageDate);
 
                                     infFile << "# DATE : " << d << "  EXP : " << Conversion::doubleToString(exposureValue) << "  MSV : "<< Conversion::floatToString(msv) << "\n";
 
@@ -610,17 +610,17 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
 
         }else{
 
-            cout << "EXPOSURE CONTROL : " << mSecTime << "/" << autoExposureTimeInterval <<  endl;
+            std::cout << "EXPOSURE CONTROL : " << mSecTime << "/" << autoExposureTimeInterval <<  std::endl;
             return false;
         }
 
-    }catch(exception& e) {
+    }catch(std::exception& e) {
 
-        cout << "An exception occured : " << e.what() << endl;
+        std::cout << "An exception occured : " << e.what() << std::endl;
 
     }catch(const char * msg) {
 
-        BOOST_LOG_SEV(logger,fail) << msg << endl;
+        BOOST_LOG_SEV(logger,fail) << msg << std::endl;
     }
 
     // Reset variables
@@ -660,11 +660,11 @@ bool ExposureControl::checkDataLocation(TimeDate::Date date){
     path p(autoExposureDataLocation);
 
     // data/STATION_YYYYMMDD/
-    string sp1 = autoExposureDataLocation + stationName + "_" + TimeDate::getYYYYMMDD(date) +"/";
+    std::string sp1 = autoExposureDataLocation + stationName + "_" + TimeDate::getYYYYMMDD(date) +"/";
     path p1(sp1);
 
     // data/STATION_YYYMMDD/exposure/
-    string sp2 = sp1 + "exposure/";
+    std::string sp2 = sp1 + "exposure/";
     path p2(sp2);
 
     finalDataLocation = sp2;

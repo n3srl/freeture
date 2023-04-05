@@ -6,6 +6,8 @@
 #C:\Program Files\Basler\pylon 3.2\genicam\library\cpp\include
 #C:\Program Files\Basler\pylon 3.2\genicam\library\cpp\lib\win64_x64
 
+
+
 IF(${OperatingSystem} MATCHES "Windows")
 	if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
 		set( GENICAM_LIBRARY "$ENV{PYLON_GENICAM_ROOT}/library/cpp/lib/win64_x64" )
@@ -15,9 +17,9 @@ IF(${OperatingSystem} MATCHES "Windows")
 ELSE(${OperatingSystem} MATCHES "Windows")
 	IF(${OperatingSystem} MATCHES "Linux")
 		if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-			set( GENICAM_LIBRARY "/opt/pylon3/genicam/bin/Linux64_x64" )
+			set( GENICAM_LIBRARY "/opt/arenasdk/GenICam/library/lib/Linux64_x64" )
 		else( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-			set( GENICAM_LIBRARY "/opt/pylon3/genicam/bin/Linux86_x86" )
+			set( GENICAM_LIBRARY "/opt/arenasdk/GenICam/library/lib/Linux86_x86" )
 		endif( CMAKE_SIZEOF_VOID_P EQUAL 8 )
 	ENDIF(${OperatingSystem} MATCHES "Linux")
 ENDIF(${OperatingSystem} MATCHES "Windows")

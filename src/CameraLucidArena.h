@@ -47,7 +47,7 @@
         public:
             virtual void UpdateCameraList() override
             {
-                cout << "GenericAravisCameraScanner::UpdateCameraList" << endl;
+                std::cout << "GenericAravisCameraScanner::UpdateCameraList" << std::endl;
                     ArvInterface *interface;
 
                     //arv_update_device_list();
@@ -81,7 +81,7 @@
                                     c.Id = i;
                                     c.Description = "NAME[" + s + "] SDK[ARAVIS] IP: " + addr;
                                     c.DeviceId =""+s;
-                                    c.Address = string(addr);
+                                    c.Address = std::string(addr);
                                     c.Interface = j;
                                     c.Sdk = CamSdkType::ARAVIS;
 
@@ -189,7 +189,7 @@
 
             bool setPixelFormat(CamPixFmt depth);
 
-            void saveGenicamXml(string p);
+            void saveGenicamXml(std::string p);
 
             bool setSize(int startx, int starty, int width, int height, bool customSize);
 

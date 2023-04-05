@@ -67,7 +67,7 @@ void LocalEvent::computeMassCenter() {
 
     float x = 0, y = 0;
 
-    vector<Point>::iterator it;
+    std::vector<Point>::iterator it;
 
     for(it = mAbsPos.begin(); it != mAbsPos.end(); ++it){
 
@@ -91,20 +91,20 @@ void LocalEvent::setMap(Point p, int h, int w){
 
 }
 
-void LocalEvent::addAbs(vector<Point> p) {
+void LocalEvent::addAbs(std::vector<Point> p) {
 
     mAbsPos.insert(mAbsPos.end(), p.begin(), p.end());
 
 }
 
-void LocalEvent::addPos(vector<Point> p) {
+void LocalEvent::addPos(std::vector<Point> p) {
 
     mPosPos.insert(mPosPos.end(), p.begin(), p.end());
     if(mPosPos.size()!=0) mPosCluster = true;
 
 }
 
-void LocalEvent::addNeg(vector<Point> p) {
+void LocalEvent::addNeg(std::vector<Point> p) {
 
     mNegPos.insert(mNegPos.end(), p.begin(), p.end());
     if(mNegPos.size()!=0) mNegCluster = true;
@@ -115,7 +115,7 @@ bool LocalEvent::localEventIsValid() {
 
     bool posCluster = false, negCluster = false;
 
-    vector<Point>::iterator it;
+    std::vector<Point>::iterator it;
 
     // Positive cluster.
     if(mPosPos.size() != 0) {
@@ -239,7 +239,7 @@ Mat LocalEvent::createPosNegAbsMap() {
 
     Mat map = Mat::zeros(mFrameHeight, mFrameWidth, CV_8UC3);
 
-    vector<Point>::iterator it;
+    std::vector<Point>::iterator it;
 
     for(it = mAbsPos.begin(); it != mAbsPos.end(); ++it){
 

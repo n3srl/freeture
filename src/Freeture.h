@@ -84,8 +84,8 @@ namespace freeture
 
             int         mode            = -1;
             int         executionTime   = 0;
-            string      configPath      = string(CFG_PATH) + "configuration.cfg";
-            string      savePath        = "./";
+            std::string      configPath      = std::string(CFG_PATH) + "configuration.cfg";
+            std::string      savePath        = "./";
             int         acqFormat       = 0;
             int         acqWidth        = 0;
             int         acqHeight       = 0;
@@ -93,9 +93,9 @@ namespace freeture
             int         starty          = 0;
             int         gain            = 0;
             double      exp             = 0;
-            string      version         = string(VERSION);
+            std::string      version         = std::string(VERSION);
             int         devID           = 0;
-            string      fileName        = "snap";
+            std::string      fileName        = "snap";
             bool        listFormats     = false;
             bool        display         = false;
             bool        bmp             = false;
@@ -109,7 +109,7 @@ namespace freeture
             void selectListFormats();
             void selectMode( boost::program_options::variables_map&);
 
-            void initLogger( string , LogSeverityLevel );
+            void initLogger( std::string , LogSeverityLevel );
 
             void signalHandler( int signum );
 

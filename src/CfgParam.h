@@ -61,7 +61,7 @@ namespace freeture {
             std::string m_CfgFilePath;
 
             static boost::log::sources::severity_logger< LogSeverityLevel > m_Logger;
-            std::vector<string> m_EMsg;
+            std::vector<std::string> m_EMsg;
 
             CfgLoader m_Cfg;
             Device* mDevice;
@@ -90,7 +90,7 @@ namespace freeture {
              * Constructor.
              *
              */
-            CfgParam(Device*,string);
+            CfgParam(Device*,std::string);
 
             int             getDeviceID();
             dataParam       getDataParam();
