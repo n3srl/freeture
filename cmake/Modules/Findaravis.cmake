@@ -1,34 +1,52 @@
-# - Try to find Aravis
-# Once done this will define
-#  ARAVIS_FOUND - System has aravis-0.8
-#  ARAVIS_INCLUDE_DIRS - The aravis-0.8 include directories
-#  ARAVIS_LIBRARIES - The libraries needed to use aravis-0.8
-
-# http://www.cmake.org/Wiki/CMake:How_To_Find_Libraries#Using_LibFindMacros
+#
+# On successfull identification the following variables will be defined
+#
+# ARAVIS_FOUND       - system has aravis
+# ARAVIS_INCLUDE_DIR - include directories
+# ARAVIS_LIBRARIES   - linker flags
+# ARAVIS_DEFINITIONS - Compiler flags required by aravis
+#
 
 include(LibFindMacros)
 
 # Use pkg-config to get hints about paths
-libfind_pkg_check_modules(aravis_PKGCONF aravis-0.8 libaravis-0.8-0)
+# libfind_pkg_check_modules(aravis_PKGCONF aravis-0.4)
+# libfind_pkg_check_modules(aravis0_6_PKGCONF aravis-0.6)
+libfind_pkg_check_modules(aravis0_8_PKGCONF aravis-0.8)
 
 # Include dir
 find_path(aravis_INCLUDE_DIR
-	NAMES arv.h
-	PATHS ${aravis_PKGCONF_INCLUDE_DIRS} 
+	NAMES
+	arv.h
+	PATHS
+	${aravis_PKGCONF_INCLUDE_DIRS}
+	${aravis0_8_PKGCONF_INCLUDE_DIRS}
+	/usr/local/include
+	# /usr/local/include/aravis-0.4
+	/usr/local/include/aravis-0.8
+	/usr/include
+	# /usr/include/aravis-0.4
+	/usr/include/aravis-0.8
 )
-message("path : "  ${aravis_PKGCONF_INCLUDE_DIRS} )
-message("include : " ${INCLUDE_DIR})
 
 # Finally the library itself
-find_library(aravis_LIBRARY
-	NAMES aravis-0.8 libaravis-0.8-0
-	PATHS 
+find_library(aravis_LIBRARIES
+	NAMES
+	# libaravis-0.4
+	libaravis-0.8
+	aravis
+	# aravis-0.4
+	aravis-0.8
+	libaravis
+	PATHS
 	${aravis_PKGCONF_LIBRARY_DIRS}
-	
+	${aravis0_8_PKGCONF_LIBRARY_DIRS}
+	/usr/local/lib
+	/usr/lib
 )
 
-# Set the include dir variables and the libraries and let libfind_process do the rest.
-# NOTE: Singular variables for this library, plural for libraries this this lib depends on.
-set(aravis_PROCESS_INCLUDES aravis_INCLUDE_DIR aravis_INCLUDE_DIRS)
-set(aravis_PROCESS_LIBS aravis_LIBRARY aravis_LIBRARIES)
-libfind_process(aravis)
+include(FindPackageHandleStandardArgs)
+# handle the QUIETLY and REQUIRED arguments and set TCAM_FOUND to TRUE
+# if all listed variables are TRUE
+find_package_handle_standard_args(Aravis  DEFAULT_MSG
+  aravis_LIBRARIES aravis_INCLUDE_DIR)
