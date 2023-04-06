@@ -1,0 +1,3 @@
+/home/mattia/Documents/progetti/freeture/cmake/CMakeFiles/freeture.dir
+/home/mattia/Documents/progetti/freeture/cmake/CMakeFiles/edit_cache.dir
+/home/mattia/Documents/progetti/freeture/cmake/CMakeFiles/rebuild_cache.dir

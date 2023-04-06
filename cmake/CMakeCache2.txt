@@ -15,7 +15,7 @@
 ########################
 
 //Path to a file.
-ARENAAPI_INCLUDE_DIR:PATH=/opt/arenasdk/include
+ARENAAPI_INCLUDE_DIR:PATH=/usr/include
 
 //Path to a library.
 ARENAAPI_LIBRARY:FILEPATH=/opt/arenasdk/lib64/libarena.so
@@ -332,10 +332,10 @@ _GThreadLibs:FILEPATH=/usr/lib/x86_64-linux-gnu/libgthread-2.0.so
 _videodev2:PATH=/usr/include/linux
 
 //Path to a file.
-aravis_INCLUDE_DIR:PATH=/usr/include/aravis-0.8
+aravis_INCLUDE_DIR:PATH=/usr/include
 
 //Path to a library.
-aravis_LIBRARY:FILEPATH=/usr/local/lib/x86_64-linux-gnu/libaravis-0.8.so
+aravis_LIBRARIES:FILEPATH=/usr/local/lib/x86_64-linux-gnu/libaravis-0.8.so
 
 //The directory containing a CMake configuration file for boost_atomic.
 boost_atomic_DIR:PATH=/usr/lib/x86_64-linux-gnu/cmake/boost_atomic-1.74.0
@@ -393,6 +393,18 @@ pkgcfg_lib_PKG_GOBJECT2_glib-2.0:FILEPATH=/usr/lib/x86_64-linux-gnu/libglib-2.0.
 
 //Path to a library.
 pkgcfg_lib_PKG_GOBJECT2_gobject-2.0:FILEPATH=/usr/lib/x86_64-linux-gnu/libgobject-2.0.so
+
+//Path to a library.
+pkgcfg_lib_aravis0_8_PKGCONF_aravis-0.8:FILEPATH=/usr/local/lib/x86_64-linux-gnu/libaravis-0.8.so
+
+//Path to a library.
+pkgcfg_lib_aravis0_8_PKGCONF_gio-2.0:FILEPATH=/usr/lib/x86_64-linux-gnu/libgio-2.0.so
+
+//Path to a library.
+pkgcfg_lib_aravis0_8_PKGCONF_glib-2.0:FILEPATH=/usr/lib/x86_64-linux-gnu/libglib-2.0.so
+
+//Path to a library.
+pkgcfg_lib_aravis0_8_PKGCONF_gobject-2.0:FILEPATH=/usr/lib/x86_64-linux-gnu/libgobject-2.0.so
 
 
 ########################
@@ -555,7 +567,9 @@ COMPILER_SUPPORTS_CXX0X:INTERNAL=1
 //Test COMPILER_SUPPORTS_CXX11
 COMPILER_SUPPORTS_CXX11:INTERNAL=1
 //Details about finding ARENASDK
-FIND_PACKAGE_MESSAGE_DETAILS_ARENASDK:INTERNAL=[/opt/arenasdk/include;/opt/arenasdk/include/Save;/opt/arenasdk/include/GenTL;/usr/include][/opt/arenasdk/lib64][v()]
+FIND_PACKAGE_MESSAGE_DETAILS_ARENASDK:INTERNAL=[/usr/include;/opt/arenasdk/include/Save;/opt/arenasdk/include/GenTL;/usr/include][/opt/arenasdk/lib64][v()]
+//Details about finding Aravis
+FIND_PACKAGE_MESSAGE_DETAILS_Aravis:INTERNAL=[/usr/local/lib/x86_64-linux-gnu/libaravis-0.8.so][/usr/include][v()]
 //Details about finding Boost
 FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[/usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake][cfound components: thread system date_time chrono filesystem log log_setup program_options iostreams serialization ][v1.74.0(1.55.0)]
 //Details about finding CFITSIO
@@ -656,42 +670,45 @@ V4L2_INCLUDE_DIR-ADVANCED:INTERNAL=1
 V4L2_LIBRARY-ADVANCED:INTERNAL=1
 __pkg_config_arguments_PC_LibGLIB2:INTERNAL=glib-2.0
 __pkg_config_arguments_PKG_GOBJECT2:INTERNAL=REQUIRED;gobject-2.0
+__pkg_config_arguments_aravis0_8_PKGCONF:INTERNAL=aravis-0.8;QUIET
 __pkg_config_checked_PC_LibGLIB2:INTERNAL=1
 __pkg_config_checked_PKG_GOBJECT2:INTERNAL=1
-__pkg_config_checked_aravis_PKGCONF:INTERNAL=1
-//ADVANCED property for variable: aravis_INCLUDE_DIR
-aravis_INCLUDE_DIR-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: aravis_LIBRARY
-aravis_LIBRARY-ADVANCED:INTERNAL=1
-aravis_PKGCONF_CFLAGS:INTERNAL=
-aravis_PKGCONF_CFLAGS_I:INTERNAL=
-aravis_PKGCONF_CFLAGS_OTHER:INTERNAL=
-aravis_PKGCONF_FOUND:INTERNAL=
-aravis_PKGCONF_INCLUDEDIR:INTERNAL=
-aravis_PKGCONF_LIBDIR:INTERNAL=
-aravis_PKGCONF_LIBS:INTERNAL=
-aravis_PKGCONF_LIBS_L:INTERNAL=
-aravis_PKGCONF_LIBS_OTHER:INTERNAL=
-aravis_PKGCONF_LIBS_PATHS:INTERNAL=
-aravis_PKGCONF_MODULE_NAME:INTERNAL=
-aravis_PKGCONF_PREFIX:INTERNAL=
-aravis_PKGCONF_STATIC_CFLAGS:INTERNAL=
-aravis_PKGCONF_STATIC_CFLAGS_I:INTERNAL=
-aravis_PKGCONF_STATIC_CFLAGS_OTHER:INTERNAL=
-aravis_PKGCONF_STATIC_LIBDIR:INTERNAL=
-aravis_PKGCONF_STATIC_LIBS:INTERNAL=
-aravis_PKGCONF_STATIC_LIBS_L:INTERNAL=
-aravis_PKGCONF_STATIC_LIBS_OTHER:INTERNAL=
-aravis_PKGCONF_STATIC_LIBS_PATHS:INTERNAL=
-aravis_PKGCONF_VERSION:INTERNAL=
-aravis_PKGCONF_aravis-0.8_INCLUDEDIR:INTERNAL=
-aravis_PKGCONF_aravis-0.8_LIBDIR:INTERNAL=
-aravis_PKGCONF_aravis-0.8_PREFIX:INTERNAL=
-aravis_PKGCONF_aravis-0.8_VERSION:INTERNAL=
-aravis_PKGCONF_libaravis-0.8-0_INCLUDEDIR:INTERNAL=
-aravis_PKGCONF_libaravis-0.8-0_LIBDIR:INTERNAL=
-aravis_PKGCONF_libaravis-0.8-0_PREFIX:INTERNAL=
-aravis_PKGCONF_libaravis-0.8-0_VERSION:INTERNAL=
+__pkg_config_checked_aravis0_8_PKGCONF:INTERNAL=1
+aravis0_8_PKGCONF_CFLAGS:INTERNAL=-pthread;-I/usr/local/include/aravis-0.8;-I/usr/include/libxml2;-I/usr/include/libusb-1.0;-I/usr/include/libmount;-I/usr/include/blkid;-I/usr/include/glib-2.0;-I/usr/lib/x86_64-linux-gnu/glib-2.0/include
+aravis0_8_PKGCONF_CFLAGS_I:INTERNAL=
+aravis0_8_PKGCONF_CFLAGS_OTHER:INTERNAL=-pthread
+aravis0_8_PKGCONF_FOUND:INTERNAL=1
+aravis0_8_PKGCONF_INCLUDEDIR:INTERNAL=/usr/local/include
+aravis0_8_PKGCONF_INCLUDE_DIRS:INTERNAL=/usr/local/include/aravis-0.8;/usr/include/libxml2;/usr/include/libusb-1.0;/usr/include/libmount;/usr/include/blkid;/usr/include/glib-2.0;/usr/lib/x86_64-linux-gnu/glib-2.0/include
+aravis0_8_PKGCONF_LDFLAGS:INTERNAL=-L/usr/local/lib/x86_64-linux-gnu;-L/usr/lib/x86_64-linux-gnu;-laravis-0.8;-lgio-2.0;-lgobject-2.0;-lglib-2.0
+aravis0_8_PKGCONF_LDFLAGS_OTHER:INTERNAL=
+aravis0_8_PKGCONF_LIBDIR:INTERNAL=/usr/local/lib/x86_64-linux-gnu
+aravis0_8_PKGCONF_LIBRARIES:INTERNAL=aravis-0.8;gio-2.0;gobject-2.0;glib-2.0
+aravis0_8_PKGCONF_LIBRARY_DIRS:INTERNAL=/usr/local/lib/x86_64-linux-gnu;/usr/lib/x86_64-linux-gnu
+aravis0_8_PKGCONF_LIBS:INTERNAL=
+aravis0_8_PKGCONF_LIBS_L:INTERNAL=
+aravis0_8_PKGCONF_LIBS_OTHER:INTERNAL=
+aravis0_8_PKGCONF_LIBS_PATHS:INTERNAL=
+aravis0_8_PKGCONF_MODULE_NAME:INTERNAL=aravis-0.8
+aravis0_8_PKGCONF_PREFIX:INTERNAL=/usr/local
+aravis0_8_PKGCONF_STATIC_CFLAGS:INTERNAL=-pthread;-I/usr/local/include/aravis-0.8;-I/usr/include/libxml2;-I/usr/include/libusb-1.0;-I/usr/include/libmount;-I/usr/include/blkid;-I/usr/include/glib-2.0;-I/usr/lib/x86_64-linux-gnu/glib-2.0/include
+aravis0_8_PKGCONF_STATIC_CFLAGS_I:INTERNAL=
+aravis0_8_PKGCONF_STATIC_CFLAGS_OTHER:INTERNAL=-pthread
+aravis0_8_PKGCONF_STATIC_INCLUDE_DIRS:INTERNAL=/usr/local/include/aravis-0.8;/usr/include/libxml2;/usr/include/libusb-1.0;/usr/include/libmount;/usr/include/blkid;/usr/include/glib-2.0;/usr/lib/x86_64-linux-gnu/glib-2.0/include
+aravis0_8_PKGCONF_STATIC_LDFLAGS:INTERNAL=-L/usr/local/lib/x86_64-linux-gnu;-L/usr/lib/x86_64-linux-gnu;-L/usr/lib;-L/usr/lib/x86_64-linux-gnu;-laravis-0.8;-lm;-lxml2;-licui18n;-licuuc;-licudata;-lz;-llzma;-lm;-lusb-1.0;-ludev;-lgio-2.0;-lgmodule-2.0;-pthread;-lz;-lmount;-ldl;-lblkid;-lselinux;-lsepol;-lpcre2-8;-lgobject-2.0;-lffi;-lglib-2.0;-pthread;-lm;-lpcre
+aravis0_8_PKGCONF_STATIC_LDFLAGS_OTHER:INTERNAL=-pthread
+aravis0_8_PKGCONF_STATIC_LIBDIR:INTERNAL=
+aravis0_8_PKGCONF_STATIC_LIBRARIES:INTERNAL=aravis-0.8;m;xml2;icui18n;icuuc;icudata;z;lzma;m;usb-1.0;udev;gio-2.0;gmodule-2.0;z;mount;dl;blkid;selinux;sepol;pcre2-8;gobject-2.0;ffi;glib-2.0;m;pcre
+aravis0_8_PKGCONF_STATIC_LIBRARY_DIRS:INTERNAL=/usr/local/lib/x86_64-linux-gnu;/usr/lib/x86_64-linux-gnu;/usr/lib;/usr/lib/x86_64-linux-gnu
+aravis0_8_PKGCONF_STATIC_LIBS:INTERNAL=
+aravis0_8_PKGCONF_STATIC_LIBS_L:INTERNAL=
+aravis0_8_PKGCONF_STATIC_LIBS_OTHER:INTERNAL=
+aravis0_8_PKGCONF_STATIC_LIBS_PATHS:INTERNAL=
+aravis0_8_PKGCONF_VERSION:INTERNAL=0.8.26
+aravis0_8_PKGCONF_aravis-0.8_INCLUDEDIR:INTERNAL=
+aravis0_8_PKGCONF_aravis-0.8_LIBDIR:INTERNAL=
+aravis0_8_PKGCONF_aravis-0.8_PREFIX:INTERNAL=
+aravis0_8_PKGCONF_aravis-0.8_VERSION:INTERNAL=
 //ADVANCED property for variable: boost_atomic_DIR
 boost_atomic_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: boost_chrono_DIR
@@ -724,5 +741,13 @@ pkgcfg_lib_PC_LibGLIB2_glib-2.0-ADVANCED:INTERNAL=1
 pkgcfg_lib_PKG_GOBJECT2_glib-2.0-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: pkgcfg_lib_PKG_GOBJECT2_gobject-2.0
 pkgcfg_lib_PKG_GOBJECT2_gobject-2.0-ADVANCED:INTERNAL=1
-prefix_result:INTERNAL=/usr/lib/x86_64-linux-gnu
+//ADVANCED property for variable: pkgcfg_lib_aravis0_8_PKGCONF_aravis-0.8
+pkgcfg_lib_aravis0_8_PKGCONF_aravis-0.8-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_aravis0_8_PKGCONF_gio-2.0
+pkgcfg_lib_aravis0_8_PKGCONF_gio-2.0-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_aravis0_8_PKGCONF_glib-2.0
+pkgcfg_lib_aravis0_8_PKGCONF_glib-2.0-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib_aravis0_8_PKGCONF_gobject-2.0
+pkgcfg_lib_aravis0_8_PKGCONF_gobject-2.0-ADVANCED:INTERNAL=1
+prefix_result:INTERNAL=/usr/local/lib/x86_64-linux-gnu
 
