@@ -1,0 +1,3586 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="freeture"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\usr\;CMake Files\..\..\..\..\..\usr\lib\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\opencv4\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Boost-1.74.0\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_headers-1.74.0\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_thread-1.74.0\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_atomic-1.74.0\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_system-1.74.0\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_date_time-1.74.0\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_chrono-1.74.0\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_filesystem-1.74.0\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_log-1.74.0\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_regex-1.74.0\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_log_setup-1.74.0\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_program_options-1.74.0\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_iostreams-1.74.0\;CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_serialization-1.74.0\;CMake Files\Modules\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/nova/Repository/freeture/cmake"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/nova/Repository/freeture/cmake"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/nova/Repository/freeture/cmake"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="freeture">
+				<Option output="/home/nova/Repository/freeture/cmake/bin/Debug/freeture" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="bin/Debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DBOOST_ALL_NO_LIB"/>
+					<Add option="-DBOOST_THREAD_DYN_LINK"/>
+					<Add option="-DBOOST_ATOMIC_DYN_LINK"/>
+					<Add option="-DBOOST_SYSTEM_DYN_LINK"/>
+					<Add option="-DBOOST_DATE_TIME_DYN_LINK"/>
+					<Add option="-DBOOST_CHRONO_DYN_LINK"/>
+					<Add option="-DBOOST_FILESYSTEM_DYN_LINK"/>
+					<Add option="-DBOOST_LOG_DYN_LINK"/>
+					<Add option="-DBOOST_REGEX_DYN_LINK"/>
+					<Add option="-DBOOST_LOG_SETUP_DYN_LINK"/>
+					<Add option="-DBOOST_PROGRAM_OPTIONS_DYN_LINK"/>
+					<Add option="-DBOOST_IOSTREAMS_DYN_LINK"/>
+					<Add option="-DBOOST_SERIALIZATION_DYN_LINK"/>
+					<Add directory="/usr/include/glib-2.0"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/glib-2.0/include"/>
+					<Add directory="/usr/include/aravis-0.8"/>
+					<Add directory="/opt/arenasdk/include/Arena"/>
+					<Add directory="/opt/arenasdk/include/Save"/>
+					<Add directory="/opt/arenasdk/include/GenTL"/>
+					<Add directory="/opt/arenasdk/GenICam/library/CPP/include"/>
+					<Add directory="/home/nova/Repository/freeture/cmake"/>
+					<Add directory="/usr/include/opencv4"/>
+					<Add directory="/usr/include/c++/10"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/10"/>
+					<Add directory="/usr/include/c++/10/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/10/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 freeture"/>
+					<CompileFile command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="freeture/fast">
+				<Option output="/home/nova/Repository/freeture/cmake/bin/Debug/freeture" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="bin/Debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DBOOST_ALL_NO_LIB"/>
+					<Add option="-DBOOST_THREAD_DYN_LINK"/>
+					<Add option="-DBOOST_ATOMIC_DYN_LINK"/>
+					<Add option="-DBOOST_SYSTEM_DYN_LINK"/>
+					<Add option="-DBOOST_DATE_TIME_DYN_LINK"/>
+					<Add option="-DBOOST_CHRONO_DYN_LINK"/>
+					<Add option="-DBOOST_FILESYSTEM_DYN_LINK"/>
+					<Add option="-DBOOST_LOG_DYN_LINK"/>
+					<Add option="-DBOOST_REGEX_DYN_LINK"/>
+					<Add option="-DBOOST_LOG_SETUP_DYN_LINK"/>
+					<Add option="-DBOOST_PROGRAM_OPTIONS_DYN_LINK"/>
+					<Add option="-DBOOST_IOSTREAMS_DYN_LINK"/>
+					<Add option="-DBOOST_SERIALIZATION_DYN_LINK"/>
+					<Add directory="/usr/include/glib-2.0"/>
+					<Add directory="/usr/lib/x86_64-linux-gnu/glib-2.0/include"/>
+					<Add directory="/usr/include/aravis-0.8"/>
+					<Add directory="/opt/arenasdk/include/Arena"/>
+					<Add directory="/opt/arenasdk/include/Save"/>
+					<Add directory="/opt/arenasdk/include/GenTL"/>
+					<Add directory="/opt/arenasdk/GenICam/library/CPP/include"/>
+					<Add directory="/home/nova/Repository/freeture/cmake"/>
+					<Add directory="/usr/include/opencv4"/>
+					<Add directory="/usr/include/c++/10"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/10"/>
+					<Add directory="/usr/include/c++/10/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/10/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 freeture/fast"/>
+					<CompileFile command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -j16 -f &quot;/home/nova/Repository/freeture/cmake/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/AcqSchedule.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/AcqThread.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Base64.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CameraFrames.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CameraGigeAravis.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CameraGigePylon.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CameraGigeTis.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CameraV4l2.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CameraVideo.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CameraWindows.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CfgLoader.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/CfgParam.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Conversion.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/DetThread.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/DetectionTemplate.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/DetectionTemporal.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Device.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/EParser.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Ephemeris.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/ExposureControl.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Fits.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Fits2D.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Fits3D.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Frame.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/GlobalEvent.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Histogram.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/HistogramGray.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/HistogramRGB.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/ImgProcessing.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/LocalEvent.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Mask.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/OpenSSL.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/PixFmtConv.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/SMTPClient.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/SaveImg.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/Stack.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/StackThread.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/TimeDate.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/.deps/main.Po">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/AcqSchedule.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/AcqSchedule.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/AcqThread.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/AcqThread.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Base64.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Base64.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Camera.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraFrames.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraFrames.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraGigeAravis.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraGigeAravis.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraGigeAravisScanner.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraGigeAravisScanner.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraGigePylon.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraGigePylon.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraGigeTis.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraGigeTis.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraLucidArena.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraLucidArena.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraLucidArenaScanner.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraLucidArenaScanner.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraLucidArena_PHX016S.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraLucidArena_PHX016S.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraLucidArena_PHX016SScanner.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraLucidArena_PHX016SScanner.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraScanner.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraScanner.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraV4l2.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraV4l2.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraVideo.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraVideo.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraWindows.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CameraWindows.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CfgLoader.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CfgLoader.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CfgParam.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/CfgParam.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Circle.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Constants.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Conversion.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Conversion.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/DetThread.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/DetThread.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Detection.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/DetectionTemplate.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/DetectionTemplate.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/DetectionTemporal.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/DetectionTemporal.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Device.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Device.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Doxyfile">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/ECamPixFmt.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/ECamSdkType.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/EDetMeth.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/EImgBitDepth.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/EImgFormat.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/EInputDeviceType.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/ELogSeverityLevel.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/EParser.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/EParser.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/ESmtpSecurity.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/EStackMeth.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/ETimeMode.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Ephemeris.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Ephemeris.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/ErrorManager.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/ErrorManager.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/ExposureControl.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/ExposureControl.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Fits.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Fits.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Fits2D.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Fits2D.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Fits3D.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Fits3D.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Frame.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Frame.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Freeture.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Freeture.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/GlobalEvent.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/GlobalEvent.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Histogram.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Histogram.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/HistogramGray.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/HistogramGray.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/HistogramRGB.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/HistogramRGB.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/ImgProcessing.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/ImgProcessing.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/LocalEvent.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/LocalEvent.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Logger.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Makefile">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Makefile.am">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Makefile.in">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Mask.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Mask.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/NodeExporterMetrics.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/NodeExporterMetrics.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/OpenSSL.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/OpenSSL.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/PixFmtConv.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/PixFmtConv.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/SMTPClient.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/SMTPClient.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/SParam.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/SaveImg.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/SaveImg.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Socket.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Stack.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/Stack.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/StackThread.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/StackThread.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/TimeDate.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/TimeDate.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/main.cpp">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Base/GCArray.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Base/GCBase.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Base/GCCompatibility.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Base/GCError.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Base/GCException.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Base/GCLinkage.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Base/GCNamespace.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Base/GCRTSSUtilities.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Base/GCString.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Base/GCStringVector.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Base/GCSynch.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Base/GCTypes.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Base/GCUtilities.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/CLAllAdapter.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/CLAutoBuffer.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/CLException.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/CLPort.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/CLProtocol.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/CLProtocolLinkage.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/CVersion.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/ClAllSerial.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/ClProtocol.def">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/ClSerial.def">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/ClSerial.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/ClSerialTypes.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/DeviceID.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/ISerial.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/ISerialAdapter.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/ISerialAdapterCStyle.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/CLProtocol/XMLID.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Factory/DataStream.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Factory/Device.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Factory/Factory.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Factory/Registry/RegDevice.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Factory/Registry/RegGlue.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Factory/Registry/RegRegistry.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Factory/Registry/RegTLClient.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Factory/Registry/RegXml.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Factory/Registry/RegXmlDescription.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/FirmwareUpdate/Destructible.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/FirmwareUpdate/FirmwareUpdatableDevice.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/FirmwareUpdate/FirmwareUpdateDefaultInfoCollector.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/FirmwareUpdate/FirmwareUpdateDll.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/FirmwareUpdate/FirmwareUpdateExceptions.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/FirmwareUpdate/FirmwareUpdateInfo.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/FirmwareUpdate/FirmwareUpdateInfoCollector.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/FirmwareUpdate/FirmwareUpdateLinkage.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/FirmwareUpdate/FirmwareUpdateProgressObserver.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/FirmwareUpdate/FirmwareUpdater.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/Autovector.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/ChunkAdapter.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/ChunkAdapterDcam.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/ChunkAdapterGEV.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/ChunkAdapterGenDC.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/ChunkAdapterGeneric.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/ChunkAdapterU3V.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/ChunkPort.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/Compatibility.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/ConcatenatedWrite.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/Container.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/Counter.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/DLLLoad.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/EnumClasses.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/EventAdapter.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/EventAdapter1394.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/EventAdapterCL.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/EventAdapterGEV.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/EventAdapterGeneric.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/EventAdapterU3V.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/EventPort.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/Filestream.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/GenApi.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/GenApiDll.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/GenApiLinkage.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/GenApiNamespace.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/GenApiTutorial/GettingStarted_StaticUseCase.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/GenApiTutorial/GettingStarted_StaticUseCaseParams.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/GenApiVersion.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IBase.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IBoolean.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/ICategory.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IChunkPort.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/ICommand.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IDestroy.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IDeviceInfo.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IEnumEntry.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IEnumeration.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IEnumerationT.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IFloat.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IInteger.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/INode.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/INodeMap.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/INodeMapDyn.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IPort.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IPortConstruct.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IPortRecorder.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IPortStacked.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IRegister.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/ISelector.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/ISelectorDigit.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IString.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IUserData.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/IValue.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/NodeCallback.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/NodeMapFactory.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/NodeMapRef.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/Persistence.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/Pointer.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/PortImpl.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/PortStackedImpl.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/PortWriteList.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/Reference.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/RegisterSetHelper.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/SelectorSet.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/SnipperTest/PostprocessingTest_TestStatic.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/SnipperTest/PostprocessingTest_TestStaticParams.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/SnipperTest/XMLExtractionTest_TestGenICamSupport_FloatingInt.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/SnipperTest/XMLExtractionTest_TestGenICamSupport_FloatingIntParams.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/StructPort.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/Synch.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/Test/EmptyFile.txt">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/Types.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/ValueArrayAdapter.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/AutovectorImpl.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/BaseT.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/Boolean.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/BooleanT.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/CacheFile.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/Category.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/Command.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/CommandT.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/ConcatenatedWriteImpl.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/Converter.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/DcamAccessCtrlReg.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/EnumEntry.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/Enumeration.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/EnumerationT.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/Exception.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/Float.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/FloatT.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/FltReg.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/GenApiUtilities.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/GlobalPragmas.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/IEEE1212Parser.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/INodeMapPrivate.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/INodePrivate.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/IntConverter.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/IntKey.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/IntReg.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/IntSwissKnife.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/Integer.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/IntegerT.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/Internal_Compatibility.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/Log.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/MaskedIntReg.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/MathParser/Int64Lexer.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/MathParser/Int64MathParser.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/MathParser/Lexer.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/MathParser/MathParser.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/MathParser/MathParserDll.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/MathParser/MathParserTypes.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/MathParser/StaticMathCharTypeTable.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/MathParser/StrMap.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/MathParser/SymTable.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/Node.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/NodeMap.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/NodeT.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/PointerImpl.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/PolyReference.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/Port.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/PrivateTypes.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/Register.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/RegisterT.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/SelectorDigit.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/SmartFeature.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/StringNode.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/StringReg.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/StringT.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/SwissKnife.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/SwissKnifeT.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/Txtkey.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/Value2String.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/ValueCache.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/ValueNode.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/ValueT.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/gcmemory.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenApi/impl/xxhash.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenCP/gencp_defines.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenICam.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenICamFwd.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenICamTestRoot.h.in">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenICamVersion.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/GenICamVersion.h.in">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Log/CLog.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Log/ILogger.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Log/ILoggerFactory.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Log/LogDll.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/NodeMapData/NodeData.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/NodeMapData/NodeDataMap.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/NodeMapData/NodeMapData.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/NodeMapData/NodeMapDataEnums.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/NodeMapData/NodeMapDataTypes.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/NodeMapData/Property.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/NodeMapData/PropertyID.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/RTmalloc/RTmalloc.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/TLI/GenTL.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Utilities/FirmwareUpdaterEx.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Utilities/GenICamRoot.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Utilities/GenICamTestRoot.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/Utilities/LoadXmlFromFile.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/XmlParser/GenApiSchema_Version_1_1-pimpl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/XmlParser/GenApiSchema_Version_1_1-pskel.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/XmlParser/NodeMapDataBuilder.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/XmlParser/NodeMapDataPtrs.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/XmlParser/XmlParser.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/XmlParser/XmlParserStringToEnum.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/XmlParser/XmlParserValue2String.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/_GenICamVersion.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/AdditionalMessage.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/Asserter.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/BriefTestProgressListener.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/CompilerOutputter.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/CppUnitLinkage.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/Exception.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/Message.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/Outputter.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/Portability.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/Protector.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/SourceLine.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/SynchronizedObject.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/Test.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TestAssert.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TestCaller.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TestCase.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TestComposite.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TestFailure.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TestFixture.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TestLeaf.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TestListener.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TestPath.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TestResult.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TestResultCollector.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TestRunner.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TestSuccessListener.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TestSuite.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TextOutputter.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TextTestProgressListener.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TextTestResult.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/TextTestRunner.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/XmlOutputter.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/XmlOutputterHook.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/config-auto.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/config/CppUnitApi.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/config/SelectDllLoader.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/config/SourcePrefix.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/config/config-bcb5.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/config/config-evc4.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/config/config-mac.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/config/config-msvc6.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/extensions/AutoRegisterSuite.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/extensions/ExceptionTestCaseDecorator.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/extensions/HelperMacros.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/extensions/Orthodox.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/extensions/RepeatedTest.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/extensions/TestCaseDecorator.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/extensions/TestDecorator.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/extensions/TestFactory.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/extensions/TestFactoryRegistry.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/extensions/TestFixtureFactory.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/extensions/TestNamer.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/extensions/TestSetUp.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/extensions/TestSuiteBuilderContext.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/extensions/TestSuiteFactory.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/extensions/TypeInfoHelper.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/plugin/DynamicLibraryManager.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/plugin/DynamicLibraryManagerException.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/plugin/PlugInManager.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/plugin/PlugInParameters.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/plugin/TestPlugIn.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/plugin/TestPlugInDefaultImpl.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/portability/CppUnitDeque.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/portability/CppUnitMap.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/portability/CppUnitSet.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/portability/CppUnitStack.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/portability/CppUnitVector.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/portability/FloatingPoint.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/portability/Stream.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/tools/Algorithm.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/tools/StringTools.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/tools/XmlDocument.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/tools/XmlElement.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/ui/mfc/MfcTestRunner.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/ui/mfc/TestRunner.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/ui/qt/Config.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/ui/qt/QtTestRunner.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/ui/qt/TestRunner.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/ui/text/TestRunner.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunit/ui/text/TextTestRunner.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunitex/HelperMacrosEx.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunitex/LogEx.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunitex/LogOutputter.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunitex/LogTestProgressListener.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunitex/TestCallerEx.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunitex/TestCaseEx.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunitex/XmlHook4CC.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunitex/teamcity_cppunit.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunitex/teamcity_messages.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunitex/teamcity_readme.txt">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/cppunitex/ui/text/TextTestRunnerEx.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/AbortAppender.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/Appender.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/AppenderSkeleton.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/AppendersFactory.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/BasicConfigurator.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/BasicLayout.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/BufferingAppender.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/Category.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/CategoryAdapter.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/CategoryStream.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/Configurator.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/Export.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/Extensions/RTSSUtilities.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/Extensions/Utilities.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/FactoryParams.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/FileAppender.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/Filter.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/FixedContextCategory.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/HierarchyMaintainer.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/IdsaAppender.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/Layout.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/LayoutAppender.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/LayoutsFactory.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/LevelEvaluator.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/Log4cppAdapter.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/LoggingEvent.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/Manipulator.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/NDC.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/NTEventLogAppender.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/OstreamAppender.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/PassThroughLayout.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/PatternLayout.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/Portability.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/Priority.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/PropertyConfigurator.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/RemoteSyslogAppender.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/RollingFileAppender.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/SimpleConfigurator.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/SimpleLayout.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/StringQueueAppender.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/SyslogAppender.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/TimeStamp.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/TriggeringEventEvaluator.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/TriggeringEventEvaluatorFactory.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/Win32DebugAppender.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/Wrapper.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/config-openvms.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/config-win32.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/config.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/convenience.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/threading/BoostThreads.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/threading/DummyThreads.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/threading/MSThreads.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/threading/OmniThreads.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/threading/PThreads.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/log4cpp/threading/Threading.hh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/allocator.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/compilers/ghs/post.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/compilers/ghs/pre.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/compilers/vc-8/post.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/compilers/vc-8/pre.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/COPYING">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/ascii.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/asciitab.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/config.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/expat.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/expat_external.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/iasciitab.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/internal.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/latin1tab.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/nametab.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/siphash.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/utf8tab.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmlrole.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/genx/COPYING">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/genx/genx.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/post.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/pre.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/regexp/COPYING">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/regexp/chvalid.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/regexp/xmlregexp.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/regexp/xmlunicode.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/config.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/allocator.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/allocator.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/buffer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/buffer.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/compilers/ghs/post.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/compilers/ghs/pre.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/compilers/vc-6/post.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/compilers/vc-6/pre.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/compilers/vc-7/post.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/compilers/vc-7/pre.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/compilers/vc-8/post.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/compilers/vc-8/pre.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/config.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/date-time.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/date-time.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/errno.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/errno.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/exceptions.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/guard.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hashmap.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hashmap.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/any-type-pimpl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/any-type-pskel.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/any-type-pskel.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/any-type-simpl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/any-type-sskel.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/any-type-sskel.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/any-type.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/base.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/cdr/exceptions.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/cdr/istream.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/cdr/istream.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/cdr/istream.txx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/cdr/ostream.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/cdr/ostream.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/cdr/ostream.txx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/parser-map.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/sequence.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/sequence.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/sequence.txx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/serializer-map.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/xdr/exceptions.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/xdr/istream.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/xdr/istream.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/xdr/istream.txx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/xdr/ostream.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/xdr/ostream.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/xdr/ostream.txx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/hybrid/xml-schema.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/iso8859-1.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/iso8859-1.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/context.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/context.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/elements.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/elements.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/error.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/error.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/exceptions.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/exceptions.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/expat/document.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/expat/document.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/expat/xml-error.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/map.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/map.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/any-simple-type-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/any-simple-type.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/any-type.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/base64-binary.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/boolean.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/byte.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/date-time.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/date.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/decimal.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/double.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/duration.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/float.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/gday.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/gmonth-day.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/gmonth.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/gyear-month.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/gyear.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/hex-binary.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/id-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/id.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/idref-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/idref.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/idrefs-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/idrefs.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/int.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/language-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/language.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/long-long.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/long.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/name-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/name.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/ncname-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/ncname.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/negative-integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/nmtoken-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/nmtoken.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/nmtokens-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/nmtokens.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/non-negative-integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/non-positive-integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/normalized-string-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/normalized-string.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/number.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/parser.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/parser.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/positive-integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/qname-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/qname.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/short.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/string-common.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/string-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/string.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/time-zone.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/time.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/token-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/token.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/unsigned-byte.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/unsigned-int.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/unsigned-long-long.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/unsigned-long.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/unsigned-short.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/uri-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/uri.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/xml-schema-pimpl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/xml-schema-pskel.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/non-validating/xml-schema-pskel.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/state.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/state.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/substitution-map-callback.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/substitution-map-load.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/substitution-map.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/substitution-map.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/any-simple-type-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/any-simple-type.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/any-type.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/base64-binary.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/boolean.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/byte.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/date-time.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/date.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/decimal.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/double.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/duration.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/float.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/gday.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/gmonth-day.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/gmonth.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/gyear-month.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/gyear.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/hex-binary.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/id-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/id.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/idref-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/idref.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/idrefs-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/idrefs.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/inheritance-map-load.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/inheritance-map.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/inheritance-map.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/int.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/language-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/language.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/long-long.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/long.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/name-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/name.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/ncname-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/ncname.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/negative-integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/nmtoken-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/nmtoken.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/nmtokens-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/nmtokens.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/non-negative-integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/non-positive-integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/normalized-string-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/normalized-string.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/number.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/parser.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/parser.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/positive-integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/qname-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/qname.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/short.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/string-common.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/string-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/string.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/time-zone.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/time.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/token-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/token.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/unsigned-byte.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/unsigned-int.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/unsigned-long-long.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/unsigned-long.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/unsigned-short.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/uri-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/uri.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/xml-schema-pimpl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/xml-schema-pskel.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/validating/xml-schema-pskel.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/parser/xml-schema.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/post.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/pre.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/qname-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/qname-stl.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/qname.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/qname.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/ro-string.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/ro-string.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/schema-error.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/schema-error.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/sequence-base.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/sequence-base.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/context.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/context.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/elements.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/elements.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/error.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/error.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/exceptions.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/exceptions.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/genx/document.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/genx/document.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/genx/xml-error.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/map.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/map.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/any-simple-type-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/any-simple-type.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/any-simple-type.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/any-type.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/base64-binary.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/base64-binary.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/boolean.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/byte.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/date-time.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/date-time.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/date.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/date.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/decimal.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/decimal.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/double.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/double.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/duration.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/duration.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/float.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/float.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/gday.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/gday.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/gmonth-day.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/gmonth-day.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/gmonth.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/gmonth.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/gyear-month.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/gyear-month.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/gyear.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/gyear.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/hex-binary.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/hex-binary.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/id-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/id.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/id.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/idref-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/idref.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/idref.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/idrefs-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/idrefs-stl.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/idrefs.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/idrefs.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/int.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/language-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/language.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/language.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/long-long.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/long.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/name-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/name.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/name.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/ncname-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/ncname.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/ncname.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/negative-integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/nmtoken-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/nmtoken.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/nmtoken.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/nmtokens-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/nmtokens-stl.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/nmtokens.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/nmtokens.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/non-negative-integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/non-positive-integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/normalized-string-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/normalized-string.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/normalized-string.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/positive-integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/qname-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/qname-stl.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/qname.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/qname.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/serializer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/serializer.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/short.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/string-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/string.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/string.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/time-zone.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/time.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/time.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/token-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/token.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/token.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/unsigned-byte.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/unsigned-int.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/unsigned-long-long.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/unsigned-long.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/unsigned-short.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/uri-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/uri.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/uri.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/xml-schema-simpl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/xml-schema-sskel.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/non-validating/xml-schema-sskel.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/substitution-map-callback.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/substitution-map-load.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/substitution-map.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/substitution-map.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/any-simple-type-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/any-simple-type.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/any-simple-type.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/any-type.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/base64-binary.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/base64-binary.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/boolean.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/byte.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/date-time.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/date-time.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/date.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/date.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/decimal.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/decimal.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/double.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/double.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/duration.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/duration.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/float.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/float.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/gday.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/gday.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/gmonth-day.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/gmonth-day.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/gmonth.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/gmonth.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/gyear-month.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/gyear-month.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/gyear.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/gyear.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/hex-binary.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/hex-binary.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/id-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/id.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/id.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/idref-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/idref.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/idref.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/idrefs-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/idrefs-stl.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/idrefs.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/idrefs.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/inheritance-map-load.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/inheritance-map.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/inheritance-map.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/int.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/language-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/language.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/language.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/long-long.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/long.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/name-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/name.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/name.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/ncname-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/ncname.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/ncname.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/negative-integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/nmtoken-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/nmtoken.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/nmtoken.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/nmtokens-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/nmtokens-stl.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/nmtokens.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/nmtokens.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/non-negative-integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/non-positive-integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/normalized-string-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/normalized-string.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/normalized-string.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/positive-integer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/qname-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/qname-stl.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/qname.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/qname.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/serializer.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/serializer.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/short.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/string-common.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/string-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/string.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/string.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/time-zone.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/time-zone.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/time.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/time.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/token-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/token.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/token.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/unsigned-byte.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/unsigned-int.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/unsigned-long-long.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/unsigned-long.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/unsigned-short.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/uri-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/uri.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/uri.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/xml-schema-simpl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/xml-schema-sskel.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/validating/xml-schema-sskel.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/serializer/xml-schema.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/stack.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/stack.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/strdupx.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/string-search.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/string-sequence-stl.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/string-sequence-stl.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/string-sequence.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/string-sequence.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/string.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/string.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/sys-error.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/sys-error.ixx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/version.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/xml/char-table.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/cxx/xml/ncname.hxx">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/CPP/include/xsde/localehelper.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/lib/Linux64_x64/libGCBase_gcc54_v3_3_LUCID.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/lib/Linux64_x64/libGenApi_gcc54_v3_3_LUCID.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/lib/Linux64_x64/libLog_gcc54_v3_3_LUCID.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/lib/Linux64_x64/libMathParser_gcc54_v3_3_LUCID.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/lib/Linux64_x64/libNodeMapData_gcc54_v3_3_LUCID.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/lib/Linux64_x64/libXmlParser_gcc54_v3_3_LUCID.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/GenICam/library/lib/Linux64_x64/liblog4cpp_gcc54_v3_3_LUCID.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/arenasdk.conf">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavcodec.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavcodec.so.58">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavcodec.so.58.18.100">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavformat.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavformat.so.58">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavformat.so.58.12.100">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavutil.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavutil.so.56">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libavutil.so.56.14.100">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libswresample.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libswresample.so.3">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/ffmpeg/libswresample.so.3.1.100">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/Arena.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/ArenaApi.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/ArenaDefs.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/DeviceInfo.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/FeatureStream.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/GenApiCustom.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/IBuffer.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/IChunkData.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/IDevice.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/IDisconnectCallback.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/IImage.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/ISystem.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/ImageFactory.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/InterfaceInfo.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/PFNC.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Arena/PFNCCustom.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/GenTL/GenTL.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/GenTL/GenTLCustom.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Save/ImageParams.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Save/ImageReader.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Save/ImageWriter.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Save/SaveApi.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Save/SaveDefs.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Save/Version.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Save/VideoParams.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/include/Save/VideoRecorder.h">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/install.sh">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libarena.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libarena.so.0">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libarena.so.0.1.68">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libarenac.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libarenac.so.0">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libarenac.so.0.1.68">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libarenacd.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libarenacd.so.0">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libarenacd.so.0.1.68">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libarenad.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libarenad.so.0">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libarenad.so.0.1.68">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libgentl.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libgentl.so.0">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libgentl.so.0.1.68">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libgentld.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libgentld.so.0">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libgentld.so.0.1.68">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/liblucidlog.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/liblucidlog.so.0">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/liblucidlog.so.0.1.68">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/liblucidlogd.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/liblucidlogd.so.0">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/liblucidlogd.so.0.1.68">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libsave.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libsave.so.0">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libsave.so.0.1.68">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libsavec.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libsavec.so.0">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libsavec.so.0.1.68">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libsavecd.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libsavecd.so.0">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libsavecd.so.0.1.68">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libsaved.so">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libsaved.so.0">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/src/sdk/lib64/libsaved.so.0.1.68">
+			<Option target="freeture"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/config.h.in">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/BoostDetectToolset-1.74.0.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/opencv4/OpenCVConfig-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\opencv4\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/opencv4/OpenCVConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\opencv4\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/opencv4/OpenCVModules-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\opencv4\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/opencv4/OpenCVModules.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\opencv4\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Boost-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\Boost-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_headers-1.74.0/boost_headers-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_headers-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_headers-1.74.0/boost_headers-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_headers-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_thread-1.74.0/boost_thread-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_thread-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_thread-1.74.0/boost_thread-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_thread-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_thread-1.74.0/libboost_thread-variant-shared.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_thread-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_thread-1.74.0/libboost_thread-variant-static.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_thread-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_atomic-1.74.0/boost_atomic-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_atomic-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_atomic-1.74.0/boost_atomic-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_atomic-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_atomic-1.74.0/libboost_atomic-variant-shared.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_atomic-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_atomic-1.74.0/libboost_atomic-variant-static.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_atomic-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_system-1.74.0/boost_system-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_system-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_system-1.74.0/boost_system-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_system-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_system-1.74.0/libboost_system-variant-shared.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_system-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_system-1.74.0/libboost_system-variant-static.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_system-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_date_time-1.74.0/boost_date_time-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_date_time-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_date_time-1.74.0/boost_date_time-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_date_time-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_date_time-1.74.0/libboost_date_time-variant-shared.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_date_time-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_date_time-1.74.0/libboost_date_time-variant-static.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_date_time-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_chrono-1.74.0/boost_chrono-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_chrono-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_chrono-1.74.0/boost_chrono-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_chrono-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_chrono-1.74.0/libboost_chrono-variant-shared.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_chrono-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_chrono-1.74.0/libboost_chrono-variant-static.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_chrono-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_filesystem-1.74.0/boost_filesystem-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_filesystem-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_filesystem-1.74.0/boost_filesystem-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_filesystem-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_filesystem-1.74.0/libboost_filesystem-variant-shared.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_filesystem-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_filesystem-1.74.0/libboost_filesystem-variant-static.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_filesystem-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_log-1.74.0/boost_log-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_log-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_log-1.74.0/boost_log-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_log-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_log-1.74.0/libboost_log-variant-shared.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_log-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_log-1.74.0/libboost_log-variant-static.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_log-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_regex-1.74.0/boost_regex-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_regex-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_regex-1.74.0/boost_regex-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_regex-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_regex-1.74.0/libboost_regex-variant-shared.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_regex-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_regex-1.74.0/libboost_regex-variant-static.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_regex-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_log_setup-1.74.0/boost_log_setup-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_log_setup-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_log_setup-1.74.0/boost_log_setup-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_log_setup-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_log_setup-1.74.0/libboost_log_setup-variant-shared.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_log_setup-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_log_setup-1.74.0/libboost_log_setup-variant-static.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_log_setup-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_program_options-1.74.0/boost_program_options-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_program_options-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_program_options-1.74.0/boost_program_options-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_program_options-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_program_options-1.74.0/libboost_program_options-variant-shared.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_program_options-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_program_options-1.74.0/libboost_program_options-variant-static.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_program_options-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_iostreams-1.74.0/boost_iostreams-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_iostreams-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_iostreams-1.74.0/boost_iostreams-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_iostreams-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_iostreams-1.74.0/libboost_iostreams-variant-shared.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_iostreams-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_iostreams-1.74.0/libboost_iostreams-variant-static.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_iostreams-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_serialization-1.74.0/boost_serialization-config-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_serialization-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_serialization-1.74.0/boost_serialization-config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_serialization-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_serialization-1.74.0/libboost_serialization-variant-shared.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_serialization-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/../../../../../usr/lib/x86_64-linux-gnu/cmake/boost_serialization-1.74.0/libboost_serialization-variant-static.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\boost_serialization-1.74.0\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/Modules/FindArenaSDK.cmake">
+			<Option virtualFolder="CMake Files\Modules\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/Modules/FindCFITSIO.cmake">
+			<Option virtualFolder="CMake Files\Modules\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/Modules/FindGLIB2.cmake">
+			<Option virtualFolder="CMake Files\Modules\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/Modules/FindGObject.cmake">
+			<Option virtualFolder="CMake Files\Modules\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/Modules/FindOpenSSL.cmake">
+			<Option virtualFolder="CMake Files\Modules\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/Modules/FindV4L2.cmake">
+			<Option virtualFolder="CMake Files\Modules\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/Modules/Findaravis.cmake">
+			<Option virtualFolder="CMake Files\Modules\"/>
+		</Unit>
+		<Unit filename="/home/nova/Repository/freeture/cmake/Modules/LibFindMacros.cmake">
+			<Option virtualFolder="CMake Files\Modules\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

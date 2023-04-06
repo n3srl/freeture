@@ -1,0 +1,3 @@
+/home/nova/Repository/freeture/cmake/CMakeFiles/rebuild_cache.dir
+/home/nova/Repository/freeture/cmake/CMakeFiles/edit_cache.dir
+/home/nova/Repository/freeture/cmake/CMakeFiles/freeture.dir

@@ -318,9 +318,4 @@ configure_file(
 )
 include_directories("${PROJECT_BINARY_DIR}")
 
-#Added install action
-set(CMAKE_INSTALL_PREFIX /freeture)
-
-install(TARGETS)
-
 
