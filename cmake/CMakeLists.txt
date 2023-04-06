@@ -22,7 +22,7 @@ message("> SOURCES : " ${SRC_FILES})
 #------------------------------------------------
 # To see the command line CMake produces :
 set(CMAKE_VERBOSE_MAKEFILE on)
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 
 #------------------------------------------------
 # Output path.
