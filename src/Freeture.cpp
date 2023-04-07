@@ -431,7 +431,7 @@ void freeture::Freeture::modeMeteorDetection()
     /// ------------------------------------------------------------------
     /// ------------------------- SHARED RESSOURCES ----------------------
     /// ------------------------------------------------------------------
-
+    cout << "> QUI : " << pLog << endl;
     // Circular buffer to store last n grabbed frames.
     boost::circular_buffer<Frame> frameBuffer(cfg.getDetParam().ACQ_BUFFER_SIZE * cfg.getCamParam().ACQ_FPS);
     boost::mutex frameBuffer_m;

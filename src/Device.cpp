@@ -394,20 +394,20 @@ InputDeviceType freeture::Device::getDeviceType(CamSdkType t) {
 
 void freeture::Device::mergeList( std::vector<CameraDescription>& Devices )
 {
-
         //foreach device found test if already exists. if not add to list
         for (int i=0;i<Devices.size();i++)
         {
             bool add_to_list = true;
 
             for (int j=0;j<listCams.size();j++)
-                if (listCams[j].Address==Devices[i].Address)
+                if (listCams[j].Address==Devices[i].Address && listCams[j].Sdk == Devices[i].Sdk) 
                 {
                     add_to_list = false;
                     break;
                 }
 
             if (add_to_list)
+                
                 listCams.push_back(Devices[i]);
         }
 }
@@ -492,11 +492,14 @@ void freeture::Device::listDevices(bool printInfos)
 
         mergeList(aravis_scanner->Devices);
 
+        
         if(printInfos)
             for(int i = 0; i < listCams.size(); i++)
             {
                 CameraDescription cam = listCams[i];
+                cam.Id = i;
                 cout << "[" << cam.Id << "]    " << cam.Description <<endl;
+                mNbDev++;
             }
         // V4L
         //CameraScanner* v4l_scanner = Camera::Scanner->CreateScanner(CamSdkType::V4L2);
