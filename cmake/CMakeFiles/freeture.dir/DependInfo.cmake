@@ -43,6 +43,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/freeture/src/AcqSchedule.cpp" "/freeture/cmake/CMakeFiles/freeture.dir/freeture/src/AcqSchedule.cpp.o"
   "/freeture/src/AcqThread.cpp" "/freeture/cmake/CMakeFiles/freeture.dir/freeture/src/AcqThread.cpp.o"
   "/freeture/src/Base64.cpp" "/freeture/cmake/CMakeFiles/freeture.dir/freeture/src/Base64.cpp.o"
+  "/freeture/src/CameraDeviceManager.cpp" "/freeture/cmake/CMakeFiles/freeture.dir/freeture/src/CameraDeviceManager.cpp.o"
   "/freeture/src/CameraFrames.cpp" "/freeture/cmake/CMakeFiles/freeture.dir/freeture/src/CameraFrames.cpp.o"
   "/freeture/src/CameraGigeAravis.cpp" "/freeture/cmake/CMakeFiles/freeture.dir/freeture/src/CameraGigeAravis.cpp.o"
   "/freeture/src/CameraGigeAravisScanner.cpp" "/freeture/cmake/CMakeFiles/freeture.dir/freeture/src/CameraGigeAravisScanner.cpp.o"

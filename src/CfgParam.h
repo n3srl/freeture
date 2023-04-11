@@ -41,12 +41,14 @@
 #include "CfgParam.h"
 #include "CfgLoader.h"
 #include "Device.h"
+#include "CameraDeviceManager.h"
 
 namespace freeture {
 
     class CfgParam{
 
         private :
+            
             static class Init {
 
                 public :
@@ -65,10 +67,12 @@ namespace freeture {
 
             CfgLoader m_Cfg;
             Device* mDevice;
+            CameraDeviceManager& manager = CameraDeviceManager::Get();
             parameters m_Param;
             InputDeviceType m_InputType;
 
             void loadDeviceID();
+            void loadDeviceID_old();
             void loadDataParam();
             void loadLogParam();
             void loadFramesParam();
@@ -104,6 +108,7 @@ namespace freeture {
             fitskeysParam   getFitskeysParam();
             mailParam       getMailParam();
             parameters      getAllParam();
+            
 
             bool deviceIdIsCorrect();
             bool dataParamIsCorrect();

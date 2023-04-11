@@ -55,8 +55,8 @@ void CameraLucidArena_PHX016SScanner::UpdateCameraList()
                 //const char* str = arv_get_device_id(i);
                 const char* str = name;
                 const char* addr = device_info.IpAddressStr();
-                std::string s = str;
-
+                std::string s = s_name;
+                //std::cout << "FIND " + s_name << std::endl;
                 c.Id = i;
                 c.Description = "NAME[" + s + "] SDK[ARENASDK] IP: " + addr;
                 c.DeviceId =std::string(name);

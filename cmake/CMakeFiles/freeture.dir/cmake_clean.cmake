@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/freeture.dir/freeture/src/AcqSchedule.cpp.o"
   "CMakeFiles/freeture.dir/freeture/src/AcqThread.cpp.o"
   "CMakeFiles/freeture.dir/freeture/src/Base64.cpp.o"
+  "CMakeFiles/freeture.dir/freeture/src/CameraDeviceManager.cpp.o"
   "CMakeFiles/freeture.dir/freeture/src/CameraFrames.cpp.o"
   "CMakeFiles/freeture.dir/freeture/src/CameraGigeAravis.cpp.o"
   "CMakeFiles/freeture.dir/freeture/src/CameraGigeAravisScanner.cpp.o"

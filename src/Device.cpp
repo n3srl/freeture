@@ -42,6 +42,8 @@
 #include "CameraLucidArena_PHX016S.h"
 #include "CameraLucidArena.h"
 
+#include "CameraDeviceManager.h"
+
 
 using namespace boost::filesystem;
 using namespace cv;
@@ -131,26 +133,31 @@ freeture::Device::~Device()
 bool freeture::Device::createCamera(int id, bool create)
 {
     freeture::Log("Device::createCamera(int,bool)");
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
 
-    if(id >=0 && id < mDevices.size())
+    //freeture::Device* mDevice = manager.getDevice();
+    
+    if(id >=0 && id < manager.deviceNumber - 1)
     {
-
+        CameraDescription camera = manager.getListDevice().at(id);
+        Camera* cam = manager.getDevice()->mCam;
+        freeture::Device* device = manager.getDevice();
         // Create Camera object with the correct sdk.
-        if ( !createDevicesWith(mDevices.at(id).second.second) )
+        if ( !createDevicesWith(camera.Sdk) )
         {
+            std::cout << "Fail to select correct sdk"<< std::endl;
             EParser<CamSdkType> parser;
-            cout << "Fail to select correct sdk : "<<parser.getStringEnum( mDevices.at(id).second.second )<< endl;
+            std::cout << "Fail to select correct sdk : "<<parser.getStringEnum( mDevices.at(id).second.second )<< std::endl;
             return false;
         }
 
-        mCamID = mDevices.at(id).first;
-
-        if(mCam == nullptr)
+        device->mCamID = camera.Id;
+        if(cam == nullptr)
         {
-                if(!mCam->createDevice(mCamID))
+                if(!cam->createDevice(device->mCamID))
                 {
                     BOOST_LOG_SEV(logger, fail) << "Fail to create device with ID  : " << id;
-                    mCam->grabCleanse();
+                    cam->grabCleanse();
                     return false;
                 }
             freeture::LogDebug ( "Device::createCamera(int,bool) - created new camera");
@@ -235,13 +242,23 @@ void freeture::Device::setVerbose(bool status) {
 
 }
 
-CamSdkType freeture::Device::getDeviceSdk(int id){
+/* CamSdkType freeture::Device::getDeviceSdk(int id){
     freeture::LogDebug( "Device::getDeviceSdk" );
     if(id >=0 && id < mDevices.size()) {
         return mDevices.at(id).second.second;
     }
 
     return CamSdkType::UNKNOWN;
+} */
+
+CamSdkType freeture::Device::getDeviceSdk(int id) {
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    std::vector<CameraDescription> devices = manager.getListDevice();
+    
+    if(id >=0 && id < (manager.deviceNumber - 1)) {
+        return devices.at(id).Sdk;
+    }
+    std::cout << "ERROR GETTING DEVICE SDK " << std::endl;
 }
 
 bool freeture::Device::createDevicesWith(CamSdkType sdk) {
@@ -257,6 +274,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::VIDEOFILE :
 
             {
+                freeture::LogError("SDK: ");
                 mVideoFramesInput = true;
                 mCam = new CameraVideo(mvp.INPUT_VIDEO_PATH, mVerbose);
                 mCam->grabInitialization();
@@ -267,7 +285,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::FRAMESDIR :
 
             {
-
+                freeture::LogDebug("SDK: ");
                 mVideoFramesInput = true;
                 // Create camera using pre-recorded fits2D in input.
                 mCam = new CameraFrames(mfp.INPUT_FRAMES_DIRECTORY_PATH, 1, mVerbose);
@@ -281,6 +299,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::V4L2 :
 
             {
+                freeture::LogDebug("SDK: V4L2");
                 #ifdef LINUX
                     mCam = new CameraV4l2();
                 #endif
@@ -291,6 +310,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::VIDEOINPUT :
 
             {
+                freeture::LogDebug("SDK: VIDEOINPUT");
                 #ifdef WINDOWS
                     mCam = new CameraWindows();
                 #endif
@@ -301,6 +321,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::ARAVIS :
 
             {
+                freeture::LogDebug("SDK: ARAVIS");
                 #ifdef LINUX
                     mCam = new CameraGigeAravis(mShiftBits);
                 #endif
@@ -311,6 +332,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::LUCID_ARAVIS :
 
             {
+                freeture::LogDebug("SDK: LUCID_ARAVIS");
                 #ifdef LINUX
 
                     mCam = new CameraLucidArena(mShiftBits);
@@ -324,6 +346,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::LUCID_ARENA :
 
             {
+                freeture::LogDebug("SDK: LUCID_ARENA");
                 #ifdef LINUX
                     mCam = new CameraLucidArena_PHX016S(mShiftBits);
 
@@ -335,6 +358,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::PYLONGIGE :
 
             {
+                freeture::LogDebug("SDK: PYLONGIGE");
                 #ifdef WINDOWS
                     mCam = new CameraGigePylon();
                 #endif
@@ -345,6 +369,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::TIS :
 
             {
+                freeture::LogDebug("SDK: TIS");
                 #ifdef WINDOWS
                     mCam = new CameraGigeTis();
                 #endif
@@ -473,6 +498,96 @@ void freeture::Device::listDevices(bool printInfos)
 
     #else
         //PRECEDENTE TO LUCID_ARAVIS
+        CameraDeviceManager& manager = CameraDeviceManager::Get();
+        manager.listDevice();
+        // V4L
+        //CameraScanner* v4l_scanner = Camera::Scanner->CreateScanner(CamSdkType::V4L2);
+        //assert(v4l_scanner!=nullptr);
+        // v4l_scanner->getCamerasList();
+        //listCams.insert ( listCams.end(), v4l_scanner->Devices.begin(),v4l_scanner->Devices.end());
+
+    #endif
+
+    // VIDEO
+    /*
+    elem.first = mNbDev; elem.second = VIDEOFILE;
+    subElem.first = 0; subElem.second = elem;
+    mDevices.push_back(subElem);
+    if(printInfos) cout << "[" << mNbDev << "]    VIDEO FILES" << endl;
+    mNbDev++;
+
+    // FRAMES
+
+    elem.first = mNbDev; elem.second = FRAMESDIR;
+    subElem.first = 0; subElem.second = elem;
+    mDevices.push_back(subElem);
+    if(printInfos) cout << "[" << mNbDev << "]    FRAMES DIRECTORY" << endl;
+    mNbDev++;
+    */
+}
+
+
+std::vector<CameraDescription> freeture::Device::getListDevice()
+{
+    freeture::LogDebug("Device::getListDevice");
+
+    int nbCam = 0;
+    mNbDev = 0;
+    pair<int, CamSdkType> elem;             // general index to specify camera to use
+    pair<int,pair<int,CamSdkType>> subElem; // index in a specific sdk
+
+    #ifdef WINDOWS
+
+        // PYLONGIGE
+
+        mCam = new CameraGigePylon();
+        listCams = mCam->getCamerasList();
+        for(int i = 0; i < listCams.size(); i++) {
+            elem.first = mNbDev; elem.second = PYLONGIGE;
+            subElem.first = listCams.at(i).first; subElem.second = elem;
+            mDevices.push_back(subElem);
+            if(printInfos) cout << "[" << mNbDev << "]    " << listCams.at(i).second << endl;
+            mNbDev++;
+        }
+        delete mCam;
+
+        // TIS
+
+        mCam = new CameraGigeTis();
+        listCams = mCam->getCamerasList();
+        for(int i = 0; i < listCams.size(); i++) {
+            elem.first = mNbDev; elem.second = TIS;
+            subElem.first = listCams.at(i).first; subElem.second = elem;
+            mDevices.push_back(subElem);
+            if(printInfos) cout << "[" << mNbDev << "]    " << listCams.at(i).second << endl;
+            mNbDev++;
+        }
+        delete mCam;
+
+        // WINDOWS
+
+        mCam = new CameraWindows();
+        listCams = mCam->getCamerasList();
+        for(int i = 0; i < listCams.size(); i++) {
+
+            // Avoid to list basler
+            std::string::size_type pos1 = listCams.at(i).second.find("Basler");
+            std::string::size_type pos2 = listCams.at(i).second.find("BASLER");
+            if((pos1 != std::string::npos) || (pos2 != std::string::npos)) {
+                //std::cout << "found \"words\" at position " << pos1 << std::endl;
+            } else {
+                elem.first = mNbDev; elem.second = VIDEOINPUT;
+                subElem.first = listCams.at(i).first; subElem.second = elem;
+                mDevices.push_back(subElem);
+                if(printInfos) cout << "[" << mNbDev << "]    " << listCams.at(i).second << endl;
+                mNbDev++;
+            }
+        }
+
+        delete mCam;
+
+    #else
+        //PRECEDENTE TO LUCID_ARAVIS
         CameraScanner* lucid_aravis_scanner = Camera::Scanner->CreateScanner(CamSdkType::LUCID_ARAVIS);
         assert(lucid_aravis_scanner!=nullptr);
         lucid_aravis_scanner->getCamerasList();
@@ -493,19 +608,7 @@ void freeture::Device::listDevices(bool printInfos)
         mergeList(aravis_scanner->Devices);
 
         
-        if(printInfos)
-            for(int i = 0; i < listCams.size(); i++)
-            {
-                CameraDescription cam = listCams[i];
-                cam.Id = i;
-                cout << "[" << cam.Id << "]    " << cam.Description <<endl;
-                mNbDev++;
-            }
-        // V4L
-        //CameraScanner* v4l_scanner = Camera::Scanner->CreateScanner(CamSdkType::V4L2);
-        //assert(v4l_scanner!=nullptr);
-        // v4l_scanner->getCamerasList();
-        //listCams.insert ( listCams.end(), v4l_scanner->Devices.begin(),v4l_scanner->Devices.end());
+        return listCams;
 
     #endif
 

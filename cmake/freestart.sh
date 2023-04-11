@@ -1,3 +1,3 @@
 make install
-freeture -l
+#freeture -l
 freeture -m 3

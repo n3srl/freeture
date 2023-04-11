@@ -885,6 +885,7 @@
         double fpsMax = 0.0;
 
         arv_camera_get_frame_rate_bounds(camera, &fpsMin, &fpsMax, &error);
+        
         ErrorManager::CheckAravisError(&error);
 
         fMin = fpsMin;

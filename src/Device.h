@@ -158,6 +158,8 @@ class Device {
 
         void listDevices(bool printInfos);
 
+        std::vector<CameraDescription> getListDevice();
+
         bool createCamera(int id, bool create);
 
         bool createCamera();

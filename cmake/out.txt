@@ -1,0 +1,7 @@
+-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0")  
+-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found suitable version "1.74.0", minimum required is "1.55.0") found components: thread system date_time chrono filesystem log log_setup program_options iostreams serialization 
+-- Found GObject libraries: gobject-2.0;glib-2.0
+-- Found GObject includes : /usr/include/glib-2.0
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /freeture/cmake

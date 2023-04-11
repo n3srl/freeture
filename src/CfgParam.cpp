@@ -61,6 +61,7 @@
 #include "Logger.h"
 
 
+
 using namespace boost::filesystem;
 using namespace std;
 using namespace cv;
@@ -72,7 +73,7 @@ freeture::CfgParam::Init freeture::CfgParam::initializer;
 freeture::CfgParam::CfgParam(Device* device, string cfgFilePath)
 {
     assert(device!=nullptr);
-
+    manager = CameraDeviceManager::Get();
     m_CfgFilePath = cfgFilePath;
     // Initialize parameters.
     mDevice = device;
@@ -81,7 +82,7 @@ freeture::CfgParam::CfgParam(Device* device, string cfgFilePath)
 
     pair<int,bool> var1(-1, false);
     pair<pair<int,bool>,string> var2(var1, "");
-    m_Param.DEVICE_ID = var2;
+    m_Param.DEVICE_ID = -1;
     m_Param.data.status = false;
     m_Param.camInput.status = false;
     m_Param.det.status = false;
@@ -161,12 +162,10 @@ freeture::CfgParam::CfgParam(Device* device, string cfgFilePath)
             loadDataParam();
             loadLogParam();
 
-            if(m_Param.DEVICE_ID.first.second) {
+            if(m_Param.DEVICE_ID != -1) {
 
-                // Get input type according to device number.
-                mDevice->setVerbose(false);
-                mDevice->listDevices(false);
-                m_InputType = mDevice->getDeviceType(mDevice->getDeviceSdk(m_Param.DEVICE_ID.first.first));
+                CamSdkType sdk = manager.getDevice()->getDeviceSdk(m_Param.DEVICE_ID);
+                m_InputType = manager.getDevice()->getDeviceType(sdk);
 
                 switch(m_InputType)
                 {
@@ -181,6 +180,7 @@ freeture::CfgParam::CfgParam(Device* device, string cfgFilePath)
 
                     // camera
                     case CAMERA :
+                    std::cout << "Camera type" << std::endl;
                             loadCamParam();
                         break;
 
@@ -206,18 +206,10 @@ freeture::CfgParam::CfgParam(Device* device, string cfgFilePath)
 }
 
 void freeture::CfgParam::loadDeviceID() {
-
-    pair<int,bool> var1;
-    pair<pair<int,bool>,string> var2;
-    m_Param.DEVICE_ID = var2;
-
-
-    mDevice->setVerbose(false);
-    mDevice->listDevices(false);
-
+    manager.listDevice();
     int cId;
     string cString;
-    bool failIntId = false, failStringId = false;
+    bool failIntId, failStringId = false;
     string failmsg = "- CAMERA_ID : ";
 
     if(!m_Cfg.Get("CAMERA_ID", cId)) {
@@ -225,43 +217,28 @@ void freeture::CfgParam::loadDeviceID() {
         failmsg += "Fail to get value. Probably not defined.\n";
     }
 
-    if(!m_Cfg.Get("CAMERA_ID", cString)) {
+    else if(!m_Cfg.Get("CAMERA_ID", cString)) {
         failStringId = true;
         failmsg += "Fail to get value. Probably not defined.\n";
-    }else{
-        try{
+    }
+
+    else {
+        try {
             EParser<CamSdkType> cam_string;
-
-            CamSdkType cType = mDevice->getDeviceSdk(cId);
-
-            if(cType == CamSdkType::VIDEOFILE) {
-                cId = mDevice->mNbDev - 2;
-            }else if(cType == CamSdkType::FRAMESDIR){
-                cId = mDevice->mNbDev - 1;
-            }else{
-                failmsg += "Not correct input.\n";
-                failStringId = true;
-            }
-
-        } catch (std::exception &ex) {
-            failmsg += string(ex.what());
-            failStringId = true;
+            CamSdkType cType = manager.getDevice()->getDeviceSdk(cId);
+        } catch (std::exception &ex){
         }
-    }
 
-    if(failIntId && failStringId) {
-        m_Param.DEVICE_ID.second = failmsg;
+
+    }
+    if (manager.deviceNumber < 0 || cId > (manager.deviceNumber - 1)) {
+        std::cout << "- CAMERA_ID's value not exist." << std::endl;
+        m_Param.DEVICE_ID = -1;
         return;
     }
 
-    if(mDevice->mNbDev < 0 || cId > (mDevice->mNbDev - 1)){
-        m_Param.DEVICE_ID.second = "- CAMERA_ID's value not exist.";
-        return;
-    }
-
-    m_Param.DEVICE_ID.first.first = cId;
-    m_Param.DEVICE_ID.first.second = true;
-    m_Param.DEVICE_ID.second = "";
+    m_Param.DEVICE_ID = cId;
+    
 }
 
 void freeture::CfgParam::loadDataParam() {
@@ -424,21 +401,21 @@ void freeture::CfgParam::loadVidParam() {
 void freeture::CfgParam::loadCamParam() {
 
     bool e = false;
+    freeture::Device* device = manager.getDevice();
 
-    if(!m_Param.DEVICE_ID.first.second) {
+    if(m_Param.DEVICE_ID == -1) {
 
         loadDeviceID();
-        if(!m_Param.DEVICE_ID.first.second) {
+        if(m_Param.DEVICE_ID == -1) {
             return;
         }
     }
 
-    mDevice->setVerbose(false);
-    mDevice->listDevices(false);
-
-    if(!mDevice->createCamera(m_Param.DEVICE_ID.first.first, true)) {
+    if(!device->createCamera(m_Param.DEVICE_ID, true)) {
         return;
     }
+
+    std::cout << "HERE IM" << std::endl;
 
     if(!m_Cfg.Get("ACQ_FPS", m_Param.camInput.ACQ_FPS)) {
         m_Param.camInput.errormsg.push_back("- ACQ_FPS : Fail to get value.");
@@ -555,11 +532,10 @@ void freeture::CfgParam::loadCamParam() {
     double ming= -1, maxg = -1;
     double mine = -1, maxe = -1;
     double minf = -1, maxf = -1;
-
-    mDevice->getCameraFPSBounds(minf, maxf);
-    mDevice->setCameraDayGain();
-    mDevice->getCameraGainBounds(ming, maxg);
-    mDevice->getCameraExposureBounds(mine, maxe);
+    device->getCameraFPSBounds(minf, maxf);
+    device->setCameraDayGain();
+    device->getCameraGainBounds(ming, maxg);
+    device->getCameraExposureBounds(mine, maxe);
 
 
     //-------------------------------------------------------------------
@@ -1153,10 +1129,10 @@ void freeture::CfgParam::loadDetParam() {
 
                     tempmask.copyTo(m_Param.det.MASK);
 
-                    if(m_Param.DEVICE_ID.first.second) {
+                    if(m_Param.DEVICE_ID = -1) {
                         mDevice->setVerbose(false);
                         mDevice->listDevices(false);
-                        m_InputType = mDevice->getDeviceType(mDevice->getDeviceSdk(m_Param.DEVICE_ID.first.first));
+                        m_InputType = mDevice->getDeviceType(mDevice->getDeviceSdk(m_Param.DEVICE_ID));
 
                         switch(m_InputType) {
 
@@ -1743,7 +1719,7 @@ void freeture::CfgParam::loadMailParam() {
 }
 
 int freeture::CfgParam::getDeviceID() {
-    return m_Param.DEVICE_ID.first.first;
+    return m_Param.DEVICE_ID;
 }
 
 dataParam freeture::CfgParam::getDataParam() {
@@ -1791,9 +1767,10 @@ parameters freeture::CfgParam::getAllParam() {
 }
 
 bool freeture::CfgParam::deviceIdIsCorrect() {
-    if(!m_Param.DEVICE_ID.first.second) {
+    
+    if(m_Param.DEVICE_ID == -1) {
         if(showErrors) {
-            cout << m_Param.DEVICE_ID.second << endl;
+            cout << "Device not valid" << endl;
         }
         return false;
     }

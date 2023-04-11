@@ -25,6 +25,8 @@
 #include "CfgParam.h"
 #include "Logger.h"
 
+#include "CameraDeviceManager.h"
+
 namespace po        = boost::program_options;
 namespace logging   = boost::log;
 namespace sinks     = boost::log::sinks;
@@ -379,15 +381,18 @@ void freeture::Freeture::modeContinuousAcquisition()
 
 void freeture::Freeture::modeMeteorDetection()
 {
-    device = new Device();
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    device = manager.getDevice();
+    //manager.listDevice();
+
     CfgParam cfg(device, configPath);
     ///%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     ///%%%%%%%%%%%%%%%%%%%% MODE 3 : METEOR DETECTION %%%%%%%%%%%%%%%%%%%%%%%%
     ///%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    std::cout << "================================================" << endl;
-    std::cout << "======= FREETURE - Meteor detection mode =======" << endl;
-    std::cout << "================================================" << endl << endl;
+    std::cout << "================================================" << std::endl;
+    std::cout << "======= FREETURE - Meteor detection mode =======" << std::endl;
+    std::cout << "================================================" << std::endl << std::endl;
 
    /// ------------------------------------------------------------------
    /// --------------------- LOAD FREETURE PARAMETERS -------------------
@@ -431,7 +436,7 @@ void freeture::Freeture::modeMeteorDetection()
     /// ------------------------------------------------------------------
     /// ------------------------- SHARED RESSOURCES ----------------------
     /// ------------------------------------------------------------------
-    cout << "> QUI : " << pLog << endl;
+    
     // Circular buffer to store last n grabbed frames.
     boost::circular_buffer<Frame> frameBuffer(cfg.getDetParam().ACQ_BUFFER_SIZE * cfg.getCamParam().ACQ_FPS);
     boost::mutex frameBuffer_m;

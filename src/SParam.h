@@ -292,7 +292,8 @@ struct fitskeysParam{
 // ******************************************************
 
 struct parameters {
-    std::pair<std::pair<int, bool>,std::string> DEVICE_ID; // Pair : <value, status>
+    //std::pair<std::pair<int, bool>,std::string> DEVICE_ID; // Pair : <value, status>
+    int             DEVICE_ID;
     dataParam       data;
     logParam        log;
     framesParam     framesInput;
