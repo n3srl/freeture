@@ -280,7 +280,6 @@ namespace freeture
     template<typename T>
     void LogDebug(T &&t)
     {
-        return;
         freeture::Logger::LogLevel(Level::DEBUG);
         std::cout << t << std::endl;
     }

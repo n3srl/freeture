@@ -140,7 +140,6 @@ bool freeture::Device::createCamera(int id, bool create)
     if(id >=0 && id < manager.deviceNumber - 1)
     {
         CameraDescription camera = manager.getListDevice().at(id);
-        Camera* cam = manager.getDevice()->mCam;
         freeture::Device* device = manager.getDevice();
         // Create Camera object with the correct sdk.
         if ( !createDevicesWith(camera.Sdk) )
@@ -151,13 +150,20 @@ bool freeture::Device::createCamera(int id, bool create)
             return false;
         }
 
+        // Cam creata
+        if (device->mCam != nullptr) {
+            freeture::LogDebug ( "Device::createCamera(int,bool) - CAMERA IS OK");
+        } else {
+            freeture::LogDebug ( "Device::createCamera(int,bool) - CAMERA IS NOT");
+        }
+
         device->mCamID = camera.Id;
-        if(cam == nullptr)
+        if(device->mCam  == nullptr)
         {
-                if(!cam->createDevice(device->mCamID))
+                if(!device->mCam ->createDevice(device->mCamID))
                 {
                     BOOST_LOG_SEV(logger, fail) << "Fail to create device with ID  : " << id;
-                    cam->grabCleanse();
+                    device->mCam->grabCleanse();
                     return false;
                 }
             freeture::LogDebug ( "Device::createCamera(int,bool) - created new camera");
@@ -263,10 +269,11 @@ CamSdkType freeture::Device::getDeviceSdk(int id) {
 
 bool freeture::Device::createDevicesWith(CamSdkType sdk) {
     freeture::LogDebug( "Device::createDevicesWith" );
-
-    if (mCam!=nullptr){
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    freeture::Device* device = manager.getDevice();
+    if (device->mCam!=nullptr){
         freeture::LogError("Device::createDevicesWith","Error","MEMORY LEAKING" );
-        assert (mCam == nullptr);
+        assert (device->mCam == nullptr);
     }
 
     switch(sdk) {
@@ -274,10 +281,9 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::VIDEOFILE :
 
             {
-                freeture::LogError("SDK: ");
                 mVideoFramesInput = true;
-                mCam = new CameraVideo(mvp.INPUT_VIDEO_PATH, mVerbose);
-                mCam->grabInitialization();
+                device->mCam = new CameraVideo(mvp.INPUT_VIDEO_PATH, mVerbose);
+                device->mCam->grabInitialization();
             }
 
             break;
@@ -285,11 +291,10 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::FRAMESDIR :
 
             {
-                freeture::LogDebug("SDK: ");
                 mVideoFramesInput = true;
                 // Create camera using pre-recorded fits2D in input.
-                mCam = new CameraFrames(mfp.INPUT_FRAMES_DIRECTORY_PATH, 1, mVerbose);
-                if(!mCam->grabInitialization())
+                device->mCam = new CameraFrames(mfp.INPUT_FRAMES_DIRECTORY_PATH, 1, mVerbose);
+                if(!device->mCam->grabInitialization())
                     throw "Fail to prepare acquisition on the first frames directory.";
 
             }
@@ -301,7 +306,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
             {
                 freeture::LogDebug("SDK: V4L2");
                 #ifdef LINUX
-                    mCam = new CameraV4l2();
+                    device->mCam = new CameraV4l2();
                 #endif
             }
 
@@ -312,7 +317,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
             {
                 freeture::LogDebug("SDK: VIDEOINPUT");
                 #ifdef WINDOWS
-                    mCam = new CameraWindows();
+                    device->mCam = new CameraWindows();
                 #endif
             }
 
@@ -323,7 +328,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
             {
                 freeture::LogDebug("SDK: ARAVIS");
                 #ifdef LINUX
-                    mCam = new CameraGigeAravis(mShiftBits);
+                    device->mCam = new CameraGigeAravis(mShiftBits);
                 #endif
             }
 
@@ -335,8 +340,8 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
                 freeture::LogDebug("SDK: LUCID_ARAVIS");
                 #ifdef LINUX
 
-                    mCam = new CameraLucidArena(mShiftBits);
-
+                    device->mCam = new CameraLucidArena(mShiftBits);
+                    
 
                 #endif
             }
@@ -346,10 +351,11 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::LUCID_ARENA :
 
             {
-                freeture::LogDebug("SDK: LUCID_ARENA");
+                
                 #ifdef LINUX
-                    mCam = new CameraLucidArena_PHX016S(mShiftBits);
-
+                    freeture::LogDebug("SDK: LUCID_ARENA");
+                    device->mCam = new CameraLucidArena_PHX016S(mShiftBits);
+                    
                 #endif
             }
 
@@ -360,7 +366,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
             {
                 freeture::LogDebug("SDK: PYLONGIGE");
                 #ifdef WINDOWS
-                    mCam = new CameraGigePylon();
+                    device = new CameraGigePylon();
                 #endif
             }
 
@@ -371,7 +377,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
             {
                 freeture::LogDebug("SDK: TIS");
                 #ifdef WINDOWS
-                    mCam = new CameraGigeTis();
+                    device = new CameraGigeTis();
                 #endif
             }
 
@@ -681,8 +687,8 @@ void freeture::Device::getCameraExposureBounds() {
 
 bool freeture::Device::getCameraFPSBounds(double &min, double &max) {
     freeture::LogDebug(  "Device::getCameraFPSBounds(double,double)" );
-
-    mCam->getFPSBounds(min, max);
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    manager.getDevice()->mCam->getFPSBounds(min, max);
     return true;
 }
 

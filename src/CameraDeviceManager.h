@@ -3,7 +3,6 @@
 #include "CameraScanner.h"
 #include "Device.h"
 
-using namespace freeture;
 
 class CameraDeviceManager
 {

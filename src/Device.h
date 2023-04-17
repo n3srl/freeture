@@ -146,6 +146,7 @@ class Device {
         double         mMaxGain;
         //int         mNbFrame;
 
+
         void Setup(cameraParam cp, framesParam fp, videoParam vp, int cid);
 
         Device();
