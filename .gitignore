@@ -16,8 +16,6 @@ INSTALL
 Makefile.in
 Makefile
 README
-config.h.in
-config.h
 config.status
 */Makefile.in
 */Makefile
