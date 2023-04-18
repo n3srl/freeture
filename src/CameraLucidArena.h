@@ -10,7 +10,7 @@
 #pragma once
 
 #include "config.h"
-
+#include "CameraDeviceManager.h"
 #ifdef LINUX
 
     #include <opencv2/highgui/highgui.hpp>
@@ -40,6 +40,7 @@
     #include <boost/log/sources/logger.hpp>
     #include <boost/log/core.hpp>
     #include "ELogSeverityLevel.h"
+
 
     class CameraLucidArenaScanner: public CameraScanner
     {
@@ -139,7 +140,9 @@
             guint64         nbUnderruns;
             int             frameCounter;           // Counter of success received frames.
 
+
         public :
+
 
             CameraLucidArena(bool shift);
 
@@ -148,6 +151,7 @@
             ~CameraLucidArena();
 
             bool createDevice(int id);
+            bool recreateDevice(int);
 
             bool grabInitialization();
 

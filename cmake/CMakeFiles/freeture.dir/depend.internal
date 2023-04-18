@@ -13,6 +13,7 @@ CMakeFiles/freeture.dir/freeture/src/AcqThread.cpp.o
  /freeture/src/AcqThread.h
  /freeture/src/Base64.h
  /freeture/src/Camera.h
+ /freeture/src/CameraDeviceManager.h
  /freeture/src/CameraFrames.h
  /freeture/src/CameraGigeAravis.h
  /freeture/src/CameraGigePylon.h
@@ -1753,14 +1754,23 @@ CMakeFiles/freeture.dir/freeture/src/CameraGigeTis.cpp.o
  config.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o
  /freeture/src/Camera.h
+ /freeture/src/CameraDeviceManager.h
+ /freeture/src/CameraFrames.h
  /freeture/src/CameraGigeAravis.h
+ /freeture/src/CameraGigePylon.h
+ /freeture/src/CameraGigeTis.h
  /freeture/src/CameraLucidArena.cpp
  /freeture/src/CameraLucidArena.h
  /freeture/src/CameraScanner.h
+ /freeture/src/CameraV4l2.h
+ /freeture/src/CameraVideo.h
+ /freeture/src/CameraWindows.h
  /freeture/src/Conversion.h
+ /freeture/src/Device.h
  /freeture/src/ECamPixFmt.h
  /freeture/src/ECamSdkType.h
  /freeture/src/EDetMeth.h
+ /freeture/src/EImgBitDepth.h
  /freeture/src/EImgFormat.h
  /freeture/src/EInputDeviceType.h
  /freeture/src/ELogSeverityLevel.h
@@ -1769,7 +1779,11 @@ CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o
  /freeture/src/EStackMeth.h
  /freeture/src/ETimeMode.h
  /freeture/src/ErrorManager.cpp
+ /freeture/src/Fits.h
+ /freeture/src/Fits2D.h
  /freeture/src/Frame.h
+ /freeture/src/PixFmtConv.h
+ /freeture/src/SParam.h
  /freeture/src/SaveImg.h
  /freeture/src/TimeDate.h
  /usr/include/aravis-0.8/arv.h

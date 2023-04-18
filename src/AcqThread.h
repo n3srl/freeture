@@ -52,6 +52,7 @@
 #include "Fits2D.h"
 #include "SParam.h"
 #include "Device.h"
+#include "CameraDeviceManager.h"
 
 class AcqThread {
 

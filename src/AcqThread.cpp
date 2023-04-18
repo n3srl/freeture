@@ -69,6 +69,7 @@ AcqThread::AcqThread(   boost::circular_buffer<Frame>       *fb,
                         Device*                             device )
 {
     std::cout << "AcqThread::AcqThread"<<std::endl;
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
     frameBuffer             = fb;
     frameBuffer_mutex       = fb_m;
     frameBuffer_condition   = fb_c;
@@ -82,7 +83,7 @@ AcqThread::AcqThread(   boost::circular_buffer<Frame>       *fb,
     pStack                  = stack;
     mThread                 = NULL;
     mMustStop               = false;
-    mDevice                 = device;
+    mDevice                 = manager.getDevice();
     mThreadTerminated       = false;
     mNextAcqIndex           = 0;
     pExpCtrl                = NULL;
@@ -124,24 +125,30 @@ void AcqThread::stopThread(){
 
 bool AcqThread::startThread() {
     std::cout << "AcqThread::startThread(" << std::endl;
-
     // Create a device.
-    mDevice->Setup(mcp, mfp, mvp, mDeviceID);
-
-    // Search available devices.
-    mDevice->listDevices(false);
-
+    
+    
     // CREATE CAMERA
-    if(!mDevice->createCamera())
-        return false;
+    if (mDevice->mCam == nullptr) {
+        if(!mDevice->createCamera()) {
+            std::cout << "CREATE CAMERA ERROR" << std::endl;
+            return false;
+        }
+    }
 
+    mDevice->Setup(mcp, mfp, mvp, mDeviceID);
+    
     // Prepare continuous acquisition.
-    if(!prepareAcquisitionOnDevice())
+    if(!prepareAcquisitionOnDevice()) {
+        std::cout << "FAIL ON PREPARE AQ DEVICE" << std::endl;
         return false;
+    }
+    
+        
 
     // Create acquisition thread.
     mThread = new boost::thread(boost::ref(*this));
-
+    
     return true;
 
 }
@@ -835,11 +842,18 @@ void AcqThread::runImageCapture(int imgNumber, int imgExposure, int imgGain, Cam
         #endif
     #endif
 
+    std::cout << "Restarting camera in continuous mode..." << std::endl;
     BOOST_LOG_SEV(logger, notification) << "Restarting camera in continuous mode...";
 
+    //mDevice->Setup(mcp, mfp, mvp, mDeviceID);
     // RECREATE CAMERA
-    if(!mDevice->recreateCamera())
+    if(!mDevice->recreateCamera()) {
+        std::cout << "FAIL CAMERA RESTART" << std::endl;
+        return;
         throw "Fail to restart camera.";
+    }
+
+    mDevice->Setup(mcp, mfp, mvp, mDeviceID);
 
     prepareAcquisitionOnDevice();
 }
@@ -1129,12 +1143,13 @@ bool AcqThread::computeSunTimes() {
 }
 
 bool AcqThread::prepareAcquisitionOnDevice() {
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    mDevice = manager.getDevice();
     std::cout << "AcqThread::prepareAcquisitionOnDevice" << std::endl;
-
+    
     // SET SIZE
     if(!mDevice->setCameraSize())
         return false;
-
     // SET FORMAT
     if(!mDevice->setCameraPixelFormat())
         return false;
@@ -1146,6 +1161,8 @@ bool AcqThread::prepareAcquisitionOnDevice() {
 
     // Get Sunrise start/stop, Sunset start/stop. ---
     computeSunTimes();
+
+    std::cout << "GET BOUNDS OK" << std::endl;
 
     // CHECK SUNRISE AND SUNSET TIMES.
 

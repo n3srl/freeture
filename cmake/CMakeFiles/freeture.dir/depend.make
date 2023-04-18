@@ -12,6 +12,7 @@ CMakeFiles/freeture.dir/freeture/src/AcqThread.cpp.o: /freeture/src/AcqThread.cp
 CMakeFiles/freeture.dir/freeture/src/AcqThread.cpp.o: /freeture/src/AcqThread.h
 CMakeFiles/freeture.dir/freeture/src/AcqThread.cpp.o: /freeture/src/Base64.h
 CMakeFiles/freeture.dir/freeture/src/AcqThread.cpp.o: /freeture/src/Camera.h
+CMakeFiles/freeture.dir/freeture/src/AcqThread.cpp.o: /freeture/src/CameraDeviceManager.h
 CMakeFiles/freeture.dir/freeture/src/AcqThread.cpp.o: /freeture/src/CameraFrames.h
 CMakeFiles/freeture.dir/freeture/src/AcqThread.cpp.o: /freeture/src/CameraGigeAravis.h
 CMakeFiles/freeture.dir/freeture/src/AcqThread.cpp.o: /freeture/src/CameraGigePylon.h
@@ -1752,14 +1753,23 @@ CMakeFiles/freeture.dir/freeture/src/CameraGigeTis.cpp.o: /usr/include/opencv4/o
 CMakeFiles/freeture.dir/freeture/src/CameraGigeTis.cpp.o: config.h
 
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/Camera.h
+CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/CameraDeviceManager.h
+CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/CameraFrames.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/CameraGigeAravis.h
+CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/CameraGigePylon.h
+CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/CameraGigeTis.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/CameraLucidArena.cpp
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/CameraLucidArena.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/CameraScanner.h
+CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/CameraV4l2.h
+CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/CameraVideo.h
+CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/CameraWindows.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/Conversion.h
+CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/Device.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/ECamPixFmt.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/ECamSdkType.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/EDetMeth.h
+CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/EImgBitDepth.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/EImgFormat.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/EInputDeviceType.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/ELogSeverityLevel.h
@@ -1768,7 +1778,11 @@ CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/ESmtp
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/EStackMeth.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/ETimeMode.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/ErrorManager.cpp
+CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/Fits.h
+CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/Fits2D.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/Frame.h
+CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/PixFmtConv.h
+CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/SParam.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/SaveImg.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /freeture/src/TimeDate.h
 CMakeFiles/freeture.dir/freeture/src/CameraLucidArena.cpp.o: /usr/include/aravis-0.8/arv.h

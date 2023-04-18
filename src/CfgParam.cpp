@@ -412,10 +412,10 @@ void freeture::CfgParam::loadCamParam() {
     }
 
     if(!device->createCamera(m_Param.DEVICE_ID, true)) {
+        std::cout << "FAIL CREATING CAMERA " << std::endl;
         return;
     }
 
-    std::cout << "HERE IM" << std::endl;
 
     if(!m_Cfg.Get("ACQ_FPS", m_Param.camInput.ACQ_FPS)) {
         m_Param.camInput.errormsg.push_back("- ACQ_FPS : Fail to get value.");
@@ -555,6 +555,8 @@ void freeture::CfgParam::loadCamParam() {
                 e = true;
             }
         }
+
+        std::cout << "EXP NIGHT " << m_Param.camInput.ACQ_NIGHT_EXPOSURE << std::endl;
     }
 
     //-------------------------------------------------------------------

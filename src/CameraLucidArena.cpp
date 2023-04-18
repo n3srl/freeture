@@ -60,6 +60,37 @@
         {
             std::cout << "CameraLucidArena::createDevice: Instancing arv_camera_new"<<std::endl;
             camera = arv_camera_new(deviceName.c_str(),&error);
+            
+            ErrorManager::CheckAravisError(&error);
+        }
+
+        if(camera == nullptr)
+        {
+            BOOST_LOG_SEV(logger, fail) << "Fail to connect the camera.";
+            return false;
+        }
+
+        getFPSBounds(fpsMin,fpsMax);
+        setFPS(fpsMin);
+
+        return true;
+    }
+
+    bool CameraLucidArena::recreateDevice(int id){
+       std::cout << "CameraLucidArena::createDevice"<< std::endl;
+
+        std::string deviceName;
+        //free(camera);
+        camera = nullptr;
+
+        if(!getDeviceNameById(id, deviceName))
+            return false;
+
+        if (camera == nullptr)
+        {
+            std::cout << "CameraLucidArena::createDevice: Instancing arv_camera_new"<<std::endl;
+            camera = arv_camera_new(deviceName.c_str(),&error);
+            
             ErrorManager::CheckAravisError(&error);
         }
 
@@ -77,7 +108,12 @@
 
     bool CameraLucidArena::setSize(int startx, int starty, int width, int height, bool customSize) {
         std::cout << "CameraLucidArena::setSize"<< std::endl;
-
+        
+        if (camera == nullptr) {
+            std::cout << "CAMERA IS NULL " <<std::endl;
+            return false;
+        }
+        
         if(customSize) {
 
 
@@ -93,6 +129,7 @@
             } else {
                 BOOST_LOG_SEV(logger, warning) << "OffsetX, OffsetY are not available: cannot set offset.";
             }
+            ErrorManager::CheckAravisError(&error);
 
 
         // Default is maximum size
@@ -781,7 +818,7 @@
             g_object_unref(stream);
             stream = NULL;
             g_object_unref(camera);
-            camera = NULL;
+            //camera = NULL;
 
         }
 
@@ -877,9 +914,15 @@
     }
 
 
+
     void CameraLucidArena::getFPSBounds(double &fMin, double &fMax)
     {
         std::cout << "CameraLucidArena::getFPSBounds ";
+        
+        
+        if (camera == nullptr) {
+            std::cout << "CAMERA IS NULL " << std::endl;
+        }
 
         double fpsMin = 0.0;
         double fpsMax = 0.0;
@@ -887,7 +930,7 @@
         arv_camera_get_frame_rate_bounds(camera, &fpsMin, &fpsMax, &error);
         
         ErrorManager::CheckAravisError(&error);
-
+        
         fMin = fpsMin;
         fMax = fpsMax;
 
@@ -1009,6 +1052,7 @@
 
     std::string CameraLucidArena::getModelName(){
         std::cout << "CameraLucidArena::getModelName"<< std::endl;
+        
 
         std::string result =  arv_camera_get_model_name(camera,&error);
         ErrorManager::CheckAravisError(&error);
@@ -1019,6 +1063,10 @@
     bool CameraLucidArena::setExposureTime(double val)
     {
         std::cout << "CameraLucidArena::setExposureTime ["<< val<<"]" << std::endl;
+        if (camera == nullptr) {
+            std::cout << "CAMERA IS NULL " <<std::endl;
+            return false;
+        }
 
         double expMin, expMax;
 
@@ -1042,6 +1090,12 @@
             } else {
 
                 std::cout << "> Exposure value (" << val << ") is not in range [ " << expMin << " - " << expMax << " ]" << std::endl;
+                if(val < expMin) {
+                    std::cout << "> Exposure value (" << val << ") less" << std::endl;
+                }
+                if(val > expMax) {
+                    std::cout << "> Exposure value (" << val << ") bigger" << std::endl;
+                }
                 return false;
 
             }
@@ -1055,6 +1109,10 @@
 
     bool CameraLucidArena::setGain(double val){
         std::cout << "CameraLucidArena::setGain"<< std::endl;
+        if (camera == nullptr) {
+            std::cout << "CAMERA IS NULL " <<std::endl;
+            return false;
+        }
 
         double gMin, gMax;
 
@@ -1088,19 +1146,22 @@
     bool CameraLucidArena::setFPS(double fps)
     {
         std::cout << "CameraLucidArena::setFPS"<<" ["<<fps<<"]";
-
-        if (camera != NULL)
-        {
-            //ADDED FOR DEBUG
+        if (camera == nullptr) {
+            std::cout << "CAMERA IS NULL " <<std::endl;
+            return false;
+        }
+        
+            /* //ADDED FOR DEBUG
             double minFps,maxFps;
-            getFPSBounds(minFps,maxFps);
+            getFPSBounds(minFps,maxFps); */
 
             //NEED TO ENABLE FRAME RATE  SETUP
             arv_device_set_boolean_feature_value(arv_camera_get_device (camera), "AcquisitionFrameRateEnable" , true, &error);
+            ErrorManager::CheckAravisError(&error);
 
             arv_camera_set_frame_rate(camera, fps, &error);
             ErrorManager::CheckAravisError(&error);
-
+            std::cout << "SET FRAME OK" << std::endl;
             double setfps = arv_camera_get_frame_rate(camera, &error);
             ErrorManager::CheckAravisError(&error);
             std::cout << "=="<<setfps<<std::endl;
@@ -1115,51 +1176,56 @@
 
             return true;
 
-        }
-
-        return false;
+        
 
     }
 
+    
+
     bool CameraLucidArena::setPixelFormat(CamPixFmt depth){
         std::cout << "CameraLucidArena::setPixelFormat"<< std::endl;
+        if (camera == nullptr) {
+            std::cout << "CAMERA IS NULL " <<std::endl;
+            return false;
+        }
+        
+        std::cout << "CAMERA IS SET OK " <<std::endl;
+        switch(depth){
 
-        if (camera != NULL){
+            case MONO8 :
+                {
+                    arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_8,&error);
+                    ErrorManager::CheckAravisError(&error);
+                }
+                break;
 
-            switch(depth){
-
-                case MONO8 :
-                    {
-                        arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_8,&error);
-                        ErrorManager::CheckAravisError(&error);
-                    }
-                    break;
-
-                case MONO12 :
-                    {
-                        arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_12,&error);
-                        ErrorManager::CheckAravisError(&error);
-                    }
-                    break;
-                case MONO16 :
-                    {
-                        arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_16,&error);
-                        ErrorManager::CheckAravisError(&error);
-                    }
-                    break;
-            }
-
-            return true;
+            case MONO12 :
+                {
+                    arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_12,&error);
+                    ErrorManager::CheckAravisError(&error);
+                }
+                break;
+            case MONO16 :
+                {
+                    arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_16,&error);
+                    ErrorManager::CheckAravisError(&error);
+                }
+                break;
         }
 
-        return false;
+        return true;
+        
+
 
     }
 
     bool CameraLucidArena::setFrameSize(int startx, int starty, int width, int height, bool customSize) {
         std::cout << "CameraLucidArena::setFrameSize"<< std::endl;
-
-        if (camera != NULL){
+        if (camera == nullptr) {
+            std::cout << "CAMERA IS NULL " <<std::endl;
+            return false;
+        }
+        
             if(customSize) {
 
                 if (arv_device_get_feature(arv_camera_get_device(camera), "OffsetX")) {
@@ -1193,8 +1259,7 @@
 
             }
             return true;
-        }
-        return false;
+        
     }
 
 #endif
