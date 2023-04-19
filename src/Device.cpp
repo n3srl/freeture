@@ -58,7 +58,7 @@ void freeture::Device::Setup(cameraParam cp, framesParam fp, videoParam vp, int 
     freeture::LogDebug("Device::Setup");
     CameraDeviceManager& manager = CameraDeviceManager::Get();
     
-    std::cout << "PARAM NIGHT EXP " << cp.ACQ_NIGHT_EXPOSURE << std::endl
+    std::cout << "PARAM NIGHT EXP " << cp.ACQ_NIGHT_EXPOSURE << std::endl;
 
     /* mCam        = NULL;
     mCamID      = 0;
