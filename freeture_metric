@@ -1,0 +1,6 @@
+freeture_acq_thread_time{description="Camera acquisition time [ms]"} 35.5271 1681831516067
+freeture_acq_thread_fps{description="Camera acquisition thread frames per seconds [Hz]"} 28.1475 1681831516067
+freeture_det_thread_nb_detection{description="Camera detection thread current session detection count"} 1 1681831516067
+freeture_det_thread_det_time{description="Camera detection thread current detection time [ms]"} 2.42538 1681831516067
+freeture_stack_thread_c_date{description="Camera stack thread cDate"} 2023-Apr-18 15:24:47.033983 1681831516067
+freeture_stack_thread_complete_data_path{description="Camera stack thread last stack local path"} /freeture/ITLO09/SANMARTINOINSTRADA_20230418/stacks/ 1681831516067

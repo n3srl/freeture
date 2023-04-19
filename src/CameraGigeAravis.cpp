@@ -967,6 +967,7 @@
             }else{
 
                 std::cout << "> Exposure value (" << val << ") is not in range [ " << expMin << " - " << expMax << " ]" << std::endl;
+                
                 return false;
 
             }

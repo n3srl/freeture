@@ -91,6 +91,7 @@ class Camera {
         * @param id Identification number of the camera to create.
         */
         virtual bool createDevice(int id) {return false;};
+        virtual bool recreateDevice(int id) {return false;};
 
         /**
         * Get camera name from its ID.

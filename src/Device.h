@@ -124,8 +124,8 @@ class Device {
         int         mDayGain;
         int         mFPS;
         int         mCamID;         // ID in a specific sdk.
-        int         mGenCamID;      // General ID.
-        Camera      *mCam;
+        
+        
         bool        mShiftBits;
         bool        mVerbose;
         framesParam mfp;
@@ -133,7 +133,8 @@ class Device {
 
         void mergeList(std::vector<CameraDescription>&);
     public :
-
+        int         mGenCamID;      // General ID.
+        Camera*      mCam;
         int         mNbDev;
         CamPixFmt   mFormat;
         std::string      mCfgPath;
@@ -235,6 +236,9 @@ class Device {
         int getDayGain() {return mDayGain;};
 
         void setVerbose(bool status);
+
+        Camera* getCamera();
+
 
     private :
 

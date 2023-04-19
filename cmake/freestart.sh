@@ -1,3 +1,3 @@
 make install
 #freeture -l
-freeture -m 3
+freeture -m 3 > text.log

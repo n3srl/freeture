@@ -1,0 +1,757 @@
+[2023-Apr-17 10:37:30.858401] <1> (main.cpp) - 
+[2023-Apr-17 10:37:30.858557] <1> (main.cpp) - ==============================================
+[2023-Apr-17 10:37:30.858587] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 10:37:30.858609] <1> (main.cpp) - ==============================================
+[2023-Apr-17 10:37:30.862206] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 10:37:30.862372] <3> (Device) - No device with ID 0
+[2023-Apr-17 10:37:30.862621] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 10:43:25.650362] <1> (main.cpp) - 
+[2023-Apr-17 10:43:25.650678] <1> (main.cpp) - ==============================================
+[2023-Apr-17 10:43:25.650734] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 10:43:25.650778] <1> (main.cpp) - ==============================================
+[2023-Apr-17 10:43:25.650949] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 10:43:25.651108] <3> (Device) - No device with ID 0
+[2023-Apr-17 10:43:25.651317] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 10:45:10.574994] <1> (main.cpp) - 
+[2023-Apr-17 10:45:10.575293] <1> (main.cpp) - ==============================================
+[2023-Apr-17 10:45:10.575332] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 10:45:10.575358] <1> (main.cpp) - ==============================================
+[2023-Apr-17 10:45:10.575508] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 10:45:10.575654] <3> (Device) - No device with ID 0
+[2023-Apr-17 10:45:10.575986] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 10:49:22.682134] <1> (main.cpp) - 
+[2023-Apr-17 10:49:22.682248] <1> (main.cpp) - ==============================================
+[2023-Apr-17 10:49:22.682288] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 10:49:22.682319] <1> (main.cpp) - ==============================================
+[2023-Apr-17 10:49:22.682487] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 10:49:22.682630] <3> (Device) - No device with ID 0
+[2023-Apr-17 10:49:22.682903] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 10:50:22.775733] <1> (main.cpp) - 
+[2023-Apr-17 10:50:22.775875] <1> (main.cpp) - ==============================================
+[2023-Apr-17 10:50:22.775915] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 10:50:22.775961] <1> (main.cpp) - ==============================================
+[2023-Apr-17 10:50:22.776137] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 10:50:22.776337] <3> (Device) - No device with ID 0
+[2023-Apr-17 10:50:22.776985] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 10:55:59.704071] <1> (main.cpp) - 
+[2023-Apr-17 10:55:59.707306] <1> (main.cpp) - ==============================================
+[2023-Apr-17 10:55:59.707384] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 10:55:59.707411] <1> (main.cpp) - ==============================================
+[2023-Apr-17 10:55:59.707539] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 10:55:59.707670] <3> (Device) - No device with ID 0
+[2023-Apr-17 10:55:59.708009] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 10:57:13.295101] <1> (main.cpp) - 
+[2023-Apr-17 10:57:13.295266] <1> (main.cpp) - ==============================================
+[2023-Apr-17 10:57:13.295324] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 10:57:13.295373] <1> (main.cpp) - ==============================================
+[2023-Apr-17 10:57:13.295554] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 10:57:13.295719] <3> (Device) - No device with ID 0
+[2023-Apr-17 10:57:13.295967] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 10:57:57.822732] <1> (main.cpp) - 
+[2023-Apr-17 10:57:57.822867] <1> (main.cpp) - ==============================================
+[2023-Apr-17 10:57:57.822907] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 10:57:57.822937] <1> (main.cpp) - ==============================================
+[2023-Apr-17 10:57:57.823079] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 11:00:50.613406] <1> (main.cpp) - 
+[2023-Apr-17 11:00:50.613543] <1> (main.cpp) - ==============================================
+[2023-Apr-17 11:00:50.613582] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 11:00:50.613613] <1> (main.cpp) - ==============================================
+[2023-Apr-17 11:00:50.613753] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 11:00:50.614045] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:03:53.728910] <1> (main.cpp) - 
+[2023-Apr-17 12:03:53.729041] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:03:53.729075] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:03:53.729098] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:03:53.729211] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:03:53.729399] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:05:03.388606] <1> (main.cpp) - 
+[2023-Apr-17 12:05:03.391527] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:05:03.391601] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:05:03.391631] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:05:03.391765] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:05:03.391962] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:07:17.686066] <1> (main.cpp) - 
+[2023-Apr-17 12:07:17.686200] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:07:17.686238] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:07:17.686268] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:07:17.686404] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:07:17.686641] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:09:18.195167] <1> (main.cpp) - 
+[2023-Apr-17 12:09:18.195291] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:09:18.195333] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:09:18.195365] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:09:18.195509] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:09:18.195713] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:09:37.687152] <1> (main.cpp) - 
+[2023-Apr-17 12:09:37.687349] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:09:37.687382] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:09:37.687403] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:09:37.687511] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:09:37.687705] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:10:51.226920] <1> (main.cpp) - 
+[2023-Apr-17 12:10:51.227052] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:10:51.227089] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:10:51.227118] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:10:51.227238] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:10:51.227454] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:12:27.444361] <1> (main.cpp) - 
+[2023-Apr-17 12:12:27.444500] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:12:27.444545] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:12:27.444575] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:12:27.444694] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:12:27.444925] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:13:46.201251] <1> (main.cpp) - 
+[2023-Apr-17 12:13:46.201412] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:13:46.201463] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:13:46.201497] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:13:46.201663] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:13:46.201900] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:14:25.581486] <1> (main.cpp) - 
+[2023-Apr-17 12:14:25.581618] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:14:25.581654] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:14:25.581680] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:14:25.581806] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:14:25.582026] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:17:26.804690] <1> (main.cpp) - 
+[2023-Apr-17 12:17:26.804869] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:17:26.804921] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:17:26.804957] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:17:26.805087] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:17:26.805306] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:18:58.230123] <1> (main.cpp) - 
+[2023-Apr-17 12:18:58.230257] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:18:58.230295] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:18:58.230322] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:18:58.230459] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:18:58.230698] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:20:52.381153] <1> (main.cpp) - 
+[2023-Apr-17 12:20:52.381286] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:20:52.381331] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:20:52.381360] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:20:52.381490] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:20:52.381690] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:22:02.446208] <1> (main.cpp) - 
+[2023-Apr-17 12:22:02.446352] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:22:02.446399] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:22:02.446420] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:22:02.446555] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:22:02.446767] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:26:28.449816] <1> (main.cpp) - 
+[2023-Apr-17 12:26:28.449952] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:26:28.449989] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:26:28.450018] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:26:28.450137] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:26:28.450368] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:27:57.168740] <1> (main.cpp) - 
+[2023-Apr-17 12:27:57.169109] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:27:57.169153] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:27:57.169182] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:27:57.169305] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:27:57.169506] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:28:31.958610] <1> (main.cpp) - 
+[2023-Apr-17 12:28:31.958916] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:28:31.958946] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:28:31.958967] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:28:31.959073] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:28:31.959243] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:29:20.761135] <1> (main.cpp) - 
+[2023-Apr-17 12:29:20.761275] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:29:20.761327] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:29:20.761369] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:29:20.761535] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:29:20.761730] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:29:59.346460] <1> (main.cpp) - 
+[2023-Apr-17 12:29:59.346600] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:29:59.346636] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:29:59.346663] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:29:59.346783] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:29:59.346976] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:30:46.932356] <1> (main.cpp) - 
+[2023-Apr-17 12:30:46.932494] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:30:46.932532] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:30:46.932561] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:30:46.932683] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:30:46.932884] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:31:58.941092] <1> (main.cpp) - 
+[2023-Apr-17 12:31:58.941226] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:31:58.941264] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:31:58.941294] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:31:58.941422] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:31:58.941624] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:35:25.120262] <1> (main.cpp) - 
+[2023-Apr-17 12:35:25.120399] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:35:25.120450] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:35:25.120489] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:35:25.120657] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:35:25.120890] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:35:51.537525] <1> (main.cpp) - 
+[2023-Apr-17 12:35:51.537658] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:35:51.537693] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:35:51.537720] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:35:51.537837] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:35:51.538061] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 12:36:11.430738] <1> (main.cpp) - 
+[2023-Apr-17 12:36:11.430892] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:36:11.430930] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 12:36:11.430957] <1> (main.cpp) - ==============================================
+[2023-Apr-17 12:36:11.431106] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 12:36:11.431338] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 13:41:09.525527] <1> (main.cpp) - 
+[2023-Apr-17 13:41:09.525651] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:41:09.525683] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 13:41:09.525705] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:41:09.525831] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 13:41:09.526090] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 13:41:33.209625] <1> (main.cpp) - 
+[2023-Apr-17 13:41:33.209931] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:41:33.209969] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 13:41:33.209997] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:41:33.210116] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 13:41:33.210350] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 13:45:46.167039] <1> (main.cpp) - 
+[2023-Apr-17 13:45:46.167178] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:45:46.167217] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 13:45:46.167245] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:45:46.167366] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 13:45:46.167561] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 13:46:16.924059] <1> (main.cpp) - 
+[2023-Apr-17 13:46:16.924366] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:46:16.924417] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 13:46:16.924456] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:46:16.924613] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 13:46:16.924842] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 13:47:27.491809] <1> (main.cpp) - 
+[2023-Apr-17 13:47:27.491925] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:47:27.491953] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 13:47:27.491974] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:47:27.492082] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 13:47:27.492271] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 13:48:18.786362] <1> (main.cpp) - 
+[2023-Apr-17 13:48:18.786481] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:48:18.786517] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 13:48:18.786540] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:48:18.786642] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 13:48:18.786815] <4> (main.cpp) - vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+[2023-Apr-17 13:53:48.260432] <1> (main.cpp) - 
+[2023-Apr-17 13:53:48.260569] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:53:48.260598] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 13:53:48.260620] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:53:48.260739] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 13:53:48.261033] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 13:53:48.261315] <3> (Device) - Fail to set camera format.
+[2023-Apr-17 13:53:48.261426] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 13:56:26.382156] <1> (main.cpp) - 
+[2023-Apr-17 13:56:26.382271] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:56:26.382299] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 13:56:26.382332] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:56:26.382437] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 13:56:26.382655] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 13:56:26.382763] <3> (Device) - Fail to set camera format.
+[2023-Apr-17 13:56:26.382828] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 13:58:07.203719] <1> (main.cpp) - 
+[2023-Apr-17 13:58:07.204043] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:58:07.204101] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 13:58:07.204144] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:58:07.204307] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 13:58:07.204632] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 13:58:07.204750] <3> (Device) - Fail to set camera format.
+[2023-Apr-17 13:58:07.204852] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 13:58:52.489772] <1> (main.cpp) - 
+[2023-Apr-17 13:58:52.489917] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:58:52.489956] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 13:58:52.489989] <1> (main.cpp) - ==============================================
+[2023-Apr-17 13:58:52.490145] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 13:58:52.490417] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 13:58:52.490551] <3> (Device) - Fail to set camera format.
+[2023-Apr-17 13:58:52.490630] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 14:01:57.466600] <1> (main.cpp) - 
+[2023-Apr-17 14:01:57.466772] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:01:57.466823] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 14:01:57.466861] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:01:57.467018] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 14:01:57.467333] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 14:01:57.467526] <3> (Device) - Fail to set camera format.
+[2023-Apr-17 14:01:57.467646] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 14:04:01.999998] <1> (main.cpp) - 
+[2023-Apr-17 14:04:02.000158] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:04:02.000206] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 14:04:02.000237] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:04:02.000338] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 14:04:02.000582] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 14:04:02.000718] <3> (Device) - Fail to set camera format.
+[2023-Apr-17 14:04:02.000816] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 14:07:18.632656] <1> (main.cpp) - 
+[2023-Apr-17 14:07:18.632780] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:07:18.632821] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 14:07:18.632842] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:07:18.632945] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 14:07:18.633152] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 14:07:18.636028] <3> (Device) - Fail to set camera format.
+[2023-Apr-17 14:07:18.636140] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 14:11:28.389704] <1> (main.cpp) - 
+[2023-Apr-17 14:11:28.389845] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:11:28.389882] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 14:11:28.389909] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:11:28.390037] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 14:11:28.390315] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 14:11:28.390617] <3> (Device) - Fail to set camera format.
+[2023-Apr-17 14:11:28.390747] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 14:21:52.116914] <1> (main.cpp) - 
+[2023-Apr-17 14:21:52.120027] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:21:52.120119] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 14:21:52.120158] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:21:52.120348] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 14:21:52.120658] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 14:21:52.121411] <1> (AcqThread) - DAYTIME         :  YES
+[2023-Apr-17 14:21:52.121491] <1> (AcqThread) - AUTO EXPOSURE   :  NO
+[2023-Apr-17 14:21:52.121523] <1> (AcqThread) - EXPOSURE TIME   :  30
+[2023-Apr-17 14:21:52.121554] <1> (AcqThread) - GAIN            :  30
+[2023-Apr-17 14:21:52.121650] <3> (Device) - Fail to set day exposure time to 30
+[2023-Apr-17 14:21:52.121747] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 14:22:27.643826] <1> (main.cpp) - 
+[2023-Apr-17 14:22:27.643936] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:22:27.643975] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 14:22:27.644007] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:22:27.644138] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 14:22:27.644364] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 14:22:27.644517] <3> (Device) - Fail to set camera format.
+[2023-Apr-17 14:22:27.644606] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 14:25:36.924736] <1> (main.cpp) - 
+[2023-Apr-17 14:25:36.925110] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:25:36.925188] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 14:25:36.925241] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:25:36.925421] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 14:25:36.925695] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 14:25:36.925851] <3> (Device) - Fail to set camera format.
+[2023-Apr-17 14:25:36.925978] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 14:35:03.469270] <1> (main.cpp) - 
+[2023-Apr-17 14:35:03.472216] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:35:03.472288] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 14:35:03.472311] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:35:03.472425] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 14:35:03.472644] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 14:35:03.472721] <3> (Device) - Fail to set camera format.
+[2023-Apr-17 14:35:03.472827] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 14:35:51.502692] <1> (main.cpp) - 
+[2023-Apr-17 14:35:51.502835] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:35:51.502876] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 14:35:51.502919] <1> (main.cpp) - ==============================================
+[2023-Apr-17 14:35:51.503090] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 14:35:51.503356] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 14:35:51.503461] <3> (Device) - Fail to set camera format.
+[2023-Apr-17 14:35:51.503554] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 15:49:32.307558] <1> (main.cpp) - 
+[2023-Apr-17 15:49:32.310604] <1> (main.cpp) - ==============================================
+[2023-Apr-17 15:49:32.310688] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 15:49:32.310720] <1> (main.cpp) - ==============================================
+[2023-Apr-17 15:49:32.310850] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 15:49:32.311109] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 15:49:32.311250] <3> (Device) - Fail to set camera format.
+[2023-Apr-17 15:49:32.311346] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 15:50:58.185942] <1> (main.cpp) - 
+[2023-Apr-17 15:50:58.186081] <1> (main.cpp) - ==============================================
+[2023-Apr-17 15:50:58.186135] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 15:50:58.186180] <1> (main.cpp) - ==============================================
+[2023-Apr-17 15:50:58.186335] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 15:50:58.186590] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 15:50:58.186752] <3> (Device) - Fail to set camera format.
+[2023-Apr-17 15:50:58.186853] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 15:51:44.692177] <1> (main.cpp) - 
+[2023-Apr-17 15:51:44.692337] <1> (main.cpp) - ==============================================
+[2023-Apr-17 15:51:44.692386] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 15:51:44.692424] <1> (main.cpp) - ==============================================
+[2023-Apr-17 15:51:44.692579] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 15:51:44.692895] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 15:51:44.693157] <3> (Device) - Fail to set camera format.
+[2023-Apr-17 15:51:44.693269] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 15:52:30.508714] <1> (main.cpp) - 
+[2023-Apr-17 15:52:30.509139] <1> (main.cpp) - ==============================================
+[2023-Apr-17 15:52:30.509204] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 15:52:30.509237] <1> (main.cpp) - ==============================================
+[2023-Apr-17 15:52:30.509385] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 15:52:30.509668] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 15:52:30.509799] <3> (Device) - Fail to set camera format.
+[2023-Apr-17 15:52:30.509895] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-17 16:01:23.105610] <1> (main.cpp) - 
+[2023-Apr-17 16:01:23.108651] <1> (main.cpp) - ==============================================
+[2023-Apr-17 16:01:23.108716] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-17 16:01:23.108748] <1> (main.cpp) - ==============================================
+[2023-Apr-17 16:01:23.108909] <1> (DetThread) - Creating detThread...
+[2023-Apr-17 16:01:23.109138] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-17 16:01:23.109962] <1> (AcqThread) - DAYTIME         :  YES
+[2023-Apr-17 16:01:23.110011] <1> (AcqThread) - AUTO EXPOSURE   :  NO
+[2023-Apr-17 16:01:23.110041] <1> (AcqThread) - EXPOSURE TIME   :  30
+[2023-Apr-17 16:01:23.110069] <1> (AcqThread) - GAIN            :  30
+[2023-Apr-17 16:01:23.110136] <3> (Device) - Fail to set day exposure time to 30
+[2023-Apr-17 16:01:23.110236] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 07:30:00.705222] <1> (main.cpp) - 
+[2023-Apr-18 07:30:00.706908] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:30:00.706965] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 07:30:00.706988] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:30:00.708241] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 07:30:00.709844] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-18 07:30:00.710187] <3> (Device) - Fail to set camera format.
+[2023-Apr-18 07:30:00.710314] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 07:32:29.389187] <1> (main.cpp) - 
+[2023-Apr-18 07:32:29.389333] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:32:29.389385] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 07:32:29.389425] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:32:29.389578] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 07:32:29.389892] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-18 07:32:29.390034] <3> (Device) - Fail to set camera format.
+[2023-Apr-18 07:32:29.390153] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 07:37:04.667090] <1> (main.cpp) - 
+[2023-Apr-18 07:37:04.667276] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:37:04.667340] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 07:37:04.667394] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:37:04.667545] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 07:37:04.667817] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-18 07:37:04.667929] <3> (Device) - Fail to set camera format.
+[2023-Apr-18 07:37:04.667998] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 07:43:14.854337] <1> (main.cpp) - 
+[2023-Apr-18 07:43:14.854494] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:43:14.854535] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 07:43:14.854566] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:43:14.854714] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 07:43:14.854992] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-18 07:43:14.855101] <3> (Device) - Fail to set camera format.
+[2023-Apr-18 07:43:14.855191] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 07:44:04.775396] <1> (main.cpp) - 
+[2023-Apr-18 07:44:04.775519] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:44:04.775547] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 07:44:04.775568] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:44:04.775677] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 07:44:04.775921] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-18 07:44:04.776017] <3> (Device) - Fail to set camera format.
+[2023-Apr-18 07:44:04.776083] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 07:46:21.820749] <1> (main.cpp) - 
+[2023-Apr-18 07:46:21.821114] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:46:21.821155] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 07:46:21.821184] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:46:21.821303] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 07:46:21.821584] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-18 07:46:21.821748] <3> (Device) - Fail to set camera format.
+[2023-Apr-18 07:46:21.821871] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 07:53:53.650953] <1> (main.cpp) - 
+[2023-Apr-18 07:53:53.651096] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:53:53.651135] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 07:53:53.651164] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:53:53.651321] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 07:53:53.651600] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-18 07:53:53.651696] <3> (Device) - Fail to set camera format.
+[2023-Apr-18 07:53:53.651795] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 07:54:19.960057] <1> (main.cpp) - 
+[2023-Apr-18 07:54:19.960219] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:54:19.960264] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 07:54:19.960288] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:54:19.960407] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 07:54:19.960688] <1> (CameraLucidArena) - Camera sensor size : 10x0
+[2023-Apr-18 07:54:19.960799] <3> (Device) - Fail to set camera format.
+[2023-Apr-18 07:54:19.960904] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 07:54:54.855263] <1> (main.cpp) - 
+[2023-Apr-18 07:54:54.855394] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:54:54.855442] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 07:54:54.855474] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:54:54.855593] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 07:54:54.855748] <3> (Device) - Fail to set camera size.
+[2023-Apr-18 07:54:54.856225] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 07:57:13.959367] <1> (main.cpp) - 
+[2023-Apr-18 07:57:13.959712] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:57:13.959768] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 07:57:13.959812] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:57:13.959978] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 07:57:13.960139] <3> (Device) - Fail to set camera size.
+[2023-Apr-18 07:57:13.960300] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 07:58:37.056048] <1> (main.cpp) - 
+[2023-Apr-18 07:58:37.056191] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:58:37.056228] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 07:58:37.056255] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:58:37.056377] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 07:58:37.056531] <3> (Device) - Fail to set camera size.
+[2023-Apr-18 07:58:37.056798] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 07:59:40.923182] <1> (main.cpp) - 
+[2023-Apr-18 07:59:40.923464] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:59:40.923510] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 07:59:40.923541] <1> (main.cpp) - ==============================================
+[2023-Apr-18 07:59:40.923666] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 07:59:40.923826] <3> (Device) - Fail to set camera size.
+[2023-Apr-18 07:59:40.923973] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 08:00:17.625421] <1> (main.cpp) - 
+[2023-Apr-18 08:00:17.625554] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:00:17.625592] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:00:17.625620] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:00:17.625772] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 08:00:17.625951] <3> (Device) - Fail to set camera size.
+[2023-Apr-18 08:00:17.626201] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 08:02:10.307210] <1> (main.cpp) - 
+[2023-Apr-18 08:02:10.307346] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:02:10.307383] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:02:10.307410] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:02:10.307538] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 08:02:10.307714] <3> (Device) - Fail to set camera size.
+[2023-Apr-18 08:02:10.307847] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 08:02:42.303386] <1> (main.cpp) - 
+[2023-Apr-18 08:02:42.303520] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:02:42.303556] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:02:42.303584] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:02:42.303704] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 08:02:42.303865] <3> (Device) - Fail to set camera size.
+[2023-Apr-18 08:02:42.304209] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 08:07:33.976085] <1> (main.cpp) - 
+[2023-Apr-18 08:07:33.976224] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:07:33.976275] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:07:33.976315] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:07:33.976484] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 08:07:33.976701] <3> (Device) - Fail to set camera size.
+[2023-Apr-18 08:07:33.976968] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 08:08:28.076606] <1> (main.cpp) - 
+[2023-Apr-18 08:08:28.076760] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:08:28.076791] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:08:28.076815] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:08:28.076941] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 08:08:28.077081] <3> (Device) - Fail to set camera size.
+[2023-Apr-18 08:08:28.077266] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 08:10:37.574350] <1> (main.cpp) - 
+[2023-Apr-18 08:10:37.574480] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:10:37.574508] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:10:37.574529] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:10:37.574631] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 08:10:37.574774] <3> (Device) - Fail to set camera size.
+[2023-Apr-18 08:10:37.575065] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 08:32:03.222150] <1> (main.cpp) - 
+[2023-Apr-18 08:32:03.222277] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:32:03.222306] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:32:03.222327] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:32:03.222432] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 08:32:03.222553] <3> (Device) - Fail to set camera size.
+[2023-Apr-18 08:32:03.222695] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 08:37:05.007251] <1> (main.cpp) - 
+[2023-Apr-18 08:37:05.007718] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:37:05.007775] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:37:05.007801] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:37:05.007941] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 08:37:05.008116] <3> (Device) - Fail to set camera size.
+[2023-Apr-18 08:37:05.008238] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 08:38:31.467241] <1> (main.cpp) - 
+[2023-Apr-18 08:38:31.467603] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:38:31.467643] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:38:31.467672] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:38:31.467797] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 08:38:31.467950] <3> (Device) - Fail to set camera size.
+[2023-Apr-18 08:38:31.468155] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 08:44:02.480782] <1> (main.cpp) - 
+[2023-Apr-18 08:44:02.480968] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:44:02.481012] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:44:02.481041] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:44:02.481172] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 08:44:02.481346] <3> (Device) - Fail to set camera size.
+[2023-Apr-18 08:44:02.481501] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 08:44:29.306527] <1> (main.cpp) - 
+[2023-Apr-18 08:44:29.306865] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:44:29.306911] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:44:29.306948] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:44:29.307087] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 08:45:02.634378] <1> (main.cpp) - 
+[2023-Apr-18 08:45:02.634512] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:45:02.634577] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:45:02.634641] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:45:02.634796] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 08:46:33.732322] <1> (main.cpp) - 
+[2023-Apr-18 08:46:33.732714] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:46:33.732765] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:46:33.732796] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:46:33.732925] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 08:47:27.698745] <1> (main.cpp) - 
+[2023-Apr-18 08:47:27.698928] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:47:27.698994] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:47:27.699022] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:47:27.699124] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 08:49:20.501471] <1> (main.cpp) - 
+[2023-Apr-18 08:49:20.501588] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:49:20.501627] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:49:20.501664] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:49:20.501791] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 08:50:33.101407] <1> (main.cpp) - 
+[2023-Apr-18 08:50:33.101529] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:50:33.101558] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:50:33.101582] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:50:33.101733] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 08:50:50.608484] <1> (main.cpp) - 
+[2023-Apr-18 08:50:50.608622] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:50:50.608653] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 08:50:50.608675] <1> (main.cpp) - ==============================================
+[2023-Apr-18 08:50:50.608792] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:05:33.764644] <1> (main.cpp) - 
+[2023-Apr-18 09:05:33.764788] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:05:33.764825] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:05:33.764853] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:05:33.764987] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:05:57.958290] <1> (main.cpp) - 
+[2023-Apr-18 09:05:57.958432] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:05:57.958468] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:05:57.958491] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:05:57.958615] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:07:01.589365] <1> (main.cpp) - 
+[2023-Apr-18 09:07:01.589497] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:07:01.589526] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:07:01.589548] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:07:01.589689] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:08:50.962240] <1> (main.cpp) - 
+[2023-Apr-18 09:08:50.962435] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:08:50.962492] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:08:50.962525] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:08:50.962667] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:34:41.111383] <1> (main.cpp) - 
+[2023-Apr-18 09:34:41.111555] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:34:41.111594] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:34:41.111623] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:34:41.111775] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:35:28.253165] <1> (main.cpp) - 
+[2023-Apr-18 09:35:28.253339] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:35:28.253383] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:35:28.253421] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:35:28.253574] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:36:05.106399] <1> (main.cpp) - 
+[2023-Apr-18 09:36:05.106569] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:36:05.106616] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:36:05.106653] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:36:05.106840] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:39:50.429737] <1> (main.cpp) - 
+[2023-Apr-18 09:39:50.429853] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:39:50.429893] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:39:50.429925] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:39:50.430063] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:40:29.311892] <1> (main.cpp) - 
+[2023-Apr-18 09:40:29.312025] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:40:29.312062] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:40:29.312090] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:40:29.312224] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:41:26.004703] <1> (main.cpp) - 
+[2023-Apr-18 09:41:26.004829] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:41:26.004862] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:41:26.004888] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:41:26.005010] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:42:35.727246] <1> (main.cpp) - 
+[2023-Apr-18 09:42:35.727389] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:42:35.727426] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:42:35.727454] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:42:35.727600] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:42:57.622803] <1> (main.cpp) - 
+[2023-Apr-18 09:42:57.623149] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:42:57.623217] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:42:57.623266] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:42:57.623435] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:43:56.657436] <1> (main.cpp) - 
+[2023-Apr-18 09:43:56.657783] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:43:56.657841] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:43:56.657885] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:43:56.658058] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:44:34.632081] <1> (main.cpp) - 
+[2023-Apr-18 09:44:34.632243] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:44:34.632292] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:44:34.632333] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:44:34.632503] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:47:17.320239] <1> (main.cpp) - 
+[2023-Apr-18 09:47:17.320498] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:47:17.320585] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:47:17.320639] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:47:17.320861] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:47:54.033851] <1> (main.cpp) - 
+[2023-Apr-18 09:47:54.034000] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:47:54.034038] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:47:54.034067] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:47:54.034194] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:48:56.167247] <1> (main.cpp) - 
+[2023-Apr-18 09:48:56.167423] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:48:56.167473] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:48:56.167514] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:48:56.167681] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:49:43.863647] <1> (main.cpp) - 
+[2023-Apr-18 09:49:43.863801] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:49:43.863860] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:49:43.863897] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:49:43.864038] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:50:53.892861] <1> (main.cpp) - 
+[2023-Apr-18 09:50:53.893197] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:50:53.893264] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:50:53.893312] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:50:53.893494] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:51:31.899204] <1> (main.cpp) - 
+[2023-Apr-18 09:51:31.899354] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:51:31.899393] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:51:31.899422] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:51:31.899538] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:51:57.674776] <1> (main.cpp) - 
+[2023-Apr-18 09:51:57.674916] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:51:57.674953] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:51:57.674982] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:51:57.675119] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:51:57.678617] <1> (CameraLucidArena) - Camera sensor size : 1440x1080
+[2023-Apr-18 09:51:57.950909] <1> (AcqThread) - DAYTIME         :  YES
+[2023-Apr-18 09:51:57.951032] <1> (AcqThread) - AUTO EXPOSURE   :  NO
+[2023-Apr-18 09:51:57.951071] <1> (AcqThread) - EXPOSURE TIME   :  0
+[2023-Apr-18 09:51:57.951102] <1> (AcqThread) - GAIN            :  0
+[2023-Apr-18 09:51:57.959379] <3> (Device) - Fail to set day exposure time to 0
+[2023-Apr-18 09:51:57.959536] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 09:51:57.959607] <1> (CameraLucidArena) - Unreferencing camera.
+[2023-Apr-18 09:53:53.932902] <1> (main.cpp) - 
+[2023-Apr-18 09:53:53.933019] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:53:53.933048] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:53:53.933070] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:53:53.933177] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:53:53.936571] <1> (CameraLucidArena) - Camera sensor size : 1440x1080
+[2023-Apr-18 09:53:54.202343] <1> (AcqThread) - DAYTIME         :  YES
+[2023-Apr-18 09:53:54.202443] <1> (AcqThread) - AUTO EXPOSURE   :  NO
+[2023-Apr-18 09:53:54.202478] <1> (AcqThread) - EXPOSURE TIME   :  0
+[2023-Apr-18 09:53:54.202506] <1> (AcqThread) - GAIN            :  0
+[2023-Apr-18 09:53:54.210202] <3> (Device) - Fail to set day exposure time to 0
+[2023-Apr-18 09:53:54.210402] <4> (main.cpp) - Fail to start acquisition thread.
+[2023-Apr-18 09:53:54.210545] <1> (CameraLucidArena) - Unreferencing camera.
+[2023-Apr-18 09:56:38.848094] <1> (main.cpp) - 
+[2023-Apr-18 09:56:38.848269] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:56:38.848346] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 09:56:38.848395] <1> (main.cpp) - ==============================================
+[2023-Apr-18 09:56:38.848587] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 09:56:38.852059] <1> (CameraLucidArena) - Camera sensor size : 1440x1080
+[2023-Apr-18 09:56:39.122856] <1> (AcqThread) - DAYTIME         :  YES
+[2023-Apr-18 09:56:39.122988] <1> (AcqThread) - AUTO EXPOSURE   :  NO
+[2023-Apr-18 09:56:39.123045] <1> (AcqThread) - EXPOSURE TIME   :  0
+[2023-Apr-18 09:56:39.123079] <1> (AcqThread) - GAIN            :  0
+[2023-Apr-18 09:56:39.201492] <1> (CameraLucidArena) - Camera payload : 1555200
+[2023-Apr-18 09:56:39.399973] <1> (CameraLucidArena) - Camera exposure bound min : 25.928
+[2023-Apr-18 09:56:39.400106] <1> (CameraLucidArena) - Camera exposure bound max : 33186.7
+[2023-Apr-18 09:56:39.407958] <1> (CameraLucidArena) - Camera gain bound min : 0
+[2023-Apr-18 09:56:39.408232] <1> (CameraLucidArena) - Camera gain bound max : 48
+[2023-Apr-18 09:56:39.408366] <1> (CameraLucidArena) - Camera frame rate : 0
+[2023-Apr-18 09:56:39.408477] <1> (CameraLucidArena) - Camera format : video/x-raw, format=(string)GRAY8
+[2023-Apr-18 09:56:39.410511] <1> (CameraLucidArena) - Camera gain : 0
+[2023-Apr-18 09:56:39.412749] <1> (CameraLucidArena) - Camera exposure : 25.928
+[2023-Apr-18 09:56:39.496891] <1> (Device) - Starting camera...
+[2023-Apr-18 09:56:39.497010] <1> (CameraLucidArena) - Set camera to CONTINUOUS MODE
+[2023-Apr-18 09:56:39.500519] <1> (CameraLucidArena) - Set camera TriggerMode to Off
+[2023-Apr-18 09:56:39.503350] <1> (CameraLucidArena) - Start acquisition on camera
+[2023-Apr-18 09:56:39.562276] <1> (main.cpp) - This is the process : 144651
+[2023-Apr-18 10:06:35.086354] <1> (main.cpp) - 
+[2023-Apr-18 10:06:35.086496] <1> (main.cpp) - ==============================================
+[2023-Apr-18 10:06:35.086535] <1> (main.cpp) - ====== FREETURE- Meteor detection mode ======
+[2023-Apr-18 10:06:35.086566] <1> (main.cpp) - ==============================================
+[2023-Apr-18 10:06:35.086714] <1> (DetThread) - Creating detThread...
+[2023-Apr-18 10:06:35.089903] <1> (CameraLucidArena) - Camera sensor size : 1440x1080
+[2023-Apr-18 10:06:35.315026] <1> (AcqThread) - DAYTIME         :  YES
+[2023-Apr-18 10:06:35.315134] <1> (AcqThread) - AUTO EXPOSURE   :  NO
+[2023-Apr-18 10:06:35.315186] <1> (AcqThread) - EXPOSURE TIME   :  0
+[2023-Apr-18 10:06:35.315232] <1> (AcqThread) - GAIN            :  0
+[2023-Apr-18 10:06:35.384944] <1> (CameraLucidArena) - Camera payload : 1555200
+[2023-Apr-18 10:06:35.545306] <1> (CameraLucidArena) - Camera exposure bound min : 25.928
+[2023-Apr-18 10:06:35.545447] <1> (CameraLucidArena) - Camera exposure bound max : 33186.7
+[2023-Apr-18 10:06:35.551711] <1> (CameraLucidArena) - Camera gain bound min : 0
+[2023-Apr-18 10:06:35.551835] <1> (CameraLucidArena) - Camera gain bound max : 48
+[2023-Apr-18 10:06:35.551872] <1> (CameraLucidArena) - Camera frame rate : 0
+[2023-Apr-18 10:06:35.551908] <1> (CameraLucidArena) - Camera format : video/x-raw, format=(string)GRAY8
+[2023-Apr-18 10:06:35.553352] <1> (CameraLucidArena) - Camera gain : 0
+[2023-Apr-18 10:06:35.554815] <1> (CameraLucidArena) - Camera exposure : 25.928
+[2023-Apr-18 10:06:35.623114] <1> (Device) - Starting camera...
+[2023-Apr-18 10:06:35.623232] <1> (CameraLucidArena) - Set camera to CONTINUOUS MODE
+[2023-Apr-18 10:06:35.625647] <1> (CameraLucidArena) - Set camera TriggerMode to Off
+[2023-Apr-18 10:06:35.628308] <1> (CameraLucidArena) - Start acquisition on camera
+[2023-Apr-18 10:06:35.676384] <1> (main.cpp) - This is the process : 157623
