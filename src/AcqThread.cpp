@@ -135,7 +135,6 @@ bool AcqThread::buildCameraInContinousMode(bool rebuild = false) {
         }
     } 
 
-    mDevice->setCameraFPS(30);
     
     // Prepare continuous acquisition.
     if(!prepareAcquisitionOnDevice()) {
