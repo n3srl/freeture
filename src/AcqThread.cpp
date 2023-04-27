@@ -123,27 +123,36 @@ void AcqThread::stopThread(){
 
 }
 
-bool AcqThread::startThread() {
-    std::cout << "AcqThread::startThread(" << std::endl;
-    // Create a device.
-    
-    
+bool AcqThread::buildCameraInContinousMode(bool rebuild = false) {
     // CREATE CAMERA
+    
+    mDevice->Setup(mcp, mfp, mvp, mDeviceID);
     if (mDevice->mCam == nullptr) {
+            
         if(!mDevice->createCamera()) {
             std::cout << "CREATE CAMERA ERROR" << std::endl;
             return false;
         }
-    }
+    } 
 
-    mDevice->Setup(mcp, mfp, mvp, mDeviceID);
+    mDevice->setCameraFPS(30);
     
     // Prepare continuous acquisition.
     if(!prepareAcquisitionOnDevice()) {
         std::cout << "FAIL ON PREPARE AQ DEVICE" << std::endl;
         return false;
     }
+
+    return true;
+}
+
+bool AcqThread::startThread() {
+    std::cout << "AcqThread::startThread(" << std::endl;
     
+    
+    if (!buildCameraInContinousMode()) {
+        return false;
+    }
         
 
     // Create acquisition thread.
@@ -408,7 +417,7 @@ void AcqThread::operator()(){
                                 if((currentTimeMode == NIGHT) && (mcp.regcap.ACQ_REGULAR_MODE == NIGHT || mcp.regcap.ACQ_REGULAR_MODE == DAYNIGHT)) {
 
                                         BOOST_LOG_SEV(logger, notification) << "Run regular acquisition.";
-
+                                        std::cout << "Run regular acquisition." << std::endl;
                                         runImageCapture(    mcp.regcap.ACQ_REGULAR_CFG.rep,
                                                             mcp.regcap.ACQ_REGULAR_CFG.exp,
                                                             mcp.regcap.ACQ_REGULAR_CFG.gain,
@@ -813,6 +822,8 @@ void AcqThread::runImageCapture(int imgNumber, int imgExposure, int imgGain, Cam
         BOOST_LOG_SEV(logger, notification) << "Format : " << format.getStringEnum(imgFormat);
         frame.mFormat = imgFormat;
 
+        frame.mFps = 30;
+
         if(mcp.ACQ_RES_CUSTOM_SIZE) {
             frame.mHeight = mcp.ACQ_HEIGHT;
             frame.mWidth = mcp.ACQ_WIDTH;
@@ -838,24 +849,17 @@ void AcqThread::runImageCapture(int imgNumber, int imgExposure, int imgGain, Cam
         Sleep(1000);
     #else
         #ifdef LINUX
-            sleep(1);
+            sleep(5);
         #endif
     #endif
 
     std::cout << "Restarting camera in continuous mode..." << std::endl;
     BOOST_LOG_SEV(logger, notification) << "Restarting camera in continuous mode...";
 
-    //mDevice->Setup(mcp, mfp, mvp, mDeviceID);
-    // RECREATE CAMERA
-    if(!mDevice->recreateCamera()) {
-        std::cout << "FAIL CAMERA RESTART" << std::endl;
-        return;
-        throw "Fail to restart camera.";
+    if (!buildCameraInContinousMode(true)) {
+        throw "Restart camera in continuos mode impossible";
     }
 
-    mDevice->Setup(mcp, mfp, mvp, mDeviceID);
-
-    prepareAcquisitionOnDevice();
 }
 
 void AcqThread::saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, std::string imgPrefix) {
@@ -1143,8 +1147,7 @@ bool AcqThread::computeSunTimes() {
 }
 
 bool AcqThread::prepareAcquisitionOnDevice() {
-    CameraDeviceManager& manager = CameraDeviceManager::Get();
-    mDevice = manager.getDevice();
+    
     std::cout << "AcqThread::prepareAcquisitionOnDevice" << std::endl;
     
     // SET SIZE
@@ -1162,12 +1165,11 @@ bool AcqThread::prepareAcquisitionOnDevice() {
     // Get Sunrise start/stop, Sunset start/stop. ---
     computeSunTimes();
 
-    std::cout << "GET BOUNDS OK" << std::endl;
 
     // CHECK SUNRISE AND SUNSET TIMES.
 
     if((mCurrentTime > mStopSunsetTime) || (mCurrentTime < mStartSunriseTime)) {
-
+        std::cout << "*************************** SET NIGHT AUTO NO" << std::endl;
         BOOST_LOG_SEV(logger, notification) << "DAYTIME         :  NO";
         BOOST_LOG_SEV(logger, notification) << "AUTO EXPOSURE   :  NO";
         BOOST_LOG_SEV(logger, notification) << "EXPOSURE TIME   :  " << mDevice->getNightExposureTime();
@@ -1180,7 +1182,7 @@ bool AcqThread::prepareAcquisitionOnDevice() {
            return false;
 
     }else if((mCurrentTime > mStopSunriseTime && mCurrentTime < mStartSunsetTime)) {
-
+        std::cout << "*************************** SET DAY AUTO NO" << std::endl;
         BOOST_LOG_SEV(logger, notification) << "DAYTIME         :  YES";
         BOOST_LOG_SEV(logger, notification) << "AUTO EXPOSURE   :  NO";
         BOOST_LOG_SEV(logger, notification) << "EXPOSURE TIME   :  " << mDevice->getDayExposureTime();
@@ -1198,7 +1200,7 @@ bool AcqThread::prepareAcquisitionOnDevice() {
         BOOST_LOG_SEV(logger, notification) << "AUTO EXPOSURE   :  YES";
         BOOST_LOG_SEV(logger, notification) << "EXPOSURE TIME   :  Minimum (" << mDevice->mMinExposureTime << ")"<< mDevice->getNightExposureTime();
         BOOST_LOG_SEV(logger, notification) << "GAIN            :  Minimum (" << mDevice->mMinGain << ")";
-
+        std::cout << "*************************** SET NIGHT AUTO SI" << std::endl;
         if(!mDevice->setCameraExposureTime(mDevice->mMinExposureTime))
             return false;
 

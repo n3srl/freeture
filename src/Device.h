@@ -123,7 +123,7 @@ class Device {
         int         mDayExposure;
         int         mDayGain;
         int         mFPS;
-        int         mCamID;         // ID in a specific sdk.
+        
         
         
         bool        mShiftBits;
@@ -133,6 +133,7 @@ class Device {
 
         void mergeList(std::vector<CameraDescription>&);
     public :
+        int         mCamID;         // ID in a specific sdk.
         int         mGenCamID;      // General ID.
         Camera*      mCam;
         int         mNbDev;

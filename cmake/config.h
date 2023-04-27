@@ -7,4 +7,4 @@
 #define LINUX
 /* #undef USE_PYLON */
 
-#endif // FREETURE_CONFIG_H
+#endif // FREETURE_CONFIG_HAS

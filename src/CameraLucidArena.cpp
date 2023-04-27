@@ -56,6 +56,8 @@
         if(!getDeviceNameById(id, deviceName))
             return false;
 
+        
+
         if (camera == nullptr)
         {
             std::cout << "CameraLucidArena::createDevice: Instancing arv_camera_new"<<std::endl;
@@ -81,12 +83,11 @@
 
         std::string deviceName;
         //free(camera);
-        camera = nullptr;
 
         if(!getDeviceNameById(id, deviceName))
             return false;
 
-        if (camera == nullptr)
+        if (camera != nullptr)
         {
             std::cout << "CameraLucidArena::createDevice: Instancing arv_camera_new"<<std::endl;
             camera = arv_camera_new(deviceName.c_str(),&error);
@@ -349,8 +350,8 @@
         ErrorManager::CheckAravisError(&error);
 
         BOOST_LOG_SEV(logger, notification) << "Set camera TriggerMode to Off";
-        arv_device_set_string_feature_value(arv_camera_get_device (camera), "TriggerMode" , "Off", &error);
-        ErrorManager::CheckAravisError(&error);
+        /* arv_device_set_string_feature_value(arv_camera_get_device (camera), "TriggerMode" , "Off", &error);
+        ErrorManager::CheckAravisError(&error); */
 
         BOOST_LOG_SEV(logger, notification) << "Start acquisition on camera";
         arv_camera_start_acquisition(camera, &error);
@@ -543,17 +544,23 @@
 
         bool res = false;
 
-        if(!createDevice(camID))
-            return false;
+        /* if(!createDevice(camID))
+            return false;  */
 
-        if(!setPixelFormat(frame.mFormat))
+        /* if(!setPixelFormat(frame.mFormat))
             return false;
 
         if(!setExposureTime(frame.mExposure))
             return false;
 
         if(!setGain(frame.mGain))
-            return false;
+            return false; 
+
+        if (!setFPS(frame.mFps))
+            return false; */
+
+
+
 
         if(frame.mWidth > 0 && frame.mHeight > 0) {
 
@@ -577,25 +584,37 @@
 
         }
 
+
+
+
         payload = arv_camera_get_payload (camera, &error);
         ErrorManager::CheckAravisError(&error);
+        
 
         pixFormat = arv_camera_get_pixel_format (camera, &error);
         ErrorManager::CheckAravisError(&error);
+        
 
         arv_camera_get_exposure_time_bounds (camera, &exposureMin, &exposureMax, &error);
         ErrorManager::CheckAravisError(&error);
+        
 
         arv_camera_get_gain_bounds (camera, &gainMin, &gainMax, &error);
         ErrorManager::CheckAravisError(&error);
+       
 
         arv_camera_set_frame_rate(camera, frame.mFps, &error); /* Regular captures */
         ErrorManager::CheckAravisError(&error);
 
+        std::cout << "==========================" << std::endl;
+
         fps = arv_camera_get_frame_rate(camera, &error);
         ErrorManager::CheckAravisError(&error);
 
+        
+
         capsString = arv_pixel_format_to_gst_caps_string(pixFormat);
+       
 
         gain    = arv_camera_get_gain(camera, &error);
         ErrorManager::CheckAravisError(&error);
@@ -629,7 +648,8 @@
 
         std::cout << std::endl;
 
-        if(arv_camera_is_gv_device (camera)) {
+
+        /* if(arv_camera_is_gv_device (camera)) {
 
             // http://www.baslerweb.com/media/documents/AW00064902000%20Control%20Packet%20Timing%20With%20Delays.pdf
             // https://github.com/GNOME/aravis/blob/06ac777fc6d98783680340f1c3f3ea39d2780974/src/arvcamera.c
@@ -645,7 +665,7 @@
             arv_camera_gv_set_packet_size (camera, 1444, &error);
             ErrorManager::CheckAravisError(&error);
 
-        }
+        } */
 
         // Create a new stream object. Open stream on Camera.
         stream = arv_camera_create_stream(camera, NULL, NULL, &error);
@@ -679,8 +699,13 @@
             // Push 50 buffer in the stream input buffer queue.
             arv_stream_push_buffer(stream, arv_buffer_new(payload, NULL));
 
+            
+
             // Set acquisition mode to continuous.
             arv_camera_set_acquisition_mode(camera, ARV_ACQUISITION_MODE_SINGLE_FRAME, &error);
+
+            
+            
             ErrorManager::CheckAravisError(&error);
 
             // Very usefull to avoid arv buffer timeout status
@@ -692,6 +717,9 @@
 
             // Get image buffer.
             ArvBuffer *arv_buffer = arv_stream_timeout_pop_buffer(stream, frame.mExposure + 5000000); //us
+            
+            
+
 
             char *buffer_data;
             size_t buffer_size;
@@ -815,10 +843,10 @@
             ErrorManager::CheckAravisError(&error);
 
 
-            g_object_unref(stream);
-            stream = NULL;
+            /* g_object_unref(stream);
+            stream = nullptr;
             g_object_unref(camera);
-            //camera = NULL;
+            camera = nullptr; */
 
         }
 
@@ -924,6 +952,7 @@
             std::cout << "CAMERA IS NULL " << std::endl;
         }
 
+
         double fpsMin = 0.0;
         double fpsMax = 0.0;
 
@@ -946,6 +975,10 @@
 
         double exposureMin = 0.0;
         double exposureMax = 0.0;
+
+        if (arv_camera_get_exposure_time_auto(camera, &error)) {
+            std::cout << "CAMERA EXP IS SET TO AUTO" << std::endl;
+        }
 
         arv_camera_get_exposure_time_bounds(camera, &exposureMin, &exposureMax, &error);
         ErrorManager::CheckAravisError(&error);
@@ -1161,7 +1194,7 @@
 
             arv_camera_set_frame_rate(camera, fps, &error);
             ErrorManager::CheckAravisError(&error);
-            std::cout << "SET FRAME OK" << std::endl;
+
             double setfps = arv_camera_get_frame_rate(camera, &error);
             ErrorManager::CheckAravisError(&error);
             std::cout << "=="<<setfps<<std::endl;
@@ -1189,11 +1222,11 @@
             return false;
         }
         
-        std::cout << "CAMERA IS SET OK " <<std::endl;
         switch(depth){
 
             case MONO8 :
                 {
+                    std::cout << "SET PIXEL FORMAT TO MONO_8 " << std::endl;
                     arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_8,&error);
                     ErrorManager::CheckAravisError(&error);
                 }
@@ -1201,12 +1234,14 @@
 
             case MONO12 :
                 {
+                    std::cout << "SET PIXEL FORMAT TO MONO_12 " << std::endl;
                     arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_12,&error);
                     ErrorManager::CheckAravisError(&error);
                 }
                 break;
             case MONO16 :
                 {
+                    std::cout << "SET PIXEL FORMAT TO MONO_16 " << std::endl;
                     arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_16,&error);
                     ErrorManager::CheckAravisError(&error);
                 }

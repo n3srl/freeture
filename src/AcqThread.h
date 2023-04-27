@@ -151,6 +151,10 @@ class AcqThread {
         // Return activity status.
         bool getThreadStatus();
 
+
+        // Added
+        bool buildCameraInContinousMode(bool);
+
     private :
 
         // Compute in seconds the sunrise start/stop times and the sunset start/stop times.

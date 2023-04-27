@@ -1,7 +1,1268 @@
--- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0")  
--- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found suitable version "1.74.0", minimum required is "1.55.0") found components: thread system date_time chrono filesystem log log_setup program_options iostreams serialization 
--- Found GObject libraries: gobject-2.0;glib-2.0
--- Found GObject includes : /usr/include/glib-2.0
--- Configuring done
--- Generating done
--- Build files have been written to: /freeture/cmake
+Device::Device
+INIT CAMERADEVICE MANAGER 
+Device::Device
+DEBUG: Device::~Device
+DEBUG: Device::getListDevice
+CameraLucidArenaScanner::UpdateCameraList
+DEBUG: CameraLucidArena_PHX016SScanner::UpdateCameraList
+DEBUG: CameraLucidArena_PHX016SScanner::UpdateCameraList UpdateDevices
+DEBUG: CameraLucidArena_PHX016SScanner::UpdateCameraList GetDevices
+DEBUG: CameraLucidArena_PHX016SScanner::UpdateCameraList Found  2 candidates devices
+DEBUG: CameraLucidArena_PHX016SScanner::UpdateCameraList # 0   acA1300-30gm
+DEBUG: CameraLucidArena_PHX016SScanner::UpdateCameraList # 1   PHX016S-M
+DEBUG: CameraLucidArena_PHX016SScanner::UpdateCameraList PHX016S found
+DEBUG: CameraGigeAravisScanner::UpdateCameraList
+DEBUG: CameraGigeAravisScanner::UpdateCameraList Fake
+DEBUG: CameraGigeAravisScanner::UpdateCameraList USB3Vision
+DEBUG: CameraGigeAravisScanner::UpdateCameraList GigEVision
+DEBUG: CameraGigeAravisScanner::UpdateCameraList Devices detected:  2
+[0]    NAME[Lucid Vision Labs-PHX016S-M-225100176] SDK[LUCIDARAVIS] IP: 192.168.16.122
+[1]    NAME[PHX016S-M] SDK[ARENASDK] IP: 192.168.16.122
+[2]    NAME[Basler-acA1300-30gm-23672455] SDK[ARAVIS] IP: 192.168.16.196
+[3]    NAME[Lucid Vision Labs-PHX016S-M-225100176] SDK[ARAVIS] IP: 192.168.16.122
+Camera type
+Device::createCamera(int,bool)
+DEBUG: Device::createDevicesWith
+DEBUG: SDK: LUCID_ARAVIS
+CameraLucidArena::createDevice
+CameraLucidArena::getDeviceNameById [#1]
+CameraLucidArena::createDevice: Instancing arv_camera_new
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::setFPS [0.1]==0.1
+DEBUG: Device::createCamera(int,bool) - created new camera
+DEBUG: Device::getCameraFPSBounds(double,double)
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+Device::setCameraDayGain
+CameraLucidArena::setGain
+DEBUG: Device::getCameraGainBounds(double,double)
+CameraLucidArena::getGainBounds
+DEBUG: Device::getCameraExposureBounds(double,double)
+CameraLucidArena::getExposureBounds [25.928, 9.99998e+06]
+EXP NIGHT 14606
+================================================
+======= FREETURE - Meteor detection mode =======
+================================================
+
+Start to create detection thread.
+AcqThread::AcqThread
+AcqThread::startThread(
+DEBUG: Device::Setup
+PARAM NIGHT EXP 14606
+DEBUG: Device::setCameraFPS [ 30 ]
+CameraLucidArena::setFPS [30]==30.0003
+AcqThread::prepareAcquisitionOnDevice
+DEBUG: Device::setCameraSize :  1440 x 1080
+CameraLucidArena::setSize
+DEBUG: Device::setCameraPixelFormat
+CameraLucidArena::setPixelFormat
+SET PIXEL FORMAT TO MONO_12 
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraExposureBounds
+CameraLucidArena::getExposureBounds [25.928, 33186.7]
+DEBUG: Device::getCameraGainBounds
+CameraLucidArena::getGainBounds
+AcqThread::computeSunTimes
+LOCAL DATE      :  20230427
+SUNRISE         :  14H47 - 15H57
+SUNSET          :  30H4 - 31H14
+*************************** SET NIGHT AUTO NO
+CameraLucidArena::setExposureTime [14606]
+arv_camera_get_exposure_time_bounds [25.928, 33186.7]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: 
+CameraLucidArena::setGain
+DEBUG: Device::setCameraFPS
+CameraLucidArena::setFPS [30]==30.0003
+DEBUG: Device::initializeCamera
+CameraLucidArena::grabInitialization
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range       : [0.1 - 33.8811]
+Fps             : 0
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+DEBUG: Device::startCamera
+CameraLucidArena::acqStart
+AcqThread::selectNextAcquisitionSchedule
+DEBUG: Device::getExposureStatus
+DEBUG: Device::loadNextCameraDataSet
+ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets
+ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets
+ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets
+ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets
+ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Run regular acquisition.
+AcqThread::runImageCapture
+DEBUG: Device::stopCamera
+CameraLucidArena::acqStop
+CameraLucidArena::grabCleanse
+DEBUG: Device::runSingleCapture
+CameraLucidArena::grabSingleImage
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range      : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+AcqThread::getThreadStatus
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+>> Acquisition in progress... (Please wait)
+>> Completed buffers = 1
+>> Failures          = 0
+Single capture succeed !
+AcqThread::buildAcquisitionDirectory
+>> Fits saved in : /freeture/ITLO09/SANMARTINOINSTRADA_20230427/captures/ITLO09_20230427T122624_UT-0
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Restarting camera in continuous mode...
+DEBUG: Device::Setup
+PARAM NIGHT EXP 14606
+DEBUG: Device::setCameraFPS [ 30 ]
+CameraLucidArena::setFPS [30]==30.0003
+AcqThread::prepareAcquisitionOnDevice
+DEBUG: Device::setCameraSize :  1440 x 1080
+CameraLucidArena::setSize
+DEBUG: Device::setCameraPixelFormat
+CameraLucidArena::setPixelFormat
+SET PIXEL FORMAT TO MONO_12 
+AcqThread::getThreadStatus
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraExposureBounds
+CameraLucidArena::getExposureBounds [25.928, 33186.7]
+DEBUG: Device::getCameraGainBounds
+CameraLucidArena::getGainBounds
+AcqThread::computeSunTimes
+LOCAL DATE      :  20230427
+SUNRISE         :  14H47 - 15H57
+SUNSET          :  30H4 - 31H14
+*************************** SET NIGHT AUTO NO
+CameraLucidArena::setExposureTime [14606]
+arv_camera_get_exposure_time_bounds [25.928, 33186.7]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: 
+CameraLucidArena::setGain
+DEBUG: Device::setCameraFPS
+CameraLucidArena::setFPS [30]==30.0003
+DEBUG: Device::initializeCamera
+CameraLucidArena::grabInitialization
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range       : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+DEBUG: Device::startCamera
+CameraLucidArena::acqStart
+ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Run regular acquisition.
+AcqThread::runImageCapture
+DEBUG: Device::stopCamera
+CameraLucidArena::acqStop
+CameraLucidArena::grabCleanse
+DEBUG: Device::runSingleCapture
+CameraLucidArena::grabSingleImage
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range      : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+AcqThread::getThreadStatus
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+>> Acquisition in progress... (Please wait)
+>> Completed buffers = 1
+>> Failures          = 0
+Single capture succeed !
+AcqThread::buildAcquisitionDirectory
+>> Fits saved in : /freeture/ITLO09/SANMARTINOINSTRADA_20230427/captures/ITLO09_20230427T122641_UT-0
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Restarting camera in continuous mode...
+DEBUG: Device::Setup
+PARAM NIGHT EXP 14606
+DEBUG: Device::setCameraFPS [ 30 ]
+CameraLucidArena::setFPS [30]==30.0003
+AcqThread::prepareAcquisitionOnDevice
+DEBUG: Device::setCameraSize :  1440 x 1080
+CameraLucidArena::setSize
+DEBUG: Device::setCameraPixelFormat
+CameraLucidArena::setPixelFormat
+SET PIXEL FORMAT TO MONO_12 
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraExposureBounds
+CameraLucidArena::getExposureBounds [25.928, 33186.7]
+DEBUG: Device::getCameraGainBounds
+CameraLucidArena::getGainBounds
+AcqThread::computeSunTimes
+LOCAL DATE      :  20230427
+SUNRISE         :  14H47 - 15H57
+SUNSET          :  30H4 - 31H14
+*************************** SET NIGHT AUTO NO
+CameraLucidArena::setExposureTime [14606]
+AcqThread::getThreadStatus
+arv_camera_get_exposure_time_bounds [25.928, 33186.7]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: 
+CameraLucidArena::setGain
+DEBUG: Device::setCameraFPS
+CameraLucidArena::setFPS [30]==30.0003
+DEBUG: Device::initializeCamera
+CameraLucidArena::grabInitialization
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range       : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+DEBUG: Device::startCamera
+CameraLucidArena::acqStart
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Run regular acquisition.
+AcqThread::runImageCapture
+DEBUG: Device::stopCamera
+CameraLucidArena::acqStop
+CameraLucidArena::grabCleanse
+DEBUG: Device::runSingleCapture
+CameraLucidArena::grabSingleImage
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range      : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+AcqThread::getThreadStatus
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+>> Acquisition in progress... (Please wait)
+ARV_BUFFER_STATUS_TIMEOUT: timeout was reached before all packets are received
+>> Completed buffers = 0
+>> Failures          = 1
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Restarting camera in continuous mode...
+DEBUG: Device::Setup
+PARAM NIGHT EXP 14606
+DEBUG: Device::setCameraFPS [ 30 ]
+CameraLucidArena::setFPS [30]==30.0003
+AcqThread::prepareAcquisitionOnDevice
+DEBUG: Device::setCameraSize :  1440 x 1080
+CameraLucidArena::setSize
+DEBUG: Device::setCameraPixelFormat
+CameraLucidArena::setPixelFormat
+SET PIXEL FORMAT TO MONO_12 
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraExposureBounds
+CameraLucidArena::getExposureBounds [25.928, 33186.7]
+DEBUG: Device::getCameraGainBounds
+CameraLucidArena::getGainBounds
+AcqThread::computeSunTimes
+LOCAL DATE      :  20230427
+SUNRISE         :  14H47 - 15H57
+SUNSET          :  30H4 - 31H14
+*************************** SET NIGHT AUTO NO
+CameraLucidArena::setExposureTime [14606]
+arv_camera_get_exposure_time_bounds [25.928, 33186.7]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: 
+CameraLucidArena::setGain
+DEBUG: Device::setCameraFPS
+CameraLucidArena::setFPS [30]==30.0003
+DEBUG: Device::initializeCamera
+CameraLucidArena::grabInitialization
+AcqThread::getThreadStatus
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range       : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+DEBUG: Device::startCamera
+CameraLucidArena::acqStart
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Run regular acquisition.
+AcqThread::runImageCapture
+DEBUG: Device::stopCamera
+CameraLucidArena::acqStop
+CameraLucidArena::grabCleanse
+DEBUG: Device::runSingleCapture
+CameraLucidArena::grabSingleImage
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range      : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+AcqThread::getThreadStatus
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+>> Acquisition in progress... (Please wait)
+>> Completed buffers = 1
+>> Failures          = 0
+Single capture succeed !
+AcqThread::buildAcquisitionDirectory
+>> Fits saved in : /freeture/ITLO09/SANMARTINOINSTRADA_20230427/captures/ITLO09_20230427T122715_UT-0
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Restarting camera in continuous mode...
+DEBUG: Device::Setup
+PARAM NIGHT EXP 14606
+DEBUG: Device::setCameraFPS [ 30 ]
+CameraLucidArena::setFPS [30]==30.0003
+AcqThread::prepareAcquisitionOnDevice
+DEBUG: Device::setCameraSize :  1440 x 1080
+CameraLucidArena::setSize
+DEBUG: Device::setCameraPixelFormat
+CameraLucidArena::setPixelFormat
+SET PIXEL FORMAT TO MONO_12 
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraExposureBounds
+CameraLucidArena::getExposureBounds [25.928, 33186.7]
+DEBUG: Device::getCameraGainBounds
+CameraLucidArena::getGainBounds
+AcqThread::computeSunTimes
+LOCAL DATE      :  20230427
+SUNRISE         :  14H47 - 15H57
+SUNSET          :  30H4 - 31H14
+*************************** SET NIGHT AUTO NO
+CameraLucidArena::setExposureTime [14606]
+arv_camera_get_exposure_time_bounds [25.928, 33186.7]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: 
+CameraLucidArena::setGain
+AcqThread::getThreadStatus
+DEBUG: Device::setCameraFPS
+CameraLucidArena::setFPS [30]==30.0003
+DEBUG: Device::initializeCamera
+CameraLucidArena::grabInitialization
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range       : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+DEBUG: Device::startCamera
+CameraLucidArena::acqStart
+ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Run regular acquisition.
+AcqThread::runImageCapture
+DEBUG: Device::stopCamera
+CameraLucidArena::acqStop
+CameraLucidArena::grabCleanse
+DEBUG: Device::runSingleCapture
+CameraLucidArena::grabSingleImage
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range      : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+AcqThread::getThreadStatus
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+>> Acquisition in progress... (Please wait)
+>> Completed buffers = 1
+>> Failures          = 0
+Single capture succeed !
+AcqThread::buildAcquisitionDirectory
+>> Fits saved in : /freeture/ITLO09/SANMARTINOINSTRADA_20230427/captures/ITLO09_20230427T122732_UT-0
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Restarting camera in continuous mode...
+DEBUG: Device::Setup
+PARAM NIGHT EXP 14606
+DEBUG: Device::setCameraFPS [ 30 ]
+CameraLucidArena::setFPS [30]==30.0003
+AcqThread::prepareAcquisitionOnDevice
+DEBUG: Device::setCameraSize :  1440 x 1080
+CameraLucidArena::setSize
+DEBUG: Device::setCameraPixelFormat
+CameraLucidArena::setPixelFormat
+SET PIXEL FORMAT TO MONO_12 
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraExposureBounds
+CameraLucidArena::getExposureBounds [25.928, 33186.7]
+DEBUG: Device::getCameraGainBounds
+CameraLucidArena::getGainBounds
+AcqThread::computeSunTimes
+LOCAL DATE      :  20230427
+SUNRISE         :  14H47 - 15H57
+SUNSET          :  30H4 - 31H14
+*************************** SET NIGHT AUTO NO
+CameraLucidArena::setExposureTime [14606]
+arv_camera_get_exposure_time_bounds [25.928, 33186.7]
+AcqThread::getThreadStatus
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: 
+CameraLucidArena::setGain
+DEBUG: Device::setCameraFPS
+CameraLucidArena::setFPS [30]==30.0003
+DEBUG: Device::initializeCamera
+CameraLucidArena::grabInitialization
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range       : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+DEBUG: Device::startCamera
+CameraLucidArena::acqStart
+ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Run regular acquisition.
+AcqThread::runImageCapture
+DEBUG: Device::stopCamera
+CameraLucidArena::acqStop
+CameraLucidArena::grabCleanse
+DEBUG: Device::runSingleCapture
+CameraLucidArena::grabSingleImage
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range      : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+AcqThread::getThreadStatus
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+>> Acquisition in progress... (Please wait)
+>> Completed buffers = 1
+>> Failures          = 0
+Single capture succeed !
+AcqThread::buildAcquisitionDirectory
+>> Fits saved in : /freeture/ITLO09/SANMARTINOINSTRADA_20230427/captures/ITLO09_20230427T122749_UT-0
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Restarting camera in continuous mode...
+DEBUG: Device::Setup
+PARAM NIGHT EXP 14606
+DEBUG: Device::setCameraFPS [ 30 ]
+CameraLucidArena::setFPS [30]==30.0003
+AcqThread::prepareAcquisitionOnDevice
+DEBUG: Device::setCameraSize :  1440 x 1080
+CameraLucidArena::setSize
+DEBUG: Device::setCameraPixelFormat
+CameraLucidArena::setPixelFormat
+SET PIXEL FORMAT TO MONO_12 
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraExposureBounds
+CameraLucidArena::getExposureBounds [25.928, 33186.7]
+DEBUG: Device::getCameraGainBounds
+CameraLucidArena::getGainBounds
+AcqThread::getThreadStatus
+AcqThread::computeSunTimes
+LOCAL DATE      :  20230427
+SUNRISE         :  14H47 - 15H57
+SUNSET          :  30H4 - 31H14
+*************************** SET NIGHT AUTO NO
+CameraLucidArena::setExposureTime [14606]
+arv_camera_get_exposure_time_bounds [25.928, 33186.7]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: 
+CameraLucidArena::setGain
+DEBUG: Device::setCameraFPS
+CameraLucidArena::setFPS [30]==30.0003
+DEBUG: Device::initializeCamera
+CameraLucidArena::grabInitialization
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range       : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+DEBUG: Device::startCamera
+CameraLucidArena::acqStart
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Run regular acquisition.
+AcqThread::runImageCapture
+DEBUG: Device::stopCamera
+CameraLucidArena::acqStop
+CameraLucidArena::grabCleanse
+DEBUG: Device::runSingleCapture
+CameraLucidArena::grabSingleImage
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range      : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+AcqThread::getThreadStatus
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+>> Acquisition in progress... (Please wait)
+>> Completed buffers = 1
+>> Failures          = 0
+Single capture succeed !
+AcqThread::buildAcquisitionDirectory
+>> Fits saved in : /freeture/ITLO09/SANMARTINOINSTRADA_20230427/captures/ITLO09_20230427T122806_UT-0
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Restarting camera in continuous mode...
+DEBUG: Device::Setup
+PARAM NIGHT EXP 14606
+DEBUG: Device::setCameraFPS [ 30 ]
+CameraLucidArena::setFPS [30]==30.0003
+AcqThread::prepareAcquisitionOnDevice
+DEBUG: Device::setCameraSize :  1440 x 1080
+CameraLucidArena::setSize
+DEBUG: Device::setCameraPixelFormat
+CameraLucidArena::setPixelFormat
+SET PIXEL FORMAT TO MONO_12 
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraExposureBounds
+CameraLucidArena::getExposureBounds [25.928, 33186.7]
+DEBUG: Device::getCameraGainBounds
+CameraLucidArena::getGainBounds
+AcqThread::computeSunTimes
+LOCAL DATE      :  20230427
+SUNRISE         :  14H47 - 15H57
+SUNSET          :  30H4 - 31H14
+*************************** SET NIGHT AUTO NO
+CameraLucidArena::setExposureTime [14606]
+arv_camera_get_exposure_time_bounds [25.928, 33186.7]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: 
+CameraLucidArena::setGain
+DEBUG: Device::setCameraFPS
+CameraLucidArena::setFPS [30]AcqThread::getThreadStatus
+==30.0003
+DEBUG: Device::initializeCamera
+CameraLucidArena::grabInitialization
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range       : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+DEBUG: Device::startCamera
+CameraLucidArena::acqStart
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Run regular acquisition.
+AcqThread::runImageCapture
+DEBUG: Device::stopCamera
+CameraLucidArena::acqStop
+CameraLucidArena::grabCleanse
+DEBUG: Device::runSingleCapture
+CameraLucidArena::grabSingleImage
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range      : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+AcqThread::getThreadStatus
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+>> Acquisition in progress... (Please wait)
+>> Completed buffers = 1
+>> Failures          = 0
+Single capture succeed !
+AcqThread::buildAcquisitionDirectory
+>> Fits saved in : /freeture/ITLO09/SANMARTINOINSTRADA_20230427/captures/ITLO09_20230427T122823_UT-0
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Restarting camera in continuous mode...
+DEBUG: Device::Setup
+PARAM NIGHT EXP 14606
+DEBUG: Device::setCameraFPS [ 30 ]
+CameraLucidArena::setFPS [30]==30.0003
+AcqThread::prepareAcquisitionOnDevice
+DEBUG: Device::setCameraSize :  1440 x 1080
+CameraLucidArena::setSize
+DEBUG: Device::setCameraPixelFormat
+CameraLucidArena::setPixelFormat
+SET PIXEL FORMAT TO MONO_12 
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraExposureBounds
+CameraLucidArena::getExposureBounds [25.928, 33186.7]
+DEBUG: Device::getCameraGainBounds
+CameraLucidArena::getGainBounds
+AcqThread::computeSunTimes
+LOCAL DATE      :  20230427
+SUNRISE         :  14H47 - 15H57
+SUNSET          :  30H4 - 31H14
+*************************** SET NIGHT AUTO NO
+CameraLucidArena::setExposureTime [14606]
+arv_camera_get_exposure_time_bounds [25.928, 33186.7]
+AcqThread::getThreadStatus
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: 
+CameraLucidArena::setGain
+DEBUG: Device::setCameraFPS
+CameraLucidArena::setFPS [30]==30.0003
+DEBUG: Device::initializeCamera
+CameraLucidArena::grabInitialization
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range       : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+DEBUG: Device::startCamera
+CameraLucidArena::acqStart
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Run regular acquisition.
+AcqThread::runImageCapture
+DEBUG: Device::stopCamera
+CameraLucidArena::acqStop
+CameraLucidArena::grabCleanse
+DEBUG: Device::runSingleCapture
+CameraLucidArena::grabSingleImage
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range      : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+AcqThread::getThreadStatus
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+>> Acquisition in progress... (Please wait)
+>> Completed buffers = 1
+>> Failures          = 0
+Single capture succeed !
+AcqThread::buildAcquisitionDirectory
+>> Fits saved in : /freeture/ITLO09/SANMARTINOINSTRADA_20230427/captures/ITLO09_20230427T122840_UT-0
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Restarting camera in continuous mode...
+DEBUG: Device::Setup
+PARAM NIGHT EXP 14606
+DEBUG: Device::setCameraFPS [ 30 ]
+CameraLucidArena::setFPS [30]==30.0003
+AcqThread::prepareAcquisitionOnDevice
+DEBUG: Device::setCameraSize :  1440 x 1080
+CameraLucidArena::setSize
+DEBUG: Device::setCameraPixelFormat
+CameraLucidArena::setPixelFormat
+SET PIXEL FORMAT TO MONO_12 
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraExposureBounds
+CameraLucidArena::getExposureBounds [25.928, 33186.7]
+DEBUG: Device::getCameraGainBounds
+CameraLucidArena::getGainBounds
+AcqThread::computeSunTimes
+LOCAL DATE      :  20230427
+SUNRISE         :  14H47 - 15H57
+SUNSET          :  30H4 - 31H14
+*************************** SET NIGHT AUTO NO
+CameraLucidArena::setExposureTime [14606]
+arv_camera_get_exposure_time_bounds [25.928, 33186.7]
+AcqThread::getThreadStatus
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: 
+CameraLucidArena::setGain
+DEBUG: Device::setCameraFPS
+CameraLucidArena::setFPS [30]==30.0003
+DEBUG: Device::initializeCamera
+CameraLucidArena::grabInitialization
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range       : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+DEBUG: Device::startCamera
+CameraLucidArena::acqStart
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Run regular acquisition.
+AcqThread::runImageCapture
+DEBUG: Device::stopCamera
+CameraLucidArena::acqStop
+CameraLucidArena::grabCleanse
+DEBUG: Device::runSingleCapture
+CameraLucidArena::grabSingleImage
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range      : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+==========================
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+AcqThread::getThreadStatus
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+M 0.1MA 33.8811
+>> Acquisition in progress... (Please wait)
+>> Completed buffers = 1
+>> Failures          = 0
+Single capture succeed !
+AcqThread::buildAcquisitionDirectory
+>> Fits saved in : /freeture/ITLO09/SANMARTINOINSTRADA_20230427/captures/ITLO09_20230427T122857_UT-0
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+AcqThread::getThreadStatus
+Restarting camera in continuous mode...
+DEBUG: Device::Setup
+PARAM NIGHT EXP 14606
+DEBUG: Device::setCameraFPS [ 30 ]
+CameraLucidArena::setFPS [30]==30.0003
+AcqThread::prepareAcquisitionOnDevice
+DEBUG: Device::setCameraSize :  1440 x 1080
+CameraLucidArena::setSize
+DEBUG: Device::setCameraPixelFormat
+CameraLucidArena::setPixelFormat
+SET PIXEL FORMAT TO MONO_12 
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraExposureBounds
+CameraLucidArena::getExposureBounds [25.928, 33186.7]
+DEBUG: Device::getCameraGainBounds
+CameraLucidArena::getGainBounds
+AcqThread::computeSunTimes
+LOCAL DATE      :  20230427
+SUNRISE         :  14H47 - 15H57
+SUNSET          :  30H4 - 31H14
+*************************** SET NIGHT AUTO NO
+CameraLucidArena::setExposureTime [14606]
+arv_camera_get_exposure_time_bounds [25.928, 33186.7]
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: Device::getCameraFPSBounds
+CameraLucidArena::getFPSBounds [0.1, 33.8811]
+DEBUG: 
+CameraLucidArena::setGain
+DEBUG: Device::setCameraFPS
+CameraLucidArena::setFPS [30]AcqThread::getThreadStatus
+==30.0003
+DEBUG: Device::initializeCamera
+CameraLucidArena::grabInitialization
+
+DEVICE SELECTED : 225100176
+DEVICE NAME     : PHX016S-M
+DEVICE VENDOR   : Lucid Vision Labs
+PAYLOAD         : 3110400
+Start X         : 0
+Start Y         : 0
+Width           : 1440
+Height          : 1080
+Exp Range       : [25.928 - 33186.7]
+Exp             : 14605.9
+Gain Range      : [0 - 48]
+Gain            : 48
+Fps Range       : [0.1 - 33.8811]
+Fps             : 30.0003
+Type            : video/x-raw, format=(string)GRAY16_LE
+
+DEBUG: Device::startCamera
+CameraLucidArena::acqStart
+ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets

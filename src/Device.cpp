@@ -197,7 +197,8 @@ bool freeture::Device::createCamera()
             return false;
         } 
         } catch (std::exception &e) {
-            
+            std::cout << "I FOUND EXC" << std::endl;
+            return false;
         }   
             
         mCamID = manager.getListDevice().at(mGenCamID).Id;
@@ -235,17 +236,11 @@ bool freeture::Device::recreateCamera() {
 
         mCamID = manager.getListDevice().at(mGenCamID).Id;
 
-        if(manager.getDevice()->mCam == nullptr) {
-            freeture::LogDebug("MCAM IS NULL : ");
-        } else {
-            freeture::LogDebug("MCAM IS NOT NULL : ", mCamID, mGenCamID);
-        }
-
-        if(manager.getDevice()->mCam != nullptr) {
-            if(!manager.getDevice()->mCam->recreateDevice(mCamID)){
+        if(mCam != nullptr) {
+            if(!mCam->recreateDevice(mCamID)){
                 freeture::LogDebug("Fail to create device with ID  : ", mGenCamID);
                 BOOST_LOG_SEV(logger, fail) << "Fail to create device with ID  : " << mGenCamID;
-                manager.getDevice()->mCam->grabCleanse();
+                mCam->grabCleanse();
                 return false;
             }
             freeture::LogDebug("Device::recreateCamera - created new camera" );
@@ -298,7 +293,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         freeture::LogError("Device::createDevicesWith","Error","MEMORY LEAKING" );
         assert (device->mCam != nullptr);
         free(device->mCam);
-        device->mCam = nullptr;
+        return true;
     }
 
 
@@ -724,10 +719,7 @@ bool freeture::Device::getCameraFPSBounds(double &min, double &max) {
 
 void freeture::Device::getCameraFPSBounds() {
     freeture::LogDebug(  "Device::getCameraFPSBounds" );
-    CameraDeviceManager& manager = CameraDeviceManager::Get();
-   
-    
-    manager.getDevice()->mCam->getFPSBounds(manager.getDevice()->mMinFPS, manager.getDevice()->mMaxFPS);
+    mCam->getFPSBounds(mMinFPS, mMaxFPS);
 }
 
 
@@ -751,7 +743,7 @@ bool freeture::Device::setCameraNightExposureTime()
     
 
     freeture::Device* device = CameraDeviceManager::Get().getDevice();
-    freeture::LogDebug(  "Device::setCameraNightExposureTime "+ device->getNightExposureTime() );
+    
 
     if(!mCam->setExposureTime(mNightExposure)) {
         BOOST_LOG_SEV(logger, fail) << "Fail to set night exposure time to " << mNightExposure;
