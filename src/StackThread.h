@@ -53,7 +53,7 @@
 #include "SParam.h"
 
 using namespace boost::filesystem;
-using namespace std;
+
 using namespace cv;
 using namespace boost::posix_time;
 
@@ -95,7 +95,7 @@ class StackThread {
         stackParam      msp;
         CamPixFmt       mPixfmt;
 
-        string completeDataPath;
+        std::string completeDataPath;
 
     public :
 

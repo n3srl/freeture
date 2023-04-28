@@ -41,7 +41,7 @@
     #define BOOST_LOG_DYN_LINK 1
 #endif
 
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <boost/log/common.hpp>
 #include <boost/log/expressions.hpp>
@@ -68,7 +68,7 @@
 #include "SParam.h"
 
 using namespace boost::filesystem;
-using namespace std;
+
 using namespace cv;
 
 class Detection {
@@ -155,9 +155,9 @@ class Detection {
         * Save infos on the detected event.
         *
         */
-        virtual void saveDetectionInfos(string p, int nbFramesAround){};
+        virtual void saveDetectionInfos(std::string p, int nbFramesAround){};
 
-        virtual vector<string> getDebugFiles() {vector<string> files; return files;};
+        virtual std::vector<std::string> getDebugFiles() {std::vector<std::string> files; return files;};
 
 };
 

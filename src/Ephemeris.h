@@ -41,7 +41,6 @@
 #include <stdio.h>
 #include "TimeDate.h"
 
-using namespace std;
 
 class Ephemeris {
 
@@ -57,7 +56,7 @@ class Ephemeris {
 
     public :
 
-        Ephemeris(string date, double sunElevation, double longitude, double latitude);
+        Ephemeris(std::string date, double sunElevation, double longitude, double latitude);
         ~Ephemeris();
         bool computeEphemeris(int &sunriseHours, int &sunriseMinutes, int &sunsetHours, int &sunsetMinutes);
 

@@ -49,7 +49,7 @@
 
 #include <TLI/TLI.h>
 
-using namespace std;
+
 
 namespace GenICam
 {

@@ -95,7 +95,7 @@ class Device {
         bool mVideoFramesInput; // TRUE if input is a video file or frames directories.
 
     private :
-        vector<CameraDescription> listCams;
+        std::vector<CameraDescription> listCams;
 
         static boost::log::sources::severity_logger< LogSeverityLevel > logger;
 
@@ -111,7 +111,7 @@ class Device {
 
         } initializer;
 
-        std::vector<pair<int,pair<int,CamSdkType>>> mDevices;
+        std::vector<std::pair<int,std::pair<int,CamSdkType>>> mDevices;
 
         bool        mCustomSize;
         int         mStartX;
@@ -123,9 +123,9 @@ class Device {
         int         mDayExposure;
         int         mDayGain;
         int         mFPS;
-        int         mCamID;         // ID in a specific sdk.
-        int         mGenCamID;      // General ID.
-        Camera      *mCam;
+        
+        
+        
         bool        mShiftBits;
         bool        mVerbose;
         framesParam mfp;
@@ -133,7 +133,9 @@ class Device {
 
         void mergeList(std::vector<CameraDescription>&);
     public :
-
+        int         mCamID;         // ID in a specific sdk.
+        int         mGenCamID;      // General ID.
+        Camera*      mCam;
         int         mNbDev;
         CamPixFmt   mFormat;
         std::string      mCfgPath;
@@ -146,6 +148,7 @@ class Device {
         double         mMaxGain;
         //int         mNbFrame;
 
+
         void Setup(cameraParam cp, framesParam fp, videoParam vp, int cid);
 
         Device();
@@ -157,6 +160,8 @@ class Device {
         CamSdkType getDeviceSdk(int id);
 
         void listDevices(bool printInfos);
+
+        std::vector<CameraDescription> getListDevice();
 
         bool createCamera(int id, bool create);
 
@@ -232,6 +237,9 @@ class Device {
         int getDayGain() {return mDayGain;};
 
         void setVerbose(bool status);
+
+        Camera* getCamera();
+
 
     private :
 

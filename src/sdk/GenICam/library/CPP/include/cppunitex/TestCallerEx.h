@@ -10,7 +10,7 @@
 #  include <cppunit/extensions/TypeInfoHelper.h>
 #endif
 
-using namespace std;
+
 
 CPPUNIT_NS_BEGIN
 

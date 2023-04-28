@@ -50,10 +50,10 @@
 #include "ESmtpSecurity.h"
 #include <vector>
 #include "EInputDeviceType.h"
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-using namespace std;
+
 using namespace cv;
 
 // ******************************************************
@@ -62,13 +62,13 @@ using namespace cv;
 
 struct mailParam{
     bool            MAIL_DETECTION_ENABLED;
-    string          MAIL_SMTP_SERVER;
+    std::string          MAIL_SMTP_SERVER;
     SmtpSecurity    MAIL_CONNECTION_TYPE;
-    string          MAIL_SMTP_LOGIN;
-    string          MAIL_SMTP_PASSWORD;
-    vector<string>  MAIL_RECIPIENTS;
+    std::string          MAIL_SMTP_LOGIN;
+    std::string          MAIL_SMTP_PASSWORD;
+    std::vector<std::string>  MAIL_RECIPIENTS;
     bool status;
-    vector<string> errormsg;
+    std::vector<std::string> errormsg;
 };
 
 // ******************************************************
@@ -76,12 +76,12 @@ struct mailParam{
 // ******************************************************
 
 struct logParam {
-    string              LOG_PATH;
+    std::string              LOG_PATH;
     int                 LOG_ARCHIVE_DAY;
     int                 LOG_SIZE_LIMIT;
     LogSeverityLevel    LOG_SEVERITY;
     bool status;
-    vector<string> errormsg;
+    std::vector<std::string> errormsg;
 };
 
 // ******************************************************
@@ -89,11 +89,11 @@ struct logParam {
 // ******************************************************
 
 struct dataParam {
-    string  DATA_PATH;
+    std::string  DATA_PATH;
     bool    FITS_COMPRESSION;
-    string  FITS_COMPRESSION_METHOD;
+    std::string  FITS_COMPRESSION_METHOD;
     bool status;
-    vector<string> errormsg;
+    std::vector<std::string> errormsg;
 };
 
 // ******************************************************
@@ -102,9 +102,9 @@ struct dataParam {
 
 struct framesParam {
     int INPUT_TIME_INTERVAL;
-    vector<string> INPUT_FRAMES_DIRECTORY_PATH;
+    std::vector<std::string> INPUT_FRAMES_DIRECTORY_PATH;
     bool status;
-    vector<string> errormsg;
+    std::vector<std::string> errormsg;
 };
 
 // ******************************************************
@@ -113,9 +113,9 @@ struct framesParam {
 
 struct videoParam {
     int INPUT_TIME_INTERVAL;
-    vector<string> INPUT_VIDEO_PATH;
+    std::vector<std::string> INPUT_VIDEO_PATH;
     bool status;
-    vector<string> errormsg;
+    std::vector<std::string> errormsg;
 };
 
 // ******************************************************
@@ -157,8 +157,8 @@ struct cameraParam{
         bool    EPHEMERIS_ENABLED;
         double  SUN_HORIZON_1;
         double  SUN_HORIZON_2;
-        vector<int>  SUNRISE_TIME;
-        vector<int>  SUNSET_TIME;
+        std::vector<int>  SUNRISE_TIME;
+        std::vector<int>  SUNSET_TIME;
         int     SUNSET_DURATION;
         int     SUNRISE_DURATION;
     };
@@ -167,7 +167,7 @@ struct cameraParam{
     struct regularCaptures {
         bool        ACQ_REGULAR_ENABLED;
         TimeMode    ACQ_REGULAR_MODE;
-        string      ACQ_REGULAR_PRFX;
+        std::string      ACQ_REGULAR_PRFX;
         ImgFormat   ACQ_REGULAR_OUTPUT;
         struct regularParam {
             int interval;
@@ -183,12 +183,12 @@ struct cameraParam{
     struct scheduledCaptures {
         bool        ACQ_SCHEDULE_ENABLED;
         ImgFormat   ACQ_SCHEDULE_OUTPUT;
-        vector<scheduleParam> ACQ_SCHEDULE;
+        std::vector<scheduleParam> ACQ_SCHEDULE;
     };
     scheduledCaptures schcap;
 
     bool status;
-    vector<string> errormsg;
+    std::vector<std::string> errormsg;
 };
 
 // ******************************************************
@@ -198,12 +198,12 @@ struct cameraParam{
 struct detectionParam {
     int         ACQ_BUFFER_SIZE;
     bool        ACQ_MASK_ENABLED;
-    string      ACQ_MASK_PATH;
+    std::string      ACQ_MASK_PATH;
     Mat         MASK;
     bool        DET_ENABLED;
     TimeMode    DET_MODE;
     bool        DET_DEBUG;
-    string      DET_DEBUG_PATH;
+    std::string      DET_DEBUG_PATH;
     int         DET_TIME_AROUND;
     int         DET_TIME_MAX;
     DetMeth     DET_METHOD;
@@ -230,7 +230,7 @@ struct detectionParam {
     detectionMethod1 temporal;
 
     bool status;
-    vector<string> errormsg;
+    std::vector<std::string> errormsg;
 
 };
 
@@ -246,7 +246,7 @@ struct stackParam{
     StackMeth   STACK_MTHD;
     bool        STACK_REDUCTION;
     bool status;
-    vector<string> errormsg;
+    std::vector<std::string> errormsg;
 };
 
 // ******************************************************
@@ -254,18 +254,18 @@ struct stackParam{
 // ******************************************************
 
  struct stationParam {
-    string STATION_NAME;
-    string TELESCOP;
-    string OBSERVER;
-    string INSTRUME;
-    string CAMERA;
+    std::string STATION_NAME;
+    std::string TELESCOP;
+    std::string OBSERVER;
+    std::string INSTRUME;
+    std::string CAMERA;
     double FOCAL;
     double APERTURE;
     double SITELONG;
     double SITELAT;
     double SITEELEV;
     bool status;
-    vector<string> errormsg;
+    std::vector<std::string> errormsg;
 };
 
 // ******************************************************
@@ -273,10 +273,10 @@ struct stackParam{
 // ******************************************************
 
 struct fitskeysParam{
-    string FILTER;
+    std::string FILTER;
     double K1;
     double K2;
-    string COMMENT;
+    std::string COMMENT;
     double CD1_1;
     double CD1_2;
     double CD2_1;
@@ -284,7 +284,7 @@ struct fitskeysParam{
     double XPIXEL;
     double YPIXEL;
     bool status;
-    vector<string> errormsg;
+    std::vector<std::string> errormsg;
 };
 
 // ******************************************************
@@ -292,7 +292,8 @@ struct fitskeysParam{
 // ******************************************************
 
 struct parameters {
-    pair<pair<int, bool>,string> DEVICE_ID; // Pair : <value, status>
+    //std::pair<std::pair<int, bool>,std::string> DEVICE_ID; // Pair : <value, status>
+    int             DEVICE_ID;
     dataParam       data;
     logParam        log;
     framesParam     framesInput;

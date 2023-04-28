@@ -42,7 +42,7 @@
 #endif
 
 #include <boost/circular_buffer.hpp>
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/video/tracking.hpp>
 #include <boost/tokenizer.hpp>
@@ -83,7 +83,7 @@ namespace attrs = boost::log::attributes;
 namespace src = boost::log::sources;
 namespace expr = boost::log::expressions;
 namespace keywords = boost::log::keywords;
-using namespace std;
+
 using namespace cv;
 
 class DetectionTemporal : public Detection {
@@ -104,22 +104,22 @@ class DetectionTemporal : public Detection {
 
         }initializer;
 
-        vector<GlobalEvent>             mListGlobalEvents;      // List of global events (Events spread on several frames).
-        vector<Point>                   mSubdivisionPos;        // Position (origin in top left) of 64 subdivisions.
-        vector<Scalar>                  mListColors;            // One color per local event.
+        std::vector<GlobalEvent>             mListGlobalEvents;      // List of global events (Events spread on several frames).
+        std::vector<Point>                   mSubdivisionPos;        // Position (origin in top left) of 64 subdivisions.
+        std::vector<Scalar>                  mListColors;            // One color per local event.
         Mat                             mLocalMask;             // Mask used to remove isolated white pixels.
         bool                            mSubdivisionStatus;     // If subdivisions positions have been computed.
         Mat                             mPrevThresholdedMap;
-        vector<GlobalEvent>::iterator   mGeToSave;              // Global event to save.
+        std::vector<GlobalEvent>::iterator   mGeToSave;              // Global event to save.
         int                             mRoiSize[2];
         int                             mImgNum;                // Current frame number.
         Mat                             mPrevFrame;             // Previous frame.
         Mat                             mStaticMask;
-        string                          mDebugCurrentPath;
+        std::string                          mDebugCurrentPath;
         int                             mDataSetCounter;
         bool                            mDebugUpdateMask;
         Mask                            *mMaskManager;
-        vector<string>                  debugFiles;
+        std::vector<std::string>                  debugFiles;
         detectionParam                  mdtp;
         VideoWriter                     mVideoDebugAutoMask;
 
@@ -129,11 +129,11 @@ class DetectionTemporal : public Detection {
 
         ~DetectionTemporal();
 
-        void initMethod(string cfgPath);
+        void initMethod(std::string cfgPath);
 
         bool runDetection(Frame &c);
 
-        void saveDetectionInfos(string p, int nbFramesAround);
+        void saveDetectionInfos(std::string p, int nbFramesAround);
 
         void resetDetection(bool loadNewDataSet);
 
@@ -145,7 +145,7 @@ class DetectionTemporal : public Detection {
 
         int getEventLastFrameNb() {return (*mGeToSave).getNumLastFrame();};
 
-        vector<string> getDebugFiles();
+        std::vector<std::string> getDebugFiles();
 
     private :
 
@@ -153,7 +153,7 @@ class DetectionTemporal : public Detection {
 
         int selectThreshold(Mat i);
 
-        vector<Scalar> getColorInEventMap(Mat &eventMap, Point roiCenter);
+        std::vector<Scalar> getColorInEventMap(Mat &eventMap, Point roiCenter);
 
         void colorRoiInBlack(Point p, int h, int w, Mat &region);
 
@@ -164,11 +164,11 @@ class DetectionTemporal : public Detection {
                             int posDiffThreshold,
                             Mat &negDiff,
                             int negDiffThreshold,
-                            vector<LocalEvent> &listLE,
+                            std::vector<LocalEvent> &listLE,
                             Point subdivisionPos,
                             int maxNbLE,
                             int numFrame,
-                            string &msg,
+                            std::string &msg,
                             TimeDate::Date cFrameDate);
 
 

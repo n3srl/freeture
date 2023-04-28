@@ -42,6 +42,8 @@
 #include "CameraLucidArena_PHX016S.h"
 #include "CameraLucidArena.h"
 
+#include "CameraDeviceManager.h"
+
 
 using namespace boost::filesystem;
 using namespace cv;
@@ -54,13 +56,16 @@ freeture::Device::Init freeture::Device::initializer;
 void freeture::Device::Setup(cameraParam cp, framesParam fp, videoParam vp, int cid)
 {
     freeture::LogDebug("Device::Setup");
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    
+    std::cout << "PARAM NIGHT EXP " << cp.ACQ_NIGHT_EXPOSURE << std::endl;
 
-    mCam        = NULL;
+    /* mCam        = NULL;
     mCamID      = 0;
     mVerbose    = true;
     mNbDev      = -1;
     mVideoFramesInput = false;
-    mGenCamID = cid;
+    mGenCamID = cid; */
     mFPS = cp.ACQ_FPS;
     mNightExposure = cp.ACQ_NIGHT_EXPOSURE;
     mNightGain = cp.ACQ_NIGHT_GAIN;
@@ -81,7 +86,9 @@ void freeture::Device::Setup(cameraParam cp, framesParam fp, videoParam vp, int 
     mvp = vp;
     mfp = fp;
     //mNbFrame = 0;
+
 }
+
 
 freeture::Device::Device() {
     freeture::Log("Device::Device");
@@ -131,26 +138,33 @@ freeture::Device::~Device()
 bool freeture::Device::createCamera(int id, bool create)
 {
     freeture::Log("Device::createCamera(int,bool)");
-
-    if(id >=0 && id < mDevices.size())
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    
+    freeture::Device* device = manager.getDevice();
+    
+    if(id >=0 && id < manager.deviceNumber - 1)
     {
-
+        CameraDescription camera = manager.getListDevice().at(id);
+        
         // Create Camera object with the correct sdk.
-        if ( !createDevicesWith(mDevices.at(id).second.second) )
+        if ( !createDevicesWith(camera.Sdk) )
         {
+            std::cout << "Fail to select correct sdk"<< std::endl;
             EParser<CamSdkType> parser;
-            cout << "Fail to select correct sdk : "<<parser.getStringEnum( mDevices.at(id).second.second )<< endl;
+            std::cout << "Fail to select correct sdk : "<<parser.getStringEnum( mDevices.at(id).second.second )<< std::endl;
             return false;
         }
+        
+    
 
-        mCamID = mDevices.at(id).first;
-
-        if(mCam == nullptr)
+        device->mCamID = camera.Id;
+        if(device->mCam != nullptr)
         {
-                if(!mCam->createDevice(mCamID))
+                
+                if(!device->mCam->createDevice(device->mCamID))
                 {
                     BOOST_LOG_SEV(logger, fail) << "Fail to create device with ID  : " << id;
-                    mCam->grabCleanse();
+                    device->mCam->grabCleanse();
                     return false;
                 }
             freeture::LogDebug ( "Device::createCamera(int,bool) - created new camera");
@@ -158,7 +172,8 @@ bool freeture::Device::createCamera(int id, bool create)
         } else {
             freeture::LogDebug( "Device::createCamera(int,bool) - camera already exists");
             return true;
-         }
+        }
+        
     }
 
     BOOST_LOG_SEV(logger, fail) << "No device with ID " << id;
@@ -169,21 +184,32 @@ bool freeture::Device::createCamera(int id, bool create)
 
 bool freeture::Device::createCamera()
 {
-    freeture::LogDebug("Device::createCamera");
-    if(mGenCamID >=0 && mGenCamID < mDevices.size()) {
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    freeture::LogDebug("Device::createCamera ");
+    if(mGenCamID >=0 && mGenCamID < manager.deviceNumber) {
 
         // Create Camera object with the correct sdk.
-        if(!createDevicesWith(mDevices.at(mGenCamID).second.second))
+        
+        try {
+            
+            if(!createDevicesWith(manager.getListDevice().at(mGenCamID).Sdk)) {
+            std::cout << "CREATE CAMERA ERROR " << std::endl;
             return false;
-
-        mCamID = mDevices.at(mGenCamID).first;
-
-        if(mCam == nullptr)
+        } 
+        } catch (std::exception &e) {
+            std::cout << "I FOUND EXC" << std::endl;
+            return false;
+        }   
+            
+        mCamID = manager.getListDevice().at(mGenCamID).Id;
+        
+        if(manager.getDevice()->mCam != nullptr)
         {
-            if(!mCam->createDevice(mCamID))
+            
+            if(!manager.getDevice()->mCam->createDevice(mCamID))
             {
                 BOOST_LOG_SEV(logger, fail) << "Fail to create device with ID  : " << mGenCamID;
-                mCam->grabCleanse();
+                manager.getDevice()->mCam->grabCleanse();
                 return false;
             }
             freeture::LogDebug("Device::createCamera - created new camera");
@@ -196,6 +222,7 @@ bool freeture::Device::createCamera()
         }
     }
 
+    std::cout << "No device with ID " << mGenCamID << std::endl;
     BOOST_LOG_SEV(logger, fail) << "No device with ID " << mGenCamID;
 
     return false;
@@ -204,12 +231,14 @@ bool freeture::Device::createCamera()
 
 bool freeture::Device::recreateCamera() {
     freeture::LogDebug("Device::recreateCamera" );
-    if(mGenCamID >=0 && mGenCamID < mDevices.size()) {
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    if(mGenCamID >=0 && mGenCamID < manager.deviceNumber) {
 
-        mCamID = mDevices.at(mGenCamID).first;
+        mCamID = manager.getListDevice().at(mGenCamID).Id;
 
-        if(mCam == nullptr) {
-            if(!mCam->createDevice(mCamID)){
+        if(mCam != nullptr) {
+            if(!mCam->recreateDevice(mCamID)){
+                freeture::LogDebug("Fail to create device with ID  : ", mGenCamID);
                 BOOST_LOG_SEV(logger, fail) << "Fail to create device with ID  : " << mGenCamID;
                 mCam->grabCleanse();
                 return false;
@@ -235,22 +264,38 @@ void freeture::Device::setVerbose(bool status) {
 
 }
 
-CamSdkType freeture::Device::getDeviceSdk(int id){
+/* CamSdkType freeture::Device::getDeviceSdk(int id){
     freeture::LogDebug( "Device::getDeviceSdk" );
     if(id >=0 && id < mDevices.size()) {
         return mDevices.at(id).second.second;
     }
 
     return CamSdkType::UNKNOWN;
+} */
+
+CamSdkType freeture::Device::getDeviceSdk(int id) {
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    std::vector<CameraDescription> devices = manager.getListDevice();
+    
+    if(id >=0 && id < (manager.deviceNumber - 1)) {
+        return devices.at(id).Sdk;
+    }
+    std::cout << "ERROR GETTING DEVICE SDK " << std::endl;
 }
 
 bool freeture::Device::createDevicesWith(CamSdkType sdk) {
     freeture::LogDebug( "Device::createDevicesWith" );
-
-    if (mCam!=nullptr){
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    freeture::Device* device = manager.getDevice();
+    
+    if (device->mCam!=nullptr){
+        
         freeture::LogError("Device::createDevicesWith","Error","MEMORY LEAKING" );
-        assert (mCam == nullptr);
+        assert (device->mCam != nullptr);
+        free(device->mCam);
+        return true;
     }
+
 
     switch(sdk) {
 
@@ -258,8 +303,8 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
 
             {
                 mVideoFramesInput = true;
-                mCam = new CameraVideo(mvp.INPUT_VIDEO_PATH, mVerbose);
-                mCam->grabInitialization();
+                device->mCam = new CameraVideo(mvp.INPUT_VIDEO_PATH, mVerbose);
+                device->mCam->grabInitialization();
             }
 
             break;
@@ -267,11 +312,10 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::FRAMESDIR :
 
             {
-
                 mVideoFramesInput = true;
                 // Create camera using pre-recorded fits2D in input.
-                mCam = new CameraFrames(mfp.INPUT_FRAMES_DIRECTORY_PATH, 1, mVerbose);
-                if(!mCam->grabInitialization())
+                device->mCam = new CameraFrames(mfp.INPUT_FRAMES_DIRECTORY_PATH, 1, mVerbose);
+                if(!device->mCam->grabInitialization())
                     throw "Fail to prepare acquisition on the first frames directory.";
 
             }
@@ -281,8 +325,9 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::V4L2 :
 
             {
+                freeture::LogDebug("SDK: V4L2");
                 #ifdef LINUX
-                    mCam = new CameraV4l2();
+                    device->mCam = new CameraV4l2();
                 #endif
             }
 
@@ -291,8 +336,9 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::VIDEOINPUT :
 
             {
+                freeture::LogDebug("SDK: VIDEOINPUT");
                 #ifdef WINDOWS
-                    mCam = new CameraWindows();
+                    device->mCam = new CameraWindows();
                 #endif
             }
 
@@ -301,8 +347,9 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::ARAVIS :
 
             {
+                freeture::LogDebug("SDK: ARAVIS");
                 #ifdef LINUX
-                    mCam = new CameraGigeAravis(mShiftBits);
+                    device->mCam = new CameraGigeAravis(mShiftBits);
                 #endif
             }
 
@@ -311,10 +358,11 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::LUCID_ARAVIS :
 
             {
+                freeture::LogDebug("SDK: LUCID_ARAVIS");
                 #ifdef LINUX
 
-                    mCam = new CameraLucidArena(mShiftBits);
-
+                    device->mCam = new CameraLucidArena(mShiftBits);
+                    
 
                 #endif
             }
@@ -324,9 +372,11 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::LUCID_ARENA :
 
             {
+                
                 #ifdef LINUX
-                    mCam = new CameraLucidArena_PHX016S(mShiftBits);
-
+                    freeture::LogDebug("SDK: LUCID_ARENA");
+                    device->mCam = new CameraLucidArena_PHX016S(mShiftBits);
+                    
                 #endif
             }
 
@@ -335,8 +385,9 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::PYLONGIGE :
 
             {
+                freeture::LogDebug("SDK: PYLONGIGE");
                 #ifdef WINDOWS
-                    mCam = new CameraGigePylon();
+                    device = new CameraGigePylon();
                 #endif
             }
 
@@ -345,8 +396,9 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::TIS :
 
             {
+                freeture::LogDebug("SDK: TIS");
                 #ifdef WINDOWS
-                    mCam = new CameraGigeTis();
+                    device = new CameraGigeTis();
                 #endif
             }
 
@@ -357,6 +409,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
             freeture::LogDebug( "Device::createDevicesWith - Unknown sdk.");
 
     }
+
 
     return true;
 
@@ -394,20 +447,20 @@ InputDeviceType freeture::Device::getDeviceType(CamSdkType t) {
 
 void freeture::Device::mergeList( std::vector<CameraDescription>& Devices )
 {
-
         //foreach device found test if already exists. if not add to list
         for (int i=0;i<Devices.size();i++)
         {
             bool add_to_list = true;
 
             for (int j=0;j<listCams.size();j++)
-                if (listCams[j].Address==Devices[i].Address)
+                if (listCams[j].Address==Devices[i].Address && listCams[j].Sdk == Devices[i].Sdk) 
                 {
                     add_to_list = false;
                     break;
                 }
 
             if (add_to_list)
+                
                 listCams.push_back(Devices[i]);
         }
 }
@@ -415,6 +468,96 @@ void freeture::Device::mergeList( std::vector<CameraDescription>& Devices )
 void freeture::Device::listDevices(bool printInfos)
 {
     freeture::LogDebug("Device::listDevices");
+
+    int nbCam = 0;
+    mNbDev = 0;
+    pair<int, CamSdkType> elem;             // general index to specify camera to use
+    pair<int,pair<int,CamSdkType>> subElem; // index in a specific sdk
+
+    #ifdef WINDOWS
+
+        // PYLONGIGE
+
+        mCam = new CameraGigePylon();
+        listCams = mCam->getCamerasList();
+        for(int i = 0; i < listCams.size(); i++) {
+            elem.first = mNbDev; elem.second = PYLONGIGE;
+            subElem.first = listCams.at(i).first; subElem.second = elem;
+            mDevices.push_back(subElem);
+            if(printInfos) cout << "[" << mNbDev << "]    " << listCams.at(i).second << endl;
+            mNbDev++;
+        }
+        delete mCam;
+
+        // TIS
+
+        mCam = new CameraGigeTis();
+        listCams = mCam->getCamerasList();
+        for(int i = 0; i < listCams.size(); i++) {
+            elem.first = mNbDev; elem.second = TIS;
+            subElem.first = listCams.at(i).first; subElem.second = elem;
+            mDevices.push_back(subElem);
+            if(printInfos) cout << "[" << mNbDev << "]    " << listCams.at(i).second << endl;
+            mNbDev++;
+        }
+        delete mCam;
+
+        // WINDOWS
+
+        mCam = new CameraWindows();
+        listCams = mCam->getCamerasList();
+        for(int i = 0; i < listCams.size(); i++) {
+
+            // Avoid to list basler
+            std::string::size_type pos1 = listCams.at(i).second.find("Basler");
+            std::string::size_type pos2 = listCams.at(i).second.find("BASLER");
+            if((pos1 != std::string::npos) || (pos2 != std::string::npos)) {
+                //std::cout << "found \"words\" at position " << pos1 << std::endl;
+            } else {
+                elem.first = mNbDev; elem.second = VIDEOINPUT;
+                subElem.first = listCams.at(i).first; subElem.second = elem;
+                mDevices.push_back(subElem);
+                if(printInfos) cout << "[" << mNbDev << "]    " << listCams.at(i).second << endl;
+                mNbDev++;
+            }
+        }
+
+        delete mCam;
+
+    #else
+        //PRECEDENTE TO LUCID_ARAVIS
+        CameraDeviceManager& manager = CameraDeviceManager::Get();
+        manager.listDevice();
+        // V4L
+        //CameraScanner* v4l_scanner = Camera::Scanner->CreateScanner(CamSdkType::V4L2);
+        //assert(v4l_scanner!=nullptr);
+        // v4l_scanner->getCamerasList();
+        //listCams.insert ( listCams.end(), v4l_scanner->Devices.begin(),v4l_scanner->Devices.end());
+
+    #endif
+
+    // VIDEO
+    /*
+    elem.first = mNbDev; elem.second = VIDEOFILE;
+    subElem.first = 0; subElem.second = elem;
+    mDevices.push_back(subElem);
+    if(printInfos) cout << "[" << mNbDev << "]    VIDEO FILES" << endl;
+    mNbDev++;
+
+    // FRAMES
+
+    elem.first = mNbDev; elem.second = FRAMESDIR;
+    subElem.first = 0; subElem.second = elem;
+    mDevices.push_back(subElem);
+    if(printInfos) cout << "[" << mNbDev << "]    FRAMES DIRECTORY" << endl;
+    mNbDev++;
+    */
+}
+
+
+std::vector<CameraDescription> freeture::Device::getListDevice()
+{
+    freeture::LogDebug("Device::getListDevice");
 
     int nbCam = 0;
     mNbDev = 0;
@@ -492,17 +635,8 @@ void freeture::Device::listDevices(bool printInfos)
 
         mergeList(aravis_scanner->Devices);
 
-        if(printInfos)
-            for(int i = 0; i < listCams.size(); i++)
-            {
-                CameraDescription cam = listCams[i];
-                cout << "[" << cam.Id << "]    " << cam.Description <<endl;
-            }
-        // V4L
-        //CameraScanner* v4l_scanner = Camera::Scanner->CreateScanner(CamSdkType::V4L2);
-        //assert(v4l_scanner!=nullptr);
-        // v4l_scanner->getCamerasList();
-        //listCams.insert ( listCams.end(), v4l_scanner->Devices.begin(),v4l_scanner->Devices.end());
+        
+        return listCams;
 
     #endif
 
@@ -533,9 +667,9 @@ bool freeture::Device::getDeviceName() {
 
 bool freeture::Device::setCameraPixelFormat() {
     freeture::LogDebug(  "Device::setCameraPixelFormat");
-
     if(!mCam->setPixelFormat(mFormat)){
         mCam->grabCleanse();
+        
         BOOST_LOG_SEV(logger,fail) << "Fail to set camera format.";
         return false;
     }
@@ -575,14 +709,16 @@ void freeture::Device::getCameraExposureBounds() {
 
 bool freeture::Device::getCameraFPSBounds(double &min, double &max) {
     freeture::LogDebug(  "Device::getCameraFPSBounds(double,double)" );
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    
+    manager.getDevice()->mCam->getFPSBounds(min, max);
+    
 
-    mCam->getFPSBounds(min, max);
     return true;
 }
 
 void freeture::Device::getCameraFPSBounds() {
-   freeture::LogDebug(  "Device::getCameraFPSBounds" );
-
+    freeture::LogDebug(  "Device::getCameraFPSBounds" );
     mCam->getFPSBounds(mMinFPS, mMaxFPS);
 }
 
@@ -603,8 +739,11 @@ void freeture::Device::getCameraGainBounds() {
 }
 
 bool freeture::Device::setCameraNightExposureTime()
-{
-    freeture::LogDebug(  "Device::setCameraNightExposureTime "+ mNightExposure );
+{   
+    
+
+    freeture::Device* device = CameraDeviceManager::Get().getDevice();
+    
 
     if(!mCam->setExposureTime(mNightExposure)) {
         BOOST_LOG_SEV(logger, fail) << "Fail to set night exposure time to " << mNightExposure;
@@ -622,10 +761,13 @@ bool freeture::Device::setCameraDayExposureTime() {
     freeture::LogDebug(  "Device::setCameraDayExposureTime" );
 
     if(!mCam->setExposureTime(mDayExposure)) {
+    
         BOOST_LOG_SEV(logger, fail) << "Fail to set day exposure time to " << mDayExposure;
         mCam->grabCleanse();
         return false;
     }
+
+    getCameraFPSBounds();
 
     return true;
 
@@ -779,12 +921,18 @@ bool freeture::Device::runSingleCapture(Frame &img) {
 }
 
 bool freeture::Device::setCameraSize() {
-    freeture::LogDebug("Device::setCameraSize : ", mSizeWidth ,"x", mSizeHeight );
-
-    if(!mCam->setSize(mStartX, mStartY, mSizeWidth, mSizeHeight, mCustomSize)) {
+    
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    freeture::LogDebug("Device::setCameraSize : ", manager.getDevice()->mSizeWidth ,"x", manager.getDevice()->mSizeHeight );
+    
+    
+    Camera* mCam = manager.getDevice()->mCam;
+    
+    if(!mCam->setSize(manager.getDevice()->mStartX, manager.getDevice()->mStartY, manager.getDevice()->mSizeWidth, manager.getDevice()->mSizeHeight, manager.getDevice()->mCustomSize)) {
         BOOST_LOG_SEV(logger, fail) << "Fail to set camera size.";
         return false;
     }
+
 
     return true;
 

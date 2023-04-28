@@ -211,7 +211,7 @@ bool GlobalEvent::addLE(LocalEvent le){
         res.copyTo(geMap);
 
         // Update colored ge map.
-        vector<Point>::iterator it;
+        std::vector<Point>::iterator it;
         int roiH = 10, roiW = 10;
         for(it = le.mLeRoiList.begin(); it != le.mLeRoiList.end(); ++it){
 
@@ -234,7 +234,7 @@ bool GlobalEvent::addLE(LocalEvent le){
 
 }
 
-bool GlobalEvent::continuousGoodPos(int n, string &msg){
+bool GlobalEvent::continuousGoodPos(int n, std::string &msg){
 
     msg += "continuousGoodPos\n";
     int nb = 0;
@@ -303,7 +303,7 @@ bool GlobalEvent::continuousBadPos(int n){
 
 }
 
-bool GlobalEvent::negPosClusterFilter(string &msg) {
+bool GlobalEvent::negPosClusterFilter(std::string &msg) {
 
     msg += "negPosClusterFilter\n";
     float counter = 0;
@@ -329,7 +329,7 @@ bool GlobalEvent::negPosClusterFilter(string &msg) {
     }
 }
 
-bool GlobalEvent::ratioFramesDist(string &msg){
+bool GlobalEvent::ratioFramesDist(std::string &msg){
 
     msg += "ratioFramesDist\n";
     float d = sqrt(pow(mainPts.back().x - mainPts.front().x,2.0) + pow(mainPts.back().y - mainPts.front().y,2.0));

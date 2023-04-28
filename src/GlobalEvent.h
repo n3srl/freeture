@@ -39,7 +39,7 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include "Frame.h"
 #include "LocalEvent.h"
@@ -47,7 +47,7 @@
 #include "TimeDate.h"
 
 using namespace cv;
-using namespace std;
+
 
 class GlobalEvent {
 
@@ -71,24 +71,24 @@ class GlobalEvent {
 
     public :
 
-        vector<LocalEvent>  LEList;
-        vector<bool>        ptsValidity;
-        vector<float>       distBtwPts;
-        vector<float>       distBtwMainPts;
-        vector<Point>       mainPts;
-        vector<Point>       pts;
+        std::vector<LocalEvent>  LEList;
+        std::vector<bool>        ptsValidity;
+        std::vector<float>       distBtwPts;
+        std::vector<float>       distBtwMainPts;
+        std::vector<Point>       mainPts;
+        std::vector<Point>       pts;
         Point leDir;
         Point geDir;
 
-        vector<Point>       listA;
-        vector<Point>       listB;
-        vector<Point>       listC;
-        vector<Point>       listu;
-        vector<Point>       listv;
-        vector<float>       listAngle;
-        vector<float>       listRad;
-        vector<bool>        mainPtsValidity;
-        vector<bool>         clusterNegPos;
+        std::vector<Point>       listA;
+        std::vector<Point>       listB;
+        std::vector<Point>       listC;
+        std::vector<Point>       listu;
+        std::vector<Point>       listv;
+        std::vector<float>       listAngle;
+        std::vector<float>       listRad;
+        std::vector<bool>        mainPtsValidity;
+        std::vector<bool>         clusterNegPos;
 
 
         GlobalEvent(TimeDate::Date frameDate, int frameNum, int frameHeight, int frameWidth, Scalar c);
@@ -116,11 +116,11 @@ class GlobalEvent {
         void setNumFirstFrame(int n) {geFirstFrameNum = n;};
         void setNumLastFrame(int n) {geLastFrameNum = n;};
 
-        bool ratioFramesDist(string &msg);
+        bool ratioFramesDist(std::string &msg);
 
         bool addLE(LocalEvent le);
-        bool continuousGoodPos(int n, string &msg);
+        bool continuousGoodPos(int n, std::string &msg);
         bool continuousBadPos(int n);
-        bool negPosClusterFilter(string &msg);
+        bool negPosClusterFilter(std::string &msg);
 
 };

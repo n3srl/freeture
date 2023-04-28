@@ -60,7 +60,6 @@
     using namespace Pylon;
     using namespace GenApi;
     using namespace cv;
-    using namespace std;
     using namespace Basler_GigECameraParams;
 
     static const uint32_t nbBuffers = 20; // Buffer's number used for grabbing

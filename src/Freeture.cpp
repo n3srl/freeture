@@ -25,6 +25,8 @@
 #include "CfgParam.h"
 #include "Logger.h"
 
+#include "CameraDeviceManager.h"
+
 namespace po        = boost::program_options;
 namespace logging   = boost::log;
 namespace sinks     = boost::log::sinks;
@@ -379,15 +381,18 @@ void freeture::Freeture::modeContinuousAcquisition()
 
 void freeture::Freeture::modeMeteorDetection()
 {
-    device = new Device();
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    device = manager.getDevice();
+    //manager.listDevice();
+
     CfgParam cfg(device, configPath);
     ///%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     ///%%%%%%%%%%%%%%%%%%%% MODE 3 : METEOR DETECTION %%%%%%%%%%%%%%%%%%%%%%%%
     ///%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    std::cout << "================================================" << endl;
-    std::cout << "======= FREETURE - Meteor detection mode =======" << endl;
-    std::cout << "================================================" << endl << endl;
+    std::cout << "================================================" << std::endl;
+    std::cout << "======= FREETURE - Meteor detection mode =======" << std::endl;
+    std::cout << "================================================" << std::endl << std::endl;
 
    /// ------------------------------------------------------------------
    /// --------------------- LOAD FREETURE PARAMETERS -------------------
@@ -403,13 +408,12 @@ void freeture::Freeture::modeMeteorDetection()
     logFiles.push_back("DET_THREAD.log");
     logFiles.push_back("STACK_THREAD.log");
 
-    Logger logSystem(cfg.getLogParam().LOG_PATH, cfg.getLogParam().LOG_ARCHIVE_DAY, cfg.getLogParam().LOG_SIZE_LIMIT, logFiles);
-
+    //Logger logSystem(cfg.getLogParam().LOG_PATH, cfg.getLogParam().LOG_ARCHIVE_DAY, cfg.getLogParam().LOG_SIZE_LIMIT, logFiles);
+    
     /// ------------------------------------------------------------------
     /// -------------------------- MANAGE LOG ----------------------------
     /// ------------------------------------------------------------------
     path pLog(cfg.getLogParam().LOG_PATH);
-
     if(!boost::filesystem::exists(pLog))
     {
 
@@ -425,13 +429,13 @@ void freeture::Freeture::modeMeteorDetection()
     BOOST_LOG_SCOPED_THREAD_TAG("LogName", "MAIN_THREAD");
     BOOST_LOG_SEV(slg,notification) << "\n";
     BOOST_LOG_SEV(slg,notification) << "==============================================";
-    BOOST_LOG_SEV(slg,notification) << "====== FREETURE - Meteor detection mode ======";
+    BOOST_LOG_SEV(slg,notification) << "====== FREETURE- Meteor detection mode ======";
     BOOST_LOG_SEV(slg,notification) << "==============================================";
 
     /// ------------------------------------------------------------------
     /// ------------------------- SHARED RESSOURCES ----------------------
     /// ------------------------------------------------------------------
-
+   
     // Circular buffer to store last n grabbed frames.
     boost::circular_buffer<Frame> frameBuffer(cfg.getDetParam().ACQ_BUFFER_SIZE * cfg.getCamParam().ACQ_FPS);
     boost::mutex frameBuffer_m;
@@ -446,7 +450,6 @@ void freeture::Freeture::modeMeteorDetection()
     boost::condition_variable signalStack_c;
 
     boost::mutex cfg_m;
-
     /// ------------------------------------------------------------------
     /// --------------------------- CREATE THREAD ------------------------
     /// ------------------------------------------------------------------
@@ -461,6 +464,7 @@ void freeture::Freeture::modeMeteorDetection()
                             if(cfg.getDetParam().DET_ENABLED) {
 
                                 BOOST_LOG_SEV(slg, normal) << "Start to create detection thread.";
+                                std::cout << "Start to create detection thread." << std::endl;
 
                                 detThread = new DetThread(  &frameBuffer,
                                                             &frameBuffer_m,
@@ -479,6 +483,8 @@ void freeture::Freeture::modeMeteorDetection()
                                     throw "Fail to start detection thread.";
 
                             }
+
+                            
 
                             // Create stack thread.
                             if(cfg.getStackParam().STACK_ENABLED) {
@@ -502,6 +508,8 @@ void freeture::Freeture::modeMeteorDetection()
 
                             }
 
+                            
+                            
                             // Create acquisition thread.
                             acqThread = new AcqThread(  &frameBuffer,
                                                         &frameBuffer_m,
@@ -522,13 +530,16 @@ void freeture::Freeture::modeMeteorDetection()
                                                         cfg.getCamParam(),
                                                         cfg.getFramesParam(),
                                                         cfg.getVidParam(),
-                                                        cfg.getFitskeysParam(), device);
+                                                        cfg.getFitskeysParam(),
+                                                        manager.getDevice());
 
                             if(!acqThread->startThread()) {
 
                                 throw "Fail to start acquisition thread.";
 
                             }else {
+
+                                
 
                                 BOOST_LOG_SEV(slg, normal) << "Success to start acquisition Thread.";
 
@@ -559,7 +570,7 @@ void freeture::Freeture::modeMeteorDetection()
 
 
                                     /// Monitors logs.
-                                    logSystem.monitorLog();
+                                    //logSystem.monitorLog();
 
                                     /// Stop freeture according time execution option.
                                     if(executionTime != 0) {
@@ -595,7 +606,7 @@ void freeture::Freeture::modeMeteorDetection()
                             }
 
                         }catch(exception& e) {
-
+                            
                             cout << e.what() << endl;
                             BOOST_LOG_SEV(slg, critical) << e.what();
 

@@ -167,7 +167,7 @@ void DetThread::operator ()(){
     // Flag to indicate that an event must be complete with more frames.
     bool eventToComplete = false;
     // Reference date to count time to complete an event.
-    string refDate;
+    std::string refDate;
 
     BOOST_LOG_SCOPED_THREAD_TAG("LogName", "DET_THREAD");
     BOOST_LOG_SEV(logger,notification) << "\n";
@@ -215,11 +215,11 @@ void DetThread::operator ()(){
                         if(pDetMthd->runDetection(lastFrame) && !eventToComplete){
 
                             // Event detected.
-                            BOOST_LOG_SEV(logger, notification) << "Event detected ! Waiting frames to complete the event..." << endl;
+                            BOOST_LOG_SEV(logger, notification) << "Event detected ! Waiting frames to complete the event..." << std::endl;
                             eventToComplete = true;
 
                             // Get a reference date.
-                            string currDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
+                            std::string currDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
                             refDate = currDate.substr(0, currDate.find("."));
 
                             mNbDetection++;
@@ -229,38 +229,38 @@ void DetThread::operator ()(){
                         // Wait frames to complete the detection.
                         if(eventToComplete){
 
-                            string currDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
-                            string nowDate = currDate.substr(0, currDate.find("."));
+                            std::string currDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
+                            std::string nowDate = currDate.substr(0, currDate.find("."));
                             boost::posix_time::ptime t1(boost::posix_time::time_from_string(refDate));
                             boost::posix_time::ptime t2(boost::posix_time::time_from_string(nowDate));
                             boost::posix_time::time_duration td = t2 - t1;
 
                             if(td.total_seconds() > mdtp.DET_TIME_AROUND) {
 
-                                BOOST_LOG_SEV(logger, notification) << "Event completed." << endl;
+                                BOOST_LOG_SEV(logger, notification) << "Event completed." << std::endl;
 
                                 // Build event directory.
                                 mEventDate = pDetMthd->getEventDate();
-                                BOOST_LOG_SEV(logger, notification) << "Building event directory..." << endl;
+                                BOOST_LOG_SEV(logger, notification) << "Building event directory..." << std::endl;
 
                                 if(buildEventDataDirectory())
-                                    BOOST_LOG_SEV(logger, notification) << "Success to build event directory." << endl;
+                                    BOOST_LOG_SEV(logger, notification) << "Success to build event directory." << std::endl;
                                 else
-                                    BOOST_LOG_SEV(logger, fail) << "Fail to build event directory." << endl;
+                                    BOOST_LOG_SEV(logger, fail) << "Fail to build event directory." << std::endl;
 
                                 // Save event.
-                                BOOST_LOG_SEV(logger, notification) << "Saving event..." << endl;
+                                BOOST_LOG_SEV(logger, notification) << "Saving event..." << std::endl;
                                 pDetMthd->saveDetectionInfos(mEventPath, mNbFramesAround);
                                 boost::mutex::scoped_lock lock(*frameBuffer_mutex);
                                 if(!saveEventData(pDetMthd->getEventFirstFrameNb(), pDetMthd->getEventLastFrameNb()))
                                     BOOST_LOG_SEV(logger,critical) << "Error saving event data.";
                                 else
-                                    BOOST_LOG_SEV(logger, notification) << "Success to save event !" << endl;
+                                    BOOST_LOG_SEV(logger, notification) << "Success to save event !" << std::endl;
 
                                 lock.unlock();
 
                                 // Reset detection.
-                                BOOST_LOG_SEV(logger, notification) << "Reset detection process." << endl;
+                                BOOST_LOG_SEV(logger, notification) << "Reset detection process." << std::endl;
                                 pDetMthd->resetDetection(false);
                                 eventToComplete = false;
                                 mNbFramesAround = 0;
@@ -274,7 +274,7 @@ void DetThread::operator ()(){
                     t = (((double)getTickCount() - t)/getTickFrequency())*1000;
                     if (LOG_FRAME_STATUS)
                     {
-                        cout << " [ TIME DET ] : " << std::setprecision(3) << std::fixed << t << " ms " << endl;
+                        std::cout << " [ TIME DET ] : " << std::setprecision(3) << std::fixed << t << " ms " << std::endl;
                         BOOST_LOG_SEV(logger,normal) << " [ TIME DET ] : " << std::setprecision(3) << std::fixed << t << " ms ";
                     }
                 }else{
@@ -308,30 +308,30 @@ void DetThread::operator ()(){
 
         if(mDetectionResults.size() == 0) {
 
-            cout << "-----------------------------------------------" << endl;
-            cout << "------------->> DETECTED EVENTS : " << mNbDetection << endl;
-            cout << "-----------------------------------------------" << endl;
+            std::cout << "-----------------------------------------------" << std::endl;
+            std::cout << "------------->> DETECTED EVENTS : " << mNbDetection << std::endl;
+            std::cout << "-----------------------------------------------" << std::endl;
 
         }else {
 
             // Create Report for videos and frames in input.
             boost::filesystem::ofstream report;
-            string reportPath = mdp.DATA_PATH + "detections_report.txt";
+            std::string reportPath = mdp.DATA_PATH + "detections_report.txt";
             report.open(reportPath.c_str());
 
-            cout << "--------------- DETECTION REPORT --------------" << endl;
+            std::cout << "--------------- DETECTION REPORT --------------" << std::endl;
 
             for(int i = 0; i < mDetectionResults.size(); i++) {
                 report << mDetectionResults.at(i).first << "------> " << mDetectionResults.at(i).second << "\n";
-                cout << "- DATASET " << i << " : ";
+                std::cout << "- DATASET " << i << " : ";
 
                 if(mDetectionResults.at(i).second > 1)
-                    cout << mDetectionResults.at(i).second << " events" << endl;
+                    std::cout << mDetectionResults.at(i).second << " events" << std::endl;
                 else
-                    cout << mDetectionResults.at(i).second << " event" << endl;
+                    std::cout << mDetectionResults.at(i).second << " event" << std::endl;
             }
 
-            cout << "-----------------------------------------------" << endl;
+            std::cout << "-----------------------------------------------" << std::endl;
 
             report.close();
 
@@ -339,13 +339,13 @@ void DetThread::operator ()(){
 
     }catch(const char * msg){
 
-        cout << msg << endl;
+        std::cout << msg << std::endl;
         BOOST_LOG_SEV(logger,critical) << msg;
 
-    }catch(exception& e){
+    }catch(std::exception& e){
 
-        cout << "An error occured. See log for details." << endl;
-        cout << e.what() << endl;
+        std::cout << "An error occured. See log for details." << std::endl;
+        std::cout << e.what() << std::endl;
         BOOST_LOG_SEV(logger, critical) << e.what();
 
     }
@@ -367,21 +367,21 @@ bool DetThread::buildEventDataDirectory(){
     namespace fs = boost::filesystem;
 
     // eventDate is the date of the first frame attached to the event.
-    string YYYYMMDD = TimeDate::getYYYYMMDD(mEventDate);
+    std::string YYYYMMDD = TimeDate::getYYYYMMDD(mEventDate);
 
     // Data location.
     path p(mdp.DATA_PATH);
 
     // Create data directory for the current day.
-    string fp = mdp.DATA_PATH + mStationName + "_" + YYYYMMDD +"/";
+    std::string fp = mdp.DATA_PATH + mStationName + "_" + YYYYMMDD +"/";
     path p0(fp);
 
     // Events directory.
-    string fp1 = "events/";
+    std::string fp1 = "events/";
     path p1(fp + fp1);
 
     // Current event directory with the format : STATION_AAAAMMDDThhmmss_UT
-    string fp2 = mStationName + "_" + TimeDate::getYYYYMMDDThhmmss(mEventDate) + "_UT/";
+    std::string fp2 = mStationName + "_" + TimeDate::getYYYYMMDDThhmmss(mEventDate) + "_UT/";
     path p2(fp + fp1 + fp2);
 
     // Final path used by an other function to save event data.
@@ -523,7 +523,7 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
     namespace fs = boost::filesystem;
 
     // List of data path to attach to the mail notification.
-    vector<string> mailAttachments;
+    std::vector<std::string> mailAttachments;
 
     // Number of the first frame to save. It depends of how many frames we want to keep before the event.
     int numFirstFrameToSave = firstEvPosInFB - mNbFramesAround;
@@ -626,8 +626,8 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
 
         // Get infos about the last frame of the event record for fits 3D.
         if((*it).mFrameNumber == numLastFrameToSave && mdtp.DET_SAVE_FITS3D){
-            cout << "DATE first : " << dateFirstFrame.hours << " H " << dateFirstFrame.minutes << " M " << dateFirstFrame.seconds << " S" << endl;
-            cout << "DATE last : " << (*it).mDate.hours << " H " << (*it).mDate.minutes << " M " << (*it).mDate.seconds << " S" << endl;
+            std::cout << "DATE first : " << dateFirstFrame.hours << " H " << dateFirstFrame.minutes << " M " << dateFirstFrame.seconds << " S" << std::endl;
+            std::cout << "DATE last : " << (*it).mDate.hours << " H " << (*it).mDate.minutes << " M " << (*it).mDate.seconds << " S" << std::endl;
             fits3d.kELAPTIME = ((*it).mDate.hours*3600 + (*it).mDate.minutes*60 + (*it).mDate.seconds) - (dateFirstFrame.hours*3600 + dateFirstFrame.minutes*60 + dateFirstFrame.seconds);
 
         }
@@ -638,8 +638,8 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
             // Save fits2D.
             if(mdtp.DET_SAVE_FITS2D) {
 
-                string fits2DPath = mEventPath + "fits2D/";
-                string fits2DName = "frame_" + Conversion::numbering(nbDigitOnNbTotalFramesToSave, c) + Conversion::intToString(c);
+                std::string fits2DPath = mEventPath + "fits2D/";
+                std::string fits2DName = "frame_" + Conversion::numbering(nbDigitOnNbTotalFramesToSave, c) + Conversion::intToString(c);
                 BOOST_LOG_SEV(logger,notification) << ">> Saving fits2D : " << fits2DName;
 
                 Fits2D newFits(fits2DPath);
@@ -765,7 +765,7 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
         float bzero  = 0.0;
         float bscale = 1.0;
         s = stack.reductionByFactorDivision(bzero,bscale);
-        cout << "mFormat : " << mFormat << endl;
+        std::cout << "mFormat : " << mFormat << std::endl;
         if(mFormat != MONO8)
             Conversion::convertTo8UC1(s).copyTo(s);
 

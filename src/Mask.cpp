@@ -38,7 +38,7 @@
 #include "Mask.h"
 
 
-Mask::Mask(int timeInterval, bool customMask, string customMaskPath, bool downsampleMask, CamPixFmt format, bool updateMask):
+Mask::Mask(int timeInterval, bool customMask, std::string customMaskPath, bool downsampleMask, CamPixFmt format, bool updateMask):
 mUpdateInterval(timeInterval), mUpdateMask(updateMask) {
 
     mMaskToCreate = false;
@@ -130,7 +130,7 @@ bool Mask::applyMask(Mat &currFrame) {
 
         }
 
-        string nowDate = to_simple_string(boost::posix_time::second_clock::universal_time());
+        std::string nowDate = to_simple_string(boost::posix_time::second_clock::universal_time());
         boost::posix_time::ptime t1(boost::posix_time::time_from_string(refDate));
         boost::posix_time::ptime t2(boost::posix_time::time_from_string(nowDate));
         boost::posix_time::time_duration td = t2 - t1;
@@ -143,7 +143,7 @@ bool Mask::applyMask(Mat &currFrame) {
         }
 
         if (LOG_FRAME_STATUS)
-            cout << "NEXT MASK : " << (mUpdateInterval - (int)diffTime) << "s" << endl;
+            std::cout << "NEXT MASK : " << (mUpdateInterval - (int)diffTime) << "s" << std::endl;
 
     }
 

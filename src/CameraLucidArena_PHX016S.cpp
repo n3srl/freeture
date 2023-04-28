@@ -84,6 +84,7 @@ using namespace std;
      */
     bool freeture::CameraLucidArena_PHX016S::createDevice(int id)
     {
+        std::cout << "CREO ARENASDK LUCID CAM" << std::endl;
         try
         {
             if (m_ArenaSDKSystem == nullptr)
@@ -98,7 +99,7 @@ using namespace std;
 
         if(!getDeviceNameById(id, deviceName))
             return false;
-
+        std::cout << "DEVICE NAME " << deviceName << std::endl;
         vector<Arena::DeviceInfo> deviceInfos = m_ArenaSDKSystem->GetDevices();
         Arena::DeviceInfo& device_info = deviceInfos[id];
         m_Camera = m_ArenaSDKSystem->CreateDevice(device_info);
@@ -148,7 +149,8 @@ using namespace std;
         if (m_Camera == nullptr)
         {
             ErrorManager::ArenaSDKError("Camera is nullptr");
-            return false;        }
+            return false;
+        }
 
 
         bool pAcquisitionFrameRateEnable = m_Camera->GetNodeMap()->GetNode("AcquisitionFrameRateEnable");

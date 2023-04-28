@@ -116,10 +116,10 @@ bool StackThread::interruptThread(){
 bool StackThread::buildStackDataDirectory(TimeDate::Date date){
 
     namespace fs = boost::filesystem;
-    string YYYYMMDD = TimeDate::getYYYYMMDD(date);
-    string root = mdp.DATA_PATH + mstp.STATION_NAME + "_" + YYYYMMDD +"/";
-    string subDir = "stacks/";
-    string finalPath = root + subDir;
+    std::string YYYYMMDD = TimeDate::getYYYYMMDD(date);
+    std::string root = mdp.DATA_PATH + mstp.STATION_NAME + "_" + YYYYMMDD +"/";
+    std::string subDir = "stacks/";
+    std::string finalPath = root + subDir;
     completeDataPath = finalPath;
 
     if(YYYYMMDD == "00000000")
@@ -250,7 +250,7 @@ void StackThread::operator()(){
     try{
 
         do{
-            string cDate ="";
+            std::string cDate ="";
             try {
 
                 // Thread is sleeping...
@@ -262,8 +262,8 @@ void StackThread::operator()(){
                 // First reference date.
                 boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
                 cDate = to_simple_string(time);
-                string dateDelimiter = ".";
-                string refDate = cDate.substr(0, cDate.find(dateDelimiter));
+                std::string dateDelimiter = ".";
+                std::string refDate = cDate.substr(0, cDate.find(dateDelimiter));
 
                 long secTime = 0;
 
@@ -298,7 +298,7 @@ void StackThread::operator()(){
 
                         t = (((double)getTickCount() - t)/getTickFrequency())*1000;
                         if (LOG_FRAME_STATUS){
-                            std::cout << "[ TIME STACK ] : " << std::setprecision(5) << std::fixed << t << " ms" << endl;
+                            std::cout << "[ TIME STACK ] : " << std::setprecision(5) << std::fixed << t << " ms" << std::endl;
                             BOOST_LOG_SEV(logger,normal) << "[ TIME STACK ] : " << std::setprecision(5) << std::fixed << t << " ms" ;
                         }
 
@@ -318,13 +318,13 @@ void StackThread::operator()(){
 
                     time = boost::posix_time::microsec_clock::universal_time();
                     cDate = to_simple_string(time);
-                    string nowDate = cDate.substr(0, cDate.find(dateDelimiter));
+                    std::string nowDate = cDate.substr(0, cDate.find(dateDelimiter));
                     boost::posix_time::ptime t1(boost::posix_time::time_from_string(refDate));
                     boost::posix_time::ptime t2(boost::posix_time::time_from_string(nowDate));
                     boost::posix_time::time_duration td = t2 - t1;
                     secTime = td.total_seconds();
                     if (LOG_FRAME_STATUS)
-                        cout << "NEXT STACK : " << (int)(msp.STACK_TIME - secTime) << "s" <<  endl;
+                        std::cout << "NEXT STACK : " << (int)(msp.STACK_TIME - secTime) << "s" <<  std::endl;
 
                 } while(secTime <= msp.STACK_TIME);
 
@@ -348,7 +348,7 @@ void StackThread::operator()(){
             } catch(const boost::thread_interrupted&) {
 
                 BOOST_LOG_SEV(logger,notification) << "Stack thread INTERRUPTED";
-                cout << "Stack thread INTERRUPTED" << endl;
+                std::cout << "Stack thread INTERRUPTED" << std::endl;
             }
 
             // Get the "must stop" state (thread-safe)
@@ -364,7 +364,7 @@ void StackThread::operator()(){
 
         BOOST_LOG_SEV(logger,critical) << msg;
 
-    }catch(exception& e){
+    }catch(std::exception& e){
 
         BOOST_LOG_SEV(logger, critical) << e.what();
 

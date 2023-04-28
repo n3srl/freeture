@@ -38,10 +38,9 @@
 #include <iostream>
 #include <list>
 #include <string>
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-using namespace std;
 using namespace cv;
 
 class Conversion {
@@ -54,7 +53,7 @@ class Conversion {
         * @param type mat.type()
         * @return Type in string.
         */
-        static string matTypeToString(int type);
+        static std::string matTypeToString(int type);
 
         /**
         * Convert an int value to string.
@@ -62,7 +61,7 @@ class Conversion {
         * @param nb Integer value.
         * @return String value.
         */
-        static string intToString(int nb);
+        static std::string intToString(int nb);
 
         /**
         * Convert a float value to string.
@@ -70,9 +69,9 @@ class Conversion {
         * @param nb Float value.
         * @return String value.
         */
-        static string floatToString(float nb);
+        static std::string floatToString(float nb);
 
-        static string doubleToString(double nb);
+        static std::string doubleToString(double nb);
 
         /**
         * Extract data from a string according to a delimiter.
@@ -81,7 +80,7 @@ class Conversion {
         * @param in String to analyse.
         * @param delimiters
         */
-        static void stringTok(list<string>  &container, string const &in, const char * const delimiters);
+        static void stringTok(std::list<std::string>  &container, std::string const &in, const char * const delimiters);
 
         /**
         * Convert an opencv image to 8 bits.
@@ -98,7 +97,7 @@ class Conversion {
         * @param n Integer value.
         * @return Number of 0 to add to reach maximum of available digits.
         */
-        static string numbering(int totalDigit, int n);
+        static std::string numbering(int totalDigit, int n);
 
         /**
         * Count number of digit in a value.

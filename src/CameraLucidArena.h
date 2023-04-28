@@ -10,10 +10,10 @@
 #pragma once
 
 #include "config.h"
-
+#include "CameraDeviceManager.h"
 #ifdef LINUX
 
-    #include "opencv2/highgui/highgui.hpp"
+    #include <opencv2/highgui/highgui.hpp>
     #include <opencv2/imgproc/imgproc.hpp>
 
     #include <iostream>
@@ -41,13 +41,14 @@
     #include <boost/log/core.hpp>
     #include "ELogSeverityLevel.h"
 
+
     class CameraLucidArenaScanner: public CameraScanner
     {
 
         public:
             virtual void UpdateCameraList() override
             {
-                cout << "GenericAravisCameraScanner::UpdateCameraList" << endl;
+                std::cout << "GenericAravisCameraScanner::UpdateCameraList" << std::endl;
                     ArvInterface *interface;
 
                     //arv_update_device_list();
@@ -81,7 +82,7 @@
                                     c.Id = i;
                                     c.Description = "NAME[" + s + "] SDK[ARAVIS] IP: " + addr;
                                     c.DeviceId =""+s;
-                                    c.Address = string(addr);
+                                    c.Address = std::string(addr);
                                     c.Interface = j;
                                     c.Sdk = CamSdkType::ARAVIS;
 
@@ -139,7 +140,9 @@
             guint64         nbUnderruns;
             int             frameCounter;           // Counter of success received frames.
 
+
         public :
+
 
             CameraLucidArena(bool shift);
 
@@ -148,6 +151,7 @@
             ~CameraLucidArena();
 
             bool createDevice(int id);
+            bool recreateDevice(int);
 
             bool grabInitialization();
 
@@ -189,7 +193,7 @@
 
             bool setPixelFormat(CamPixFmt depth);
 
-            void saveGenicamXml(string p);
+            void saveGenicamXml(std::string p);
 
             bool setSize(int startx, int starty, int width, int height, bool customSize);
 

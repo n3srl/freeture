@@ -42,7 +42,7 @@ Fits2D::Init Fits2D::initializer;
 
 Fits2D::~Fits2D(void){}
 
-Fits2D::Fits2D(string path):mFitsPath(path){
+Fits2D::Fits2D(std::string path):mFitsPath(path){
 
     kPROGRAM    = "FreeTure";
     kCREATOR    = "";
@@ -618,7 +618,7 @@ bool Fits2D::writeKeywords(fitsfile *fptr){
 
 }
 
-bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, string fileName, string compression) {
+bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, std::string fileName, std::string compression) {
 
     int status = 0;
 
@@ -641,7 +641,7 @@ bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, string fileName, string com
     kDATE = to_iso_extended_string(time);
 
     // Date in the fits filename.
-    string dateFileName = TimeDate::getYYYYMMDDThhmmss(to_iso_string(time));
+    std::string dateFileName = TimeDate::getYYYYMMDDThhmmss(to_iso_string(time));
 
     // Define CRPIX1 and CRPIX2
     kCRPIX1 = (int)naxes[0] / 2;
@@ -654,7 +654,7 @@ bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, string fileName, string com
 
 
     // Creation of the fits filename.
-    string pathAndname = "";
+    std::string pathAndname = "";
 
     if(fileName != ""){
 
@@ -1504,7 +1504,7 @@ bool Fits2D::readFits8C(Mat &img){
 
 }
 
-bool Fits2D::readIntKeyword(string keyword, int &value){
+bool Fits2D::readIntKeyword(std::string keyword, int &value){
 
     char *ptr = NULL;
 
@@ -1540,7 +1540,7 @@ bool Fits2D::readIntKeyword(string keyword, int &value){
     return true;
 }
 
-bool Fits2D::readStringKeyword(string keyword, string &value){
+bool Fits2D::readStringKeyword(std::string keyword, std::string &value){
 
     char *ptr = NULL;
 
@@ -1573,7 +1573,7 @@ bool Fits2D::readStringKeyword(string keyword, string &value){
 
     }
 
-    value = string(v);
+    value = std::string(v);
 
     if(fits_close_file(fptr, &status)){
 
@@ -1585,7 +1585,7 @@ bool Fits2D::readStringKeyword(string keyword, string &value){
     return true;
 }
 
-bool Fits2D::readDoubleKeyword(string keyword, double &value){
+bool Fits2D::readDoubleKeyword(std::string keyword, double &value){
 
     char *ptr = NULL;
 
@@ -1622,7 +1622,7 @@ bool Fits2D::readDoubleKeyword(string keyword, double &value){
     return true;
 }
 
-void Fits2D::printerror(int status, string errorMsg){
+void Fits2D::printerror(int status, std::string errorMsg){
 
     if(status){
 
@@ -1630,10 +1630,10 @@ void Fits2D::printerror(int status, string errorMsg){
         fits_get_errstatus(status, status_str);
 
         BOOST_LOG_SEV(logger, fail) << errorMsg;
-        cout << errorMsg << endl;
+        std::cout << errorMsg << std::endl;
         std::string str(status_str);
         BOOST_LOG_SEV(logger, fail) << "CFITSIO ERROR : " << status << " -> " << str;
-        cout << "CFITSIO ERROR : " << status << " -> " << str << endl;
+        std::cout << "CFITSIO ERROR : " << status << " -> " << str << std::endl;
 
     }
 
@@ -1647,7 +1647,7 @@ void Fits2D::printerror(int status){
         fits_get_errstatus(status, status_str);
         std::string str(status_str);
         BOOST_LOG_SEV(logger, fail) << "CFITSIO ERROR : " << status << " -> " << str;
-        cout << "CFITSIO ERROR : " << status << " -> " << str << endl;
+        std::cout << "CFITSIO ERROR : " << status << " -> " << str << std::endl;
 
     }
 }

@@ -1,3 +1,7 @@
-/home/nova/Repository/freeture/cmake/CMakeFiles/rebuild_cache.dir
-/home/nova/Repository/freeture/cmake/CMakeFiles/edit_cache.dir
-/home/nova/Repository/freeture/cmake/CMakeFiles/freeture.dir
+/freeturenew/cmake/CMakeFiles/install/strip.dir
+/freeturenew/cmake/CMakeFiles/install/local.dir
+/freeturenew/cmake/CMakeFiles/install.dir
+/freeturenew/cmake/CMakeFiles/list_install_components.dir
+/freeturenew/cmake/CMakeFiles/rebuild_cache.dir
+/freeturenew/cmake/CMakeFiles/edit_cache.dir
+/freeturenew/cmake/CMakeFiles/freeture.dir

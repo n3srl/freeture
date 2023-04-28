@@ -41,7 +41,7 @@
 #endif
 
 #include <boost/circular_buffer.hpp>
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/video/tracking.hpp>
 #include <boost/tokenizer.hpp>
@@ -82,7 +82,7 @@ namespace attrs = boost::log::attributes;
 namespace src = boost::log::sources;
 namespace expr = boost::log::expressions;
 namespace keywords = boost::log::keywords;
-using namespace std;
+
 using namespace cv;
 
 class DetectionTemplate : public Detection {
@@ -117,11 +117,11 @@ class DetectionTemplate : public Detection {
 
         ~DetectionTemplate();
 
-        void initMethod(string cfgPath);
+        void initMethod(std::string cfgPath);
 
         bool runDetection(Frame &c);
 
-        void saveDetectionInfos(string p, int nbFramesAround);
+        void saveDetectionInfos(std::string p, int nbFramesAround);
 
         void resetDetection(bool loadNewDataSet);
 

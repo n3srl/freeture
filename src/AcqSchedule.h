@@ -37,7 +37,6 @@
 #include <stdio.h>
 #include <iostream>
 
-using namespace std;
 
 class AcqSchedule{
 
@@ -50,7 +49,7 @@ class AcqSchedule{
         int     mG;     // Gain
         int     mN;     // Repetition number
         int     mF;     // Format
-        string  mDate;
+        std::string  mDate;
 
     public:
 
@@ -133,13 +132,13 @@ class AcqSchedule{
         *
         * @param Date : YYYY-MM-DDTHH:MM:SS,fffffffff
         */
-        void setDate(string date) {mDate = date;};
+        void setDate(std::string date) {mDate = date;};
 
         /**
         * Get acquisition date.
         *
         * @return Date : YYYY-MM-DDTHH:MM:SS,fffffffff
         */
-        string getDate() {return mDate;};
+        std::string getDate() {return mDate;};
 
 };

@@ -1,22 +1,22 @@
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
-Change Dir: /home/nova/Repository/freeture/cmake/CMakeFiles/CMakeTmp
+Change Dir: /freeture/cmake/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/gmake cmTC_b6d13/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_b6d13.dir/build.make CMakeFiles/cmTC_b6d13.dir/build
-gmake[1]: Entering directory '/home/nova/Repository/freeture/cmake/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_b6d13.dir/src.c.o
-/usr/bin/cc   -DCMAKE_HAVE_LIBC_PTHREAD -o CMakeFiles/cmTC_b6d13.dir/src.c.o -c /home/nova/Repository/freeture/cmake/CMakeFiles/CMakeTmp/src.c
-Linking C executable cmTC_b6d13
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b6d13.dir/link.txt --verbose=1
-/usr/bin/cc  -DCMAKE_HAVE_LIBC_PTHREAD -rdynamic CMakeFiles/cmTC_b6d13.dir/src.c.o -o cmTC_b6d13 
-/usr/bin/ld: CMakeFiles/cmTC_b6d13.dir/src.c.o: in function `main':
+Run Build Command(s):/usr/bin/gmake cmTC_cd47e/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_cd47e.dir/build.make CMakeFiles/cmTC_cd47e.dir/build
+gmake[1]: Entering directory '/freeture/cmake/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_cd47e.dir/src.c.o
+/usr/bin/cc   -DCMAKE_HAVE_LIBC_PTHREAD -o CMakeFiles/cmTC_cd47e.dir/src.c.o -c /freeture/cmake/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_cd47e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cd47e.dir/link.txt --verbose=1
+/usr/bin/cc  -DCMAKE_HAVE_LIBC_PTHREAD -rdynamic CMakeFiles/cmTC_cd47e.dir/src.c.o -o cmTC_cd47e 
+/usr/bin/ld: CMakeFiles/cmTC_cd47e.dir/src.c.o: in function `main':
 src.c:(.text+0x2f): undefined reference to `pthread_create'
 /usr/bin/ld: src.c:(.text+0x3b): undefined reference to `pthread_detach'
 /usr/bin/ld: src.c:(.text+0x47): undefined reference to `pthread_cancel'
 /usr/bin/ld: src.c:(.text+0x58): undefined reference to `pthread_join'
 collect2: error: ld returned 1 exit status
-gmake[1]: *** [CMakeFiles/cmTC_b6d13.dir/build.make:106: cmTC_b6d13] Error 1
-gmake[1]: Leaving directory '/home/nova/Repository/freeture/cmake/CMakeFiles/CMakeTmp'
-gmake: *** [Makefile:140: cmTC_b6d13/fast] Error 2
+gmake[1]: *** [CMakeFiles/cmTC_cd47e.dir/build.make:106: cmTC_cd47e] Error 1
+gmake[1]: Leaving directory '/freeture/cmake/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:140: cmTC_cd47e/fast] Error 2
 
 
 Source file was:
@@ -41,20 +41,80 @@ int main(void)
 }
 
 Determining if the function pthread_create exists in the pthreads failed with the following output:
-Change Dir: /home/nova/Repository/freeture/cmake/CMakeFiles/CMakeTmp
+Change Dir: /freeture/cmake/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/gmake cmTC_910a1/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_910a1.dir/build.make CMakeFiles/cmTC_910a1.dir/build
-gmake[1]: Entering directory '/home/nova/Repository/freeture/cmake/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_910a1.dir/CheckFunctionExists.c.o
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_910a1.dir/CheckFunctionExists.c.o -c /usr/share/cmake-3.18/Modules/CheckFunctionExists.c
-Linking C executable cmTC_910a1
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_910a1.dir/link.txt --verbose=1
-/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create -rdynamic CMakeFiles/cmTC_910a1.dir/CheckFunctionExists.c.o -o cmTC_910a1  -lpthreads 
+Run Build Command(s):/usr/bin/gmake cmTC_280bf/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_280bf.dir/build.make CMakeFiles/cmTC_280bf.dir/build
+gmake[1]: Entering directory '/freeture/cmake/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_280bf.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_280bf.dir/CheckFunctionExists.c.o -c /usr/share/cmake-3.18/Modules/CheckFunctionExists.c
+Linking C executable cmTC_280bf
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_280bf.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create -rdynamic CMakeFiles/cmTC_280bf.dir/CheckFunctionExists.c.o -o cmTC_280bf  -lpthreads 
 /usr/bin/ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
-gmake[1]: *** [CMakeFiles/cmTC_910a1.dir/build.make:106: cmTC_910a1] Error 1
-gmake[1]: Leaving directory '/home/nova/Repository/freeture/cmake/CMakeFiles/CMakeTmp'
-gmake: *** [Makefile:140: cmTC_910a1/fast] Error 2
+gmake[1]: *** [CMakeFiles/cmTC_280bf.dir/build.make:106: cmTC_280bf] Error 1
+gmake[1]: Leaving directory '/freeture/cmake/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:140: cmTC_280bf/fast] Error 2
+
+
+
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /freeturenew/cmake/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_0d463/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_0d463.dir/build.make CMakeFiles/cmTC_0d463.dir/build
+gmake[1]: Entering directory '/freeturenew/cmake/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0d463.dir/src.c.o
+/usr/bin/cc   -DCMAKE_HAVE_LIBC_PTHREAD -o CMakeFiles/cmTC_0d463.dir/src.c.o -c /freeturenew/cmake/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_0d463
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0d463.dir/link.txt --verbose=1
+/usr/bin/cc  -DCMAKE_HAVE_LIBC_PTHREAD -rdynamic CMakeFiles/cmTC_0d463.dir/src.c.o -o cmTC_0d463 
+/usr/bin/ld: CMakeFiles/cmTC_0d463.dir/src.c.o: in function `main':
+src.c:(.text+0x2f): undefined reference to `pthread_create'
+/usr/bin/ld: src.c:(.text+0x3b): undefined reference to `pthread_detach'
+/usr/bin/ld: src.c:(.text+0x47): undefined reference to `pthread_cancel'
+/usr/bin/ld: src.c:(.text+0x58): undefined reference to `pthread_join'
+collect2: error: ld returned 1 exit status
+gmake[1]: *** [CMakeFiles/cmTC_0d463.dir/build.make:106: cmTC_0d463] Error 1
+gmake[1]: Leaving directory '/freeturenew/cmake/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:140: cmTC_0d463/fast] Error 2
+
+
+Source file was:
+#include <pthread.h>
+
+void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_cancel(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /freeturenew/cmake/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_d2baf/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_d2baf.dir/build.make CMakeFiles/cmTC_d2baf.dir/build
+gmake[1]: Entering directory '/freeturenew/cmake/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d2baf.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_d2baf.dir/CheckFunctionExists.c.o -c /usr/share/cmake-3.18/Modules/CheckFunctionExists.c
+Linking C executable cmTC_d2baf
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d2baf.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create -rdynamic CMakeFiles/cmTC_d2baf.dir/CheckFunctionExists.c.o -o cmTC_d2baf  -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+gmake[1]: *** [CMakeFiles/cmTC_d2baf.dir/build.make:106: cmTC_d2baf] Error 1
+gmake[1]: Leaving directory '/freeturenew/cmake/CMakeFiles/CMakeTmp'
+gmake: *** [Makefile:140: cmTC_d2baf/fast] Error 2
 
 
 

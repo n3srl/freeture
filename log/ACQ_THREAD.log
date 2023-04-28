@@ -1,0 +1,74 @@
+[2023-Apr-18 09:56:39.562307] <1> (AcqThread) - 
+[2023-Apr-18 09:56:39.562534] <1> (AcqThread) - ==============================================
+[2023-Apr-18 09:56:39.562578] <1> (AcqThread) - ========== START ACQUISITION THREAD ==========
+[2023-Apr-18 09:56:39.562612] <1> (AcqThread) - ==============================================
+[2023-Apr-18 09:57:05.665306] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:07.665771] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:09.666253] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:11.666736] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:13.667182] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:15.667580] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:17.667934] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:19.668290] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:21.668616] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:23.668996] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:25.669351] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:27.669790] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:29.670226] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:31.670682] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:33.671087] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:35.671410] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:37.671755] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:39.672176] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:41.672647] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:43.673066] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:45.673492] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:47.673940] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:49.674386] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:51.674866] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:53.675320] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:55.675766] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:57.676259] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:57:59.676727] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:01.677158] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:03.677662] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:05.678108] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:07.678595] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:09.678962] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:11.679367] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:13.679784] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:15.680197] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:17.680609] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:19.681017] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:21.681436] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:23.681810] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:25.682222] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:27.682998] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:29.683638] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:31.684265] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:33.685147] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:35.685661] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:37.686235] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:39.686683] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:41.687075] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:43.687516] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:45.688102] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:47.688543] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:49.691664] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:51.692257] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:53.692975] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:55.693419] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:57.693866] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:58:59.694599] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:59:01.695564] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:59:03.696017] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:59:05.696746] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:59:07.697135] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:59:09.697589] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:59:11.698282] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:59:13.698841] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 09:59:15.699776] <3> (Device) - Exception grabImage...arv_buffer is NULL
+[2023-Apr-18 10:06:35.676427] <1> (AcqThread) - 
+[2023-Apr-18 10:06:35.676673] <1> (AcqThread) - ==============================================
+[2023-Apr-18 10:06:35.676734] <1> (AcqThread) - ========== START ACQUISITION THREAD ==========
+[2023-Apr-18 10:06:35.676777] <1> (AcqThread) - ==============================================

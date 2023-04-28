@@ -39,7 +39,7 @@ boost::log::sources::severity_logger< LogSeverityLevel >  Fits3D::logger;
 
 Fits3D::Init Fits3D::initializer;
 
-Fits3D::Fits3D(CamPixFmt depth, int imgHeight, int imgWidth, int numberOfImages, string fileName){
+Fits3D::Fits3D(CamPixFmt depth, int imgHeight, int imgWidth, int numberOfImages, std::string fileName){
 
     fptr = NULL;
     mFileName    = fileName.c_str();
@@ -824,7 +824,7 @@ bool Fits3D::writeFits3D(){
 
 }
 
-void Fits3D::printerror(int status, string errorMsg){
+void Fits3D::printerror(int status, std::string errorMsg){
 
     if(status){
 
@@ -832,10 +832,10 @@ void Fits3D::printerror(int status, string errorMsg){
         fits_get_errstatus(status, status_str);
 
         BOOST_LOG_SEV(logger, fail) << errorMsg;
-        cout << errorMsg << endl;
+        std::cout << errorMsg << std::endl;
         std::string str(status_str);
         BOOST_LOG_SEV(logger, fail) << "CFITSIO ERROR : " << status << " -> " << str;
-        cout << "CFITSIO ERROR : " << status << " -> " << str << endl;
+        std::cout << "CFITSIO ERROR : " << status << " -> " << str << std::endl;
 
     }
 
@@ -849,7 +849,7 @@ void Fits3D::printerror(int status){
         fits_get_errstatus(status, status_str);
         std::string str(status_str);
         BOOST_LOG_SEV(logger, fail) << "CFITSIO ERROR : " << status << " -> " << str;
-        cout << "CFITSIO ERROR : " << status << " -> " << str << endl;
+        std::cout << "CFITSIO ERROR : " << status << " -> " << str << std::endl;
 
     }
 }

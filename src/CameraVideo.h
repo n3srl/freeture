@@ -36,7 +36,7 @@
 #pragma once
 #include "config.h"
 
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
 #ifdef LINUX
@@ -66,7 +66,6 @@
 
 using namespace boost::filesystem;
 using namespace cv;
-using namespace std;
 
 class CameraVideo : public Camera{
 
@@ -91,11 +90,11 @@ class CameraVideo : public Camera{
         VideoCapture        mCap;
         bool                mReadDataStatus;
         int                 mVideoID;
-        vector<string>      mVideoList;
+        std::vector<std::string>      mVideoList;
 
     public:
 
-        CameraVideo(vector<string> videoList, bool verbose);
+        CameraVideo(std::vector<std::string> videoList, bool verbose);
 
         ~CameraVideo(void);
 
@@ -123,7 +122,7 @@ class CameraVideo : public Camera{
         *
         * @return Success status to load next data set.
         */
-        bool loadNextDataSet(string &location);
+        bool loadNextDataSet(std::string &location);
 
         bool getFPS(double &value) {value = 0; return false;};
 

@@ -35,9 +35,9 @@
 
 #include "Conversion.h"
 
-string Conversion::matTypeToString(int type) {
+std::string Conversion::matTypeToString(int type) {
 
-    string r;
+    std::string r;
 
     uchar depth = type & CV_MAT_DEPTH_MASK;
     uchar chans = 1 + (type >> CV_CN_SHIFT);
@@ -62,11 +62,11 @@ string Conversion::matTypeToString(int type) {
 
 }
 
-string Conversion::intToString(int nb){
+std::string Conversion::intToString(int nb){
 
-    ostringstream oss;
+    std::ostringstream oss;
     oss << nb;
-    string result = oss.str();
+    std::string result = oss.str();
     return result;
 
 }
@@ -74,13 +74,13 @@ string Conversion::intToString(int nb){
 float Conversion::roundToNearest(float value, float precision) {
 
     float fractpart1 = 0.0, intpart1 = 0.0, fractpart2 = 0.0, intpart2 = 0.0;
-    fractpart1 = modf (value , &intpart1);
+    fractpart1 = modf (value , (double*)&intpart1);
     float d = fractpart1/precision;
-    fractpart2 = modf (d , &intpart2);
+    fractpart2 = modf (d , (double*)&intpart2);
     return intpart1 + intpart2*precision;
 }
 
-string Conversion::floatToString(float nb){
+std::string Conversion::floatToString(float nb){
 
     std::ostringstream ss;
     ss << nb;
@@ -89,7 +89,7 @@ string Conversion::floatToString(float nb){
 
 }
 
-string Conversion::doubleToString(double nb) {
+std::string Conversion::doubleToString(double nb) {
 
     std::ostringstream strs;
     strs << nb;
@@ -99,24 +99,24 @@ string Conversion::doubleToString(double nb) {
 
 }
 
-void Conversion::stringTok(list<string> &container, string const &in, const char * const delimiters  = "_"){
+void Conversion::stringTok(std::list<std::string> &container, std::string const &in, const char * const delimiters  = "_"){
 
-    const string::size_type len = in.length();
-    string::size_type i = 0;
+    const std::string::size_type len = in.length();
+    std::string::size_type i = 0;
 
     while (i < len){
 
         // Eat leading whitespace
         i = in.find_first_not_of(delimiters, i);
 
-        if (i == string::npos)
+        if (i == std::string::npos)
             return;   // Nothing left but white space
 
         // Find the end of the token
-        string::size_type j = in.find_first_of(delimiters, i);
+        std::string::size_type j = in.find_first_of(delimiters, i);
 
         // Push token
-        if (j == string::npos){
+        if (j == std::string::npos){
 
             container.push_back(in.substr(i));
             return;
@@ -178,13 +178,13 @@ int Conversion::roundToUpperRange(int n) {
     return (last+1) * f;
 }
 
-string Conversion::numbering(int totalDigit, int n) {
+std::string Conversion::numbering(int totalDigit, int n) {
 
     int cpt = 0;
 
     int nbZeroToAdd = 0;
 
-    string ch = "";
+    std::string ch = "";
 
     if(n<10){
 

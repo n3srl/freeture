@@ -43,7 +43,7 @@
 #endif
 
 #include "fitsio.h"
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <boost/log/common.hpp>
 #include <boost/log/expressions.hpp>
@@ -62,7 +62,7 @@
 #include "ECamPixFmt.h"
 
 using namespace cv;
-using namespace std;
+
 
 class Fits3D : public Fits {
 
@@ -106,7 +106,7 @@ class Fits3D : public Fits {
         * @param fileName Name od the fits cube.
         *
         */
-        Fits3D(CamPixFmt depth, int imgHeight, int imgWidth, int numberOfImages, string fileName);
+        Fits3D(CamPixFmt depth, int imgHeight, int imgWidth, int numberOfImages, std::string fileName);
 
         /**
         * Constructor.
@@ -141,7 +141,7 @@ class Fits3D : public Fits {
         * @param errorMsg Additional information about where the error occured.
         *
         */
-        void printerror(int status, string errorMsg);
+        void printerror(int status, std::string errorMsg);
 
         /**
         * Helper function to get cfitsio error.

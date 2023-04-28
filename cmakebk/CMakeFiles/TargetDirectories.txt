@@ -1,0 +1,7 @@
+/freeture/cmake/CMakeFiles/install/strip.dir
+/freeture/cmake/CMakeFiles/install/local.dir
+/freeture/cmake/CMakeFiles/install.dir
+/freeture/cmake/CMakeFiles/list_install_components.dir
+/freeture/cmake/CMakeFiles/rebuild_cache.dir
+/freeture/cmake/CMakeFiles/edit_cache.dir
+/freeture/cmake/CMakeFiles/freeture.dir

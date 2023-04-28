@@ -33,7 +33,7 @@ void CameraLucidArena_PHX016SScanner::UpdateCameraList()
         m_ArenaSDKSystem->UpdateDevices(100);
         freeture::LogDebug("CameraLucidArena_PHX016SScanner::UpdateCameraList","GetDevices");
 
-        vector<Arena::DeviceInfo> deviceInfos = m_ArenaSDKSystem->GetDevices();
+        std::vector<Arena::DeviceInfo> deviceInfos = m_ArenaSDKSystem->GetDevices();
 
         int ni =  deviceInfos.size();
         freeture::LogDebug("CameraLucidArena_PHX016SScanner::UpdateCameraList","Found ",ni, "candidates devices");
@@ -44,8 +44,8 @@ void CameraLucidArena_PHX016SScanner::UpdateCameraList()
             const char* name = device_info.ModelName();
 
             freeture::LogDebug("CameraLucidArena_PHX016SScanner::UpdateCameraList","#",i," ",name);
-            string s_name = string(name);
-            string s_test = string("PHX016S");
+            std::string s_name = std::string(name);
+            std::string s_test = std::string("PHX016S");
             if ( s_name.find ( s_test ) != std::string::npos )
             {
                 freeture::LogDebug("CameraLucidArena_PHX016SScanner::UpdateCameraList","PHX016S found");
@@ -55,12 +55,12 @@ void CameraLucidArena_PHX016SScanner::UpdateCameraList()
                 //const char* str = arv_get_device_id(i);
                 const char* str = name;
                 const char* addr = device_info.IpAddressStr();
-                string s = str;
-
+                std::string s = s_name;
+                //std::cout << "FIND " + s_name << std::endl;
                 c.Id = i;
                 c.Description = "NAME[" + s + "] SDK[ARENASDK] IP: " + addr;
-                c.DeviceId =string(name);
-                c.Address = string(addr);
+                c.DeviceId =std::string(name);
+                c.Address = std::string(addr);
                 c.Interface = 0;
                 c.Sdk = CamSdkType::LUCID_ARENA;
                 Devices.push_back(c);

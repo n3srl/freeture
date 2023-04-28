@@ -39,7 +39,7 @@ boost::log::sources::severity_logger< LogSeverityLevel >  CameraVideo::logger;
 
 CameraVideo::Init CameraVideo::initializer;
 
-CameraVideo::CameraVideo(vector<string> videoList, bool verbose):mVideoID(0), mFrameWidth(0), mFrameHeight(0), mReadDataStatus(false){
+CameraVideo::CameraVideo(std::vector<std::string> videoList, bool verbose):mVideoID(0), mFrameWidth(0), mFrameHeight(0), mReadDataStatus(false){
 
     mVideoList = videoList;
 
@@ -65,7 +65,7 @@ bool CameraVideo::grabInitialization(){
     if(!mCap.isOpened()) {
 
          if(mVerbose) BOOST_LOG_SEV(logger,fail) << "Cannot open the video file";
-         if(mVerbose) cout << "Cannot open the video file" << endl;
+         if(mVerbose) std::cout << "Cannot open the video file" << std::endl;
          return false;
     }
 
@@ -87,22 +87,22 @@ bool CameraVideo::getDataSetStatus(){
         return true;
 }
 
-bool CameraVideo::loadNextDataSet(string &location){
+bool CameraVideo::loadNextDataSet(std::string &location){
 
     if(mVideoID != 0){
 
-        cout << "Change video : " << mVideoID << " - Path : " << mVideoList.at(mVideoID) << endl;
+        std::cout << "Change video : " << mVideoID << " - Path : " << mVideoList.at(mVideoID) << std::endl;
 
         mCap = VideoCapture(mVideoList.at(mVideoID));
 
         if(!mCap.isOpened()){
 
-             cout << "Cannot open the video file" << endl;
+             std::cout << "Cannot open the video file" << std::endl;
              return false;
 
         }else{
 
-            cout << "Success to open the video file" << endl;
+            std::cout << "Success to open the video file" << std::endl;
 
         }
 

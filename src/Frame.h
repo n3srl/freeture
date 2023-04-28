@@ -36,7 +36,7 @@
 
 #pragma once
 
-#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <boost/tokenizer.hpp>
 #include "Conversion.h"
@@ -44,7 +44,6 @@
 #include "ECamPixFmt.h"
 #include "TimeDate.h"
 
-using namespace std;
 using namespace cv;
 
 class Frame {
@@ -56,7 +55,7 @@ class Frame {
         int                 mGain;               // Camera's gain value used to grab the frame.
         CamPixFmt           mFormat;             // Pixel format.
         Mat                 mImg;                // Frame's image data.
-        string              mFileName;           // Frame's name.
+        std::string              mFileName;           // Frame's name.
         int                 mFrameNumber;        // Each frame is identified by a number corresponding to the acquisition order.
         int                 mFrameRemaining;     // Define the number of remaining frames if the input source is a video or a set of single frames.
         double              mSaturatedValue;     // Max pixel value in the image.
@@ -66,7 +65,7 @@ class Frame {
         int                 mWidth;
         int                 mHeight;
 
-        Frame(Mat capImg, int g, double e, string acquisitionDate);
+        Frame(Mat capImg, int g, double e, std::string acquisitionDate);
 
         Frame();
 

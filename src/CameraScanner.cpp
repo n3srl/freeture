@@ -25,7 +25,7 @@ CameraScanner* CameraScanner::CreateScanner(CamSdkType sdk)
 
     switch (sdk)
     {
-        case CamSdkType::ARAVIS :
+        case CamSdkType::ARAVIS:
             return new CameraGigeAravisScanner(sdk);
 
         case CamSdkType::LUCID_ARAVIS:

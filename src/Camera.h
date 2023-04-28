@@ -49,7 +49,6 @@
 
 
 using namespace cv;
-using namespace std;
 
 class Camera {
 
@@ -92,6 +91,7 @@ class Camera {
         * @param id Identification number of the camera to create.
         */
         virtual bool createDevice(int id) {return false;};
+        virtual bool recreateDevice(int id) {return false;};
 
         /**
         * Get camera name from its ID.
@@ -100,7 +100,7 @@ class Camera {
         * @param device The camera's name found.
         * @return Success status to find camera's name.
         */
-        virtual bool getDeviceNameById(int id, string &deviceName) {return false;};
+        virtual bool getDeviceNameById(int id, std::string &deviceName) {return false;};
 
         virtual bool getCameraName() {return false;};
 
@@ -208,14 +208,14 @@ class Camera {
         *
         * @return Possible fps values.
         */
-        virtual bool getFpsEnum(vector<double> &values) {return false;};
+        virtual bool getFpsEnum(std::vector<double> &values) {return false;};
 
         /**
         * Get device's model name.
         *
         * @return Device's model name.
         */
-        virtual string getModelName() {return "";};
+        virtual std::string getModelName() {return "";};
 
         /**
         * Get device's gain value.
@@ -277,8 +277,8 @@ class Camera {
         *
         * @return Success status to load next data set.
         */
-        virtual bool loadNextDataSet(string &location) {location = ""; return true; };
+        virtual bool loadNextDataSet(std::string &location) {location = ""; return true; };
 
-        virtual void test() {cout << " in camera.h" << endl;};
+        virtual void test() {std::cout << " in camera.h" << std::endl;};
 
 };

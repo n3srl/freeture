@@ -65,7 +65,7 @@
 
 #ifdef LINUX
 
-#include "arv.h"
+#include <arv.h>
 #include "arvinterface.h"
 
 

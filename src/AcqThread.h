@@ -52,6 +52,7 @@
 #include "Fits2D.h"
 #include "SParam.h"
 #include "Device.h"
+#include "CameraDeviceManager.h"
 
 class AcqThread {
 
@@ -82,8 +83,8 @@ class AcqThread {
         DetThread           *pDetection;            // Pointer on detection thread in order to stop it or reset it when a regular capture occurs.
         StackThread         *pStack;                // Pointer on stack thread in order to save and reset a stack when a regular capture occurs.
         ExposureControl     *pExpCtrl;              // Pointer on exposure time control object while sunrise and sunset.
-        string              mOutputDataPath;        // Dynamic location where to save data (regular captures etc...).
-        string              mCurrentDate;
+        std::string              mOutputDataPath;        // Dynamic location where to save data (regular captures etc...).
+        std::string              mCurrentDate;
         int                 mStartSunriseTime;      // In seconds.
         int                 mStopSunriseTime;       // In seconds.
         int                 mStartSunsetTime;       // In seconds.
@@ -150,22 +151,26 @@ class AcqThread {
         // Return activity status.
         bool getThreadStatus();
 
+
+        // Added
+        bool buildCameraInContinousMode(bool);
+
     private :
 
         // Compute in seconds the sunrise start/stop times and the sunset start/stop times.
         bool computeSunTimes();
 
         // Build the directory where the data will be saved.
-        bool buildAcquisitionDirectory(string YYYYMMDD);
+        bool buildAcquisitionDirectory(std::string YYYYMMDD);
 
         // Analyse the scheduled acquisition list to find the next one according to the current time.
         void selectNextAcquisitionSchedule(TimeDate::Date date);
 
         // Save a capture on disk.
-        void saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, string imgPrefix);
+        void saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, std::string imgPrefix);
 
         // Run a regular or scheduled acquisition.
-        void runImageCapture(int imgNumber, int imgExposure, int imgGain, CamPixFmt imgFormat, ImgFormat imgOutput, string imgPrefix);
+        void runImageCapture(int imgNumber, int imgExposure, int imgGain, CamPixFmt imgFormat, ImgFormat imgOutput, std::string imgPrefix);
 
         // Prepare the device for a continuous acquisition.
         bool prepareAcquisitionOnDevice();

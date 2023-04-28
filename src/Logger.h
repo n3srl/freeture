@@ -144,7 +144,7 @@ namespace freeture
 
             void monitorLog() {
 
-                vector<int> currDate = TimeDate::splitStringToInt(TimeDate::localDateTime(microsec_clock::universal_time(),"%Y:%m:%d:%H:%M:%S"));
+                std::vector<int> currDate = TimeDate::splitStringToInt(TimeDate::localDateTime(microsec_clock::universal_time(),"%Y:%m:%d:%H:%M:%S"));
 
                 //cout << "REFDATE : " << mRefDate.at(0) << mRefDate.at(1) << mRefDate.at(2) << endl;
                 //cout << "CURDATE : " << currDate.at(0) << currDate.at(1) << currDate.at(2) << endl;
@@ -253,35 +253,35 @@ namespace freeture
     template<typename T>
     void Log(T &&t)
     {
-        std::cout << t << endl;
+        std::cout << t << std::endl;
     }
 
     template<typename T>
     void LogError(T &&t)
     {
         freeture::Logger::LogLevel(Level::ERROR);
-        std::cout << t << endl;
+        std::cout << t << std::endl;
     }
 
     template<typename T>
     void LogInfo(T &&t)
     {
         freeture::Logger::LogLevel(Level::INFO);
-        std::cout << t << endl;
+        std::cout << t << std::endl;
     }
 
     template<typename T>
     void LogWarning(T &&t)
     {
         freeture::Logger::LogLevel(Level::WARNING);
-        std::cout << t << endl;
+        std::cout << t << std::endl;
     }
 
     template<typename T>
     void LogDebug(T &&t)
     {
         freeture::Logger::LogLevel(Level::DEBUG);
-        std::cout << t << endl;
+        std::cout << t << std::endl;
     }
 
     template<typename Head, typename... Tail>

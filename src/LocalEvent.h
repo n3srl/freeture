@@ -44,7 +44,7 @@
 #include "TimeDate.h"
 
 using namespace cv;
-using namespace std;
+
 
 class LocalEvent {
 
@@ -67,10 +67,10 @@ class LocalEvent {
 
     public :
 
-        vector<Point>   mLeRoiList;   // Contains position of region of interest which compose a local event.
-        vector<Point>   mAbsPos;
-        vector<Point>   mPosPos;
-        vector<Point>   mNegPos;
+        std::vector<Point>   mLeRoiList;   // Contains position of region of interest which compose a local event.
+        std::vector<Point>   mAbsPos;
+        std::vector<Point>   mPosPos;
+        std::vector<Point>   mNegPos;
         int             mFrameHeight;
         int             mFrameWidth;
         TimeDate::Date  mFrameAcqDate;
@@ -144,9 +144,9 @@ class LocalEvent {
 
         Point getLeDir() {return uNegToPos;};
 
-        void addAbs(vector<Point> p);
-        void addPos(vector<Point> p);
-        void addNeg(vector<Point> p);
+        void addAbs(std::vector<Point> p);
+        void addPos(std::vector<Point> p);
+        void addNeg(std::vector<Point> p);
 
         bool getMergedStatus() {return mergedFlag;};
         void setMergedStatus(bool flag) {mergedFlag = flag;};

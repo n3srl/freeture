@@ -38,7 +38,7 @@
 
 #ifdef LINUX
 
-    #include "opencv2/highgui/highgui.hpp"
+    #include <opencv2/highgui/highgui.hpp>
     #include <opencv2/imgproc/imgproc.hpp>
 
     #include <iostream>
@@ -83,7 +83,6 @@
     #include <algorithm>
 
     using namespace cv;
-    using namespace std;
 
     class CameraV4l2: public Camera {
 
@@ -128,7 +127,7 @@
 
             bool getInfos();
 
-            vector<pair<int,string>> getCamerasList();
+            std::vector<std::pair<int,std::string>> getCamerasList();
 
             bool listCameras();
 
@@ -148,7 +147,7 @@
 
             bool grabSingleImage(Frame &frame, int camID);
 
-            bool getDeviceNameById(int id, string &device);
+            bool getDeviceNameById(int id, std::string &device);
 
             bool getCameraName();
 
@@ -164,9 +163,9 @@
 
             bool getFPS(double &value);
 
-            bool getFpsEnum(vector<double> &values);
+            bool getFpsEnum(std::vector<double> &values);
 
-            string getModelName();
+            std::string getModelName();
 
             double getExposureTime();
 

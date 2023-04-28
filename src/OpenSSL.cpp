@@ -88,7 +88,7 @@ OpenSSL::~OpenSSL() {
 
 }
 
-void OpenSSL::Write(const string &msg) {
+void OpenSSL::Write(const std::string &msg) {
 
     const int rstWrite = SSL_write(ssl_.get(), msg.c_str(), msg.length());
     if(0 == rstWrite) {
