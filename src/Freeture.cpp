@@ -637,7 +637,8 @@ void freeture::Freeture::modeMeteorDetection()
 
 void freeture::Freeture::modeSingleAcquisition()
 {
-    device = new Device();
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    device = manager.getDevice();
 
     try
     {
@@ -723,8 +724,8 @@ void freeture::Freeture::modeSingleAcquisition()
                         frame.mHeight = acqHeight;
                         frame.mWidth = acqWidth;
 
-                        device = new Device();
-                        device->listDevices(false);
+                        device = manager.getDevice();
+                        //device->listDevices(false);
 
                         if(!device->createCamera(devID, false)) {
                             throw ">> Fail to create device.";
