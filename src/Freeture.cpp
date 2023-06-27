@@ -727,9 +727,9 @@ void freeture::Freeture::modeSingleAcquisition()
                         device = manager.getDevice();
                         //device->listDevices(false);
 
-                        if(!device->createCamera(devID, false)) {
+                        /* if(!device->createCamera(devID, false)) {
                             throw ">> Fail to create device.";
-                        }
+                        } */
 
                         if(!device->runSingleCapture(frame)){
                             throw ">> Single capture failed.";
