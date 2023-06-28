@@ -131,6 +131,7 @@
             double          exposureMax;            // Camera's maximum exposure time.
             double          fpsMin;                 // Camera's minimum frame rate.
             double          fpsMax;                 // Camera's maximum frame rate.
+            double          temperature;            // Camera temperature in °C
             const char*     capsString;
             int             gain;                   // Camera's gain.
             double          exp;                    // Camera's exposure time.

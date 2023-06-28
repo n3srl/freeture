@@ -170,7 +170,7 @@
                 return true;
 
             }
-        }
+        }ErrorManager::CheckAravisError(&error);
 
         BOOST_LOG_SEV(logger, fail) << "Fail to retrieve camera with this ID.";
         return false;
@@ -541,6 +541,7 @@
     bool CameraLucidArena::grabSingleImage(Frame &frame, int camID)
     {
         std::cout << "CameraLucidArena::grabSingleImage"<< std::endl;
+        auto arv_device = arv_camera_get_device(camera);
 
         bool res = false;
 
@@ -589,6 +590,9 @@
 
         std::cout << "==========================" << std::endl;
 
+        temperature = arv_device_get_float_feature_value(arv_device, "DeviceTemperature", &error);
+        ErrorManager::CheckAravisError(&error);
+
         fps = arv_camera_get_frame_rate(camera, &error);
         ErrorManager::CheckAravisError(&error);
 
@@ -614,6 +618,8 @@
         std::cout << "DEVICE VENDOR   : " << arv_camera_get_vendor_name(camera, &error)  << std::endl;
         ErrorManager::CheckAravisError(&error);
 
+        std::cout << "DEVICE TEMP     : " << temperature << std::endl;
+
         std::cout << "PAYLOAD         : " << payload                             << std::endl;
         std::cout << "Start X         : " << mStartX                             << std::endl
              << "Start Y         : " << mStartY                             << std::endl;
@@ -623,7 +629,7 @@
         std::cout << "Exp             : " << exp                                 << std::endl;
         std::cout << "Gain Range      : [" << gainMin        << " - " << gainMax       << "]"  << std::endl;
         std::cout << "Gain            : " << gain                                << std::endl;
-        std::cout << "Fps Range      : [" << fpsMin        << " - " << fpsMax       << "]"  << std::endl;
+        std::cout << "Fps Range       : [" << fpsMin        << " - " << fpsMax       << "]"  << std::endl;
         std::cout << "Fps             : " << fps                                 << std::endl;
         std::cout << "Type            : " << capsString                         << std::endl;
 

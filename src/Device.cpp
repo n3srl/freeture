@@ -142,7 +142,7 @@ bool freeture::Device::createCamera(int id, bool create)
     
     freeture::Device* device = manager.getDevice();
     
-    if(id >=0 && id < manager.deviceNumber - 1)
+    if(id >=0 && id <= manager.deviceNumber - 1)
     {
         CameraDescription camera = manager.getListDevice().at(id);
         
@@ -222,7 +222,7 @@ bool freeture::Device::createCamera()
         }
     }
 
-    std::cout << "No device with ID " << mGenCamID << std::endl;
+    std::cout << "No s with ID " << mGenCamID << "DEVICES " << manager.deviceNumber << std::endl;
     BOOST_LOG_SEV(logger, fail) << "No device with ID " << mGenCamID;
 
     return false;
@@ -277,10 +277,10 @@ CamSdkType freeture::Device::getDeviceSdk(int id) {
     CameraDeviceManager& manager = CameraDeviceManager::Get();
     std::vector<CameraDescription> devices = manager.getListDevice();
     
-    if(id >=0 && id < (manager.deviceNumber - 1)) {
+    if(id >=0 && id <= (manager.deviceNumber - 1)) {
         return devices.at(id).Sdk;
     }
-    std::cout << "ERROR GETTING DEVICE SDK " << std::endl;
+    std::cout << "ERROR GETTING DEVICE SDK FOR CAMERA ID " << id << " NUM OF DEVICES " << manager.deviceNumber - 1 << std::endl;
 }
 
 bool freeture::Device::createDevicesWith(CamSdkType sdk) {
@@ -912,7 +912,7 @@ bool freeture::Device::runContinuousCapture(Frame &img)
 
 bool freeture::Device::runSingleCapture(Frame &img) {
     freeture::LogDebug( "Device::runSingleCapture" );
-
+    std::cout << "single capture with cam: " << mCamID << std::endl;
     if(mCam->grabSingleImage(img, mCamID))
         return true;
 

@@ -54,6 +54,19 @@ CameraLucidArenaScanner::CameraLucidArenaScanner(CamSdkType sdk):CameraScanner(s
 
                                     Devices.push_back(c);
                                 }
+                                t = "Machine";
+                                if (s.find(t)!= string::npos)
+                                {
+                                    
+                                    c.Id = i;
+                                    c.Description = "NAME[" + s + "] SDK[LUCIDARAVIS] IP: " + addr;
+                                    c.DeviceId =string(str);
+                                    c.Address = string(addr);
+                                    c.Interface = j;
+                                    c.Sdk = CamSdkType::LUCID_ARAVIS;
+
+                                    Devices.push_back(c);
+                                }
                             }
                         }
                     }

@@ -724,12 +724,15 @@ void freeture::Freeture::modeSingleAcquisition()
                         frame.mHeight = acqHeight;
                         frame.mWidth = acqWidth;
 
-                        device = manager.getDevice();
+                        //device = manager.getDevice();
                         //device->listDevices(false);
 
                         /* if(!device->createCamera(devID, false)) {
                             throw ">> Fail to create device.";
                         } */
+
+                        /* device->setCameraGain(gain);
+                        device->setCameraExposureTime(exp); */
 
                         if(!device->runSingleCapture(frame)){
                             throw ">> Single capture failed.";

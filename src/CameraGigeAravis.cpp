@@ -493,19 +493,20 @@
         GError* error;
 
         bool res = false;
-
+        std::cout << "ARAVIS CREATE DEVICE"<< std::endl;
         if(!createDevice(camID))
             return false;
+        std::cout << "ARAVIS DEVICE CREATED"<< std::endl;
 
         if(!setPixelFormat(frame.mFormat))
             return false;
-
+        std::cout << "ARAVIS PIXEL FORMAT OK"<< std::endl;
         if(!setExposureTime(frame.mExposure))
             return false;
-
+        std::cout << "ARAVIS EXP OK"<< std::endl;
         if(!setGain(frame.mGain))
             return false;
-
+        std::cout << "ARAVIS GAIN OK"<< std::endl;
         if(frame.mWidth > 0 && frame.mHeight > 0) {
 
             setFrameSize(frame.mStartX, frame.mStartY, frame.mWidth, frame.mHeight,1);
@@ -522,6 +523,8 @@
             arv_camera_set_region(camera, 0, 0,sensor_width,sensor_height, &error);
             arv_camera_get_region (camera, NULL, NULL, &mWidth, &mHeight, &error);
         }
+
+        std::cout << "ARAVIS FRAME OK"<< std::endl;
 
         payload = arv_camera_get_payload (camera, &error);
 
