@@ -318,4 +318,5 @@ configure_file(
 )
 include_directories("${PROJECT_BINARY_DIR}")
 
-install(TARGETS freeture DESTINATION /usr/local/bin)
+#install(TARGETS freeture DESTINATION /usr/local/bin)
+install(TARGETS freeture DESTINATION /home/prisma/freeture/bin)

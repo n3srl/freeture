@@ -575,12 +575,20 @@
 
         pixFormat = arv_camera_get_pixel_format (camera, &error);
         ErrorManager::CheckAravisError(&error);
-        
 
         arv_camera_get_exposure_time_bounds (camera, &exposureMin, &exposureMax, &error);
         ErrorManager::CheckAravisError(&error);
-        
 
+        if(frame.mExposure >= exposureMin && frame.mExposure <= exposureMax)
+        {
+            arv_camera_set_exposure_time (camera, frame.mExposure, &error);
+            ErrorManager::CheckAravisError(&error);
+        }
+        else 
+        {
+            std::cout << "Value " << frame.mExposure << " not permitted ["<< exposureMin << ","<< exposureMax <<"]" << std::endl;
+        }
+        
         arv_camera_get_gain_bounds (camera, &gainMin, &gainMax, &error);
         ErrorManager::CheckAravisError(&error);
        
@@ -812,16 +820,12 @@
             ErrorManager::CheckAravisError(&error);
 
 
-            /* g_object_unref(stream);
-            stream = nullptr;
-            g_object_unref(camera);
-            camera = nullptr; */
-
         }
 
         return res;
 
     }
+
 
     void CameraLucidArena::saveGenicamXml(std::string p){
         std::cout << "CameraLucidArena::saveGenicamXml"<< std::endl;

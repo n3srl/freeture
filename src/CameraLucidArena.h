@@ -200,6 +200,7 @@
 
             void getAvailablePixelFormats();
 
+
     };
 
 #endif
