@@ -591,8 +591,10 @@
         
         arv_camera_get_gain_bounds (camera, &gainMin, &gainMax, &error);
         ErrorManager::CheckAravisError(&error);
-       
 
+        arv_camera_set_gain(camera, frame.mGainm, &error);
+        ErrorManager::CheckAravisError(&error);
+       
         arv_camera_set_frame_rate(camera, frame.mFps, &error); /* Regular captures */
         ErrorManager::CheckAravisError(&error);
 
