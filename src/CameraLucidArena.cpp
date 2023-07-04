@@ -599,6 +599,8 @@
         arv_camera_set_frame_rate(camera, frame.mFps, &error); /* Regular captures */
         ErrorManager::CheckAravisError(&error);
 
+        setPixelFormat(frame.mFormat);
+
         std::cout << "==========================" << std::endl;
 
         temperature = arv_device_get_float_feature_value(arv_device, "DeviceTemperature", &error);
