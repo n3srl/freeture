@@ -588,6 +588,8 @@
         arv_camera_set_gain(camera, frame.mGain, &error);
         ErrorManager::CheckAravisError(&error);
 
+        setPixelFormat(frame.mFormat);
+
         if(frame.mExposure >= exposureMin && frame.mExposure <= exposureMax)
         {
             arv_camera_set_exposure_time (camera, frame.mExposure, &error);
@@ -598,10 +600,10 @@
             std::cout << "Value " << frame.mExposure << " not permitted ["<< exposureMin << ","<< exposureMax <<"]" << std::endl;
         }
        
-        arv_camera_set_frame_rate(camera, frame.mFps, &error); /* Regular captures */
-        ErrorManager::CheckAravisError(&error);
+        //arv_camera_set_frame_rate(camera, frame.mFps, &error); /* Regular captures */
+        //ErrorManager::CheckAravisError(&error);
 
-        setPixelFormat(frame.mFormat);
+        
 
         std::cout << "==========================" << std::endl;
 
