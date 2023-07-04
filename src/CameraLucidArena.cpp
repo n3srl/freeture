@@ -9,6 +9,7 @@
 
 #include "ErrorManager.cpp"
 #include "CameraLucidArena.h"
+#include <vector>
 
 #ifdef LINUX
 
@@ -579,6 +580,15 @@
         arv_camera_get_exposure_time_bounds (camera, &exposureMin, &exposureMax, &error);
         ErrorManager::CheckAravisError(&error);
 
+        
+        
+        arv_camera_get_gain_bounds (camera, &gainMin, &gainMax, &error);
+        ErrorManager::CheckAravisError(&error);
+
+        // Set gain in singlemode
+        arv_camera_set_gain(camera, frame.mGain, &error);
+        ErrorManager::CheckAravisError(&error);
+
         if(frame.mExposure >= exposureMin && frame.mExposure <= exposureMax)
         {
             arv_camera_set_exposure_time (camera, frame.mExposure, &error);
@@ -588,13 +598,6 @@
         {
             std::cout << "Value " << frame.mExposure << " not permitted ["<< exposureMin << ","<< exposureMax <<"]" << std::endl;
         }
-        
-        arv_camera_get_gain_bounds (camera, &gainMin, &gainMax, &error);
-        ErrorManager::CheckAravisError(&error);
-
-        // Set gain in singlemode
-        arv_camera_set_gain(camera, frame.mGain, &error);
-        ErrorManager::CheckAravisError(&error);
        
         arv_camera_set_frame_rate(camera, frame.mFps, &error); /* Regular captures */
         ErrorManager::CheckAravisError(&error);
