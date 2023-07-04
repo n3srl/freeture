@@ -574,8 +574,7 @@
         ErrorManager::CheckAravisError(&error);
         
 
-        pixFormat = arv_camera_get_pixel_format (camera, &error);
-        ErrorManager::CheckAravisError(&error);
+        
 
         arv_camera_get_exposure_time_bounds (camera, &exposureMin, &exposureMax, &error);
         ErrorManager::CheckAravisError(&error);
@@ -612,7 +611,8 @@
         fps = arv_camera_get_frame_rate(camera, &error);
         ErrorManager::CheckAravisError(&error);
 
-        
+        pixFormat = arv_camera_get_pixel_format (camera, &error);
+        ErrorManager::CheckAravisError(&error);
 
         capsString = arv_pixel_format_to_gst_caps_string(pixFormat);
        
@@ -734,33 +734,46 @@
                         Mat image = Mat(mHeight, mWidth, CV_8UC1, buffer_data);
                         image.copyTo(frame.mImg);
 
-                    }else if(pixFormat == ARV_PIXEL_FORMAT_MONO_12 || pixFormat == ARV_PIXEL_FORMAT_MONO_16) {
+                    }else if(pixFormat == ARV_PIXEL_FORMAT_MONO_12) {
 
-                        if(pixFormat == ARV_PIXEL_FORMAT_MONO_12)
-                        {
-                            std::cout << ">> >> CAM PIX FORMAT MONO12" << std::endl;
-                        }
-
-                        if(pixFormat == ARV_PIXEL_FORMAT_MONO_16)
-                        {
-                            std::cout << ">> >> CAM PIX FORMAT MONO16" << std::endl;
-                        }
-
+                       
+                        std::cout << ">> >> CAM PIX FORMAT MONO12" << std::endl;
+                        
                         // Unsigned short image.
                         Mat image = Mat(mHeight, mWidth, CV_16UC1, buffer_data);
                         shiftBitsImage = true;
                         // http://www.theimagingsource.com/en_US/support/documentation/icimagingcontrol-class/PixelformatY16.htm
                         // Some sensors only support 10-bit or 12-bit pixel data. In this case, the least significant bits are don't-care values.
-                        if(shiftBitsImage && pixFormat == ARV_PIXEL_FORMAT_MONO_12){
+                        if(shiftBitsImage){
                             std::cout << ">> >> SHIFTING BITS" << std::endl;
                             unsigned short * p;
                             for(int i = 0; i < image.rows; i++){
                                 p = image.ptr<unsigned short>(i);
-                                for(int j = 0; j < image.cols; j++) p[j] = p[j] << 4;
+                                for(int j = 0; j < image.cols; j++) p[j] = p[j] >> 4;
                             }
                         }
 
                         image.copyTo(frame.mImg);
+                    }
+                    else if (pixFormat == ARV_PIXEL_FORMAT_MONO_16)
+                    {
+                        std::cout << ">> >> CAM PIX FORMAT MONO16" << std::endl;
+
+                        Mat image = Mat(mHeight, mWidth, CV_16UC1, buffer_data);
+                        Mat imageUnpacked = Mat(mHeight, mWidth, CV_16UC1);
+
+                        for(int i = 0; i < mHeight; i++)
+                        {
+                            for(int j = 0; j < mWidth; j++)
+                            {
+                                int index = i* mWidth + j;
+                                int value = (int)image.data[index*2] + ((int)image.data[index*2+1] << 8);
+                                imageUnpacked.at<ushort>(i,j) = value;
+                            }
+                        }
+
+                        imageUnpacked.copyTo(frame.mImg);
+
                     }
 
                     frame.mDate = TimeDate::splitIsoExtendedDate(to_iso_extended_string(time));
