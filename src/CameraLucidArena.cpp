@@ -592,6 +592,7 @@
         arv_camera_get_gain_bounds (camera, &gainMin, &gainMax, &error);
         ErrorManager::CheckAravisError(&error);
 
+        // Set gain in singlemode
         arv_camera_set_gain(camera, frame.mGainm, &error);
         ErrorManager::CheckAravisError(&error);
        
