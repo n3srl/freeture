@@ -593,7 +593,7 @@
         ErrorManager::CheckAravisError(&error);
 
         // Set gain in singlemode
-        arv_camera_set_gain(camera, frame.mGainm, &error);
+        arv_camera_set_gain(camera, frame.mGain, &error);
         ErrorManager::CheckAravisError(&error);
        
         arv_camera_set_frame_rate(camera, frame.mFps, &error); /* Regular captures */
