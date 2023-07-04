@@ -709,6 +709,14 @@
             char *buffer_data;
             size_t buffer_size;
 
+            if(shiftBitsImage)
+            {
+                std::cout << ">> SHIFT BIT ENABLED" << std::endl;
+            } else 
+            {
+                std::cout << ">> SHIFT BIT NOT ENABLED" << std::endl;
+            }
+
             std::cout << ">> Acquisition in progress... (Please wait)" << std::endl;
 
             if (arv_buffer != NULL){
@@ -721,18 +729,29 @@
                     boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
 
                     if(pixFormat == ARV_PIXEL_FORMAT_MONO_8){
+                        std::cout << ">> >> CAM PIX FORMAT MONO8" << std::endl;
 
                         Mat image = Mat(mHeight, mWidth, CV_8UC1, buffer_data);
                         image.copyTo(frame.mImg);
 
                     }else if(pixFormat == ARV_PIXEL_FORMAT_MONO_12 || pixFormat == ARV_PIXEL_FORMAT_MONO_16) {
 
+                        if(pixFormat == ARV_PIXEL_FORMAT_MONO_12)
+                        {
+                            std::cout << ">> >> CAM PIX FORMAT MONO12" << std::endl;
+                        }
+
+                        if(pixFormat == ARV_PIXEL_FORMAT_MONO_16)
+                        {
+                            std::cout << ">> >> CAM PIX FORMAT MONO16" << std::endl;
+                        }
+
                         // Unsigned short image.
                         Mat image = Mat(mHeight, mWidth, CV_16UC1, buffer_data);
-
+                        shiftBitsImage = true;
                         // http://www.theimagingsource.com/en_US/support/documentation/icimagingcontrol-class/PixelformatY16.htm
                         // Some sensors only support 10-bit or 12-bit pixel data. In this case, the least significant bits are don't-care values.
-                        if(shiftBitsImage && pixFormat != ARV_PIXEL_FORMAT_MONO_16 ){
+                        if(shiftBitsImage && pixFormat != ARV_PIXEL_FORMAT_MONO_16){
                             unsigned short * p;
                             for(int i = 0; i < image.rows; i++){
                                 p = image.ptr<unsigned short>(i);

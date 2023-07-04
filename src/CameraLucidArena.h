@@ -27,6 +27,8 @@
     #include <algorithm>
     #include "EParser.h"
 
+    #include "ArenaApi.h"
+
     #define BOOST_LOG_DYN_LINK 1
 
     #include <boost/log/common.hpp>
@@ -200,6 +202,7 @@
 
             void getAvailablePixelFormats();
 
+            // Support method
 
     };
 
