@@ -25,6 +25,8 @@
 #include "CfgParam.h"
 #include "Logger.h"
 
+#include "ArenaApi.h"
+
 #include "CameraDeviceManager.h"
 
 namespace po        = boost::program_options;
@@ -639,6 +641,8 @@ void freeture::Freeture::modeSingleAcquisition()
 {
     CameraDeviceManager& manager = CameraDeviceManager::Get();
     device = manager.getDevice();
+
+    
 
     try
     {

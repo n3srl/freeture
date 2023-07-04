@@ -751,11 +751,12 @@
                         shiftBitsImage = true;
                         // http://www.theimagingsource.com/en_US/support/documentation/icimagingcontrol-class/PixelformatY16.htm
                         // Some sensors only support 10-bit or 12-bit pixel data. In this case, the least significant bits are don't-care values.
-                        if(shiftBitsImage && pixFormat != ARV_PIXEL_FORMAT_MONO_16){
+                        if(shiftBitsImage && pixFormat == ARV_PIXEL_FORMAT_MONO_12){
+                            std::cout << ">> >> SHIFTING BITS" << std::endl;
                             unsigned short * p;
                             for(int i = 0; i < image.rows; i++){
                                 p = image.ptr<unsigned short>(i);
-                                for(int j = 0; j < image.cols; j++) p[j] = p[j] >> 4;
+                                for(int j = 0; j < image.cols; j++) p[j] = p[j] << 4;
                             }
                         }
 

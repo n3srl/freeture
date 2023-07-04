@@ -21,6 +21,7 @@
 #include "TimeDate.h"
 #include "Camera.h"
 #include "ErrorManager.cpp"
+#include "CameraDeviceManager.h"
 
 #include "CameraLucidArena_PHX016S.h"
 
@@ -886,7 +887,9 @@ using namespace std;
         bool res = false;
 
         if(!createDevice(camID))
+        {
             return false;
+        }
 
         if(!setPixelFormat(frame.mFormat))
             return false;
