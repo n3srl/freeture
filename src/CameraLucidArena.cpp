@@ -538,6 +538,8 @@
         }
     }
 
+    
+
 
     bool CameraLucidArena::grabSingleImage(Frame &frame, int camID)
     {
@@ -579,8 +581,9 @@
         arv_camera_get_exposure_time_bounds (camera, &exposureMin, &exposureMax, &error);
         ErrorManager::CheckAravisError(&error);
 
-        
-        
+        arv_camera_set_frame_rate(camera, frame.mFps, &error); /* Regular captures */
+        ErrorManager::CheckAravisError(&error);
+
         arv_camera_get_gain_bounds (camera, &gainMin, &gainMax, &error);
         ErrorManager::CheckAravisError(&error);
 
@@ -600,8 +603,6 @@
             std::cout << "Value " << frame.mExposure << " not permitted ["<< exposureMin << ","<< exposureMax <<"]" << std::endl;
         }
        
-        //arv_camera_set_frame_rate(camera, frame.mFps, &error); /* Regular captures */
-        //ErrorManager::CheckAravisError(&error);
 
         
 
@@ -711,13 +712,7 @@
             char *buffer_data;
             size_t buffer_size;
 
-            if(shiftBitsImage)
-            {
-                std::cout << ">> SHIFT BIT ENABLED" << std::endl;
-            } else 
-            {
-                std::cout << ">> SHIFT BIT NOT ENABLED" << std::endl;
-            }
+            
 
             std::cout << ">> Acquisition in progress... (Please wait)" << std::endl;
 
@@ -762,7 +757,7 @@
                         std::cout << ">> >> CAM PIX FORMAT MONO16" << std::endl;
 
                         Mat image = Mat(mHeight, mWidth, CV_16UC1, buffer_data);
-                        Mat imageUnpacked = Mat(mHeight, mWidth, CV_16UC1);
+                        /* Mat imageUnpacked = Mat(mHeight, mWidth, CV_16UC1);
 
                         for(int i = 0; i < mHeight; i++)
                         {
@@ -772,9 +767,9 @@
                                 int value = (int)image.data[index*2] + ((int)image.data[index*2+1] << 8);
                                 imageUnpacked.at<ushort>(i,j) = value;
                             }
-                        }
+                        } */
 
-                        imageUnpacked.copyTo(frame.mImg);
+                        image.copyTo(frame.mImg);
 
                     }
 
