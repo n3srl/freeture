@@ -259,9 +259,9 @@ std::vector<std::string> DetectionTemporal::getDebugFiles() {
 }
 
 bool DetectionTemporal::runDetection(Frame &c) {
-
+    
     if(!mSubdivisionStatus) {
-
+        //std::cout << "DetThread run DetectionTemporal !mSubDivisionStatus" << std::endl;
         mSubdivisionPos.clear();
 
         int h = c.mImg.rows;
@@ -289,6 +289,7 @@ bool DetectionTemporal::runDetection(Frame &c) {
         }
 
     }else {
+        //std::cout << "DetThread run DetectionTemporal mSubDivisionStatus" << std::endl;
 
         double tDownsample  = 0;
         double tAbsDiff     = 0;

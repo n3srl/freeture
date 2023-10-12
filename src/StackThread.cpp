@@ -341,7 +341,7 @@ void StackThread::operator()(){
 
                 }else{
 
-                    BOOST_LOG_SEV(logger,fail) << "Fail to build stack directory. ";
+                    BOOST_LOG_SEV(logger,fail) << "Fail to build stack directory. " << completeDataPath;
 
                 }
 

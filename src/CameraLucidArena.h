@@ -184,6 +184,8 @@
 
             double getExposureTime();
 
+            bool setAutoExposure(bool val);
+
             bool setExposureTime(double exp);
 
             bool setGain(double gain);

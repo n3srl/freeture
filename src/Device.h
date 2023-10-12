@@ -197,6 +197,8 @@ class Device {
 
         InputDeviceType getDeviceType();
 
+        bool setCameraAutoExposure(bool);
+
         bool setCameraNightExposureTime();
 
         bool setCameraDayExposureTime();
@@ -230,6 +232,7 @@ class Device {
         bool getGainStatus();
 
         bool setCameraSize(int x, int y, int w, int h);
+        bool getDeviceCameraSizeParams(int& x,int& y,int& height,int& width);    
 
         int getNightExposureTime() {return mNightExposure;};
         int getNightGain() {return mNightGain;};

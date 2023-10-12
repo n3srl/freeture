@@ -162,7 +162,7 @@ bool AcqThread::startThread() {
 }
 
 bool AcqThread::getThreadStatus(){
-    std::cout << "AcqThread::getThreadStatus"<<std::endl;
+    //std::cout << "AcqThread::getThreadStatus"<<std::endl;
     return mThreadTerminated;
 }
 
@@ -291,7 +291,7 @@ void AcqThread::operator()(){
                             if(pDetection != NULL) {
 
                                 if(previousTimeMode != currentTimeMode && mdtp.DET_MODE != DAYNIGHT) {
-
+                                    std::cout << "ERROR HERE Notify detection thread." << std::endl;
                                     BOOST_LOG_SEV(logger, notification) << "TimeMode has changed ! ";
                                     boost::mutex::scoped_lock lock(*detSignal_mutex);
                                     *detSignal = false;
@@ -314,7 +314,7 @@ void AcqThread::operator()(){
 
                                 // TimeMode has changed.
                                 if(previousTimeMode != currentTimeMode && msp.STACK_MODE != DAYNIGHT) {
-
+                                    //std::cout << "ERROR HERE Notify stack thread " << std::endl;
                                     BOOST_LOG_SEV(logger, notification) << "TimeMode has changed ! ";
                                     boost::mutex::scoped_lock lock(*stackSignal_mutex);
                                     *stackSignal = false;
@@ -396,7 +396,7 @@ void AcqThread::operator()(){
 
                         // Acquisition at regular time interval is enabled.
                         if(mcp.regcap.ACQ_REGULAR_ENABLED && !mDevice->mVideoFramesInput) {
-
+                            //std::cout << "TRY REGULAR ACQ " << std::endl;
                             cDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
                             std::string nowDate = cDate.substr(0, cDate.find("."));
 
@@ -862,7 +862,7 @@ void AcqThread::runImageCapture(int imgNumber, int imgExposure, int imgGain, Cam
 }
 
 void AcqThread::saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, std::string imgPrefix) {
-
+    std::cout << "AcqThread: SAVING IMAGE CAPTURED" << std::endl;
     if(img.mImg.data) {
 
         std::string  YYYYMMDD = TimeDate::getYYYYMMDD(img.mDate);

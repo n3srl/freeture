@@ -174,14 +174,14 @@ void DetThread::operator ()(){
     BOOST_LOG_SEV(logger,notification) << "==============================================";
     BOOST_LOG_SEV(logger,notification) << "=========== Start detection thread ===========";
     BOOST_LOG_SEV(logger,notification) << "==============================================";
-
+    std::string errorWhen = "NO";
     /// Thread loop.
     try{
 
         do{
             double t = 0.0;
             try {
-
+                
                 /// Wait new frame from AcqThread.
                 boost::mutex::scoped_lock lock(*detSignal_mutex);
                 while (!(*detSignal)) detSignal_condition->wait(lock);
@@ -191,15 +191,16 @@ void DetThread::operator ()(){
                 // Check interruption signal from AcqThread.
                 mForceToReset = false;
                 mInterruptionStatusMutex.lock();
+                //std::cout << "DetThread after lock ok" << std::endl;
                 if(mInterruptionStatus) {
                     BOOST_LOG_SEV(logger, notification) << "Interruption status : " << mInterruptionStatus;
                     BOOST_LOG_SEV(logger, notification) << "-> reset forced on detection method.";
                     mForceToReset = true;
                 }
                 mInterruptionStatusMutex.unlock();
-
+                //std::cout << "DetThread after unlock ok" << std::endl;
                 if(!mForceToReset){
-
+                    errorWhen = "!Force to reset";
                     // Fetch the last grabbed frame.
                     Frame lastFrame;
                     boost::mutex::scoped_lock lock2(*frameBuffer_mutex);
@@ -211,8 +212,11 @@ void DetThread::operator ()(){
                     if(lastFrame.mImg.data) {
                         mFormat = lastFrame.mFormat;
 
+                        
+
                         // Run detection process.
-                        if(pDetMthd->runDetection(lastFrame) && !eventToComplete){
+                        try {
+                            if(pDetMthd->runDetection(lastFrame) && !eventToComplete){
 
                             // Event detected.
                             BOOST_LOG_SEV(logger, notification) << "Event detected ! Waiting frames to complete the event..." << std::endl;
@@ -225,6 +229,12 @@ void DetThread::operator ()(){
                             mNbDetection++;
 
                         }
+                        } catch (std::exception& e)
+                        {
+                            BOOST_LOG_SEV(logger, notification) << "Frameis not valid" << std::endl;
+                           
+                        }
+                        
 
                         // Wait frames to complete the detection.
                         if(eventToComplete){
@@ -278,7 +288,7 @@ void DetThread::operator ()(){
                         BOOST_LOG_SEV(logger,normal) << " [ TIME DET ] : " << std::setprecision(3) << std::fixed << t << " ms ";
                     }
                 }else{
-
+                    errorWhen = "Force to reset";
                     // reset method
                     if(pDetMthd != NULL)
                         pDetMthd->resetDetection(false);
@@ -291,11 +301,18 @@ void DetThread::operator ()(){
                     mInterruptionStatusMutex.unlock();
 
                 }
+                //std::cout << "End of try ok" << std::endl;
 
             }catch(const boost::thread_interrupted&){
 
                 BOOST_LOG_SEV(logger,notification) << "Detection Thread INTERRUPTED";
 
+            } catch(std::exception& e)
+            {
+                std::cout << errorWhen << " An error occured in internal try. See log for details." << std::endl;
+                std::cout << e.what() << std::endl;
+                BOOST_LOG_SEV(logger, critical) << errorWhen << " An error occured in internal try. See log for details.";
+                BOOST_LOG_SEV(logger, critical) << e.what();
             }
 
             mMustStopMutex.lock();
@@ -358,12 +375,13 @@ void DetThread::operator ()(){
 
 bool DetThread::getRunStatus(){
 
+    //std::cout << "DetThrad getRunstatus" << std::endl;
     return mIsRunning;
 
 }
 
 bool DetThread::buildEventDataDirectory(){
-
+    std::cout << "DetThrad buildEventDataDirectory" << std::endl;
     namespace fs = boost::filesystem;
 
     // eventDate is the date of the first frame attached to the event.
@@ -519,7 +537,7 @@ bool DetThread::buildEventDataDirectory(){
 }
 
 bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
-
+    std::cout << "DetThread SAVE EVENT DATA" << std::endl;
     namespace fs = boost::filesystem;
 
     // List of data path to attach to the mail notification.

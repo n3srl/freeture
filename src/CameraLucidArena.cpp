@@ -108,7 +108,7 @@
     }
 
     bool CameraLucidArena::setSize(int startx, int starty, int width, int height, bool customSize) {
-        std::cout << "CameraLucidArena::setSize"<< std::endl;
+        std::cout << "CameraLucidArena::setSize"<< startx << "," << starty << " " << width<<"x"<<height << std::endl;
         
         if (camera == nullptr) {
             std::cout << "CAMERA IS NULL " <<std::endl;
@@ -117,7 +117,7 @@
         
         if(customSize) {
 
-
+            std::cout << "custom size is ok " << std::endl;
             arv_camera_set_region(camera, startx, starty, width, height,&error);
             ErrorManager::CheckAravisError(&error);
 
@@ -135,7 +135,7 @@
 
         // Default is maximum size
         } else {
-
+            std::cout << "custom size is false " << std::endl;
             int sensor_width, sensor_height;
 
             arv_camera_get_sensor_size(camera, &sensor_width, &sensor_height, &error);
@@ -426,6 +426,7 @@
 
                     if(pixFormat == ARV_PIXEL_FORMAT_MONO_8)
                     {
+                        
                         //BOOST_LOG_SEV(logger, normal) << "Creating Mat 8 bits ...";
                         image = Mat(mHeight, mWidth, CV_8UC1, buffer_data);
                         imgDepth = MONO8;
@@ -434,7 +435,7 @@
                     }
                     else if(pixFormat == ARV_PIXEL_FORMAT_MONO_12)
                     {
-
+                        
                         //BOOST_LOG_SEV(logger, normal) << "Creating Mat 16 bits ...";
                         image = Mat(mHeight, mWidth, CV_16UC1, buffer_data);
                         imgDepth = MONO12;
@@ -464,6 +465,7 @@
                     }
                     else if(pixFormat == ARV_PIXEL_FORMAT_MONO_16)
                     {
+                        
                         //BOOST_LOG_SEV(logger, normal) << "Creating Mat 16 bits ...";
                         image = Mat(mHeight, mWidth, CV_16UC1, buffer_data);
                         imgDepth = MONO16;
@@ -528,7 +530,7 @@
                 }
 
             }catch(std::exception& e){
-
+                std::cout << "CameraLucidArena::grabImage EXC"<< std::endl;
                 std::cout << e.what() << std::endl;
                 BOOST_LOG_SEV(logger, critical) << e.what() ;
                 return false;
@@ -1107,6 +1109,22 @@
         }
 
         return false;
+    }
+
+    bool CameraLucidArena::setAutoExposure(bool val)
+    {
+        std::cout << "CameraLucidArena::setAutoExp"<< std::endl;
+        if (camera == nullptr) {
+            std::cout << "CAMERA IS NULL " <<std::endl;
+            return false;
+        }
+
+        ArvAuto arv_mode = val ? ARV_AUTO_ONCE : ARV_AUTO_OFF;
+        arv_camera_set_exposure_time_auto(camera, arv_mode, &error);
+        
+        ErrorManager::CheckAravisError(&error);
+
+        return true;
     }
 
     bool CameraLucidArena::setGain(double val){

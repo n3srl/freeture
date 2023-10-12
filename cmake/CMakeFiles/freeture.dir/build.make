@@ -65,10 +65,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/mattia/Desktop/freeture/freeture/cmake
+CMAKE_SOURCE_DIR = /usr/local/freeture-1.3.1/freeture_git/cmake
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/mattia/Desktop/freeture/freeture/cmake
+CMAKE_BINARY_DIR = /usr/local/freeture-1.3.1/freeture_git/cmake
 
 # Include any dependencies generated for this target.
 include CMakeFiles/freeture.dir/depend.make
@@ -79,777 +79,777 @@ include CMakeFiles/freeture.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/freeture.dir/flags.make
 
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqSchedule.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqSchedule.cpp.o: /home/mattia/Desktop/freeture/freeture/src/AcqSchedule.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqSchedule.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqSchedule.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/AcqSchedule.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqSchedule.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqSchedule.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/AcqSchedule.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqSchedule.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqSchedule.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqSchedule.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/AcqSchedule.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqSchedule.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqThread.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqThread.cpp.o: /home/mattia/Desktop/freeture/freeture/src/AcqThread.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqThread.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqThread.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/AcqThread.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqThread.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqThread.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/AcqThread.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqThread.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqThread.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqThread.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/AcqThread.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqThread.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Base64.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Base64.cpp.o: /home/mattia/Desktop/freeture/freeture/src/Base64.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Base64.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Base64.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/Base64.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Base64.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Base64.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/Base64.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Base64.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Base64.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Base64.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/Base64.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Base64.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraDeviceManager.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraDeviceManager.cpp.o: /home/mattia/Desktop/freeture/freeture/src/CameraDeviceManager.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraDeviceManager.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraDeviceManager.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/CameraDeviceManager.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraDeviceManager.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraDeviceManager.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/CameraDeviceManager.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraDeviceManager.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraDeviceManager.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraDeviceManager.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/CameraDeviceManager.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraDeviceManager.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraFrames.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraFrames.cpp.o: /home/mattia/Desktop/freeture/freeture/src/CameraFrames.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraFrames.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraFrames.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/CameraFrames.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraFrames.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraFrames.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/CameraFrames.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraFrames.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraFrames.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraFrames.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/CameraFrames.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraFrames.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravis.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravis.cpp.o: /home/mattia/Desktop/freeture/freeture/src/CameraGigeAravis.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravis.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravis.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/CameraGigeAravis.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravis.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravis.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/CameraGigeAravis.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravis.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravis.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravis.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/CameraGigeAravis.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravis.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravisScanner.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravisScanner.cpp.o: /home/mattia/Desktop/freeture/freeture/src/CameraGigeAravisScanner.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravisScanner.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravisScanner.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/CameraGigeAravisScanner.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravisScanner.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravisScanner.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/CameraGigeAravisScanner.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravisScanner.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravisScanner.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravisScanner.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/CameraGigeAravisScanner.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravisScanner.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigePylon.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigePylon.cpp.o: /home/mattia/Desktop/freeture/freeture/src/CameraGigePylon.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigePylon.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigePylon.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/CameraGigePylon.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigePylon.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigePylon.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/CameraGigePylon.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigePylon.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigePylon.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigePylon.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/CameraGigePylon.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigePylon.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeTis.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeTis.cpp.o: /home/mattia/Desktop/freeture/freeture/src/CameraGigeTis.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeTis.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeTis.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/CameraGigeTis.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeTis.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeTis.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/CameraGigeTis.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeTis.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeTis.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeTis.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/CameraGigeTis.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeTis.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena.cpp.o: /home/mattia/Desktop/freeture/freeture/src/CameraLucidArena.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/CameraLucidArena.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/CameraLucidArena.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/CameraLucidArena.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArenaScanner.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArenaScanner.cpp.o: /home/mattia/Desktop/freeture/freeture/src/CameraLucidArenaScanner.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArenaScanner.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArenaScanner.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/CameraLucidArenaScanner.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArenaScanner.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArenaScanner.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/CameraLucidArenaScanner.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArenaScanner.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArenaScanner.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArenaScanner.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/CameraLucidArenaScanner.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArenaScanner.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016S.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016S.cpp.o: /home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016S.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016S.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016S.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016S.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016S.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016S.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016S.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016S.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016S.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016S.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016S.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016S.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016SScanner.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016SScanner.cpp.o: /home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016SScanner.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016SScanner.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016SScanner.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016SScanner.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016SScanner.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016SScanner.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016SScanner.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016SScanner.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016SScanner.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016SScanner.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016SScanner.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016SScanner.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraScanner.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraScanner.cpp.o: /home/mattia/Desktop/freeture/freeture/src/CameraScanner.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraScanner.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraScanner.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/CameraScanner.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraScanner.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraScanner.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/CameraScanner.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraScanner.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraScanner.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraScanner.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/CameraScanner.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraScanner.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraV4l2.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraV4l2.cpp.o: /home/mattia/Desktop/freeture/freeture/src/CameraV4l2.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraV4l2.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraV4l2.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/CameraV4l2.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraV4l2.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraV4l2.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/CameraV4l2.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraV4l2.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraV4l2.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraV4l2.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/CameraV4l2.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraV4l2.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraVideo.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraVideo.cpp.o: /home/mattia/Desktop/freeture/freeture/src/CameraVideo.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraVideo.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraVideo.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/CameraVideo.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraVideo.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraVideo.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/CameraVideo.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraVideo.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraVideo.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraVideo.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/CameraVideo.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraVideo.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraWindows.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraWindows.cpp.o: /home/mattia/Desktop/freeture/freeture/src/CameraWindows.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraWindows.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraWindows.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/CameraWindows.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraWindows.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraWindows.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/CameraWindows.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraWindows.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraWindows.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraWindows.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/CameraWindows.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraWindows.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgLoader.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgLoader.cpp.o: /home/mattia/Desktop/freeture/freeture/src/CfgLoader.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgLoader.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgLoader.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/CfgLoader.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgLoader.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgLoader.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/CfgLoader.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgLoader.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgLoader.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgLoader.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/CfgLoader.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgLoader.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgParam.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgParam.cpp.o: /home/mattia/Desktop/freeture/freeture/src/CfgParam.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgParam.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgParam.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/CfgParam.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgParam.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgParam.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/CfgParam.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgParam.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgParam.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgParam.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/CfgParam.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgParam.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Conversion.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Conversion.cpp.o: /home/mattia/Desktop/freeture/freeture/src/Conversion.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Conversion.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Conversion.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/Conversion.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Conversion.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Conversion.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/Conversion.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Conversion.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Conversion.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Conversion.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/Conversion.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Conversion.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetThread.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetThread.cpp.o: /home/mattia/Desktop/freeture/freeture/src/DetThread.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetThread.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetThread.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/DetThread.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetThread.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetThread.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/DetThread.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetThread.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetThread.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetThread.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/DetThread.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetThread.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemplate.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemplate.cpp.o: /home/mattia/Desktop/freeture/freeture/src/DetectionTemplate.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemplate.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemplate.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/DetectionTemplate.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemplate.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemplate.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/DetectionTemplate.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemplate.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemplate.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemplate.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/DetectionTemplate.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemplate.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemporal.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemporal.cpp.o: /home/mattia/Desktop/freeture/freeture/src/DetectionTemporal.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemporal.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemporal.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/DetectionTemporal.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemporal.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemporal.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/DetectionTemporal.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemporal.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemporal.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemporal.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/DetectionTemporal.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemporal.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Device.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Device.cpp.o: /home/mattia/Desktop/freeture/freeture/src/Device.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Device.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Device.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/Device.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Device.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Device.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/Device.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Device.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Device.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Device.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/Device.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Device.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/EParser.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/EParser.cpp.o: /home/mattia/Desktop/freeture/freeture/src/EParser.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/EParser.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/EParser.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/EParser.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/EParser.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/EParser.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/EParser.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/EParser.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/EParser.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/EParser.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/EParser.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/EParser.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Ephemeris.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Ephemeris.cpp.o: /home/mattia/Desktop/freeture/freeture/src/Ephemeris.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Ephemeris.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Ephemeris.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/Ephemeris.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Ephemeris.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Ephemeris.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/Ephemeris.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Ephemeris.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Ephemeris.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Ephemeris.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/Ephemeris.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Ephemeris.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ErrorManager.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ErrorManager.cpp.o: /home/mattia/Desktop/freeture/freeture/src/ErrorManager.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ErrorManager.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ErrorManager.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/ErrorManager.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ErrorManager.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ErrorManager.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/ErrorManager.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ErrorManager.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ErrorManager.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ErrorManager.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/ErrorManager.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ErrorManager.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ExposureControl.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ExposureControl.cpp.o: /home/mattia/Desktop/freeture/freeture/src/ExposureControl.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ExposureControl.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ExposureControl.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/ExposureControl.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ExposureControl.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ExposureControl.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/ExposureControl.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ExposureControl.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ExposureControl.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ExposureControl.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/ExposureControl.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ExposureControl.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits.cpp.o: /home/mattia/Desktop/freeture/freeture/src/Fits.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/Fits.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/Fits.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/Fits.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits2D.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits2D.cpp.o: /home/mattia/Desktop/freeture/freeture/src/Fits2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits2D.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits2D.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/Fits2D.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits2D.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits2D.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/Fits2D.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits2D.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits2D.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits2D.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/Fits2D.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits2D.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits3D.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits3D.cpp.o: /home/mattia/Desktop/freeture/freeture/src/Fits3D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits3D.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits3D.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/Fits3D.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits3D.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits3D.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/Fits3D.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits3D.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits3D.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits3D.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/Fits3D.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits3D.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Frame.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Frame.cpp.o: /home/mattia/Desktop/freeture/freeture/src/Frame.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Frame.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Frame.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/Frame.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Frame.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Frame.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/Frame.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Frame.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Frame.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Frame.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/Frame.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Frame.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Freeture.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Freeture.cpp.o: /home/mattia/Desktop/freeture/freeture/src/Freeture.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Freeture.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Freeture.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/Freeture.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Freeture.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Freeture.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/Freeture.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Freeture.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Freeture.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Freeture.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/Freeture.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Freeture.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/GlobalEvent.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/GlobalEvent.cpp.o: /home/mattia/Desktop/freeture/freeture/src/GlobalEvent.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/GlobalEvent.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/GlobalEvent.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/GlobalEvent.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/GlobalEvent.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/GlobalEvent.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/GlobalEvent.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/GlobalEvent.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/GlobalEvent.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/GlobalEvent.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/GlobalEvent.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/GlobalEvent.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Histogram.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Histogram.cpp.o: /home/mattia/Desktop/freeture/freeture/src/Histogram.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Histogram.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Histogram.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/Histogram.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Histogram.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Histogram.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/Histogram.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Histogram.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Histogram.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Histogram.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/Histogram.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Histogram.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramGray.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramGray.cpp.o: /home/mattia/Desktop/freeture/freeture/src/HistogramGray.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramGray.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramGray.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/HistogramGray.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramGray.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramGray.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/HistogramGray.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramGray.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramGray.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramGray.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/HistogramGray.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramGray.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramRGB.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramRGB.cpp.o: /home/mattia/Desktop/freeture/freeture/src/HistogramRGB.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramRGB.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramRGB.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/HistogramRGB.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramRGB.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramRGB.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/HistogramRGB.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramRGB.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramRGB.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramRGB.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/HistogramRGB.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramRGB.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ImgProcessing.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ImgProcessing.cpp.o: /home/mattia/Desktop/freeture/freeture/src/ImgProcessing.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ImgProcessing.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ImgProcessing.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/ImgProcessing.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ImgProcessing.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ImgProcessing.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/ImgProcessing.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ImgProcessing.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ImgProcessing.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ImgProcessing.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/ImgProcessing.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ImgProcessing.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/LocalEvent.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/LocalEvent.cpp.o: /home/mattia/Desktop/freeture/freeture/src/LocalEvent.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/LocalEvent.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/LocalEvent.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/LocalEvent.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/LocalEvent.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/LocalEvent.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/LocalEvent.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/LocalEvent.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/LocalEvent.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/LocalEvent.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/LocalEvent.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/LocalEvent.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Mask.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Mask.cpp.o: /home/mattia/Desktop/freeture/freeture/src/Mask.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Mask.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Mask.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/Mask.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Mask.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Mask.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/Mask.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Mask.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Mask.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Mask.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/Mask.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Mask.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/NodeExporterMetrics.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/NodeExporterMetrics.cpp.o: /home/mattia/Desktop/freeture/freeture/src/NodeExporterMetrics.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/NodeExporterMetrics.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/NodeExporterMetrics.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/NodeExporterMetrics.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/NodeExporterMetrics.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/NodeExporterMetrics.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/NodeExporterMetrics.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/NodeExporterMetrics.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/NodeExporterMetrics.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/NodeExporterMetrics.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/NodeExporterMetrics.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/NodeExporterMetrics.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/OpenSSL.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/OpenSSL.cpp.o: /home/mattia/Desktop/freeture/freeture/src/OpenSSL.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/OpenSSL.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/OpenSSL.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/OpenSSL.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/OpenSSL.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/OpenSSL.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/OpenSSL.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/OpenSSL.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/OpenSSL.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/OpenSSL.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/OpenSSL.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/OpenSSL.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/PixFmtConv.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/PixFmtConv.cpp.o: /home/mattia/Desktop/freeture/freeture/src/PixFmtConv.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/PixFmtConv.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/PixFmtConv.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/PixFmtConv.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/PixFmtConv.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/PixFmtConv.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/PixFmtConv.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/PixFmtConv.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/PixFmtConv.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/PixFmtConv.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/PixFmtConv.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/PixFmtConv.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SMTPClient.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SMTPClient.cpp.o: /home/mattia/Desktop/freeture/freeture/src/SMTPClient.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SMTPClient.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SMTPClient.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/SMTPClient.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SMTPClient.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SMTPClient.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/SMTPClient.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SMTPClient.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SMTPClient.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SMTPClient.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/SMTPClient.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SMTPClient.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SaveImg.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SaveImg.cpp.o: /home/mattia/Desktop/freeture/freeture/src/SaveImg.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SaveImg.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SaveImg.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/SaveImg.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SaveImg.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SaveImg.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/SaveImg.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SaveImg.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SaveImg.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SaveImg.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/SaveImg.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SaveImg.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Stack.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Stack.cpp.o: /home/mattia/Desktop/freeture/freeture/src/Stack.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Stack.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Stack.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/Stack.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Stack.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Stack.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/Stack.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Stack.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Stack.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Stack.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/Stack.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Stack.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/StackThread.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/StackThread.cpp.o: /home/mattia/Desktop/freeture/freeture/src/StackThread.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/StackThread.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/StackThread.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/StackThread.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/StackThread.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/StackThread.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/StackThread.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/StackThread.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/StackThread.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/StackThread.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/StackThread.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/StackThread.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/TimeDate.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/TimeDate.cpp.o: /home/mattia/Desktop/freeture/freeture/src/TimeDate.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/TimeDate.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/TimeDate.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/TimeDate.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/TimeDate.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/TimeDate.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/TimeDate.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/TimeDate.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/TimeDate.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/TimeDate.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/TimeDate.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/TimeDate.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/main.cpp.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/main.cpp.o: /home/mattia/Desktop/freeture/freeture/src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/main.cpp.o -c /home/mattia/Desktop/freeture/freeture/src/main.cpp
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/main.cpp > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/main.cpp.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/main.cpp -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/main.cpp.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.o: /home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building C object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.o -c /home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.s
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.o: CMakeFiles/freeture.dir/flags.make
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.o: /home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_51) "Building C object CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.o -c /home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c > CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.i
-
-CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c -o CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.s
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqSchedule.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqSchedule.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/AcqSchedule.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqSchedule.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqSchedule.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/AcqSchedule.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqSchedule.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqSchedule.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/AcqSchedule.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqSchedule.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqSchedule.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqSchedule.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/AcqSchedule.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqSchedule.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqThread.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqThread.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/AcqThread.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqThread.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqThread.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/AcqThread.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqThread.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqThread.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/AcqThread.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqThread.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqThread.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqThread.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/AcqThread.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqThread.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Base64.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Base64.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/Base64.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Base64.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Base64.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/Base64.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Base64.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Base64.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/Base64.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Base64.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Base64.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Base64.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/Base64.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Base64.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraDeviceManager.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraDeviceManager.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/CameraDeviceManager.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraDeviceManager.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraDeviceManager.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/CameraDeviceManager.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraDeviceManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraDeviceManager.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/CameraDeviceManager.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraDeviceManager.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraDeviceManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraDeviceManager.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/CameraDeviceManager.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraDeviceManager.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraFrames.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraFrames.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/CameraFrames.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraFrames.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraFrames.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/CameraFrames.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraFrames.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraFrames.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/CameraFrames.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraFrames.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraFrames.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraFrames.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/CameraFrames.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraFrames.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravis.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravis.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravis.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravis.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravis.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravis.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravis.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravis.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravis.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravis.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravis.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravis.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravis.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravis.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravisScanner.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravisScanner.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravisScanner.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravisScanner.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravisScanner.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravisScanner.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravisScanner.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravisScanner.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravisScanner.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravisScanner.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravisScanner.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravisScanner.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravisScanner.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravisScanner.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigePylon.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigePylon.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/CameraGigePylon.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigePylon.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigePylon.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/CameraGigePylon.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigePylon.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigePylon.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/CameraGigePylon.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigePylon.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigePylon.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigePylon.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/CameraGigePylon.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigePylon.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeTis.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeTis.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/CameraGigeTis.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeTis.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeTis.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/CameraGigeTis.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeTis.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeTis.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/CameraGigeTis.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeTis.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeTis.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeTis.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/CameraGigeTis.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeTis.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArenaScanner.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArenaScanner.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArenaScanner.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArenaScanner.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArenaScanner.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArenaScanner.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArenaScanner.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArenaScanner.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArenaScanner.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArenaScanner.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArenaScanner.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArenaScanner.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArenaScanner.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArenaScanner.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016S.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016S.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016S.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016S.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016S.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016S.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016S.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016S.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016S.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016S.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016S.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016S.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016S.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016S.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016SScanner.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016SScanner.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016SScanner.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016SScanner.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016SScanner.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016SScanner.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016SScanner.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016SScanner.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016SScanner.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016SScanner.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016SScanner.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016SScanner.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016SScanner.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016SScanner.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraScanner.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraScanner.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/CameraScanner.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraScanner.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraScanner.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/CameraScanner.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraScanner.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraScanner.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/CameraScanner.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraScanner.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraScanner.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraScanner.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/CameraScanner.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraScanner.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraV4l2.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraV4l2.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/CameraV4l2.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraV4l2.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraV4l2.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/CameraV4l2.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraV4l2.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraV4l2.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/CameraV4l2.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraV4l2.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraV4l2.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraV4l2.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/CameraV4l2.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraV4l2.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraVideo.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraVideo.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/CameraVideo.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraVideo.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraVideo.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/CameraVideo.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraVideo.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraVideo.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/CameraVideo.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraVideo.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraVideo.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraVideo.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/CameraVideo.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraVideo.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraWindows.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraWindows.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/CameraWindows.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraWindows.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraWindows.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/CameraWindows.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraWindows.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraWindows.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/CameraWindows.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraWindows.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraWindows.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraWindows.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/CameraWindows.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraWindows.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgLoader.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgLoader.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/CfgLoader.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgLoader.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgLoader.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/CfgLoader.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgLoader.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgLoader.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/CfgLoader.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgLoader.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgLoader.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgLoader.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/CfgLoader.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgLoader.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgParam.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgParam.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/CfgParam.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgParam.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgParam.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/CfgParam.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgParam.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgParam.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/CfgParam.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgParam.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgParam.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgParam.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/CfgParam.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgParam.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Conversion.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Conversion.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/Conversion.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Conversion.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Conversion.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/Conversion.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Conversion.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Conversion.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/Conversion.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Conversion.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Conversion.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Conversion.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/Conversion.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Conversion.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetThread.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetThread.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/DetThread.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetThread.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetThread.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/DetThread.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetThread.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetThread.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/DetThread.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetThread.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetThread.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetThread.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/DetThread.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetThread.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemplate.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemplate.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/DetectionTemplate.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemplate.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemplate.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/DetectionTemplate.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemplate.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemplate.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/DetectionTemplate.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemplate.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemplate.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemplate.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/DetectionTemplate.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemplate.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemporal.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemporal.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/DetectionTemporal.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemporal.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemporal.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/DetectionTemporal.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemporal.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemporal.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/DetectionTemporal.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemporal.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemporal.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemporal.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/DetectionTemporal.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemporal.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Device.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Device.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/Device.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Device.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Device.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/Device.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Device.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Device.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/Device.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Device.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Device.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Device.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/Device.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Device.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/EParser.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/EParser.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/EParser.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/EParser.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/EParser.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/EParser.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/EParser.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/EParser.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/EParser.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/EParser.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/EParser.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/EParser.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/EParser.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/EParser.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Ephemeris.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Ephemeris.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/Ephemeris.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Ephemeris.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Ephemeris.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/Ephemeris.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Ephemeris.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Ephemeris.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/Ephemeris.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Ephemeris.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Ephemeris.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Ephemeris.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/Ephemeris.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Ephemeris.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ErrorManager.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ErrorManager.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/ErrorManager.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ErrorManager.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ErrorManager.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/ErrorManager.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ErrorManager.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ErrorManager.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/ErrorManager.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ErrorManager.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ErrorManager.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ErrorManager.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/ErrorManager.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ErrorManager.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ExposureControl.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ExposureControl.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/ExposureControl.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ExposureControl.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ExposureControl.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/ExposureControl.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ExposureControl.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ExposureControl.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/ExposureControl.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ExposureControl.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ExposureControl.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ExposureControl.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/ExposureControl.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ExposureControl.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/Fits.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/Fits.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/Fits.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/Fits.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits2D.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits2D.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/Fits2D.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits2D.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits2D.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/Fits2D.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits2D.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits2D.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/Fits2D.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits2D.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits2D.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits2D.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/Fits2D.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits2D.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits3D.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits3D.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/Fits3D.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits3D.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits3D.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/Fits3D.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits3D.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits3D.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/Fits3D.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits3D.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits3D.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits3D.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/Fits3D.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits3D.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Frame.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Frame.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/Frame.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Frame.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Frame.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/Frame.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Frame.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Frame.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/Frame.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Frame.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Frame.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Frame.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/Frame.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Frame.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Freeture.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Freeture.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/Freeture.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Freeture.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Freeture.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/Freeture.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Freeture.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Freeture.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/Freeture.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Freeture.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Freeture.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Freeture.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/Freeture.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Freeture.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/GlobalEvent.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/GlobalEvent.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/GlobalEvent.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/GlobalEvent.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/GlobalEvent.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/GlobalEvent.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/GlobalEvent.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/GlobalEvent.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/GlobalEvent.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/GlobalEvent.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/GlobalEvent.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/GlobalEvent.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/GlobalEvent.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/GlobalEvent.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Histogram.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Histogram.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/Histogram.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Histogram.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Histogram.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/Histogram.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Histogram.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Histogram.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/Histogram.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Histogram.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Histogram.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Histogram.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/Histogram.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Histogram.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramGray.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramGray.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/HistogramGray.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramGray.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramGray.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/HistogramGray.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramGray.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramGray.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/HistogramGray.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramGray.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramGray.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramGray.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/HistogramGray.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramGray.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramRGB.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramRGB.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/HistogramRGB.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramRGB.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramRGB.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/HistogramRGB.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramRGB.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramRGB.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/HistogramRGB.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramRGB.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramRGB.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramRGB.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/HistogramRGB.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramRGB.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ImgProcessing.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ImgProcessing.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/ImgProcessing.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ImgProcessing.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ImgProcessing.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/ImgProcessing.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ImgProcessing.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ImgProcessing.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/ImgProcessing.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ImgProcessing.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ImgProcessing.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ImgProcessing.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/ImgProcessing.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ImgProcessing.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/LocalEvent.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/LocalEvent.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/LocalEvent.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/LocalEvent.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/LocalEvent.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/LocalEvent.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/LocalEvent.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/LocalEvent.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/LocalEvent.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/LocalEvent.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/LocalEvent.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/LocalEvent.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/LocalEvent.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/LocalEvent.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Mask.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Mask.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/Mask.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Mask.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Mask.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/Mask.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Mask.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Mask.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/Mask.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Mask.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Mask.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Mask.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/Mask.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Mask.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/NodeExporterMetrics.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/NodeExporterMetrics.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/NodeExporterMetrics.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/NodeExporterMetrics.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/NodeExporterMetrics.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/NodeExporterMetrics.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/NodeExporterMetrics.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/NodeExporterMetrics.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/NodeExporterMetrics.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/NodeExporterMetrics.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/NodeExporterMetrics.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/NodeExporterMetrics.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/NodeExporterMetrics.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/NodeExporterMetrics.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/OpenSSL.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/OpenSSL.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/OpenSSL.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/OpenSSL.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/OpenSSL.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/OpenSSL.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/OpenSSL.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/OpenSSL.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/OpenSSL.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/OpenSSL.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/OpenSSL.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/OpenSSL.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/OpenSSL.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/OpenSSL.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/PixFmtConv.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/PixFmtConv.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/PixFmtConv.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/PixFmtConv.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/PixFmtConv.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/PixFmtConv.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/PixFmtConv.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/PixFmtConv.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/PixFmtConv.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/PixFmtConv.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/PixFmtConv.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/PixFmtConv.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/PixFmtConv.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/PixFmtConv.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SMTPClient.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SMTPClient.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/SMTPClient.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SMTPClient.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SMTPClient.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/SMTPClient.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SMTPClient.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SMTPClient.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/SMTPClient.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SMTPClient.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SMTPClient.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SMTPClient.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/SMTPClient.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SMTPClient.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SaveImg.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SaveImg.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/SaveImg.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SaveImg.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SaveImg.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/SaveImg.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SaveImg.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SaveImg.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/SaveImg.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SaveImg.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SaveImg.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SaveImg.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/SaveImg.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SaveImg.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Stack.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Stack.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/Stack.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Stack.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Stack.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/Stack.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Stack.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Stack.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/Stack.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Stack.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Stack.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Stack.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/Stack.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Stack.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/StackThread.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/StackThread.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/StackThread.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/StackThread.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/StackThread.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/StackThread.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/StackThread.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/StackThread.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/StackThread.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/StackThread.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/StackThread.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/StackThread.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/StackThread.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/StackThread.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/TimeDate.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/TimeDate.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/TimeDate.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/TimeDate.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/TimeDate.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/TimeDate.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/TimeDate.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/TimeDate.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/TimeDate.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/TimeDate.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/TimeDate.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/TimeDate.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/TimeDate.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/TimeDate.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/main.cpp.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/main.cpp.o: /usr/local/freeture-1.3.1/freeture_git/src/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/main.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/main.cpp.o -c /usr/local/freeture-1.3.1/freeture_git/src/main.cpp
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/main.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/main.cpp > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/main.cpp.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/main.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/main.cpp -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/main.cpp.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.o: /usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building C object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.o -c /usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.s
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.o: CMakeFiles/freeture.dir/flags.make
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.o: /usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_51) "Building C object CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.o -c /usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c > CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.i
+
+CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c -o CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.s
 
 # Object files for target freeture
 freeture_OBJECTS = \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqSchedule.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqThread.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Base64.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraDeviceManager.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraFrames.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravis.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravisScanner.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigePylon.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeTis.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArenaScanner.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016S.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016SScanner.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraScanner.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraV4l2.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraVideo.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraWindows.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgLoader.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgParam.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Conversion.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetThread.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemplate.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemporal.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Device.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/EParser.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Ephemeris.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ErrorManager.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ExposureControl.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits2D.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits3D.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Frame.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Freeture.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/GlobalEvent.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Histogram.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramGray.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramRGB.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ImgProcessing.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/LocalEvent.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Mask.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/NodeExporterMetrics.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/OpenSSL.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/PixFmtConv.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SMTPClient.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SaveImg.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Stack.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/StackThread.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/TimeDate.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/main.cpp.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.o" \
-"CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.o"
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqSchedule.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqThread.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Base64.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraDeviceManager.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraFrames.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravis.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravisScanner.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigePylon.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeTis.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArenaScanner.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016S.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016SScanner.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraScanner.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraV4l2.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraVideo.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraWindows.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgLoader.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgParam.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Conversion.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetThread.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemplate.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemporal.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Device.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/EParser.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Ephemeris.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ErrorManager.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ExposureControl.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits2D.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits3D.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Frame.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Freeture.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/GlobalEvent.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Histogram.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramGray.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramRGB.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ImgProcessing.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/LocalEvent.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Mask.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/NodeExporterMetrics.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/OpenSSL.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/PixFmtConv.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SMTPClient.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SaveImg.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Stack.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/StackThread.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/TimeDate.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/main.cpp.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.o" \
+"CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.o"
 
 # External object files for target freeture
 freeture_EXTERNAL_OBJECTS =
 
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqSchedule.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/AcqThread.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Base64.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraDeviceManager.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraFrames.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravis.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeAravisScanner.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigePylon.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraGigeTis.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArenaScanner.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016S.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraLucidArena_PHX016SScanner.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraScanner.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraV4l2.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraVideo.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CameraWindows.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgLoader.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/CfgParam.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Conversion.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetThread.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemplate.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/DetectionTemporal.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Device.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/EParser.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Ephemeris.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ErrorManager.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ExposureControl.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits2D.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Fits3D.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Frame.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Freeture.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/GlobalEvent.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Histogram.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramGray.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/HistogramRGB.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/ImgProcessing.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/LocalEvent.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Mask.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/NodeExporterMetrics.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/OpenSSL.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/PixFmtConv.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SMTPClient.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/SaveImg.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/Stack.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/StackThread.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/TimeDate.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/main.cpp.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.o
-bin/Release/freeture: CMakeFiles/freeture.dir/home/mattia/Desktop/freeture/freeture/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqSchedule.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/AcqThread.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Base64.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraDeviceManager.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraFrames.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravis.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeAravisScanner.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigePylon.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraGigeTis.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArenaScanner.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016S.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraLucidArena_PHX016SScanner.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraScanner.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraV4l2.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraVideo.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CameraWindows.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgLoader.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/CfgParam.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Conversion.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetThread.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemplate.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/DetectionTemporal.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Device.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/EParser.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Ephemeris.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ErrorManager.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ExposureControl.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits2D.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Fits3D.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Frame.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Freeture.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/GlobalEvent.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Histogram.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramGray.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/HistogramRGB.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/ImgProcessing.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/LocalEvent.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Mask.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/NodeExporterMetrics.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/OpenSSL.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/PixFmtConv.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SMTPClient.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/SaveImg.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/Stack.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/StackThread.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/TimeDate.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/main.cpp.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_impl.c.o
+bin/Release/freeture: CMakeFiles/freeture.dir/usr/local/freeture-1.3.1/freeture_git/src/sdk/GenICam/library/CPP/include/xsde/c/expat/xmltok_ns.c.o
 bin/Release/freeture: CMakeFiles/freeture.dir/build.make
 bin/Release/freeture: /usr/lib/x86_64-linux-gnu/libopencv_stitching.so.4.5.1
 bin/Release/freeture: /usr/lib/x86_64-linux-gnu/libopencv_alphamat.so.4.5.1
@@ -926,7 +926,7 @@ bin/Release/freeture: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.74.0
 bin/Release/freeture: /usr/lib/x86_64-linux-gnu/libboost_atomic.so.1.74.0
 bin/Release/freeture: /usr/lib/x86_64-linux-gnu/libboost_regex.so.1.74.0
 bin/Release/freeture: CMakeFiles/freeture.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_52) "Linking CXX executable bin/Release/freeture"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles --progress-num=$(CMAKE_PROGRESS_52) "Linking CXX executable bin/Release/freeture"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/freeture.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -939,6 +939,6 @@ CMakeFiles/freeture.dir/clean:
 .PHONY : CMakeFiles/freeture.dir/clean
 
 CMakeFiles/freeture.dir/depend:
-	cd /home/mattia/Desktop/freeture/freeture/cmake && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/mattia/Desktop/freeture/freeture/cmake /home/mattia/Desktop/freeture/freeture/cmake /home/mattia/Desktop/freeture/freeture/cmake /home/mattia/Desktop/freeture/freeture/cmake /home/mattia/Desktop/freeture/freeture/cmake/CMakeFiles/freeture.dir/DependInfo.cmake --color=$(COLOR)
+	cd /usr/local/freeture-1.3.1/freeture_git/cmake && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /usr/local/freeture-1.3.1/freeture_git/cmake /usr/local/freeture-1.3.1/freeture_git/cmake /usr/local/freeture-1.3.1/freeture_git/cmake /usr/local/freeture-1.3.1/freeture_git/cmake /usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles/freeture.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/freeture.dir/depend
 

@@ -17,6 +17,9 @@ using namespace freeture;
 
 int main(int argc, const char ** argv)
 {
+    std::cout << "================================================" << endl;
+    std::cout << "======        FREETURE 13 - V1.0.1       =======" << endl;
+    std::cout << "================================================" << endl << endl;
     try
     {
         

@@ -444,9 +444,8 @@ void freeture::CfgParam::loadCamParam() {
         m_Param.camInput.errormsg.push_back("- ACQ_RES_CUSTOM_SIZE : Fail to get value.");
         e = true;
     }else{
-
+        
         if(m_Param.camInput.ACQ_RES_CUSTOM_SIZE) {
-
             string acq_offset;
             if(!m_Cfg.Get("ACQ_OFFSET", acq_offset)) {
                 m_Param.camInput.errormsg.push_back("- ACQ_OFFSET : Fail to get value.");
@@ -454,7 +453,7 @@ void freeture::CfgParam::loadCamParam() {
             }else {
 
                 if(acq_offset.find(",") != std::string::npos) {
-
+                    std::cout << "++++++++++++++++++++++++++++++++++++++ FIND ACQ OFFSET " << acq_offset << std::endl;
                     string offsetx = acq_offset.substr(0,acq_offset.find(","));
                     string offsety = acq_offset.substr(acq_offset.find(",")+1,string::npos);
                     int mStartX = atoi(offsetx.c_str());
@@ -465,6 +464,7 @@ void freeture::CfgParam::loadCamParam() {
                         e = true;
                     }else{
                         m_Param.camInput.ACQ_STARTX = mStartX;
+                        
                     }
 
                     if(mStartY <= 0) {
@@ -487,7 +487,7 @@ void freeture::CfgParam::loadCamParam() {
             }else {
 
                 if(acq_res_custome_size.find("x") != std::string::npos) {
-
+                    std::cout << "++++++++++++++++++++++++++++++++++++++ FIND ACQ RES SIZE " << acq_res_custome_size << std::endl;
                     string width = acq_res_custome_size.substr(0,acq_res_custome_size.find("x"));
                     string height = acq_res_custome_size.substr(acq_res_custome_size.find("x")+1,string::npos);
                     int mSizeWidth = atoi(width.c_str());
@@ -497,6 +497,7 @@ void freeture::CfgParam::loadCamParam() {
                         m_Param.camInput.errormsg.push_back("- ACQ_RES_SIZE : Height value is not correct.");
                         e = true;
                     }else{
+                        std::cout << "++++++++++++++++++++++++++++++++++++++ ACQ_HEIGHT " << mSizeHeight << std::endl;
                         m_Param.camInput.ACQ_HEIGHT = mSizeHeight;
                     }
 

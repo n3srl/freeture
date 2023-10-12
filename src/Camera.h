@@ -247,6 +247,8 @@ class Camera {
         */
         virtual bool setGain(double value) {return false;};
 
+        virtual bool setAutoExposure(bool val) {return false;};
+
         /**
         * Set device's acquisition frequency.
         *

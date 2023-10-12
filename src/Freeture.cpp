@@ -127,6 +127,7 @@ void freeture::Freeture::selectMode( boost::program_options::variables_map& vm)
          m_CurrentMode == freeture::Mode::CONTINUOUS_ACQUISITION
     )
     {
+        std::cout << "++++++++++++++++++++++++++++++++++++++++++++++++ Sovrascrivo usando i nuovi valori da params" << std::endl;
             // Cam id.
             if(vm.count("id")) devID = vm["id"].as<int>();
 
@@ -402,11 +403,16 @@ void freeture::Freeture::modeMeteorDetection()
    if(!cfg.allParamAreCorrect())
         throw "Configuration file is not correct. Fail to launch detection mode.";
 
+    device->Setup(cfg.getCamParam(), cfg.getFramesParam(), cfg.getVidParam(), devID);
+
+
     vector<string> logFiles;
     logFiles.push_back("MAIN_THREAD.log");
     logFiles.push_back("ACQ_THREAD.log");
     logFiles.push_back("DET_THREAD.log");
     logFiles.push_back("STACK_THREAD.log");
+
+    //device->Setup(cfg.getCamParam(), cfg.getFramesParam(), cfg.getVidParam(), devID);
 
     //Logger logSystem(cfg.getLogParam().LOG_PATH, cfg.getLogParam().LOG_ARCHIVE_DAY, cfg.getLogParam().LOG_SIZE_LIMIT, logFiles);
     
@@ -647,6 +653,8 @@ void freeture::Freeture::modeSingleAcquisition()
         ///%%%%%%%%%%%%%%%%%%% MODE 4 : SINGLE ACQUISITION %%%%%%%%%%%%%%%%%%%%%%%
         ///%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+        device->Setup(cfg.getCamParam(), cfg.getFramesParam(), cfg.getVidParam(), devID);
+
         std::cout << "================================================" << endl;
         std::cout << "======== FREETURE - Single acquisition =========" << endl;
         std::cout << "================================================" << endl << endl;
@@ -715,24 +723,31 @@ void freeture::Freeture::modeSingleAcquisition()
                         /// ---------------------- RUN SINGLE CAPTURE ------------------------
                         /// ------------------------------------------------------------------
 
+                        int devStartx, devStarty, devHeight, devWidth = 0;
+
+                        bool cameraParamsGet = device->getDeviceCameraSizeParams(devStartx, devStarty, devHeight, devWidth);
+                        
                         Frame frame;
                         frame.mExposure = exp;
                         frame.mGain = gain;
                         frame.mFormat = static_cast<CamPixFmt>(acqFormat);
-                        frame.mStartX = startx;
-                        frame.mStartY = starty;
-                        frame.mHeight = acqHeight;
-                        frame.mWidth = acqWidth;
+                        frame.mStartX = startx != 0 ? startx : devStartx;
+                        frame.mStartY = starty != 0 ? starty : devStarty;
+                        frame.mHeight = acqHeight != 0 ? acqHeight : devHeight;
+                        frame.mWidth = acqWidth != 0 ? acqWidth : devWidth;
 
-                        //device = manager.getDevice();
-                        //device->listDevices(false);
+                        std::cout << "++++++++++++++++++++++++++ startx " << frame.mStartX << std::endl;
+                        std::cout << "++++++++++++++++++++++++++ starty " << frame.mStartY << std::endl;
+                        std::cout << "++++++++++++++++++++++++++ acqHeight " << frame.mHeight << std::endl;
+                        std::cout << "++++++++++++++++++++++++++ acqWidth " << frame.mWidth << std::endl;
 
-                        /* if(!device->createCamera(devID, false)) {
-                            throw ">> Fail to create device.";
-                        } */
 
-                        /* device->setCameraGain(gain);
-                        device->setCameraExposureTime(exp); */
+                       
+                        device->setCameraAutoExposure(false);
+                        device->setCameraGain(gain);
+                        device->setCameraExposureTime(exp);
+
+                        
 
                         if(!device->runSingleCapture(frame)){
                             throw ">> Single capture failed.";

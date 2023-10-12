@@ -56,7 +56,7 @@ void DetectionTemplate::createDebugDirectories(bool cleanDebugDirectory) {
 }
 
 bool DetectionTemplate::runDetection(Frame &c) {
-
+    
     Mat currImg;
 
     if(mdtp.DET_DOWNSAMPLE_ENABLED)

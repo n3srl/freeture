@@ -839,6 +839,19 @@ bool freeture::Device::setCameraGain(double value) {
 
 }
 
+bool freeture::Device::setCameraAutoExposure(bool value)
+{
+    freeture::LogDebug(  "Device::setCameraAutoExposure" );
+    //arv_camera_set_exposure_time_auto(camera, &error)
+    if(!mCam->setAutoExposure(value)) {
+        BOOST_LOG_SEV(logger, fail) << "Fail to set gain to " << value;
+        mCam->grabCleanse();
+        return false;
+    }
+
+    return true;
+}
+
 bool freeture::Device::setCameraFPS() {
     freeture::LogDebug(  "Device::setCameraFPS" );
 
@@ -918,6 +931,17 @@ bool freeture::Device::runSingleCapture(Frame &img) {
 
     return false;
 
+}
+
+bool freeture::Device::getDeviceCameraSizeParams(int& x,int& y,int& height,int& width)
+{
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    Device* dev = manager.getDevice();
+    x = dev->mStartX;
+    y = dev->mStartY;
+    height = dev->mSizeHeight;
+    width = dev->mSizeWidth;
+    return true;
 }
 
 bool freeture::Device::setCameraSize() {

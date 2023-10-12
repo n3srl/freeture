@@ -1,4 +1,4 @@
-# Install script for directory: /home/mattia/Desktop/freeture/freeture/cmake
+# Install script for directory: /usr/local/freeture-1.3.1/freeture_git/cmake
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -57,7 +57,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-file(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/mattia/Desktop/freeture/freeture/cmake/bin/Release/freeture")
+file(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/usr/local/freeture-1.3.1/freeture_git/cmake/bin/Release/freeture")
   if(EXISTS "$ENV{DESTDIR}/usr/local/bin/freeture" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/bin/freeture")
     file(RPATH_CHANGE
@@ -78,5 +78,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/mattia/Desktop/freeture/freeture/cmake/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/usr/local/freeture-1.3.1/freeture_git/cmake/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
