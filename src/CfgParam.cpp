@@ -41,6 +41,8 @@
 #include <map>
 #include <stdlib.h>
 
+#include <filesystem>
+
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
@@ -158,6 +160,8 @@ freeture::CfgParam::CfgParam(Device* device, string cfgFilePath)
     boost::filesystem::path pcfg(cfgFilePath);
     if(boost::filesystem::exists(pcfg)) {
         if(m_Cfg.Load(cfgFilePath)) {
+            loadCameraSerial();
+            loadCameraInit();
             loadDeviceID();
             loadDataParam();
             loadLogParam();
@@ -180,7 +184,6 @@ freeture::CfgParam::CfgParam(Device* device, string cfgFilePath)
 
                     // camera
                     case CAMERA :
-                    std::cout << "Camera type" << std::endl;
                             loadCamParam();
                         break;
 
@@ -204,9 +207,111 @@ freeture::CfgParam::CfgParam(Device* device, string cfgFilePath)
         freeture::LogError("Configuration file path not exists : " , cfgFilePath);
     }
 }
+void freeture::CfgParam::setInitRequired(bool init)
+{
+    std::cout << "Set init req" << std::endl;
+    FILE* ofile = fopen(FREETURE_WRITE_CONFIG_PATH, "w");
+    std::ifstream file(m_CfgFilePath);
+    if(!file.is_open())
+    {
+        std::cout << "Impossibile resettare il file di configurazione" << std::endl;
+        return;
+    }
+
+    std::string line;
+    while (!file.eof())
+    {
+        std::getline(file, line);
+        size_t found = line.find("CAMERA_INIT = true");
+        if(found != std::string::npos)
+        {
+            line = "CAMERA_INIT = false";
+        }
+        //std::cout << "Write line " << line << std::endl;
+        line += '\n';
+        fprintf(ofile, "%s", line.c_str());
+    }
+    fclose(ofile);
+    file.close();
+    const char* newFileName = (m_CfgFilePath  + ".old").c_str();
+    std::rename(m_CfgFilePath.c_str(), newFileName);
+    std::rename(FREETURE_WRITE_CONFIG_PATH, m_CfgFilePath.c_str());
+    std::remove(newFileName);
+    return;
+}
+void freeture::CfgParam::loadCameraInit()
+{
+    
+    std::string defaultCameraConfigFile = "/freeture/cinit.cfg";
+    bool cBool = false;
+    if(!m_Cfg.Get("CAMERA_INIT", cBool))
+    {
+        m_Param.CAMERA_INIT = false;
+    } else 
+    {
+        m_Param.CAMERA_INIT = cBool;
+    } 
+    
+
+    std::string cString = "";
+    if(!m_Cfg.Get("CAMERA_INIT_CONFIG", cString))
+    {
+        m_Param.CAMERA_INIT_CONFIG = defaultCameraConfigFile;
+    } 
+    else {
+        m_Param.CAMERA_INIT_CONFIG = cString;
+    }
+    
+    if(m_Param.CAMERA_INIT_CONFIG == "") m_Param.CAMERA_INIT_CONFIG = defaultCameraConfigFile;
+
+    std::string message;
+    if(m_Param.CAMERA_INIT)
+    {
+        bool initDone;
+
+        if(FILE* file = fopen(FREETURE_CHECK_INIT_DONE, "r")) {
+            fclose(file);
+            initDone = true;
+        } else 
+        {
+            initDone = false;
+        }
+
+        if(initDone)
+        {
+            setInitRequired(true);
+            std::remove(FREETURE_CHECK_INIT_DONE);
+        }
+        message = "YES";
+        std::cout << "Camera init file " << m_Param.CAMERA_INIT_CONFIG << std::endl;
+    } else 
+    {
+        message = "NO";
+    }
+    std::cout << "Need to init camera: " << message << std::endl;
+
+
+}
+
+void freeture::CfgParam::loadCameraSerial()
+{
+    manager.listDevice(false);
+    std::string cString;
+
+    bool failStringSerial = false;
+    std::string failmsg = "- CAMERA_SERIAL : ";
+
+    if(!m_Cfg.Get("CAMERA_SERIAL", cString))
+    {
+        failStringSerial = true;
+        failmsg += "Fail to get camera seria, DeviceId will be used for camera selection";
+    }
+
+    m_Param.CAMERA_SERIAL = cString;
+}
 
 void freeture::CfgParam::loadDeviceID() {
-    manager.listDevice();
+    manager.listDevice(true);
     int cId;
     string cString;
     bool failIntId, failStringId = false;
@@ -401,19 +506,41 @@ void freeture::CfgParam::loadVidParam() {
 void freeture::CfgParam::loadCamParam() {
 
     bool e = false;
+    int camera_id;
     freeture::Device* device = manager.getDevice();
-
     if(m_Param.DEVICE_ID == -1) {
 
         loadDeviceID();
+        loadCameraSerial();
+        loadCameraInit();
         if(m_Param.DEVICE_ID == -1) {
             return;
         }
     }
 
-    if(!device->createCamera(m_Param.DEVICE_ID, true)) {
-        std::cout << "FAIL CREATING CAMERA " << std::endl;
+    camera_id = m_Param.DEVICE_ID;
+    int camera_id_f = manager.getCameraDeviceBySerial(m_Param.CAMERA_SERIAL);
+    if(camera_id_f == -2)
+    {
+        freeture::Log("CAMERA WITH SERIAL " + m_Param.CAMERA_SERIAL + " NOT FOUND");
         return;
+    }
+    if(camera_id_f != -1) camera_id = camera_id_f;
+    
+    if(!device->createCamera(camera_id, true)) {
+        freeture::Log("FAIL CREATING CAMERA ");
+        return;
+    }
+
+    if(m_Param.CAMERA_INIT)
+    {
+        if(!device->firstIinitializeCamera(m_Param.CAMERA_INIT_CONFIG))
+        {
+            freeture::Log("Inizializing camera using " + m_Param.CAMERA_INIT_CONFIG + " Failed!");
+            return;
+        }
+        
+        
     }
 
 
@@ -453,7 +580,7 @@ void freeture::CfgParam::loadCamParam() {
             }else {
 
                 if(acq_offset.find(",") != std::string::npos) {
-                    std::cout << "++++++++++++++++++++++++++++++++++++++ FIND ACQ OFFSET " << acq_offset << std::endl;
+                    //std::cout << "++++++++++++++++++++++++++++++++++++++ FIND ACQ OFFSET " << acq_offset << std::endl;
                     string offsetx = acq_offset.substr(0,acq_offset.find(","));
                     string offsety = acq_offset.substr(acq_offset.find(",")+1,string::npos);
                     int mStartX = atoi(offsetx.c_str());
@@ -487,7 +614,7 @@ void freeture::CfgParam::loadCamParam() {
             }else {
 
                 if(acq_res_custome_size.find("x") != std::string::npos) {
-                    std::cout << "++++++++++++++++++++++++++++++++++++++ FIND ACQ RES SIZE " << acq_res_custome_size << std::endl;
+                    //std::cout << "++++++++++++++++++++++++++++++++++++++ FIND ACQ RES SIZE " << acq_res_custome_size << std::endl;
                     string width = acq_res_custome_size.substr(0,acq_res_custome_size.find("x"));
                     string height = acq_res_custome_size.substr(acq_res_custome_size.find("x")+1,string::npos);
                     int mSizeWidth = atoi(width.c_str());
@@ -497,7 +624,7 @@ void freeture::CfgParam::loadCamParam() {
                         m_Param.camInput.errormsg.push_back("- ACQ_RES_SIZE : Height value is not correct.");
                         e = true;
                     }else{
-                        std::cout << "++++++++++++++++++++++++++++++++++++++ ACQ_HEIGHT " << mSizeHeight << std::endl;
+                        //std::cout << "++++++++++++++++++++++++++++++++++++++ ACQ_HEIGHT " << mSizeHeight << std::endl;
                         m_Param.camInput.ACQ_HEIGHT = mSizeHeight;
                     }
 

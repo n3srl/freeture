@@ -64,6 +64,8 @@ class Camera {
         int                 mCamSizeHeight;
         InputDeviceType     mInputDeviceType;
         bool                mVerbose;
+        std::string         mCamDescription;
+        std::string         mCamSerial;
 
     public :
 
@@ -282,5 +284,10 @@ class Camera {
         virtual bool loadNextDataSet(std::string &location) {location = ""; return true; };
 
         virtual void test() {std::cout << " in camera.h" << std::endl;};
+
+        virtual bool FirstInitializeCamera(std::string) {
+            std::cout << "Inizialize camera done" << std::endl;
+            return true;
+        };
 
 };

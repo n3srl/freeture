@@ -39,6 +39,10 @@
 #include <string>
 #include <algorithm>
 #include <time.h>
+#include <sstream>
+#include <vector>
+#include <chrono>
+#include <thread>
 
 #include <boost/log/common.hpp>
 #include <boost/log/expressions.hpp>
@@ -67,7 +71,7 @@
 
 #include <arv.h>
 #include "arvinterface.h"
-
+#include "CameraFirstInit.h"
 
     class CameraGigeAravis: public Camera
     {
@@ -165,6 +169,7 @@
 
             void getAvailablePixelFormats();
 
+            bool FirstInitializeCamera(std::string);
     };
 
 #endif

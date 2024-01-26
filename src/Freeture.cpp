@@ -127,7 +127,7 @@ void freeture::Freeture::selectMode( boost::program_options::variables_map& vm)
          m_CurrentMode == freeture::Mode::CONTINUOUS_ACQUISITION
     )
     {
-        std::cout << "++++++++++++++++++++++++++++++++++++++++++++++++ Sovrascrivo usando i nuovi valori da params" << std::endl;
+        
             // Cam id.
             if(vm.count("id")) devID = vm["id"].as<int>();
 

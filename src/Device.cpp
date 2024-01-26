@@ -135,6 +135,18 @@ freeture::Device::~Device()
 
 }
 
+bool freeture::Device::firstIinitializeCamera(std::string configPath)
+{
+    std::cout << "Device:firstIinitializeCamera(\"" << configPath << "\")" << std::endl;
+    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    freeture::Device* device = manager.getDevice();
+    if(device != NULL)
+    {
+        return device->mCam->FirstInitializeCamera(configPath);
+    }
+    return false;
+}
+
 bool freeture::Device::createCamera(int id, bool create)
 {
     freeture::Log("Device::createCamera(int,bool)");
@@ -145,7 +157,7 @@ bool freeture::Device::createCamera(int id, bool create)
     if(id >=0 && id <= manager.deviceNumber - 1)
     {
         CameraDescription camera = manager.getListDevice().at(id);
-        
+        freeture::Log("CREATE CAMERA " + camera.Description); 
         // Create Camera object with the correct sdk.
         if ( !createDevicesWith(camera.Sdk) )
         {
@@ -527,7 +539,7 @@ void freeture::Device::listDevices(bool printInfos)
     #else
         //PRECEDENTE TO LUCID_ARAVIS
         CameraDeviceManager& manager = CameraDeviceManager::Get();
-        manager.listDevice();
+        manager.listDevice(true);
         // V4L
         //CameraScanner* v4l_scanner = Camera::Scanner->CreateScanner(CamSdkType::V4L2);
         //assert(v4l_scanner!=nullptr);
@@ -905,20 +917,24 @@ bool freeture::Device::stopCamera()
  */
 bool freeture::Device::runContinuousCapture(Frame &img)
 {
- //   cout << "Device::runContinuousCapture" << endl;
+    //cout << "Device::runContinuousCapture" << endl;
 
     try
     {
-    if(mCam->grabImage(img)) {
-        //img.mFrameNumber = mNbFrame;
-        //mNbFrame++;
-        return true;
-    }
+        if(mCam == nullptr) std::cout << "MCAM IS NULL" << std::endl;
+        
+        if(mCam->grabImage(img)) {
+            //img.mFrameNumber = mNbFrame;
+            //mNbFrame++;
+            return true;
+        }
     }
     catch (exception& ex)
     {
+        std::cout << "Exception grabImage..." << ex.what();
         BOOST_LOG_SEV(logger, fail) << "Exception grabImage..." << ex.what();
     }
+    
     return false;
 
 }

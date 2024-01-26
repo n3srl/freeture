@@ -169,7 +169,7 @@ bool AcqThread::getThreadStatus(){
 void AcqThread::operator()(){
 
     bool stop = false;
-
+    std::cout << "========== START ACQUISITION THREAD ==========" << std::endl;
     BOOST_LOG_SCOPED_THREAD_TAG("LogName", "ACQ_THREAD");
     BOOST_LOG_SEV(logger,notification) << "\n";
     BOOST_LOG_SEV(logger,notification) << "==============================================";
@@ -206,9 +206,8 @@ void AcqThread::operator()(){
 
             // Load videos file or frames directory if input type is FRAMES or VIDEO
             if(!mDevice->loadNextCameraDataSet(location)) break;
-
+            
             if(pDetection != NULL) pDetection->setCurrentDataSet(location);
-
             // Reference time to compute interval between regular captures.
             std::string cDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
             std::string refDate = cDate.substr(0, cDate.find("."));
@@ -235,7 +234,7 @@ void AcqThread::operator()(){
 
                     // If camera type in input is FRAMES or VIDEO.
                     if(mDevice->mVideoFramesInput) {
-
+                        //std::cout << "mDevice->mVideoFramesInput" << std::endl;
                         // Push the new frame in the framebuffer.
                         boost::mutex::scoped_lock lock(*frameBuffer_mutex);
                         frameBuffer->push_back(newFrame);
@@ -266,7 +265,6 @@ void AcqThread::operator()(){
                         #endif
 
                     }else {
-
                         // Get current time in seconds.
                         int currentTimeInSec = newFrame.mDate.hours * 3600 + newFrame.mDate.minutes * 60 + (int)newFrame.mDate.seconds;
 
@@ -289,7 +287,6 @@ void AcqThread::operator()(){
 
                             // Notify detection thread.
                             if(pDetection != NULL) {
-
                                 if(previousTimeMode != currentTimeMode && mdtp.DET_MODE != DAYNIGHT) {
                                     std::cout << "ERROR HERE Notify detection thread." << std::endl;
                                     BOOST_LOG_SEV(logger, notification) << "TimeMode has changed ! ";
@@ -335,7 +332,6 @@ void AcqThread::operator()(){
                             }
 
                             cleanStatus = false;
-
                         }else {
 
                             // Exposure control is active, the new frame can't be shared with others threads.
@@ -393,7 +389,6 @@ void AcqThread::operator()(){
                             computeSunTimes();
 
                         }
-
                         // Acquisition at regular time interval is enabled.
                         if(mcp.regcap.ACQ_REGULAR_ENABLED && !mDevice->mVideoFramesInput) {
                             //std::cout << "TRY REGULAR ACQ " << std::endl;
@@ -439,7 +434,6 @@ void AcqThread::operator()(){
                             }
 
                         }
-
                         // Acquisiton at scheduled time is enabled.
                         if(mcp.schcap.ACQ_SCHEDULE.size() != 0 && mcp.schcap.ACQ_SCHEDULE_ENABLED && !mDevice->mVideoFramesInput) {
 

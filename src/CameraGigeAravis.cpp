@@ -37,6 +37,7 @@
 
 #include "ErrorManager.cpp"
 #include "CameraGigeAravis.h"
+#include <iostream>
 
 #ifdef LINUX
 
@@ -94,8 +95,20 @@
     }
 
     bool CameraGigeAravis::setSize(int startx, int starty, int width, int height, bool customSize) {
+        int sensor_width, sensor_height;
+        arv_camera_get_sensor_size(camera, &sensor_width, &sensor_height, &error);
         if(customSize) {
 
+            if(width > sensor_width) 
+            {
+                std::cout << width << " Bigger than the sensor width => width set to " << sensor_width << std::endl;
+                width = sensor_width;
+            }
+            if(height > sensor_height)
+            {
+                std::cout << height << " Bigger than the sensor height => height set to " << sensor_height << std::endl;
+                height = sensor_height;
+            }
 
             arv_camera_set_region(camera, startx, starty, width, height,&error);
             ErrorManager::CheckAravisError(&error);
@@ -114,9 +127,9 @@
         // Default is maximum size
         } else {
 
-            int sensor_width, sensor_height;
+            
 
-            arv_camera_get_sensor_size(camera, &sensor_width, &sensor_height, &error);
+            
             ErrorManager::CheckAravisError(&error);
 
             BOOST_LOG_SEV(logger, notification) << "Camera sensor size : " << sensor_width << "x" << sensor_height;
@@ -350,7 +363,7 @@
     }
 
     bool CameraGigeAravis::grabImage(Frame &newFrame){
-
+        //std::cout << "grabImage(Frame &newFrame)" << std::endl;
         ArvBuffer *arv_buffer;
         //exp = arv_camera_get_exposure_time(camera);
 
@@ -366,14 +379,11 @@
         }else{
 
             try{
-
                 if ( arv_buffer_get_status(arv_buffer) == ARV_BUFFER_STATUS_SUCCESS )
                 {
-
                     //BOOST_LOG_SEV(logger, normal) << "Success to grab a frame.";
 
                     buffer_data = (char *) arv_buffer_get_data (arv_buffer, &buffer_size);
-
                     //Timestamping.
                     //string acquisitionDate = TimeDate::localDateTime(microsec_clock::universal_time(),"%Y:%m:%d:%H:%M:%S");
                     //BOOST_LOG_SEV(logger, normal) << "Date : " << acquisitionDate;
@@ -395,7 +405,6 @@
                     }
                     else if(pixFormat == ARV_PIXEL_FORMAT_MONO_12)
                     {
-
                         //BOOST_LOG_SEV(logger, normal) << "Creating Mat 16 bits ...";
                         image = Mat(mHeight, mWidth, CV_16UC1, buffer_data);
                         imgDepth = MONO12;
@@ -419,11 +428,9 @@
                             //BOOST_LOG_SEV(logger, normal) << "Bits shifted.";
 
                         }
-
                         //t3 = (((double)getTickCount() - t3)/getTickFrequency())*1000;
                         //std::cout << "> Time shift : " << t3 << std::endl;
                     }
-
                     //BOOST_LOG_SEV(logger, normal) << "Creating frame object ...";
                     newFrame = Frame(image, gain, exp, acquisitionDate);
                     //BOOST_LOG_SEV(logger, normal) << "Setting date of frame ...";
@@ -471,9 +478,9 @@
                             break;
 
                     }
-
+                    
                     arv_stream_push_buffer(stream, arv_buffer);
-
+                    
                     return false;
                 }
 
@@ -1105,6 +1112,71 @@
                 ErrorManager::CheckAravisError(&error);
 
             }
+            return true;
+        }
+        return false;
+    }
+
+    bool CameraGigeAravis::FirstInitializeCamera(std::string cPath)
+    {
+        std::cout << "CameraGigeAravis::FirstInitializeCamera(\"" << cPath << "\")" << std::endl;
+        if (camera != NULL)
+        {
+            ArvDevice* arv_device = arv_camera_get_device(camera);
+            //arv_device_set_boolean_feature_value(arv_device, "AcquisitionFrameRateEnable", true, &error);
+            std::ifstream file(cPath);
+            if(!file.is_open())
+            {
+                std::cout << "Error opening file " << cPath << std::endl;
+                return false;
+            }
+
+            std::string line;
+
+            
+            while (std::getline(file, line))
+            {
+                arv_device = arv_camera_get_device(camera);
+                std::vector<std::string> line_data;
+                std::istringstream ss(line);
+                std::string token;
+
+                if(line.find('=') < 2) 
+                {
+                    std::cout << "Line " << line << " cannot be parsed" << std::endl;
+                    continue;
+                }
+                
+                while (std::getline(ss, token, '='))
+                {
+                    line_data.push_back(token);
+                }
+
+                
+                std::cout << "Applining init " << line << std::endl;
+                const char* feature = line_data[0].c_str(); 
+                if(line_data[2] == "bool")
+                {
+                    bool value = line_data[1] == "true";
+                    arv_device_set_boolean_feature_value(arv_device, feature, value, &error);
+                    ErrorManager::CheckAravisError(&error);
+                } else if(line_data[2] == "string")
+                {
+                    const char* value = line_data[1].c_str();
+                    arv_device_set_string_feature_value(arv_device, feature, value, &error);
+                    ErrorManager::CheckAravisError(&error);
+                }
+                else if(line_data[2] == "float")
+                {
+                    float value = std::stof(line_data[1]);
+                    arv_device_set_float_feature_value(arv_device, feature, value, &error);
+                    ErrorManager::CheckAravisError(&error);
+                }
+                std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+            }
+            std::fstream f2;
+            f2.open(FREETURE_CHECK_INIT_DONE, std::ios::out);
+            f2.close();
             return true;
         }
         return false;

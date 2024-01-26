@@ -42,6 +42,7 @@
 #include "CfgLoader.h"
 #include "Device.h"
 #include "CameraDeviceManager.h"
+#include "CameraFirstInit.h"
 
 namespace freeture {
 
@@ -83,7 +84,8 @@ namespace freeture {
             void loadStationParam();
             void loadFitskeysParam();
             void loadMailParam();
-
+            void loadCameraSerial();
+            void loadCameraInit();
 
 
         public :
@@ -123,6 +125,8 @@ namespace freeture {
             bool mailParamIsCorrect();
             bool allParamAreCorrect();
             bool inputIsCorrect();
+
+            void setInitRequired(bool);
 
     };
 }

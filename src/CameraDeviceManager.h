@@ -30,7 +30,6 @@ class CameraDeviceManager
 
         freeture::Device* getDevice();
 
-        void listDevice();
-
-
+        void listDevice(bool);
+        int getCameraDeviceBySerial(std::string);
 };

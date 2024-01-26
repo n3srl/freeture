@@ -242,7 +242,7 @@ class Device {
         void setVerbose(bool status);
 
         Camera* getCamera();
-
+        bool firstIinitializeCamera(std::string);
 
     private :
 

@@ -1,7 +1,7 @@
-/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles/install/strip.dir
-/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles/install/local.dir
-/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles/install.dir
-/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles/list_install_components.dir
-/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles/rebuild_cache.dir
-/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles/edit_cache.dir
-/usr/local/freeture-1.3.1/freeture_git/cmake/CMakeFiles/freeture.dir
+/home/mattia/Documenti/dev/freeture/freeture_git/cmake/CMakeFiles/install/strip.dir
+/home/mattia/Documenti/dev/freeture/freeture_git/cmake/CMakeFiles/install/local.dir
+/home/mattia/Documenti/dev/freeture/freeture_git/cmake/CMakeFiles/install.dir
+/home/mattia/Documenti/dev/freeture/freeture_git/cmake/CMakeFiles/list_install_components.dir
+/home/mattia/Documenti/dev/freeture/freeture_git/cmake/CMakeFiles/rebuild_cache.dir
+/home/mattia/Documenti/dev/freeture/freeture_git/cmake/CMakeFiles/edit_cache.dir
+/home/mattia/Documenti/dev/freeture/freeture_git/cmake/CMakeFiles/freeture.dir

@@ -523,7 +523,6 @@
                             break;
 
                     }
-
                     arv_stream_push_buffer(stream, arv_buffer);
 
                     return false;
