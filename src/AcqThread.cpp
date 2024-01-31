@@ -820,6 +820,9 @@ void AcqThread::runImageCapture(int imgNumber, int imgExposure, int imgGain, Cam
         if(mcp.ACQ_RES_CUSTOM_SIZE) {
             frame.mHeight = mcp.ACQ_HEIGHT;
             frame.mWidth = mcp.ACQ_WIDTH;
+
+            frame.mStartX = mcp.ACQ_STARTX;
+            frame.mStartY = mcp.ACQ_STARTY;
         }
 
         // Run single capture.
