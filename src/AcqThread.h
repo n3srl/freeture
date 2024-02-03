@@ -144,6 +144,16 @@ class AcqThread {
 
         void operator()();
 
+        bool isNight(int);
+        bool isDay(int);
+        bool isSunset(int);
+        bool isSunrise(int);
+        bool isNight();
+        bool isDay();
+        bool isSunset();
+        bool isSunrise();
+        TimeMode getCurrentTimeMode();
+        TimeMode getTimeMode(int);
         void stopThread();
 
         bool startThread();

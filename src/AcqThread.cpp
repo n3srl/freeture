@@ -166,7 +166,8 @@ bool AcqThread::getThreadStatus(){
     return mThreadTerminated;
 }
 
-void AcqThread::operator()(){
+void AcqThread::operator()()
+{
 
     bool stop = false;
     std::cout << "========== START ACQUISITION THREAD ==========" << std::endl;
@@ -187,16 +188,18 @@ void AcqThread::operator()(){
         bool cleanStatus = false;
 
         // If exposure can be set on the input device.
-        if(mDevice->getExposureStatus()) {
-
-            pExpCtrl = new ExposureControl( mcp.EXPOSURE_CONTROL_FREQUENCY,
+        if(mDevice->getExposureStatus())
+        {
+            if (pExpCtrl!=nullptr)
+                delete pExpCtrl;
+            else pExpCtrl = new ExposureControl( mcp.EXPOSURE_CONTROL_FREQUENCY,
                                             mcp.EXPOSURE_CONTROL_SAVE_IMAGE,
                                             mcp.EXPOSURE_CONTROL_SAVE_INFOS,
                                             mdp.DATA_PATH,
-                                            mstp.STATION_NAME);
+                                            mstp.STATION_NAME);    
         }
 
-        TimeMode previousTimeMode = NONE;
+        TimeMode previousTimeMode = TimeMode::NONE;
 
         /// Acquisition process.
         do {
@@ -205,9 +208,12 @@ void AcqThread::operator()(){
             std::string location = "";
 
             // Load videos file or frames directory if input type is FRAMES or VIDEO
-            if(!mDevice->loadNextCameraDataSet(location)) break;
+            if(!mDevice->loadNextCameraDataSet(location))
+                break;
             
-            if(pDetection != NULL) pDetection->setCurrentDataSet(location);
+            if(pDetection != NULL)
+                pDetection->setCurrentDataSet(location);
+
             // Reference time to compute interval between regular captures.
             std::string cDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
             std::string refDate = cDate.substr(0, cDate.find("."));
@@ -269,13 +275,9 @@ void AcqThread::operator()(){
                         int currentTimeInSec = newFrame.mDate.hours * 3600 + newFrame.mDate.minutes * 60 + (int)newFrame.mDate.seconds;
 
                         // Detect day or night.
-                        TimeMode currentTimeMode = NONE;
+                        TimeMode currentTimeMode = getTimeMode(currentTimeInSec);
 
-                        if((currentTimeInSec > mStopSunsetTime) || (currentTimeInSec < mStartSunriseTime)) {
-                            currentTimeMode = NIGHT;
-                        }else if((currentTimeInSec > mStartSunriseTime) && (currentTimeInSec < mStopSunsetTime)) {
-                            currentTimeMode = DAY;
-                        }
+                        
 
                         // If exposure control is not active, the new frame can be shared with others threads.
                         if(!exposureControlStatus) {
@@ -497,15 +499,14 @@ void AcqThread::operator()(){
                         }
 
                         // Check sunrise and sunset time.
-                        if( (((currentTimeInSec > mStartSunriseTime && currentTimeInSec < mStopSunriseTime) ||
-                            (currentTimeInSec > mStartSunsetTime && currentTimeInSec < mStopSunsetTime))) && !mDevice->mVideoFramesInput) {
-
+                        if( (isSunrise(currentTimeInSec) || isSunset(currentTimeInSec)) 
+                                && !mDevice->mVideoFramesInput) {
                             exposureControlActive = true;
 
-                        }else {
+                        } else {
 
                             // Print time before sunrise.
-                            if(currentTimeInSec < mStartSunriseTime || currentTimeInSec > mStopSunsetTime ) {
+                            if(!isSunrise(currentTimeInSec)) {
                                 nextSunrise.clear();
                                 if(currentTimeInSec < mStartSunriseTime)
                                     nextSunrise = TimeDate::HdecimalToHMS((mStartSunriseTime - currentTimeInSec) / 3600.0);
@@ -516,8 +517,8 @@ void AcqThread::operator()(){
                             }
 
                             // Print time before sunset.
-                            if(currentTimeInSec > mStopSunriseTime && currentTimeInSec < mStartSunsetTime){
-
+                            if(!isSunset())
+                            {
                                 nextSunset.clear();
                                 nextSunset = TimeDate::HdecimalToHMS((mStartSunsetTime - currentTimeInSec) / 3600.0);
                                 if (LOG_FRAME_STATUS)
@@ -529,7 +530,8 @@ void AcqThread::operator()(){
                             if(exposureControlActive) {
 
                                 // In DAYTIME : Apply minimum available exposure time.
-                                if((currentTimeInSec >= mStopSunriseTime && currentTimeInSec < mStartSunsetTime)){
+                                if(isDay(currentTimeInSec)) 
+                                {
 
                                     BOOST_LOG_SEV(logger, notification) << "Apply day exposure time : " << mDevice->getDayExposureTime();
                                     mDevice->setCameraDayExposureTime();
@@ -537,19 +539,19 @@ void AcqThread::operator()(){
                                     mDevice->setCameraDayGain();
 
                                 // In NIGHTTIME : Apply maximum available exposure time.
-                                }else if((currentTimeInSec >= mStopSunsetTime) || (currentTimeInSec < mStartSunriseTime)){
+                                } 
+                                else if(isNight(currentTimeInSec)) 
+                                {
 
                                     BOOST_LOG_SEV(logger, notification) << "Apply night exposure time." << mDevice->getNightExposureTime();
                                     mDevice->setCameraNightExposureTime();
                                     BOOST_LOG_SEV(logger, notification) << "Apply night exposure time." << mDevice->getNightGain();
                                     mDevice->setCameraNightGain();
-
                                 }
                             }
 
                             exposureControlActive = false;
                             exposureControlStatus = false;
-
                         }
 
                     }
@@ -1142,7 +1144,120 @@ bool AcqThread::computeSunTimes() {
 
 }
 
-bool AcqThread::prepareAcquisitionOnDevice() {
+
+
+// mCurrentTime is in seconds and starts from 0 to 24*3600=86400
+// int is a wrong container even if on x64 4 bytes are used to make a int.
+// better to use a specific datetime container eg. boost
+// using minors because if is exactly the second of sunrise/sunset start it is not considered night
+bool AcqThread::isNight(int currentTimeInSec)
+{
+    if ((currentTimeInSec < mStartSunriseTime) || (currentTimeInSec > mStopSunsetTime) 
+            && currentTimeInSec > 0 
+            && mStartSunriseTime > 0
+            && mStopSunsetTime > 0 ) 
+        return true;
+
+    return false;
+}
+
+bool AcqThread::isDay(int seconds)
+{
+    if ( seconds > mStopSunriseTime && seconds < mStartSunsetTime
+            && seconds > 0 
+            && mStartSunriseTime > 0
+            && mStopSunsetTime > 0 )
+        return true;
+
+    return false;
+}
+
+bool AcqThread::isNight()
+{
+    return isNight(mCurrentTime);
+}
+
+bool AcqThread::isDay()
+{
+    return isDay(mCurrentTime);
+}
+
+bool AcqThread::isSunset()
+{
+    return isSunset(mCurrentTime);
+}
+
+bool AcqThread::isSunrise()
+{
+    return isSunrise(mCurrentTime);
+}
+
+bool AcqThread::isSunrise(int seconds){
+    if (   seconds >= mStartSunriseTime 
+        && seconds <= mStopSunriseTime
+        && seconds > 0 
+        && mStartSunriseTime > 0
+        && mStopSunriseTime > 0 ) 
+        return true;
+    return false;             
+}
+
+bool AcqThread::isSunset(int seconds){
+    if(    seconds >= mStartSunsetTime 
+        && seconds <= mStopSunsetTime
+        && seconds > 0 
+        && mStartSunsetTime > 0
+        && mStopSunsetTime > 0 
+        )
+        return true;
+
+     return false;
+}
+
+TimeMode AcqThread::getTimeMode(int seconds)
+{
+    if (isNight(seconds)){
+        return TimeMode::NIGHT;
+    }
+
+    if (isSunrise(seconds)){
+        return TimeMode::SUNRISE;
+    }
+    if (isSunset(seconds)){
+        return TimeMode::SUNSET;
+    }
+
+    if (isDay(seconds)){
+        return TimeMode::DAY;
+    }
+    
+    return TimeMode::NONE;
+}
+
+
+
+TimeMode AcqThread::getCurrentTimeMode()
+{
+    if (isNight()){
+        return TimeMode::NIGHT;
+    }
+
+    if (isSunrise()){
+        return TimeMode::SUNRISE;
+    }
+    if (isSunset()){
+        return TimeMode::SUNSET;
+    }
+
+    if (isDay()){
+        return TimeMode::DAY;
+    }
+    
+    return TimeMode::NONE;
+}
+
+bool AcqThread::prepareAcquisitionOnDevice() 
+{
     
     std::cout << "AcqThread::prepareAcquisitionOnDevice" << std::endl;
     
@@ -1161,10 +1276,9 @@ bool AcqThread::prepareAcquisitionOnDevice() {
     // Get Sunrise start/stop, Sunset start/stop. ---
     computeSunTimes();
 
-
     // CHECK SUNRISE AND SUNSET TIMES.
-
-    if((mCurrentTime > mStopSunsetTime) || (mCurrentTime < mStartSunriseTime)) {
+    if(isNight()) 
+    {
         std::cout << "*************************** SET NIGHT AUTO NO" << std::endl;
         BOOST_LOG_SEV(logger, notification) << "DAYTIME         :  NO";
         BOOST_LOG_SEV(logger, notification) << "AUTO EXPOSURE   :  NO";
@@ -1177,20 +1291,22 @@ bool AcqThread::prepareAcquisitionOnDevice() {
         if(!mDevice->setCameraNightGain())
            return false;
 
-    }else if((mCurrentTime > mStopSunriseTime && mCurrentTime < mStartSunsetTime)) {
-        std::cout << "*************************** SET DAY AUTO NO" << std::endl;
-        BOOST_LOG_SEV(logger, notification) << "DAYTIME         :  YES";
-        BOOST_LOG_SEV(logger, notification) << "AUTO EXPOSURE   :  NO";
-        BOOST_LOG_SEV(logger, notification) << "EXPOSURE TIME   :  " << mDevice->getDayExposureTime();
-        BOOST_LOG_SEV(logger, notification) << "GAIN            :  " << mDevice->getDayGain();
+    }
+    else 
+        if(isDay()) {
+            std::cout << "*************************** SET DAY AUTO NO" << std::endl;
+            BOOST_LOG_SEV(logger, notification) << "DAYTIME         :  YES";
+            BOOST_LOG_SEV(logger, notification) << "AUTO EXPOSURE   :  NO";
+            BOOST_LOG_SEV(logger, notification) << "EXPOSURE TIME   :  " << mDevice->getDayExposureTime();
+            BOOST_LOG_SEV(logger, notification) << "GAIN            :  " << mDevice->getDayGain();
 
-        if(!mDevice->setCameraDayExposureTime())
-            return false;
+            if(!mDevice->setCameraDayExposureTime())
+                return false;
 
-        if(!mDevice->setCameraDayGain())
-            return false;
+            if(!mDevice->setCameraDayGain())
+                return false;
 
-    }else{
+    } else {
 
         BOOST_LOG_SEV(logger, notification) << "DAYTIME         :  NO";
         BOOST_LOG_SEV(logger, notification) << "AUTO EXPOSURE   :  YES";
