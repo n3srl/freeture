@@ -144,9 +144,27 @@ class AcqThread {
 
         void operator()();
 
+        bool isNight(int);
+        bool isDay(int);
+        bool isSunset(int);
+        bool isSunrise(int);
+        bool isNight();
+        bool isDay();
+        bool isSunset();
+        bool isSunrise();
+        TimeMode getCurrentTimeMode();
+        TimeMode getTimeMode(int);
+        int getNowInSeconds();
+        int getTimeInSeconds(boost::posix_time::ptime);
         void stopThread();
 
         bool startThread();
+
+        void stopDetectionThread();
+        void stopStackThread();
+        void resetFrameBuffer();
+
+        void notifyDetectionThread();
 
         // Return activity status.
         bool getThreadStatus();
@@ -156,6 +174,8 @@ class AcqThread {
         bool buildCameraInContinousMode(bool);
 
     private :
+        bool cleanStatus = false;
+
 
         // Compute in seconds the sunrise start/stop times and the sunset start/stop times.
         bool computeSunTimes();

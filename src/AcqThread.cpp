@@ -166,7 +166,53 @@ bool AcqThread::getThreadStatus(){
     return mThreadTerminated;
 }
 
-void AcqThread::operator()(){
+void AcqThread::stopDetectionThread()
+{
+    if ( pDetection != nullptr ) {
+        boost::mutex::scoped_lock lock(*detSignal_mutex);
+        *detSignal = false;
+        lock.unlock();
+        
+        // Force interruption.
+        std::cout << "Sending interruption signal to detection process... " << std::endl;
+        pDetection->interruptThread();
+    }
+}
+
+void AcqThread::stopStackThread()
+{
+    if ( pStack != nullptr ) {
+        boost::mutex::scoped_lock lock(*stackSignal_mutex);
+        *stackSignal = false;
+        lock.unlock();
+
+        // Force interruption.
+        std::cout << "Send interruption signal to stack " << std::endl;
+        pStack->interruptThread();
+    }
+}
+
+void AcqThread::resetFrameBuffer()
+{
+    std::cout << "Cleaning frameBuffer..." << std::endl;
+    boost::mutex::scoped_lock lock(*frameBuffer_mutex);
+    frameBuffer->clear();
+    lock.unlock();
+    cleanStatus = true;
+}
+
+void AcqThread::notifyDetectionThread() {
+    if(pDetection != NULL)
+    {
+        boost::mutex::scoped_lock lock2(*detSignal_mutex);
+        *detSignal = true;
+        detSignal_condition->notify_one();
+        lock2.unlock();
+    }
+}
+
+void AcqThread::operator()()
+{
 
     bool stop = false;
     std::cout << "========== START ACQUISITION THREAD ==========" << std::endl;
@@ -184,8 +230,7 @@ void AcqThread::operator()(){
         // Exposure adjustment variables.
         bool exposureControlStatus = false;
         bool exposureControlActive = false;
-        bool cleanStatus = false;
-
+        
         // If exposure can be set on the input device.
         if(mDevice->getExposureStatus()) {
 
@@ -196,7 +241,7 @@ void AcqThread::operator()(){
                                             mstp.STATION_NAME);
         }
 
-        TimeMode previousTimeMode = NONE;
+        TimeMode previousTimeMode =  getTimeMode(getNowInSeconds());
 
         /// Acquisition process.
         do {
@@ -241,14 +286,7 @@ void AcqThread::operator()(){
                         lock.unlock();
 
                         // Notify detection thread.
-                        if(pDetection != NULL) {
-
-                            boost::mutex::scoped_lock lock2(*detSignal_mutex);
-                            *detSignal = true;
-                            detSignal_condition->notify_one();
-                            lock2.unlock();
-
-                        }
+                        notifyDetectionThread();
 
                         // Slow down the time in order to give more time to the detection process.
                         int twait = 100;
@@ -338,37 +376,14 @@ void AcqThread::operator()(){
                             if(!cleanStatus) {
 
                                 // If stack process exists.
-                                if(pStack != NULL) {
-
-                                    boost::mutex::scoped_lock lock(*stackSignal_mutex);
-                                    *stackSignal = false;
-                                    lock.unlock();
-
-                                    // Force interruption.
-                                    std::cout << "Send interruption signal to stack " << std::endl;
-                                    pStack->interruptThread();
-
-                                }
+                                stopStackThread();
 
                                 // If detection process exists
-                                if(pDetection != NULL) {
-
-                                    boost::mutex::scoped_lock lock(*detSignal_mutex);
-                                    *detSignal = false;
-                                    lock.unlock();
-                                    std::cout << "Sending interruption signal to detection process... " << std::endl;
-                                    pDetection->interruptThread();
-
-                                }
-
+                                stopDetectionThread();
+                                
                                 // Reset framebuffer.
-                                std::cout << "Cleaning frameBuffer..." << std::endl;
-                                boost::mutex::scoped_lock lock(*frameBuffer_mutex);
-                                frameBuffer->clear();
-                                lock.unlock();
-
-                                cleanStatus = true;
-
+                                resetFrameBuffer();
+                                
                             }
 
                         }
@@ -383,11 +398,10 @@ void AcqThread::operator()(){
                         std::string currentFrameDate =   TimeDate::getYYYYMMDD(newFrame.mDate);
 
                         // If the date has changed, sun ephemeris must be updated.
-                        if(currentFrameDate != mCurrentDate) {
-
+                        if(currentFrameDate != mCurrentDate)
+                        {
                             BOOST_LOG_SEV(logger, notification) << "Date has changed. Former Date is " << mCurrentDate << ". New Date is " << currentFrameDate << "." ;
                             computeSunTimes();
-
                         }
                         // Acquisition at regular time interval is enabled.
                         if(mcp.regcap.ACQ_REGULAR_ENABLED && !mDevice->mVideoFramesInput) {
@@ -572,8 +586,8 @@ void AcqThread::operator()(){
             } while(stop == false && !mDevice->getCameraStatus());
 
             // Reset detection process to prepare the analyse of a new data set.
-            if(pDetection != NULL) {
-
+            if(pDetection != NULL) 
+            {
                 pDetection->getDetMethod()->resetDetection(true);
                 pDetection->getDetMethod()->resetMask();
                 pDetection->updateDetectionReport();
@@ -583,9 +597,7 @@ void AcqThread::operator()(){
             }
 
             // Clear framebuffer.
-            boost::mutex::scoped_lock lock(*frameBuffer_mutex);
-            frameBuffer->clear();
-            lock.unlock();
+            resetFrameBuffer();
         } while(mDevice->getCameraDataSetStatus() && stop == false);
 
     }catch(const boost::thread_interrupted&){
@@ -989,6 +1001,19 @@ void AcqThread::saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, 
         }
     }
 
+}
+
+int AcqThread::getNowInSeconds()
+{
+    boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
+    return getTimeInSeconds(time);
+}
+
+int AcqThread::getTimeInSeconds(boost::posix_time::ptime time)
+{
+    std::string date = to_iso_extended_string(time);
+    std::vector<int> intDate = TimeDate::getIntVectorFromDateString(date);
+    return intDate.at(3) * 3600 + intDate.at(4) * 60 + intDate.at(5);
 }
 
 bool AcqThread::computeSunTimes() {
