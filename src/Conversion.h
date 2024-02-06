@@ -38,10 +38,10 @@
 #include <iostream>
 #include <list>
 #include <string>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
 
-using namespace cv;
+namespace cv {
+    class Mat;
+}
 
 class Conversion {
 
@@ -88,7 +88,7 @@ class Conversion {
         * @param img Opencv image to convert.
         * @return 8 bits opencv mat.
         */
-        static Mat convertTo8UC1(Mat &img);
+        static cv::Mat convertTo8UC1(cv::Mat &img);
 
         /**
         * Determine the number of "0" required.

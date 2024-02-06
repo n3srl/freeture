@@ -36,9 +36,6 @@
 #pragma once
 #include "config.h"
 
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-
 #ifdef LINUX
 #define BOOST_LOG_DYN_LINK 1
 #endif

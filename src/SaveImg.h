@@ -35,8 +35,11 @@
 #pragma once
 
 #include <string>
-#include <opencv2/core/mat.hpp>
 
+namespace cv
+{
+    class Mat;
+}
 
 class SaveImg{
 

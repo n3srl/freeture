@@ -1,11 +1,11 @@
-### FreeTure [![Build Status](https://travis-ci.org/fripon/freeture.svg?branch=master)](https://travis-ci.org/fripon/freeture)[![Coverity Scan Build Status](https://scan.coverity.com/projects/6030/badge.svg)](https://scan.coverity.com/projects/6030 "Coverity Badge")
+### FreeTure
 --------
 
 *A Free software to capTure meteors*
 
 `FreeTure` is a free open source (GPL license) meteor detection software used to monitor the sky with GigE all-sky cameras to detect and record falling stars and fireball.
 
-It is portable and cross-platform (Linux, Windows)
+It is portable and cross-platform (Linux, Windows) (not anymore!)
 
 The project home page is http://fripon.org
 
@@ -20,9 +20,24 @@ Features
 - Possibility to run regular or scheduled long exposure acquisition
 - Possibility to stack frames in order to keep a kind of history
 
-Examples
---------
+How to run CMake
+----------------
+EXAMPLE ON WINDOWS
 
-![grez_armainvilliers_20141229](https://raw.githubusercontent.com/fripon/freeture/master/data/gretz_armainvilliers-fireball-20141229.jpg)
+Download and Install boost (from zip extract to a folder eg. C:\Program Files\boost\boost_1_82_0)
+https://www.boost.org/doc/libs/1_84_0/more/getting_started/windows.html#get-boost
 
-![wien_20150905](https://raw.githubusercontent.com/fripon/freeture/master/data/wien-fireball-20150905.jpg)
+Download and install opencv (from zip extract to a folder eg. C:\Program Files\opencv)
+https://opencv.org/releases/
+
+git clone 
+from the cloned repo folder
+
+cd ..
+mkdir freeture-project
+cd freeture-project
+cmake ../freeture
+
+free to move binaries where you want but consider this.
+
+https://gitlab.kitware.com/cmake/community/-/wikis/FAQ#what-is-an-out-of-source-build

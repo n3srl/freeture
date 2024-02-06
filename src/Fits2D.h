@@ -42,8 +42,6 @@
     #define BOOST_LOG_DYN_LINK 1
 #endif
 
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
 #include "fitsio.h"
 #include <boost/log/common.hpp>
 #include <boost/log/expressions.hpp>
@@ -61,6 +59,10 @@
 #include "Fits.h"
 #include "Conversion.h"
 
+namespace cv 
+{
+    class Mat;
+}
 
 using namespace boost::posix_time;
 
@@ -107,42 +109,42 @@ class Fits2D : public Fits {
         * @return Success status to create and write the file.
         *
         */
-        bool writeFits(Mat img, ImgBitDepth imgType, std::string fileName, std::string compression = "");
+        bool writeFits(cv::Mat img, ImgBitDepth imgType, std::string fileName, std::string compression = "");
 
         /**
         * Read a Fits file in 32 bits float format.
         * @param img Reference on the container which will contain the read fits.
         *
         */
-        bool readFits32F(Mat &img);
+        bool readFits32F(cv::Mat &img);
 
         /**
         * Read a Fits file in 16 bits unsigned char format.
         * @param img Reference on the container which will contain the read fits.
         *
         */
-        bool readFits16US(Mat &img);
+        bool readFits16US(cv::Mat &img);
 
         /**
         * Read a Fits file in 16 bits signed char format.
         * @param img Reference on the container which will contain the read fits.
         *
         */
-        bool readFits16S(Mat &img);
+        bool readFits16S(cv::Mat &img);
 
         /**
         * Read a Fits file in 8 bits unsigned char format.
         * @param img Reference on the container which will contain the read fits.
         *
         */
-        bool readFits8UC(Mat &img);
+        bool readFits8UC(cv::Mat &img);
 
         /**
         * Read a Fits file in 8 bits signed char format.
         * @param img Reference on the container which will contain the read fits.
         *
         */
-        bool readFits8C(Mat &img);
+        bool readFits8C(cv::Mat &img);
 
         /**
         * Read a keyword in integer type.

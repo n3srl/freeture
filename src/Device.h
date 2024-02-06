@@ -49,9 +49,6 @@
 #define BOOST_LOG_DYN_LINK 1
 #endif
 
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-
 #include <boost/log/common.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/utility/setup/file.hpp>

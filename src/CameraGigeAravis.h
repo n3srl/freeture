@@ -64,11 +64,6 @@
 #include "Frame.h"
 #include "TimeDate.h"
 
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-
-#ifdef LINUX
-
 #include <arv.h>
 #include "arvinterface.h"
 #include "CameraFirstInit.h"
@@ -171,5 +166,3 @@
 
             bool FirstInitializeCamera(std::string);
     };
-
-#endif

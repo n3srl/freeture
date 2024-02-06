@@ -41,8 +41,6 @@
 #endif
 
 #include <boost/circular_buffer.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/video/tracking.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/log/common.hpp>
@@ -83,7 +81,7 @@ namespace src = boost::log::sources;
 namespace expr = boost::log::expressions;
 namespace keywords = boost::log::keywords;
 
-using namespace cv;
+class cv::Mat;
 
 class DetectionTemplate : public Detection {
 
@@ -104,8 +102,8 @@ class DetectionTemplate : public Detection {
         }initializer;
 
         int                 mImgNum;                // Current frame number.
-        Mat                 mPrevFrame;             // Previous frame.
-        Mat                 mMask;                  // Mask applied to frames.
+        cv::Mat                 mPrevFrame;             // Previous frame.
+        cv::Mat                 mMask;                  // Mask applied to frames.
         int                 mDataSetCounter;
         detectionParam      mdtp;
         Mask                *mMaskControl;

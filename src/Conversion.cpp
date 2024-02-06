@@ -35,6 +35,12 @@
 
 #include "Conversion.h"
 
+#include "opencv2\opencv.hpp"
+#include "opencv2\highgui\highgui.hpp" 
+#include "opencv2\imgproc\imgproc.hpp" 
+
+using namespace cv;
+
 std::string Conversion::matTypeToString(int type) {
 
     std::string r;
@@ -132,7 +138,6 @@ void Conversion::stringTok(std::list<std::string> &container, std::string const 
 }
 
 Mat Conversion::convertTo8UC1(Mat &img) {
-
     Mat tmp;
     img.copyTo(tmp);
     double min, max;

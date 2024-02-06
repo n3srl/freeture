@@ -7,7 +7,7 @@
 #include "Logger.h"
 
 
-CameraLucidArena_PHX016SScanner::CameraLucidArena_PHX016SScanner(CamSdkType sdk):CameraScanner(sdk)
+CameraLucidArena_PHX016SScanner::CameraLucidArena_PHX016SScanner(CamSdkType sdk): CameraScanner(sdk)
 {
 }
 
