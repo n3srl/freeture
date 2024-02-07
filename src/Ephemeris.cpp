@@ -59,7 +59,7 @@ Ephemeris::~Ephemeris() {
 }
 
 bool Ephemeris::computeEphemeris(int &sunriseHours, int &sunriseMinutes, int &sunsetHours, int &sunsetMinutes) {
-
+    //std::cout << "Ephemeris::computeEphemeris at Lat " << mStationLatitude << " Lon " << mStationLongitude << std::endl;
     double DJJ = dateToJulianDate();
 
     double LS = longitudeSun(DJJ);

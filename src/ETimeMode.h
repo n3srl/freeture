@@ -32,6 +32,8 @@ enum TimeMode{
     DAY,
     NIGHT,
     DAYNIGHT,
+    SUNRISE,
+    SUNSET,
     NONE
 };
 

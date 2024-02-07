@@ -152,6 +152,7 @@ class AcqThread {
         bool isDay();
         bool isSunset();
         bool isSunrise();
+        std::string getCurrentTimeModeString();
         TimeMode getCurrentTimeMode();
         TimeMode getTimeMode(int);
         int getNowInSeconds();
