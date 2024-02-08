@@ -216,6 +216,9 @@
         gain = arv_camera_get_gain(camera,&error);
         ErrorManager::CheckAravisError(&error);
 
+        fps = arv_camera_get_frame_rate (camera,&error);
+        ErrorManager::CheckAravisError(&error);
+
         BOOST_LOG_SEV(logger, notification) << "Camera gain : " << gain;
 
         exp = arv_camera_get_exposure_time(camera, &error);
@@ -346,6 +349,7 @@
         std::cout << "CameraLucidArena::acqStart"<< std::endl;
 
         BOOST_LOG_SEV(logger, notification) << "Set camera to CONTINUOUS MODE";
+        std::cout << "Set camera to CONTINUOUS MODE" <<std::endl;
         arv_camera_set_acquisition_mode(camera, ARV_ACQUISITION_MODE_CONTINUOUS, &error);
         ErrorManager::CheckAravisError(&error);
 
@@ -388,7 +392,7 @@
 
     bool CameraLucidArena::grabImage(Frame &newFrame)
     {
-        //std::cout << "CameraLucidArena::grabImage"<< std::endl;
+        std::cout << "CameraLucidArena::grabImage"<< std::endl;
 
         ArvBuffer *arv_buffer;
         //exp = arv_camera_get_exposure_time(camera);
@@ -481,7 +485,7 @@
                     //BOOST_LOG_SEV(logger, normal) << "Setting date of frame ...";
                     //newFrame.setAcqDateMicro(acqDateInMicrosec);
                     //BOOST_LOG_SEV(logger, normal) << "Setting fps of frame ...";
-                    newFrame.mFps = fps;
+                    newFrame.mFps = 30;
                     newFrame.mFormat = imgDepth;
                     //BOOST_LOG_SEV(logger, normal) << "Setting saturated value of frame ...";
                     newFrame.mSaturatedValue = saturateVal;
@@ -576,19 +580,32 @@
 
         pixFormat = arv_camera_get_pixel_format (camera, &error);
         ErrorManager::CheckAravisError(&error);
+
+        BOOST_LOG_SEV(logger, notification) << "Set camera to SINGLE FRAME MODE";
+        std::cout << "Set camera to SINGLE FRAME MODE" << std::endl;
+        arv_camera_set_acquisition_mode(camera, ARV_ACQUISITION_MODE_SINGLE_FRAME, &error);
+        ErrorManager::CheckAravisError(&error);
         
+        arv_camera_set_frame_rate(camera, 0.1, &error); /* Regular captures */
+        ErrorManager::CheckAravisError(&error);
 
         arv_camera_get_exposure_time_bounds (camera, &exposureMin, &exposureMax, &error);
         ErrorManager::CheckAravisError(&error);
+
+        arv_camera_set_exposure_time (camera, frame.mExposure, &error); /* Regular captures */
+        ErrorManager::CheckAravisError(&error);
+
+        
         
 
         arv_camera_get_gain_bounds (camera, &gainMin, &gainMax, &error);
         ErrorManager::CheckAravisError(&error);
+
+        arv_camera_set_gain (camera, frame.mGain, &error); /* Regular captures */
+        ErrorManager::CheckAravisError(&error);
        
 
-        arv_camera_set_frame_rate(camera, frame.mFps, &error); /* Regular captures */
-        ErrorManager::CheckAravisError(&error);
-
+     
         std::cout << "==========================" << std::endl;
 
         temperature = arv_device_get_float_feature_value(arv_device, "DeviceTemperature", &error);
@@ -613,7 +630,7 @@
         std::cout << "DEVICE SELECTED : " << arv_camera_get_device_id(camera, &error)    << std::endl;
         ErrorManager::CheckAravisError(&error);
 
-        std::cout << "DEVICE NAME     : " << arv_camera_get_model_name(camera, &error)   << std::endl;
+        std::cout << "DEVICE NAME  c   : " << arv_camera_get_model_name(camera, &error)   << std::endl;
         ErrorManager::CheckAravisError(&error);
 
         std::cout << "DEVICE VENDOR   : " << arv_camera_get_vendor_name(camera, &error)  << std::endl;

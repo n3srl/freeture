@@ -272,7 +272,7 @@ void AcqThread::operator()()
                 double fps;
                 std::vector<int> nextSunset;
                 std::vector<int> nextSunrise;
-
+                
                 // Grab a frame.
                 if(mDevice->runContinuousCapture(newFrame)) {
 
@@ -313,7 +313,8 @@ void AcqThread::operator()()
 
                         // Detect day or night.
                         TimeMode currentTimeMode = getTimeMode(currentTimeInSec);
-
+                        /* std::cout << currentTimeInSec << " " << currentTimeMode << " " << std::endl;
+                        std::cout << currentTimeInSec << " " << currentTimeMode << " " << mStartSunriseTime << std::endl; */
                         
 
                         // If exposure control is not active, the new frame can be shared with others threads.
@@ -336,7 +337,7 @@ void AcqThread::operator()()
                                     pDetection->interruptThread();
 
                                 }else if(mdtp.DET_MODE == currentTimeMode || mdtp.DET_MODE == DAYNIGHT) {
-
+                                    std::cout << "Notify det thread" << std::endl;
                                     boost::mutex::scoped_lock lock2(*detSignal_mutex);
                                     *detSignal = true;
                                     detSignal_condition->notify_one();
@@ -392,9 +393,9 @@ void AcqThread::operator()()
                         previousTimeMode = currentTimeMode;
 
                         // Adjust exposure time.
-                        if(pExpCtrl != NULL && exposureControlActive)
+                        if(pExpCtrl != NULL && exposureControlActive) {
                             exposureControlStatus = pExpCtrl->controlExposureTime(mDevice, newFrame.mImg, newFrame.mDate, mdtp.MASK, mDevice->mMinExposureTime, mcp.ACQ_FPS);
-
+                        }
                         // Get current date YYYYMMDD.
                         std::string currentFrameDate =   TimeDate::getYYYYMMDD(newFrame.mDate);
 
@@ -402,6 +403,7 @@ void AcqThread::operator()()
                         if(currentFrameDate != mCurrentDate)
                         {
                             BOOST_LOG_SEV(logger, notification) << "Date has changed. Former Date is " << mCurrentDate << ". New Date is " << currentFrameDate << "." ;
+                            std::cout << "Date has changed. Former Date is " << mCurrentDate << ". New Date is " << currentFrameDate << "." << std::endl;
                             computeSunTimes();
                         }
                         // Acquisition at regular time interval is enabled.
@@ -426,20 +428,39 @@ void AcqThread::operator()()
                                 if((currentTimeMode == NIGHT) && (mcp.regcap.ACQ_REGULAR_MODE == NIGHT || mcp.regcap.ACQ_REGULAR_MODE == DAYNIGHT)) {
 
                                         BOOST_LOG_SEV(logger, notification) << "Run regular acquisition.";
-                                        std::cout << "Run regular acquisition." << std::endl;
+                                        std::cout << mCurrentTime << " Run regular acquisition in night. Mode  => " << getCurrentTimeModeString() << " ACQ_REGULAR_MODE is " << getCurrentTimeModeString(mcp.regcap.ACQ_REGULAR_MODE) << std::endl;
+                                        
+                                        std::cout << mCurrentTime << mcp.regcap.ACQ_REGULAR_CFG.rep <<
+                                                            mcp.regcap.ACQ_REGULAR_CFG.exp <<
+                                                            mcp.regcap.ACQ_REGULAR_CFG.gain <<  
+                                                            mcp.regcap.ACQ_REGULAR_CFG.fmt <<
+                                                            mcp.regcap.ACQ_REGULAR_OUTPUT <<
+                                                            mcp.regcap.ACQ_REGULAR_PRFX ;
+                                        
                                         runImageCapture(    mcp.regcap.ACQ_REGULAR_CFG.rep,
                                                             mcp.regcap.ACQ_REGULAR_CFG.exp,
                                                             mcp.regcap.ACQ_REGULAR_CFG.gain,
                                                             mcp.regcap.ACQ_REGULAR_CFG.fmt,
                                                             mcp.regcap.ACQ_REGULAR_OUTPUT,
                                                             mcp.regcap.ACQ_REGULAR_PRFX);
+                                        std::cout << mCurrentTime << " Run regular acquisition in night. Mode  => " << getCurrentTimeModeString() << " ACQ_REGULAR_MODE is " << getCurrentTimeModeString(mcp.regcap.ACQ_REGULAR_MODE) << std::endl;
+                                                            
 
                                 // Current time is between sunrise start and sunset stop = DAY
                                 }else if(currentTimeMode == DAY && (mcp.regcap.ACQ_REGULAR_MODE == DAY || mcp.regcap.ACQ_REGULAR_MODE == DAYNIGHT)) {
 
                                     BOOST_LOG_SEV(logger, notification) << "Run regular acquisition.";
+                                    std::cout  << "Run regular acquisition in DAY. Mode => " << getCurrentTimeModeString() << " ACQ_REGULAR_MODE is " << getCurrentTimeModeString(mcp.regcap.ACQ_REGULAR_MODE) << std::endl;
                                     saveImageCaptured(newFrame, 0, mcp.regcap.ACQ_REGULAR_OUTPUT, mcp.regcap.ACQ_REGULAR_PRFX);
-
+                                    std::cout << mCurrentTime << " Run regular acquisition in night. Mode  => " << getCurrentTimeModeString() << " ACQ_REGULAR_MODE is " << getCurrentTimeModeString(mcp.regcap.ACQ_REGULAR_MODE) << std::endl;
+                                     // Prepare continuous acquisition.
+                                    if(!prepareAcquisitionOnDevice()) {
+                                        std::cout << "FAIL ON PREPARE AQ DEVICE" << std::endl;
+                                        //return false;
+                                    }
+                                } else 
+                                {
+                                    std::cout << "Cannot run regular acquisition in current timemode " << getCurrentTimeModeString() << " ACQ_REGULAR_MODE is " << getCurrentTimeModeString(mcp.regcap.ACQ_REGULAR_MODE) << std::endl;
                                 }
 
                                 // Reset reference time in case a long exposure has been done.
@@ -449,6 +470,7 @@ void AcqThread::operator()()
                             }
 
                         }
+                        
                         // Acquisiton at scheduled time is enabled.
                         if(mcp.schcap.ACQ_SCHEDULE.size() != 0 && mcp.schcap.ACQ_SCHEDULE_ENABLED && !mDevice->mVideoFramesInput) {
 
@@ -828,7 +850,7 @@ void AcqThread::runImageCapture(int imgNumber, int imgExposure, int imgGain, Cam
         BOOST_LOG_SEV(logger, notification) << "Format : " << format.getStringEnum(imgFormat);
         frame.mFormat = imgFormat;
 
-        frame.mFps = 30;
+        //frame.mFps = 0.1;
 
         if(mcp.ACQ_RES_CUSTOM_SIZE) {
             frame.mHeight = mcp.ACQ_HEIGHT;
@@ -1179,9 +1201,9 @@ bool AcqThread::computeSunTimes() {
 bool AcqThread::isNight(int currentTimeInSec)
 {
     if ((currentTimeInSec < mStartSunriseTime) || (currentTimeInSec > mStopSunsetTime) 
-            && currentTimeInSec > 0 
+            /*&& currentTimeInSec > 0 
             && mStartSunriseTime > 0
-            && mStopSunsetTime > 0 ) 
+            && mStopSunsetTime > 0*/ ) 
         return true;
 
     return false;
@@ -1190,9 +1212,10 @@ bool AcqThread::isNight(int currentTimeInSec)
 bool AcqThread::isDay(int seconds)
 {
     if ( seconds > mStopSunriseTime && seconds < mStartSunsetTime
-            && seconds > 0 
+           /* && seconds > 0 
             && mStartSunriseTime > 0
-            && mStopSunsetTime > 0 )
+            && mStopSunsetTime > 0 */
+            )
         return true;
 
     return false;
@@ -1221,9 +1244,9 @@ bool AcqThread::isSunrise()
 bool AcqThread::isSunrise(int seconds){
     if (   seconds >= mStartSunriseTime 
         && seconds <= mStopSunriseTime
-        && seconds > 0 
+       /* && seconds > 0 
         && mStartSunriseTime > 0
-        && mStopSunriseTime > 0 ) 
+        && mStopSunriseTime > 0 */) 
         return true;
     return false;             
 }
@@ -1231,9 +1254,9 @@ bool AcqThread::isSunrise(int seconds){
 bool AcqThread::isSunset(int seconds){
     if(    seconds >= mStartSunsetTime 
         && seconds <= mStopSunsetTime
-        && seconds > 0 
+        /*&& seconds > 0 
         && mStartSunsetTime > 0
-        && mStopSunsetTime > 0 
+        && mStopSunsetTime > 0 */
         )
         return true;
 
@@ -1264,11 +1287,15 @@ TimeMode AcqThread::getTimeMode(int seconds)
     return TimeMode::NONE;
 }
 
-std::string AcqThread::getCurrentTimeModeString()
+std::string AcqThread::getCurrentTimeModeString(TimeMode mode)
 {
-    TimeMode mode = getCurrentTimeMode();
+    if(mode == TimeMode::NONE) {
+        mode = getCurrentTimeMode();
+    }
     switch (mode)
     {
+    case TimeMode::DAYNIGHT:
+        return "DAYNIGHT";
     case TimeMode::DAY:
         return "DAY";
     case TimeMode::NIGHT:
@@ -1282,7 +1309,7 @@ std::string AcqThread::getCurrentTimeModeString()
         break;
     
     default:
-    return "";
+    return "NOT DEFINED";
         break;
     }
 } 
