@@ -24,14 +24,52 @@ How to run CMake
 ----------------
 EXAMPLE ON WINDOWS
 
-Download and Install boost (from zip extract to a folder eg. C:\Program Files\boost\boost_1_82_0)
-https://www.boost.org/doc/libs/1_84_0/more/getting_started/windows.html#get-boost
 
+DEPENDENCIES
+
+BOOST
+debian:bullseye version is 1.74
+Download and Install boost (from zip extract to a folder eg. C:\Program Files\boost\boost_1_74_0)
+https://sourceforge.net/projects/boost/files/boost-binaries/1.74.0/boost_1_74_0-msvc-14.2-64.exe/download
+will be installed on C:\local\boost_1_74_0
+
+OPEN CV
+debian:bullseye version is 4.5.1
 Download and install opencv (from zip extract to a folder eg. C:\Program Files\opencv)
 https://opencv.org/releases/
 
-git clone 
-from the cloned repo folder
+https://sourceforge.net/projects/opencvlibrary/files/4.5.1/
+
+OPEN SSL
+debian:bullseye version is 1.1.1
+Downloading OpenSSL from https://slproweb.com/products/Win32OpenSSL.html (Win64 OpenSSL v1.1.1w Light)
+
+LIB ARAVIS
+debian:bullseye version is 0.8
+
+Install Conan
+https://docs.conan.io/2/installation.html
+
+Download and install meson, follow instructions for python3
+https://mesonbuild.com/Getting-meson.html
+
+Installare GTK
+https://github.com/wingtk/gvsbuild
+
+CFITSIO
+download latest
+follow these instructions:
+https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/README.win
+
+Otherwise get latest from jenkins.
+
+extract in %PROGRAMFILES%\cfits
+
+
+
+
+BUILD freeture
+git clone https://github.com/n3srl/freeture
 
 cd ..
 mkdir freeture-project
@@ -41,3 +79,5 @@ cmake ../freeture
 free to move binaries where you want but consider this.
 
 https://gitlab.kitware.com/cmake/community/-/wikis/FAQ#what-is-an-out-of-source-build
+
+or use cmake-gui

@@ -29,18 +29,17 @@ message(STATUS "Binary directory: ${CMAKE_BINARY_DIR}")
 
 
 # boost section
-set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "C:/Program Files/boost/boost_1_82_0/boost")
+set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "C:/local/boost_1_74_0")
 
 #set(Boost_USE_STATIC_LIBS OFF) 
 #set(Boost_USE_MULTITHREADED ON)  
 #set(Boost_USE_STATIC_RUNTIME OFF) 
 
-find_package(Boost REQUIRED) 
+find_package(Boost 1.74 REQUIRED system ) 
 
 
 if (Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIR})
-    add_definitions( "-DHAS_BOOST" )
+	LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 endif()
 
 
@@ -49,8 +48,13 @@ set(OpenCV_DIR "C:/Program Files/opencv/build")
 								 
 find_package(OpenCV REQUIRED) 
 
+#openssl
+set (OpenSSLDir "C:/Program Files/OpenSSL-Win64/include")
 
 
+
+
+#add config.h
 configure_file(config.h.in config.h COPYONLY)
 
 #adding sources
@@ -174,7 +178,17 @@ set(SOURCES
 )
 
 
-include_directories(freeture ${OpenCV_INCLUDE_DIRS} "libs/ArenaSDK/include/Arena" "libs/ArenaSDK/GenICam/library/CPP/include" "libs/ArenaSDK/include/Save" "C:/msys64/clang32/include/glib-2.0/include" "C:/msys64/clang32/include/glib-2.0" "C:/msys64/clang32/include/aravis-0.8")
+include_directories(freeture 
+	${OpenCV_INCLUDE_DIRS} 
+	${OpenSSLDir} 
+	${Boost_INCLUDE_DIR} 
+	"C:/Program Files/cfits/include" 
+	"libs/ArenaSDK/include/Arena" 
+	"libs/ArenaSDK/GenICam/library/CPP/include" 
+	"libs/ArenaSDK/include/Save" 
+	"C:/gtk-build/gtk/x64/release/include/glib-2.0"  
+	"C:/gtk-build/gtk/x64/release/lib/glib-2.0/include"
+	"C:/msys64/mingw64/include/aravis-0.8")
 
 add_executable(freeture ${SOURCES})
 
@@ -184,4 +198,8 @@ set_property(TARGET freeture
     PROPERTY VS_PACKAGE_REFERENCES "openssl-vc142"
 )
 
-target_link_libraries (freeture  ${OpenCV_LIBS})
+target_link_libraries (
+	freeture  
+	${OpenCV_LIBS}
+	${Boost_LIBRARIES}
+)

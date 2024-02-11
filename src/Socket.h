@@ -35,27 +35,25 @@
 
 #include "config.h"
 
-#ifdef WINDOWS
+#ifdef _WIN64
     #define WIN32_LEAN_AND_MEAN
-    #include <boost/asio.hpp>
     #include <windows.h>
     #include <stdint.h>
     #include <openssl\err.h>
     #include <openssl\ssl.h>
-
 #else
     #ifdef LINUX
-        #include <boost/asio.hpp>
         #define BOOST_LOG_DYN_LINK 1
+        #include <stdio.h>
     #endif
 #endif
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string>
 #include <string.h>
 #include <iostream>
 #include <boost/archive/iterators/ostream_iterator.hpp>
+#include <boost/asio.hpp>
 #include <boost/log/common.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/utility/setup/file.hpp>

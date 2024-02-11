@@ -39,8 +39,8 @@
 
 #ifdef WINDOWS
     #define WIN32_LEAN_AND_MEAN
-    #include <boost/asio.hpp>
     #include <windows.h>
+    #include <boost/asio.hpp>
     #include <iphlpapi.h>
     #include <stdint.h>
 #else

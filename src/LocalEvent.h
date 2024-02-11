@@ -43,34 +43,32 @@
 #include "Circle.h"
 #include "TimeDate.h"
 
-using namespace cv;
-
 
 class LocalEvent {
 
     private :
 
-        Scalar          mLeColor;           // Color attribute of the local event.
-        Mat             mLeMap;             // ROI map.
-        Point           mLeMassCenter;      // Mass center.
+        cv::Scalar          mLeColor;           // Color attribute of the local event.
+        cv::Mat             mLeMap;             // ROI map.
+        cv::Point           mLeMassCenter;      // Mass center.
         int             mLeNumFrame;        // Associated frame.
 
-        Point           mPosMassCenter;
-        Point           mNegMassCenter;
+        cv::Point           mPosMassCenter;
+        cv::Point           mNegMassCenter;
         float           mPosRadius;
         float           mNegRadius;
         bool            mPosCluster;
         bool            mNegCluster;
         bool            mergedFlag;
-        Point           uNegToPos;
+        cv::Point           uNegToPos;
         int             index;
 
     public :
 
-        std::vector<Point>   mLeRoiList;   // Contains position of region of interest which compose a local event.
-        std::vector<Point>   mAbsPos;
-        std::vector<Point>   mPosPos;
-        std::vector<Point>   mNegPos;
+        std::vector<cv::Point>   mLeRoiList;   // Contains position of region of interest which compose a local event.
+        std::vector<cv::Point>   mAbsPos;
+        std::vector<cv::Point>   mPosPos;
+        std::vector<cv::Point>   mNegPos;
         int             mFrameHeight;
         int             mFrameWidth;
         TimeDate::Date  mFrameAcqDate;
@@ -84,7 +82,7 @@ class LocalEvent {
         * @param frameWidth
         * @param roiSize
         */
-        LocalEvent(Scalar color, Point roiPos, int frameHeight, int frameWidth, const int *roiSize);
+        LocalEvent(cv::Scalar color, cv::Point roiPos, int frameHeight, int frameWidth, const int *roiSize);
 
         /**
         * Destructor.
@@ -103,21 +101,21 @@ class LocalEvent {
         *
         * @return color.
         */
-        Scalar getColor() {return mLeColor;};
+        cv::Scalar getColor() {return mLeColor;};
 
         /**
         * Get local event's color.
         *
         * @return color.
         */
-        Mat getMap() {return mLeMap;};
+        cv::Mat getMap() {return mLeMap;};
 
         /**
         * Get local event's mass center.
         *
         * @return Center of mass.
         */
-        Point getMassCenter() {return mLeMassCenter;};
+        cv::Point getMassCenter() {return mLeMassCenter;};
 
         /**
         * Get local event's frame number.
@@ -140,27 +138,27 @@ class LocalEvent {
         * @param h Height of the new ROI.
         * @param w Width of the new ROI.
         */
-        void setMap(Point p, int h, int w);
+        void setMap(cv::Point p, int h, int w);
 
-        Point getLeDir() {return uNegToPos;};
+        cv::Point getLeDir() {return uNegToPos;};
 
-        void addAbs(std::vector<Point> p);
-        void addPos(std::vector<Point> p);
-        void addNeg(std::vector<Point> p);
+        void addAbs(std::vector<cv::Point> p);
+        void addPos(std::vector<cv::Point> p);
+        void addNeg(std::vector<cv::Point> p);
 
         bool getMergedStatus() {return mergedFlag;};
         void setMergedStatus(bool flag) {mergedFlag = flag;};
 
-        Mat createPosNegAbsMap();
+        cv::Mat createPosNegAbsMap();
         bool localEventIsValid();
 
         bool getPosClusterStatus() {return mPosCluster;};
         bool getNegClusterStatus() {return mNegCluster;};
 
         void mergeWithAnOtherLE(LocalEvent &LE);
-        void completeGapWithRoi(Point p1, Point p2);
-        Point getPosMassCenter() {return mPosMassCenter;};
-        Point getNegMassCenter() {return mNegMassCenter;};
+        void completeGapWithRoi(cv::Point p1, cv::Point p2);
+        cv::Point getPosMassCenter() {return mPosMassCenter;};
+        cv::Point getNegMassCenter() {return mNegMassCenter;};
         float getPosRadius() {return mPosRadius;};
         float getNegRadius() {return mNegRadius;};
         bool getPosCluster() {return mPosCluster;};
