@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 Socket.h
 
@@ -30,51 +31,22 @@
 * \version 1.0
 * \date    03/03/2015
 */
+//header refactoring ok
+#include "Commons.h"
 
-#pragma once
-
-#include "config.h"
-
-#ifdef _WIN64
-    #define WIN32_LEAN_AND_MEAN
-    #include <windows.h>
-    #include <stdint.h>
-    #include <openssl\err.h>
-    #include <openssl\ssl.h>
-#else
-    #ifdef LINUX
-        #define BOOST_LOG_DYN_LINK 1
-        #include <stdio.h>
-    #endif
-#endif
-
-#include <stdlib.h>
-#include <string>
-#include <string.h>
-#include <iostream>
-#include <boost/archive/iterators/ostream_iterator.hpp>
 #include <boost/asio.hpp>
-#include <boost/log/common.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/attributes/named_scope.hpp>
-#include <boost/log/attributes.hpp>
-#include <boost/log/sinks.hpp>
-#include <boost/log/sources/logger.hpp>
-#include <boost/log/core.hpp>
-#include "ELogSeverityLevel.h"
-#include "Conversion.h"
+#include <boost/archive/iterators/ostream_iterator.hpp>
+
+namespace freeture
+{
 
 
+    class Socket {
 
-class Socket {
+        boost::asio::io_service mIoService;
+        boost::asio::ip::tcp::socket mSocket;
 
-    boost::asio::io_service mIoService;
-    boost::asio::ip::tcp::socket mSocket;
-
-    public :
+    public:
 
         /**
         * Constructor.
@@ -82,7 +54,7 @@ class Socket {
         * @param sever SMTP server.
         * @param port Connection port.
         */
-        Socket(std::string server, uint16_t port):mSocket(mIoService) {
+        Socket(std::string server, uint16_t port) : mSocket(mIoService) {
 
             boost::asio::ip::tcp::resolver resolver(mIoService);
 
@@ -98,8 +70,9 @@ class Socket {
         *
         * @return Pointer on the socket.
         */
-        boost::asio::ip::tcp::socket * GetSocket() {
+        boost::asio::ip::tcp::socket* GetSocket() {
             return &mSocket;
         }
 
-};
+    };
+}

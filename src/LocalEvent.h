@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 LocalEvent.h
 
@@ -32,21 +33,21 @@
 * \date    03/06/2014
 * \brief   Event occured on a single frame.
 */
+#include "Commons.h"
 
-#pragma once
+#include <opencv2/opencv.hpp>
 
-#include "opencv2/highgui/highgui.hpp"
-#include <opencv2/imgproc/imgproc.hpp>
 #include <iostream>
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "Circle.h"
 #include "TimeDate.h"
 
+namespace freeture
+{
 
-class LocalEvent {
-
-    private :
+    class LocalEvent {
+    private:
 
         cv::Scalar          mLeColor;           // Color attribute of the local event.
         cv::Mat             mLeMap;             // ROI map.
@@ -63,7 +64,7 @@ class LocalEvent {
         cv::Point           uNegToPos;
         int             index;
 
-    public :
+    public:
 
         std::vector<cv::Point>   mLeRoiList;   // Contains position of region of interest which compose a local event.
         std::vector<cv::Point>   mAbsPos;
@@ -84,6 +85,7 @@ class LocalEvent {
         */
         LocalEvent(cv::Scalar color, cv::Point roiPos, int frameHeight, int frameWidth, const int *roiSize);
 
+
         /**
         * Destructor.
         *
@@ -103,12 +105,14 @@ class LocalEvent {
         */
         cv::Scalar getColor() {return mLeColor;};
 
+
         /**
         * Get local event's color.
         *
         * @return color.
         */
         cv::Mat getMap() {return mLeMap;};
+
 
         /**
         * Get local event's mass center.
@@ -117,19 +121,20 @@ class LocalEvent {
         */
         cv::Point getMassCenter() {return mLeMassCenter;};
 
+
         /**
         * Get local event's frame number.
         *
         * @return Frame number.
         */
-        int getNumFrame() {return mLeNumFrame;};
+        int getNumFrame() { return mLeNumFrame; };
 
         /**
         * Set local event's frame number.
         *
         * @param n Frame number.
         */
-        void setNumFrame(int n) {mLeNumFrame = n;};
+        void setNumFrame(int n) { mLeNumFrame = n; };
 
         /**
         * Update local event's roi map.
@@ -142,18 +147,19 @@ class LocalEvent {
 
         cv::Point getLeDir() {return uNegToPos;};
 
+
         void addAbs(std::vector<cv::Point> p);
         void addPos(std::vector<cv::Point> p);
         void addNeg(std::vector<cv::Point> p);
 
-        bool getMergedStatus() {return mergedFlag;};
-        void setMergedStatus(bool flag) {mergedFlag = flag;};
+        bool getMergedStatus() { return mergedFlag; };
+        void setMergedStatus(bool flag) { mergedFlag = flag; };
 
         cv::Mat createPosNegAbsMap();
         bool localEventIsValid();
 
-        bool getPosClusterStatus() {return mPosCluster;};
-        bool getNegClusterStatus() {return mNegCluster;};
+        bool getPosClusterStatus() { return mPosCluster; };
+        bool getNegClusterStatus() { return mNegCluster; };
 
         void mergeWithAnOtherLE(LocalEvent &LE);
         void completeGapWithRoi(cv::Point p1, cv::Point p2);
@@ -168,4 +174,7 @@ class LocalEvent {
         void setLeIndex(int i) {index = i;};
 
 
-};
+
+    };
+
+}

@@ -32,33 +32,34 @@
 * \date    03/06/2014
 * \brief   Event occured on a single frame.
 */
+#include "Commons.h"
 
 #include "LocalEvent.h"
 
-using namespace cv;
+using namespace freeture;
 using namespace std;
 
-LocalEvent::LocalEvent( Scalar color, Point roiPos, int frameHeight, int frameWidth, const int *roiSize):
-                        mLeColor(color), mFrameHeight(frameHeight), mFrameWidth(frameWidth), mLeNumFrame(0), index(0) {
+LocalEvent::LocalEvent(cv::Scalar color, cv::Point roiPos, int frameHeight, int frameWidth, const int *roiSize):
+        mLeColor(color), mFrameHeight(frameHeight), mFrameWidth(frameWidth), mLeNumFrame(0), index(0) {
 
-    mPosMassCenter = Point(0,0);
-    mNegMassCenter = Point(0,0);
+    mPosMassCenter = cv::Point(0,0);
+    mNegMassCenter = cv::Point(0,0);
     mPosRadius = 0.5;
     mNegRadius = 0.5;
     mPosCluster = false;
     mNegCluster = false;
     mergedFlag = false;
-    uNegToPos = Point(0,0);
+    uNegToPos = cv::Point(0,0);
 
     // Save position of the first ROI.
     mLeRoiList.push_back(roiPos);
 
     // Create LE map.
-    mLeMap = Mat::zeros(frameHeight, frameWidth, CV_8UC1);
+    mLeMap = cv::Mat::zeros(frameHeight, frameWidth, CV_8UC1);
 
     // Add first ROI in the LE map.
-    Mat roi(roiSize[1],roiSize[0],CV_8UC1,Scalar(255));
-    roi.copyTo(mLeMap(Rect(roiPos.x-roiSize[0]/2,roiPos.y-roiSize[1]/2,roiSize[0],roiSize[1])));
+    cv::Mat roi(roiSize[1],roiSize[0],CV_8UC1, cv::Scalar(255));
+    roi.copyTo(mLeMap(cv::Rect(roiPos.x-roiSize[0]/2,roiPos.y-roiSize[1]/2,roiSize[0],roiSize[1])));
 
 }
 
@@ -70,7 +71,7 @@ void LocalEvent::computeMassCenter() {
 
     float x = 0, y = 0;
 
-    vector<Point>::iterator it;
+    vector<cv::Point>::iterator it;
 
     for(it = mAbsPos.begin(); it != mAbsPos.end(); ++it){
 
@@ -82,32 +83,33 @@ void LocalEvent::computeMassCenter() {
     x = x / mAbsPos.size();
     y = y / mAbsPos.size();
 
-    mLeMassCenter = Point(x,y);
+    mLeMassCenter = cv::Point(x,y);
 
 }
 
-void LocalEvent::setMap(Point p, int h, int w){
+void LocalEvent::setMap(cv::Point p, int h, int w){
 
     // Add new ROI to the LE map.
-    Mat roi(h,w,CV_8UC1,Scalar(255));
-    roi.copyTo(mLeMap(Rect(p.x, p.y, w, h)));
+    cv::Mat roi(h,w,CV_8UC1, cv::Scalar(255));
+    roi.copyTo(mLeMap(cv::Rect(p.x, p.y, w, h)));
 
 }
 
-void LocalEvent::addAbs(vector<Point> p) {
+void LocalEvent::addAbs(vector<cv::Point> p) {
 
     mAbsPos.insert(mAbsPos.end(), p.begin(), p.end());
 
 }
 
-void LocalEvent::addPos(vector<Point> p) {
+void LocalEvent::addPos(vector<cv::Point> p) {
 
     mPosPos.insert(mPosPos.end(), p.begin(), p.end());
     if(mPosPos.size()!=0) mPosCluster = true;
 
 }
 
-void LocalEvent::addNeg(vector<Point> p) {
+void LocalEvent::addNeg(vector<cv::Point> p) {
+
 
     mNegPos.insert(mNegPos.end(), p.begin(), p.end());
     if(mNegPos.size()!=0) mNegCluster = true;
@@ -117,8 +119,8 @@ void LocalEvent::addNeg(vector<Point> p) {
 bool LocalEvent::localEventIsValid() {
 
     bool posCluster = false, negCluster = false;
+    vector<cv::Point>::iterator it;
 
-    vector<Point>::iterator it;
 
     // Positive cluster.
     if(mPosPos.size() != 0) {
@@ -135,7 +137,7 @@ bool LocalEvent::localEventIsValid() {
         xPos = xPos / mPosPos.size();
         yPos = yPos / mPosPos.size();
 
-        mPosMassCenter = Point(xPos, yPos);
+        mPosMassCenter = cv::Point(xPos, yPos);
 
         // Search radius.
         for(it = mPosPos.begin(); it != mPosPos.end(); ++it) {
@@ -168,7 +170,7 @@ bool LocalEvent::localEventIsValid() {
         xNeg = xNeg / mNegPos.size();
         yNeg = yNeg / mNegPos.size();
 
-        mNegMassCenter = Point(xNeg, yNeg);
+        mNegMassCenter = cv::Point(xNeg, yNeg);
 
         // Search radius.
         for(it = mNegPos.begin(); it != mNegPos.end(); ++it){
@@ -190,7 +192,7 @@ bool LocalEvent::localEventIsValid() {
     if(negCluster && posCluster) {
 
         // Vector from neg cluster to pos cluster.
-        uNegToPos = Point(mPosMassCenter.x - mNegMassCenter.x, mPosMassCenter.y - mNegMassCenter.y);
+        uNegToPos = cv::Point(mPosMassCenter.x - mNegMassCenter.x, mPosMassCenter.y - mNegMassCenter.y);
 
 
         Circle pos(mPosMassCenter, mPosRadius);
@@ -238,17 +240,18 @@ bool LocalEvent::localEventIsValid() {
 
 }
 
-Mat LocalEvent::createPosNegAbsMap() {
+cv::Mat LocalEvent::createPosNegAbsMap() {
 
-    Mat map = Mat::zeros(mFrameHeight, mFrameWidth, CV_8UC3);
+    cv::Mat map = cv::Mat::zeros(mFrameHeight, mFrameWidth, CV_8UC3);
 
-    vector<Point>::iterator it;
+    vector<cv::Point>::iterator it;
+
 
     for(it = mAbsPos.begin(); it != mAbsPos.end(); ++it){
 
-        map.at<Vec3b>((*it).y, (*it).x)[0] = 255;
-        map.at<Vec3b>((*it).y, (*it).x)[1] = 255;
-        map.at<Vec3b>((*it).y, (*it).x)[2] = 255;
+        map.at<cv::Vec3b>((*it).y, (*it).x)[0] = 255;
+        map.at<cv::Vec3b>((*it).y, (*it).x)[1] = 255;
+        map.at<cv::Vec3b>((*it).y, (*it).x)[2] = 255;
 
     }
 
@@ -257,9 +260,9 @@ Mat LocalEvent::createPosNegAbsMap() {
 
         for(it = mPosPos.begin(); it != mPosPos.end(); ++it){
 
-            map.at<Vec3b>((*it).y, (*it).x)[0] = 0;
-            map.at<Vec3b>((*it).y, (*it).x)[1] = 255;
-            map.at<Vec3b>((*it).y, (*it).x)[2] = 0;
+            map.at<cv::Vec3b>((*it).y, (*it).x)[0] = 0;
+            map.at<cv::Vec3b>((*it).y, (*it).x)[1] = 255;
+            map.at<cv::Vec3b>((*it).y, (*it).x)[2] = 0;
 
             xPos += (*it).x;
             yPos += (*it).y;
@@ -269,7 +272,7 @@ Mat LocalEvent::createPosNegAbsMap() {
         xPos = xPos / mPosPos.size();
         yPos = yPos / mPosPos.size();
 
-        Point mPosMassCenter = Point(xPos, yPos);
+        cv::Point mPosMassCenter = cv::Point(xPos, yPos);
 
         // Search radius.
         float posRadius = 0.0;
@@ -287,7 +290,7 @@ Mat LocalEvent::createPosNegAbsMap() {
         }
 
         if(mPosMassCenter.x > 0 && mPosMassCenter.y > 0)
-            circle(map, mPosMassCenter, (int) posRadius, Scalar(0,255,0));
+            circle(map, mPosMassCenter, (int) posRadius, cv::Scalar(0,255,0));
 
     }
 
@@ -297,17 +300,17 @@ Mat LocalEvent::createPosNegAbsMap() {
 
         for(it = mNegPos.begin(); it != mNegPos.end(); ++it){
 
-            if(map.at<Vec3b>((*it).y, (*it).x) == Vec3b(0,255,0)) {
+            if(map.at<cv::Vec3b>((*it).y, (*it).x) == cv::Vec3b(0,255,0)) {
 
-                map.at<Vec3b>((*it).y, (*it).x)[0] = 255;
-                map.at<Vec3b>((*it).y, (*it).x)[1] = 0;
-                map.at<Vec3b>((*it).y, (*it).x)[2] = 0;
+                map.at<cv::Vec3b>((*it).y, (*it).x)[0] = 255;
+                map.at<cv::Vec3b>((*it).y, (*it).x)[1] = 0;
+                map.at<cv::Vec3b>((*it).y, (*it).x)[2] = 0;
 
             }else {
 
-                map.at<Vec3b>((*it).y, (*it).x)[0] = 0;
-                map.at<Vec3b>((*it).y, (*it).x)[1] = 0;
-                map.at<Vec3b>((*it).y, (*it).x)[2] = 255;
+                map.at<cv::Vec3b>((*it).y, (*it).x)[0] = 0;
+                map.at<cv::Vec3b>((*it).y, (*it).x)[1] = 0;
+                map.at<cv::Vec3b>((*it).y, (*it).x)[2] = 255;
 
 
 
@@ -320,7 +323,7 @@ Mat LocalEvent::createPosNegAbsMap() {
         xNeg = xNeg / mNegPos.size();
         yNeg = yNeg / mNegPos.size();
 
-        Point mNegMassCenter = Point(xNeg, yNeg);
+        cv::Point mNegMassCenter = cv::Point(xNeg, yNeg);
 
         // Search radius.
         float negRadius = 0.0;
@@ -338,7 +341,7 @@ Mat LocalEvent::createPosNegAbsMap() {
         }
 
         if(mNegMassCenter.x > 0 && mNegMassCenter.y > 0)
-            circle(map, mNegMassCenter, (int) negRadius, Scalar(0,0,255));
+            circle(map, mNegMassCenter, (int) negRadius, cv::Scalar(0,0,255));
 
     }
 
@@ -356,7 +359,7 @@ void LocalEvent::mergeWithAnOtherLE(LocalEvent &LE) {
     mPosPos.insert(mPosPos.end(), LE.mPosPos.begin(), LE.mPosPos.end());
     mNegPos.insert(mNegPos.end(), LE.mNegPos.begin(), LE.mNegPos.end());
     computeMassCenter();
-    Mat temp = mLeMap + LE.getMap();
+    cv::Mat temp = mLeMap + LE.getMap();
     temp.copyTo(mLeMap);
     if(mPosPos.size()!=0) mPosCluster = true;
     if(mNegPos.size()!=0) mNegCluster = true;
@@ -364,9 +367,9 @@ void LocalEvent::mergeWithAnOtherLE(LocalEvent &LE) {
 }
 
 //http://mathforum.org/library/drmath/view/66794.html
-void LocalEvent::completeGapWithRoi(Point p1, Point p2) {
+void LocalEvent::completeGapWithRoi(cv::Point p1, cv::Point p2) {
 
-    Mat roi(10,10,CV_8UC1,Scalar(255));
+    cv::Mat roi(10,10,CV_8UC1, cv::Scalar(255));
 
     float dist = sqrt(pow((p1.x - p2.x),2) + pow((p1.y - p2.y),2));
 
@@ -374,7 +377,7 @@ void LocalEvent::completeGapWithRoi(Point p1, Point p2) {
 
     if((int)part!=0) {
 
-        Point p3 = Point(p1.x,p2.y);
+        cv::Point p3 = cv::Point(p1.x,p2.y);
 
         float dist1 = sqrt(pow((p1.x - p3.x),2) + pow((p1.y - p3.y),2)); //A--> C
         float dist2 = sqrt(pow((p2.x - p3.x),2) + pow((p2.y - p3.y),2)); //B-> C
@@ -384,10 +387,10 @@ void LocalEvent::completeGapWithRoi(Point p1, Point p2) {
 
         for(int i = 0; i < part ; i++){
 
-            Point p = Point(p3.x + i * part2, p1.y + i* part1);
+            cv::Point p = cv::Point(p3.x + i * part2, p1.y + i* part1);
 
             if(p.x-5 > 0 && p.x+5 < mLeMap.cols && p.y-5 > 0 && p.y+5 < mLeMap.rows)
-                roi.copyTo(mLeMap(Rect(p.x-5,p.y-5,10,10)));
+                roi.copyTo(mLeMap(cv::Rect(p.x-5,p.y-5,10,10)));
 
         }
     }

@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 SMTPClient.h
 
@@ -33,72 +34,24 @@
 * \brief   SMTP connection and send mails.
 */
 
-#pragma once
+#include "Commons.h"
 
-#include "config.h"
-
-#ifdef WINDOWS
-    #define WIN32_LEAN_AND_MEAN
-    #include <windows.h>
-    #include <boost/asio.hpp>
-    #include <iphlpapi.h>
-    #include <stdint.h>
-#else
-    #ifdef LINUX
-        #include <boost/asio.hpp>
-        #define BOOST_LOG_DYN_LINK 1
-    #endif
-#endif
-#include "OpenSSL.h"
-#include "Socket.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <string>
-#include <iostream>
 #include <vector>
-#include <ostream>
-#include <fstream>
-#include <sstream>
-#include <boost/archive/iterators/ostream_iterator.hpp>
-#include <boost/log/common.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/attributes/named_scope.hpp>
-#include <boost/log/attributes.hpp>
-#include <boost/log/sinks.hpp>
-#include <boost/log/sources/logger.hpp>
-#include <boost/log/core.hpp>
-#include "ELogSeverityLevel.h"
-#include <iterator>
-#include <algorithm>
-#include "Conversion.h"
-#include "Base64.h"
-#include <cerrno>
 #include "ESmtpSecurity.h"
 
+#include "OpenSSL.h"
+#include "Logger.h"
+
+#include <boost/asio.hpp>
 
 
-class SMTPClient {
+namespace freeture
+{
 
-    private :
+    class SMTPClient {
 
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
-
-        static class Init {
-
-            public:
-
-                Init() {
-
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("SMTPClient"));
-
-                }
-
-        }initializer;
-
-    public :
+    public:
 
         /**
         * Send mail.
@@ -114,17 +67,17 @@ class SMTPClient {
         * @param imgInline
         * @param securityType Use secured connection or not.
         */
-        static void sendMail(   std::string            server,
-                                std::string            login,
-                                std::string            password,
-                                std::string            from,
-                                std::vector<std::string>    to,
-                                std::string            subject,
-                                std::string            message,
-                                std::vector<std::string>    pathAttachments,
-                                SmtpSecurity      securityType);
+        static void sendMail(std::string            server,
+            std::string            login,
+            std::string            password,
+            std::string            from,
+            std::vector<std::string>    to,
+            std::string            subject,
+            std::string            message,
+            std::vector<std::string>    pathAttachments,
+            SmtpSecurity      securityType);
 
-    private :
+    private:
 
         /**
         * Check SMTP answer.
@@ -133,7 +86,7 @@ class SMTPClient {
         * @param socket
         * @return Answer is correct or not.
         */
-        static bool checkSMTPAnswer(const std::string & responseWaited, boost::asio::ip::tcp::socket & socket);
+        static bool checkSMTPAnswer(const std::string& responseWaited, boost::asio::ip::tcp::socket& socket);
 
         /**
         * Send data to SMTP.
@@ -143,15 +96,15 @@ class SMTPClient {
         * @param checkAnswer
         * @param printCmd
         */
-        static void write(std::string data, std::string expectedAnswer, bool checkAnswer, boost::asio::ip::tcp::socket & socket);
+        static void write(std::string data, std::string expectedAnswer, bool checkAnswer, boost::asio::ip::tcp::socket& socket);
 
         /**
         * Create MIME message.
         *
         * @return Final message to send.
         */
-        static std::string buildMessage( std::string msg, std::vector<std::string> mMailAttachments,
-             std::vector<std::string> mMailTo,  std::string mMailFrom,  std::string mMailSubject);
+        static std::string buildMessage(std::string msg, std::vector<std::string> mMailAttachments,
+            std::vector<std::string> mMailTo, std::string mMailFrom, std::string mMailSubject);
 
         /**
         * Get file content.
@@ -159,37 +112,38 @@ class SMTPClient {
         * @param filename
         * @return File's content.
         */
-        static bool getFileContents(const char *filename, std::string &content);
+        static bool getFileContents(const char* filename, std::string& content);
 
 
-        struct ReceiveFunctor{
+        struct ReceiveFunctor {
 
-            enum {codeLength = 3};
+            enum { codeLength = 3 };
             const std::string code;
 
-            ReceiveFunctor(int expectingCode) : code (std::to_string(expectingCode)){
-                if(code.length() != codeLength) {
-                    BOOST_LOG_SEV(logger,fail) << "SMTP code must be three-digits.";
+            ReceiveFunctor(int expectingCode) : code(std::to_string(expectingCode)) {
+                if (code.length() != codeLength) {
+                    LOG_ERROR << "SMTP code must be three-digits.";
                     throw "SMTP code must be three-digits.";
                     //throw runtime_error("SMTP code must be three-digits.");}
                 }
             }
 
-            bool operator()(const std::string &msg) const {
+            bool operator()(const std::string& msg) const {
 
-                if(msg.length() < codeLength) return false;
-                if(code!=msg.substr(0,codeLength)) {
-                    BOOST_LOG_SEV(logger,fail) << "SMTP code must be three-digits.";
+                if (msg.length() < codeLength) return false;
+                if (code != msg.substr(0, codeLength)) {
+                    LOG_ERROR << "SMTP code must be three-digits.";
                     throw "SMTP code must be three-digits.";
                     //throw runtime_error("SMTP code is not received");
                 }
 
                 const size_t posNewline = msg.find_first_of("\n", codeLength);
-                if(posNewline == std::string::npos) return false;
-                if(msg.at(codeLength ) == ' ') return true;
-                if(msg.at(codeLength ) == '-') return this->operator()(msg.substr(posNewline + 1));
+                if (posNewline == std::string::npos) return false;
+                if (msg.at(codeLength) == ' ') return true;
+                if (msg.at(codeLength) == '-') return this->operator()(msg.substr(posNewline + 1));
                 throw "Unexpected return code received.";
 
             }
         };
-};
+    };
+}

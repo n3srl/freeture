@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 Circle.h
 
@@ -31,79 +32,93 @@
 * \date    19/06/2014
 * \brief
 */
-
-#pragma once
+//header refactoring ok
+#include "Commons.h"
 
 #include <iostream>
 
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/opencv.hpp>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
+
 #include "Conversion.h"
 #include "SaveImg.h"
 
-class Circle {
+namespace freeture
+{
+    class Circle {
 
     private :
+
 
         cv::Point   mPos;     // Center position.
         int     mRadius;
 
-    public :
+    public:
 
-        Circle(cv::Point center, int radius):mPos(center), mRadius(radius) {
+        Circle(cv::Point center, int radius) :mPos(center), mRadius(radius) {
 
         }
 
-        cv::Point getCenter() { return mPos;};
-        int getRadius() { return mRadius;};
+        cv::Point getCenter() { return mPos; };
+        int getRadius() { return mRadius; };
 
-        bool computeDiskSurfaceIntersection(    Circle c2,
-                                                float &surfaceCircle1,
-                                                float &surfaceCircle2,
-                                                float &intersectedSurface,
-                                                bool enableDebug,
-                                                std::string debugPath) {
+        bool computeDiskSurfaceIntersection(Circle c2,
+            float& surfaceCircle1,
+            float& surfaceCircle2,
+            float& intersectedSurface,
+            bool enableDebug,
+            std::string debugPath) {
 
             cv::Mat map;
             bool res = false;
             bool displayIntersectedSurface = false;
+
             if(enableDebug) map = cv::Mat(480, 640, CV_8UC3, cv::Scalar(0,0,0));
+
 
             surfaceCircle1 = 0.0;
             surfaceCircle2 = 0.0;
             intersectedSurface = 0.0;
 
+
             if(enableDebug) circle(map, mPos, mRadius, cv::Scalar(0,255,0));
             if(enableDebug) circle(map, c2.getCenter(), c2.getRadius(), cv::Scalar(0,0,255));
 
+
             // Distance between two circles centers
-            float distPcNc = sqrt(pow((mPos.x - c2.getCenter().x),2) + pow((mPos.y - c2.getCenter().y),2));
+            float distPcNc = sqrt(pow((mPos.x - c2.getCenter().x), 2) + pow((mPos.y - c2.getCenter().y), 2));
 
             // No intersections.
-            if(distPcNc > c2.getRadius() + mRadius) {
+            if (distPcNc > c2.getRadius() + mRadius) {
+
 
                 if(enableDebug) putText(map, "No intersections." , cv::Point(15,15), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0,0,255), 1, cv::LINE_AA);
+
                 res = false;
 
-            // Circles coincide.
-            }else if(distPcNc == 0 && c2.getRadius() == mRadius) {
+                // Circles coincide.
+            }
+            else if (distPcNc == 0 && c2.getRadius() == mRadius) {
 
                 if(enableDebug) putText(map, "Circles coincides." , cv::Point(15,15), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0,0,255), 1, cv::LINE_AA);
+
                 res = true;
 
-            // A circle is contained inside the other.
-            }else if(distPcNc < abs(c2.getRadius() - mRadius)) {
+                // A circle is contained inside the other.
+            }
+            else if (distPcNc < abs(c2.getRadius() - mRadius)) {
 
                 if(enableDebug) putText(map, "A circle is contained whithin the other." , cv::Point(15,15), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0,0,255), 1, cv::LINE_AA);
+
                 res = true;
 
-            }else {
+            }
+            else {
 
-                surfaceCircle1 = M_PI * pow(mRadius,2);
-                surfaceCircle2 = M_PI * pow(c2.getRadius(),2);
+                surfaceCircle1 = M_PI * pow(mRadius, 2);
+                surfaceCircle2 = M_PI * pow(c2.getRadius(), 2);
 
                 float R0 = mRadius;
                 float R1 = c2.getRadius();
@@ -112,86 +127,90 @@ class Circle {
                 double x1 = c2.getCenter().x;
                 double y1 = c2.getCenter().y;
 
-                if(mPos.y != c2.getCenter().y) {
+                if (mPos.y != c2.getCenter().y) {
 
-                    float N = (pow(R1,2) - pow(R0,2) - pow(x1,2) + pow(x0,2) - pow(y1,2) + pow(y0,2)) / (2 * (y0 - y1));
-                    float A = pow((x0-x1)/(y0-y1),2) + 1;
-                    float B = 2*y0*((x0-x1)/(y0-y1))-2*N*((x0-x1)/(y0-y1))-2*x0;
-                    float C = pow(x0,2) + pow(y0,2) + pow(N,2) - pow(R0,2) - 2* y0*N;
-                    double delta = std::sqrt(pow(B,2)-4*A*C);
+                    float N = (pow(R1, 2) - pow(R0, 2) - pow(x1, 2) + pow(x0, 2) - pow(y1, 2) + pow(y0, 2)) / (2 * (y0 - y1));
+                    float A = pow((x0 - x1) / (y0 - y1), 2) + 1;
+                    float B = 2 * y0 * ((x0 - x1) / (y0 - y1)) - 2 * N * ((x0 - x1) / (y0 - y1)) - 2 * x0;
+                    float C = pow(x0, 2) + pow(y0, 2) + pow(N, 2) - pow(R0, 2) - 2 * y0 * N;
+                    double delta = std::sqrt(pow(B, 2) - 4 * A * C);
 
                     //cout << delta << endl;
 
-                    if(delta > 0) {
+                    if (delta > 0) {
 
-                        float resX1 = (-B-delta) / (2*A);
-                        float resX2 = (-B+delta) / (2*A);
+                        float resX1 = (-B - delta) / (2 * A);
+                        float resX2 = (-B + delta) / (2 * A);
 
-                        float resY1 = N - resX1 * ((x0-x1)/(y0-y1));
-                        float resY2 = N - resX2 * ((x0-x1)/(y0-y1));
+                        float resY1 = N - resX1 * ((x0 - x1) / (y0 - y1));
+                        float resY2 = N - resX2 * ((x0 - x1) / (y0 - y1));
 
                         if(enableDebug) line(map, cv::Point(resX1,resY1 ), cv::Point(resX2,resY2 ), cv::Scalar(255,255,255), 1, cv::LINE_AA);
 
+
                         // Circle1 more inside the other
-                        if(distPcNc > abs(c2.getRadius() - mRadius) && distPcNc < c2.getRadius() && c2.getRadius() > mRadius) {
+                        if (distPcNc > abs(c2.getRadius() - mRadius) && distPcNc < c2.getRadius() && c2.getRadius() > mRadius) {
 
                             //cout << "one circle more inside the other" << endl;
 
                             // Cord length.
-                            double c = sqrt(pow((resX1 - resX2),2) + pow((resY1 - resY2),2));
-                            double cc = c/(2.0*R0);
-                            if(cc>1.0) cc = 1.0;
-                            double thetaCircle1 = 2.0* asin(cc);
-                            double areaCircle1 = (pow(R0,2)/2) * (thetaCircle1 - sin(thetaCircle1));
+                            double c = sqrt(pow((resX1 - resX2), 2) + pow((resY1 - resY2), 2));
+                            double cc = c / (2.0 * R0);
+                            if (cc > 1.0) cc = 1.0;
+                            double thetaCircle1 = 2.0 * asin(cc);
+                            double areaCircle1 = (pow(R0, 2) / 2) * (thetaCircle1 - sin(thetaCircle1));
 
-                            double ccc = c/(2.0*R1);
-                            if(ccc>1.0) ccc=1.0;
-                            double thetaCircle2 = 2* asin(ccc);
-                            double areaCircle2 = (pow(R1,2)/2) * (thetaCircle2 - sin(thetaCircle2));
+                            double ccc = c / (2.0 * R1);
+                            if (ccc > 1.0) ccc = 1.0;
+                            double thetaCircle2 = 2 * asin(ccc);
+                            double areaCircle2 = (pow(R1, 2) / 2) * (thetaCircle2 - sin(thetaCircle2));
 
                             intersectedSurface = surfaceCircle1 - areaCircle1 + areaCircle2;
 
                             displayIntersectedSurface = true;
 
-                        // Circle2 more inside the other
-                        }else if(distPcNc > abs(c2.getRadius() - mRadius )&& distPcNc < mRadius && mRadius > c2.getRadius()) {
+                            // Circle2 more inside the other
+                        }
+                        else if (distPcNc > abs(c2.getRadius() - mRadius) && distPcNc < mRadius && mRadius > c2.getRadius()) {
 
                             //cout << "one circle more inside the other" << endl;
 
                             // Cord length.
-                            double c = sqrt(pow((resX1 - resX2),2) + pow((resY1 - resY2),2));
+                            double c = sqrt(pow((resX1 - resX2), 2) + pow((resY1 - resY2), 2));
 
-                            double cc = c/(2.0*R0);
-                            if(cc>1.0) cc = 1.0;
-                            double thetaPosCircle = 2.0* asin(cc);
-                            double areaPosCircle = (pow(R0,2)/2) * (thetaPosCircle - sin(thetaPosCircle));
+                            double cc = c / (2.0 * R0);
+                            if (cc > 1.0) cc = 1.0;
+                            double thetaPosCircle = 2.0 * asin(cc);
+                            double areaPosCircle = (pow(R0, 2) / 2) * (thetaPosCircle - sin(thetaPosCircle));
 
-                            double ccc = c/(2.0*R1);
-                            if(ccc>1.0) ccc=1.0;
-                            double thetaNegCircle = 2* asin(ccc);
-                            double areaNegCircle = (pow(R1,2)/2) * (thetaNegCircle - sin(thetaNegCircle));
+                            double ccc = c / (2.0 * R1);
+                            if (ccc > 1.0) ccc = 1.0;
+                            double thetaNegCircle = 2 * asin(ccc);
+                            double areaNegCircle = (pow(R1, 2) / 2) * (thetaNegCircle - sin(thetaNegCircle));
 
                             intersectedSurface = surfaceCircle2 - areaNegCircle + areaPosCircle;
 
                             displayIntersectedSurface = true;
 
-                        }else if(distPcNc  == c2.getRadius() ||  distPcNc  == mRadius ) {
+                        }
+                        else if (distPcNc == c2.getRadius() || distPcNc == mRadius) {
 
                             //cout << "Outskirt" << endl;
 
-                        }else {
+                        }
+                        else {
 
-                            double c = sqrt(pow((resX1 - resX2),2) + pow((resY1 - resY2),2));
+                            double c = sqrt(pow((resX1 - resX2), 2) + pow((resY1 - resY2), 2));
 
-                            double cc = c/(2.0*R0);
-                            if(cc>1.0) cc = 1.0;
-                            double thetaPosCircle = 2.0* asin(cc);
-                            double areaPosCircle = (pow(R0,2)/2) * (thetaPosCircle - sin(thetaPosCircle));
+                            double cc = c / (2.0 * R0);
+                            if (cc > 1.0) cc = 1.0;
+                            double thetaPosCircle = 2.0 * asin(cc);
+                            double areaPosCircle = (pow(R0, 2) / 2) * (thetaPosCircle - sin(thetaPosCircle));
 
-                            double ccc = c/(2.0*R1);
-                            if(ccc>1.0) ccc=1.0;
-                            double thetaNegCircle = 2* asin(ccc);
-                            double areaNegCircle = (pow(R1,2)/2) * (thetaNegCircle - sin(thetaNegCircle));
+                            double ccc = c / (2.0 * R1);
+                            if (ccc > 1.0) ccc = 1.0;
+                            double thetaNegCircle = 2 * asin(ccc);
+                            double areaNegCircle = (pow(R1, 2) / 2) * (thetaNegCircle - sin(thetaNegCircle));
 
                             intersectedSurface = areaNegCircle + areaPosCircle;
 
@@ -203,83 +222,88 @@ class Circle {
 
                     }
 
-                }else {
+                }
+                else {
 
-                    float x = (pow(R1,2) - pow(R0,2) - pow(x1,2) + pow(x0,2))/(2*(x0-x1));
+                    float x = (pow(R1, 2) - pow(R0, 2) - pow(x1, 2) + pow(x0, 2)) / (2 * (x0 - x1));
                     float A = 1.0;
                     float B = -2 * y1;
-                    float C = pow(x1,2) + pow(x,2) - 2*x1*x + pow(y1,2) - pow(R1,2);
+                    float C = pow(x1, 2) + pow(x, 2) - 2 * x1 * x + pow(y1, 2) - pow(R1, 2);
 
-                    double delta = std::sqrt(pow(B,2)-4*A*C);
+                    double delta = std::sqrt(pow(B, 2) - 4 * A * C);
 
-                    if(delta > 0) {
+                    if (delta > 0) {
 
-                        float resY1 = (-B-delta) / (2*A);
-                        float resY2 = (-B+delta) / (2*A);
+                        float resY1 = (-B - delta) / (2 * A);
+                        float resY2 = (-B + delta) / (2 * A);
 
-                        float resX1 = (pow(R1,2) - pow(R0,2) - pow(x1,2) + pow(x0,2) - pow(y1,2) + pow(y0,2))/(2*(x0-x1));
-                        float resX2 = (pow(R1,2) - pow(R0,2) - pow(x1,2) + pow(x0,2) - pow(y1,2) + pow(y0,2))/(2*(x0-x1));
+                        float resX1 = (pow(R1, 2) - pow(R0, 2) - pow(x1, 2) + pow(x0, 2) - pow(y1, 2) + pow(y0, 2)) / (2 * (x0 - x1));
+                        float resX2 = (pow(R1, 2) - pow(R0, 2) - pow(x1, 2) + pow(x0, 2) - pow(y1, 2) + pow(y0, 2)) / (2 * (x0 - x1));
 
                         if(enableDebug) line(map, cv::Point(resX1,resY1 ), cv::Point(resX2,resY2 ), cv::Scalar(255,255,255), 1, cv::LINE_AA);
 
+
                         // Circle neg more inside the other
-                        if(distPcNc > abs(c2.getRadius() - mRadius) && distPcNc < c2.getRadius() && c2.getRadius() > mRadius) {
+                        if (distPcNc > abs(c2.getRadius() - mRadius) && distPcNc < c2.getRadius() && c2.getRadius() > mRadius) {
 
                             // Cord length.
-                            double c = sqrt(pow((resX1 - resX2),2) + pow((resY1 - resY2),2));
+                            double c = sqrt(pow((resX1 - resX2), 2) + pow((resY1 - resY2), 2));
 
-                            double cc = c/(2.0*R0);
-                            if(cc>1.0) cc = 1.0;
-                            double thetaPosCircle = 2.0* asin(cc);
+                            double cc = c / (2.0 * R0);
+                            if (cc > 1.0) cc = 1.0;
+                            double thetaPosCircle = 2.0 * asin(cc);
 
-                            double areaPosCircle = (pow(R0,2)/2) * (thetaPosCircle - sin(thetaPosCircle));
+                            double areaPosCircle = (pow(R0, 2) / 2) * (thetaPosCircle - sin(thetaPosCircle));
 
-                            double ccc = c/(2.0*R1);
-                            if(ccc>1.0) ccc=1.0;
-                            double thetaNegCircle = 2* asin(ccc);
-                            double areaNegCircle = (pow(R1,2)/2) * (thetaNegCircle - sin(thetaNegCircle));
+                            double ccc = c / (2.0 * R1);
+                            if (ccc > 1.0) ccc = 1.0;
+                            double thetaNegCircle = 2 * asin(ccc);
+                            double areaNegCircle = (pow(R1, 2) / 2) * (thetaNegCircle - sin(thetaNegCircle));
 
                             intersectedSurface = surfaceCircle1 - areaPosCircle + areaNegCircle;
 
                             displayIntersectedSurface = true;
 
-                        // Circle pos more inside the other
-                        }else if(distPcNc > abs(c2.getRadius() - mRadius )&& distPcNc < mRadius && mRadius > c2.getRadius()) {
+                            // Circle pos more inside the other
+                        }
+                        else if (distPcNc > abs(c2.getRadius() - mRadius) && distPcNc < mRadius && mRadius > c2.getRadius()) {
 
                             // Cord length.
-                            double c = sqrt(pow((resX1 - resX2),2) + pow((resY1 - resY2),2));
+                            double c = sqrt(pow((resX1 - resX2), 2) + pow((resY1 - resY2), 2));
 
-                            double cc = c/(2.0*R0);
-                            if(cc>1.0) cc = 1.0;
-                            double thetaPosCircle = 2.0* asin(cc);
-                            double areaPosCircle = (pow(R0,2)/2) * (thetaPosCircle - sin(thetaPosCircle));
+                            double cc = c / (2.0 * R0);
+                            if (cc > 1.0) cc = 1.0;
+                            double thetaPosCircle = 2.0 * asin(cc);
+                            double areaPosCircle = (pow(R0, 2) / 2) * (thetaPosCircle - sin(thetaPosCircle));
 
-                            double ccc = c/(2.0*R1);
-                            if(ccc>1.0) ccc=1.0;
-                            double thetaNegCircle = 2* asin(ccc);
-                            double areaNegCircle = (pow(R1,2)/2) * (thetaNegCircle - sin(thetaNegCircle));
+                            double ccc = c / (2.0 * R1);
+                            if (ccc > 1.0) ccc = 1.0;
+                            double thetaNegCircle = 2 * asin(ccc);
+                            double areaNegCircle = (pow(R1, 2) / 2) * (thetaNegCircle - sin(thetaNegCircle));
 
                             intersectedSurface = surfaceCircle2 - areaNegCircle + areaPosCircle;
 
                             displayIntersectedSurface = true;
 
-                        }else if(distPcNc  == c2.getRadius() ||  distPcNc  ==mRadius ) {
+                        }
+                        else if (distPcNc == c2.getRadius() || distPcNc == mRadius) {
 
                             //cout << "Le centre d'un des cercles est sur la p�riph�rie de l'autre" << endl;
 
-                        }else {
+                        }
+                        else {
 
-                            double c = sqrt(pow((resX1 - resX2),2) + pow((resY1 - resY2),2));
+                            double c = sqrt(pow((resX1 - resX2), 2) + pow((resY1 - resY2), 2));
 
-                            double cc = c/(2.0*R0);
-                            if(cc>1.0) cc = 1.0;
-                            double thetaPosCircle = 2.0* asin(cc);
-                            double areaPosCircle = (pow(R0,2)/2) * (thetaPosCircle - sin(thetaPosCircle));
+                            double cc = c / (2.0 * R0);
+                            if (cc > 1.0) cc = 1.0;
+                            double thetaPosCircle = 2.0 * asin(cc);
+                            double areaPosCircle = (pow(R0, 2) / 2) * (thetaPosCircle - sin(thetaPosCircle));
 
-                            double ccc = c/(2.0*R1);
-                            if(ccc>1.0) ccc=1.0;
-                            double thetaNegCircle = 2* asin(ccc);
-                            double areaNegCircle = (pow(R1,2)/2) * (thetaNegCircle - sin(thetaNegCircle));
+                            double ccc = c / (2.0 * R1);
+                            if (ccc > 1.0) ccc = 1.0;
+                            double thetaNegCircle = 2 * asin(ccc);
+                            double areaNegCircle = (pow(R1, 2) / 2) * (thetaNegCircle - sin(thetaNegCircle));
 
                             intersectedSurface = areaNegCircle + areaPosCircle;
 
@@ -292,11 +316,11 @@ class Circle {
 
                     }
 
-                }   
+                }
 
             }
 
-            if(enableDebug && displayIntersectedSurface) {
+            if (enableDebug && displayIntersectedSurface) {
 
                 putText(map, "Intersected surface : " , cv::Point(15,15), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0,0,255), 1, cv::LINE_AA);
                 std::string msg1 = "- Green circle : " + Conversion::floatToString((intersectedSurface * 100) / surfaceCircle1) + "%" ;
@@ -306,10 +330,11 @@ class Circle {
 
             }
 
-            if(enableDebug) SaveImg::saveBMP(map, debugPath);
+            if (enableDebug) SaveImg::saveBMP(map, debugPath);
 
             return res;
 
         }
 
-};
+    };
+}
