@@ -1,3 +1,4 @@
+#pragma once
 /*
                             ExposureControl.h
 
@@ -32,38 +33,28 @@
 * \date    03/06/2014
 * \brief   Create/Analyse histogram of a gray image.
 */
+#include "Commons.h"
 
-#pragma once
+#include <string>
+#include <vector>
 
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <iostream>
-#include "Conversion.h"
-#include "ECamPixFmt.h"
-#include "Device.h"
-#include "SaveImg.h"
-#include <boost/filesystem.hpp>
+// #include <iostream>
+// #include "Conversion.h"
+// #include "ECamPixFmt.h"
+// #include "Device.h"
+// #include "SaveImg.h"
+// #include <boost/filesystem.hpp>
+
+#include <opencv2/opencv.hpp>
 #include "TimeDate.h"
 
-using namespace cv;
+namespace freeture
+{
+    class Device;
 
-class ExposureControl {
-
-    private :
-
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
-
-        static class Init {
-
-            public :
-
-                Init() {
-
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("ExposureControl"));
-
-                }
-
-        }initializer;
+    class ExposureControl {
+        
+    private:
 
         float           bin_0; // 8 bits : [0,50]       12 bits : [0,819]
         float           bin_1; // 8 bits : ]50,100]     12 bits : ]819,1638]
@@ -86,7 +77,7 @@ class ExposureControl {
         std::vector<double>  expArray_1;
         std::vector<float>   msvArray_2;
         std::vector<double>  expArray_2;
-        bool            incrementExposureTimeValue ;
+        bool            incrementExposureTimeValue;
         float           msvMin_1;
         float           msvMax_1;
         double          expMin_1;
@@ -117,16 +108,17 @@ class ExposureControl {
         */
         ExposureControl(int timeInterval, bool saveImage, bool saveInfos, std::string dataPath, std::string station);
 
-        bool calculate(Mat& image, Mat &mask);
+        bool calculate(cv::Mat& image, cv::Mat& mask);
 
         float computeMSV();
 
-        bool controlExposureTime(freeture::Device *camera, Mat image, TimeDate::Date imageDate, Mat mask, double minExposureTime, double fps);
+        bool controlExposureTime(freeture::Device* camera, cv::Mat image, TimeDate::Date imageDate, cv::Mat mask, double minExposureTime, double fps);
 
         bool checkDataLocation(TimeDate::Date date);
 
-    private :
+    private:
 
-        void clear(){bin_0 = 0;bin_1 = 0;bin_2 = 0;bin_3 = 0;bin_4 = 0;};
+        void clear() { bin_0 = 0; bin_1 = 0; bin_2 = 0; bin_3 = 0; bin_4 = 0; };
 
-};
+    };
+}

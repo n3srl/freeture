@@ -1,3 +1,4 @@
+#pragma once
 /*                          CameraGigeTis.h
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -32,14 +33,11 @@
 * \date    19/03/2018
 * \brief   Use Imaging source sdk to pilot GigE Cameras.
 */
+//git clone https://github.com/TheImagingSource/tiscamera.git
+#ifdef TISCAMERA
+#include "Commons.h"
 
-#pragma once
-
-#include "config.h"
-
-#ifdef WINDOWS
-
-    #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/highgui/highgui.hpp>
     #include <opencv2/imgproc/imgproc.hpp>
     #include <iostream>
     #include <string>
@@ -64,9 +62,9 @@
 
     #define NUMBER_OF_BUFFERS 1
 
-    using namespace cv;
-
-    class CameraGigeTis: public Camera {
+    namespace freeture
+    {
+        class CameraGigeTis : public Camera {
 
         private:
 
@@ -74,13 +72,13 @@
 
             static class Init {
 
-                public:
+            public:
 
-                    Init() {
+                Init() {
 
-                        logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CameraGigeTis"));
+                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CameraGigeTis"));
 
-                    }
+                }
 
             } initializer;
 
@@ -114,17 +112,17 @@
 
             ~CameraGigeTis();
 
-            bool grabSingleImage(Frame &frame, int camID);
+            bool grabSingleImage(Frame& frame, int camID);
 
             bool createDevice(int id);
 
             bool setPixelFormat(CamPixFmt format);
 
-            void getExposureBounds(double &eMin, double &eMax);
+            void getExposureBounds(double& eMin, double& eMax);
 
-            void getGainBounds(double &gMin, double &gMax);
+            void getGainBounds(double& gMin, double& gMax);
 
-            bool getFPS(double &value);
+            bool getFPS(double& value);
 
             bool setExposureTime(double value);
 
@@ -138,13 +136,13 @@
 
             bool acqStart();
 
-            bool grabImage(Frame &newFrame);
+            bool grabImage(Frame& newFrame);
 
             void acqStop();
 
             void grabCleanse();
 
-            bool getPixelFormat(CamPixFmt &format);
+            bool getPixelFormat(CamPixFmt& format);
 
             double getExposureTime();
 
@@ -152,6 +150,7 @@
 
             void getAvailablePixelFormats();
 
-    };
+        };
+    }
 
 #endif

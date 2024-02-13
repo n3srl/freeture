@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 EParser.h
 
@@ -33,7 +34,6 @@
 * \brief   Parse some parameters in the configuration file with FreeTure's enumerations.
 */
 
-#pragma once
 
 #include <string>
 #include <iostream>
@@ -52,14 +52,15 @@
 
 
 //http://stackoverflow.com/questions/726664/string-to-enum-in-c
+namespace freeture
+{
+    template<typename T> class EParser {
 
-template<typename T> class EParser {
+    public:
 
-    public :
-        
         std::map<std::string, T> enumMap;     // String value with its enumeration value.
 
-    public :
+    public:
 
         /**
         * Constructor.
@@ -74,17 +75,17 @@ template<typename T> class EParser {
         * @param value Enumeration value in string.
         * @return Enumeration value.
         */
-        T parseEnum(std::string paramName, const std::string & value){
+        T parseEnum(std::string paramName, const std::string& value) {
 
             typename std::map<std::string, T>::const_iterator iValue = enumMap.find(value);
 
-            if(iValue == enumMap.end()){
+            if (iValue == enumMap.end()) {
 
                 typename std::map<std::string, T>::const_iterator it;
 
                 std::string res = "<" + value + "> is not correct. Available values are : \n";
 
-                for(it = enumMap.begin(); it != enumMap.end(); ++it){
+                for (it = enumMap.begin(); it != enumMap.end(); ++it) {
                     res = res + "    <" + it->first + ">\n";
                 }
 
@@ -96,11 +97,11 @@ template<typename T> class EParser {
 
         }
 
-        T parseEnum(const std::string value){
+        T parseEnum(const std::string value) {
 
             typename std::map<std::string, T>::const_iterator iValue = enumMap.find(value);
 
-            if(iValue == enumMap.end()){
+            if (iValue == enumMap.end()) {
 
                 throw "Enum not found";
 
@@ -110,11 +111,11 @@ template<typename T> class EParser {
 
         }
 
-        bool isEnumValue(const std::string value){
+        bool isEnumValue(const std::string value) {
 
             typename std::map<std::string, T>::const_iterator iValue = enumMap.find(value);
 
-            if(iValue == enumMap.end()){
+            if (iValue == enumMap.end()) {
                 return false;
             }
 
@@ -128,12 +129,12 @@ template<typename T> class EParser {
         * @param type Enumeration value.
         * @return String of enumeration.
         */
-        std::string getStringEnum(T type){
+        std::string getStringEnum(T type) {
 
             typename std::map<std::string, T>::const_iterator it;
 
-            for(it = enumMap.begin(); it != enumMap.end(); ++it){
-                if(type == it->second)
+            for (it = enumMap.begin(); it != enumMap.end(); ++it) {
+                if (type == it->second)
                     return it->first;
             }
 
@@ -141,3 +142,4 @@ template<typename T> class EParser {
         }
 
     };
+}

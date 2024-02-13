@@ -11,6 +11,7 @@
 #include "CameraLucidArena.h"
 
 #ifdef LINUX
+using namespace freeture;
 
     boost::log::sources::severity_logger< LogSeverityLevel >  CameraLucidArena::logger;
     CameraLucidArena::Init CameraLucidArena::initializer;

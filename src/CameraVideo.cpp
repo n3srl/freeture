@@ -34,6 +34,9 @@
 */
 
 #include "CameraVideo.h"
+#include <boost/date_time.hpp>
+
+using namespace freeture;
 
 boost::log::sources::severity_logger< LogSeverityLevel >  CameraVideo::logger;
 
@@ -45,7 +48,7 @@ CameraVideo::CameraVideo(std::vector<std::string> videoList, bool verbose):mVide
 
     // Open the video file for reading.
     if(mVideoList.size()>0)
-        mCap = VideoCapture(videoList.front());
+        mCap = cv::VideoCapture(videoList.front());
     else
         throw "No video path in input.";
 
@@ -93,7 +96,7 @@ bool CameraVideo::loadNextDataSet(std::string &location){
 
         std::cout << "Change video : " << mVideoID << " - Path : " << mVideoList.at(mVideoID) << std::endl;
 
-        mCap = VideoCapture(mVideoList.at(mVideoID));
+        mCap = cv::VideoCapture(mVideoList.at(mVideoID));
 
         if(!mCap.isOpened()){
 
@@ -124,7 +127,7 @@ bool CameraVideo::createDevice(int id) {
 
 bool CameraVideo::grabImage(Frame &img){
 
-    Mat frame;
+    cv::Mat frame;
 
     if(mCap.read(frame)) {
 

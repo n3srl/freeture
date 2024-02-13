@@ -43,6 +43,8 @@
 
 using namespace std;
 
+using namespace freeture;
+
 string Base64::encodeBase64(string data){
 
     stringstream os;
@@ -58,5 +60,4 @@ string Base64::encodeBase64(string data){
     );
 
     return os.str();
-
 }

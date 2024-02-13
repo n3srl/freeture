@@ -1,13 +1,17 @@
 #pragma once
+#include "Commons.h"
 
 #include "CameraScanner.h"
 
-class CameraLucidArenaScanner: public CameraScanner
+namespace freeture
 {
+    class CameraLucidArenaScanner : public CameraScanner
+    {
 
-        public:
-            CameraLucidArenaScanner(CamSdkType);
+    public:
+        CameraLucidArenaScanner(CamSdkType);
 
-            virtual void UpdateCameraList() override;
+        virtual void UpdateCameraList() override;
 
-};
+    };
+}

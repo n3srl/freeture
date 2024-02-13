@@ -1,3 +1,5 @@
+#pragma once
+
 /*
                                 SParam.h
 
@@ -33,279 +35,292 @@
 * \date    20/03/2018
 * \brief   FreeTure parameters
 */
+//header refactoring ok
+#include "Commons.h"
 
-#pragma once
-
-#include <fstream>
 #include <string>
-#include <iostream>
-#include <map>
-#include <stdlib.h>
+#include <vector>
+
+#include <opencv2/opencv.hpp>
+
+#include "ELogSeverityLevel.h"
 #include "ECamPixFmt.h"
+#include "ESmtpSecurity.h"
 #include "ETimeMode.h"
 #include "EImgFormat.h"
 #include "EDetMeth.h"
-#include "ELogSeverityLevel.h"
 #include "EStackMeth.h"
-#include "ESmtpSecurity.h"
-#include <vector>
-#include "EInputDeviceType.h"
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+
+// #include <fstream>
+// #include <string>
+// #include <iostream>
+// #include <map>
+// #include <stdlib.h>
+// #include "ECamPixFmt.h"
+// #include "ETimeMode.h"
+// #include "EImgFormat.h"
+// #include "EDetMeth.h"
+// #include "ELogSeverityLevel.h"
+// #include "EStackMeth.h"
+// #include "ESmtpSecurity.h"
+// #include <vector>
+// #include "EInputDeviceType.h"
 
 
-using namespace cv;
 
 // ******************************************************
 // ****************** MAIL PARAMETERS *******************
 // ******************************************************
 
-struct mailParam{
-    bool            MAIL_DETECTION_ENABLED;
-    std::string          MAIL_SMTP_SERVER;
-    SmtpSecurity    MAIL_CONNECTION_TYPE;
-    std::string          MAIL_SMTP_LOGIN;
-    std::string          MAIL_SMTP_PASSWORD;
-    std::vector<std::string>  MAIL_RECIPIENTS;
-    bool status;
-    std::vector<std::string> errormsg;
-};
-
-// ******************************************************
-// ******************* LOG PARAMETERS *******************
-// ******************************************************
-
-struct logParam {
-    std::string              LOG_PATH;
-    int                 LOG_ARCHIVE_DAY;
-    int                 LOG_SIZE_LIMIT;
-    LogSeverityLevel    LOG_SEVERITY;
-    bool status;
-    std::vector<std::string> errormsg;
-};
-
-// ******************************************************
-// **************** OUTPUT DATA PARAMETERS **************
-// ******************************************************
-
-struct dataParam {
-    std::string  DATA_PATH;
-    bool    FITS_COMPRESSION;
-    std::string  FITS_COMPRESSION_METHOD;
-    bool status;
-    std::vector<std::string> errormsg;
-};
-
-// ******************************************************
-// **************** INPUT FRAMES PARAMETERS *************
-// ******************************************************
-
-struct framesParam {
-    int INPUT_TIME_INTERVAL;
-    std::vector<std::string> INPUT_FRAMES_DIRECTORY_PATH;
-    bool status;
-    std::vector<std::string> errormsg;
-};
-
-// ******************************************************
-// **************** INPUT VIDEO PARAMETERS **************
-// ******************************************************
-
-struct videoParam {
-    int INPUT_TIME_INTERVAL;
-    std::vector<std::string> INPUT_VIDEO_PATH;
-    bool status;
-    std::vector<std::string> errormsg;
-};
-
-// ******************************************************
-// ********* SCHEDULED ACQUISITION PARAMETERS ***********
-// ******************************************************
-
-struct scheduleParam {
-    int hours;
-    int min;
-    int sec;
-    int exp;
-    int gain;
-    int rep;
-    CamPixFmt fmt;
-};
-
-// ******************************************************
-// ************** INPUT CAMERA PARAMETERS ***************
-// ******************************************************
-
-struct cameraParam{
-    int         ACQ_FPS;
-    CamPixFmt   ACQ_FORMAT;
-    bool        ACQ_RES_CUSTOM_SIZE;
-    bool        SHIFT_BITS;
-    int         ACQ_NIGHT_EXPOSURE;
-    int         ACQ_NIGHT_GAIN;
-    int         ACQ_DAY_EXPOSURE;
-    int         ACQ_DAY_GAIN;
-    int         ACQ_STARTX;
-    int         ACQ_STARTY;
-    int         ACQ_HEIGHT;
-    int         ACQ_WIDTH;
-    int         EXPOSURE_CONTROL_FREQUENCY;
-    bool        EXPOSURE_CONTROL_SAVE_IMAGE;
-    bool        EXPOSURE_CONTROL_SAVE_INFOS;
-
-    struct ephemeris {
-        bool    EPHEMERIS_ENABLED;
-        double  SUN_HORIZON_1;
-        double  SUN_HORIZON_2;
-        std::vector<int>  SUNRISE_TIME;
-        std::vector<int>  SUNSET_TIME;
-        int     SUNSET_DURATION;
-        int     SUNRISE_DURATION;
+namespace freeture
+{
+    struct mailParam {
+        bool            MAIL_DETECTION_ENABLED;
+        std::string          MAIL_SMTP_SERVER;
+        SmtpSecurity    MAIL_CONNECTION_TYPE;
+        std::string          MAIL_SMTP_LOGIN;
+        std::string          MAIL_SMTP_PASSWORD;
+        std::vector<std::string>  MAIL_RECIPIENTS;
+        bool status;
+        std::vector<std::string> errormsg;
     };
-    ephemeris ephem;
 
-    struct regularCaptures {
-        bool        ACQ_REGULAR_ENABLED;
-        TimeMode    ACQ_REGULAR_MODE;
-        std::string      ACQ_REGULAR_PRFX;
-        ImgFormat   ACQ_REGULAR_OUTPUT;
-        struct regularParam {
-            int interval;
-            int exp;
-            int gain;
-            int rep;
-            CamPixFmt fmt;
+    // ******************************************************
+    // ******************* LOG PARAMETERS *******************
+    // ******************************************************
+
+    struct logParam {
+        std::string         LOG_PATH;
+        int                 LOG_ARCHIVE_DAY;
+        int                 LOG_SIZE_LIMIT;
+        LogSeverityLevel    LOG_SEVERITY;
+        bool status;
+        std::vector<std::string> errormsg;
+    };
+
+    // ******************************************************
+    // **************** OUTPUT DATA PARAMETERS **************
+    // ******************************************************
+
+    struct dataParam {
+        std::string  DATA_PATH;
+        bool    FITS_COMPRESSION;
+        std::string  FITS_COMPRESSION_METHOD;
+        bool status;
+        std::vector<std::string> errormsg;
+    };
+
+    // ******************************************************
+    // **************** INPUT FRAMES PARAMETERS *************
+    // ******************************************************
+
+    struct framesParam {
+        int INPUT_TIME_INTERVAL;
+        std::vector<std::string> INPUT_FRAMES_DIRECTORY_PATH;
+        bool status;
+        std::vector<std::string> errormsg;
+    };
+
+    // ******************************************************
+    // **************** INPUT VIDEO PARAMETERS **************
+    // ******************************************************
+
+    struct videoParam {
+        int INPUT_TIME_INTERVAL;
+        std::vector<std::string> INPUT_VIDEO_PATH;
+        bool status;
+        std::vector<std::string> errormsg;
+    };
+
+    // ******************************************************
+    // ********* SCHEDULED ACQUISITION PARAMETERS ***********
+    // ******************************************************
+
+    struct scheduleParam {
+        int hours;
+        int min;
+        int sec;
+        int exp;
+        int gain;
+        int rep;
+        CamPixFmt fmt;
+    };
+
+    // ******************************************************
+    // ************** INPUT CAMERA PARAMETERS ***************
+    // ******************************************************
+
+    struct cameraParam {
+        int         ACQ_FPS;
+        CamPixFmt   ACQ_FORMAT;
+        bool        ACQ_RES_CUSTOM_SIZE;
+        bool        SHIFT_BITS;
+        int         ACQ_NIGHT_EXPOSURE;
+        int         ACQ_NIGHT_GAIN;
+        int         ACQ_DAY_EXPOSURE;
+        int         ACQ_DAY_GAIN;
+        int         ACQ_STARTX;
+        int         ACQ_STARTY;
+        int         ACQ_HEIGHT;
+        int         ACQ_WIDTH;
+        int         EXPOSURE_CONTROL_FREQUENCY;
+        bool        EXPOSURE_CONTROL_SAVE_IMAGE;
+        bool        EXPOSURE_CONTROL_SAVE_INFOS;
+
+        struct ephemeris {
+            bool    EPHEMERIS_ENABLED;
+            double  SUN_HORIZON_1;
+            double  SUN_HORIZON_2;
+            std::vector<int>  SUNRISE_TIME;
+            std::vector<int>  SUNSET_TIME;
+            int     SUNSET_DURATION;
+            int     SUNRISE_DURATION;
         };
-        regularParam ACQ_REGULAR_CFG;
+        ephemeris ephem;
+
+        struct regularCaptures {
+            bool        ACQ_REGULAR_ENABLED;
+            TimeMode    ACQ_REGULAR_MODE;
+            std::string      ACQ_REGULAR_PRFX;
+            ImgFormat   ACQ_REGULAR_OUTPUT;
+            struct regularParam {
+                int interval;
+                int exp;
+                int gain;
+                int rep;
+                CamPixFmt fmt;
+            };
+            regularParam ACQ_REGULAR_CFG;
+        };
+        regularCaptures regcap;
+
+        struct scheduledCaptures {
+            bool        ACQ_SCHEDULE_ENABLED;
+            ImgFormat   ACQ_SCHEDULE_OUTPUT;
+            std::vector<scheduleParam> ACQ_SCHEDULE;
+        };
+        scheduledCaptures schcap;
+
+        bool status;
+        std::vector<std::string> errormsg;
     };
-    regularCaptures regcap;
 
-    struct scheduledCaptures {
-        bool        ACQ_SCHEDULE_ENABLED;
-        ImgFormat   ACQ_SCHEDULE_OUTPUT;
-        std::vector<scheduleParam> ACQ_SCHEDULE;
+    // ******************************************************
+    // **************** DETECTION PARAMETERS ****************
+    // ******************************************************
+
+    struct detectionParam {
+        int         ACQ_BUFFER_SIZE;
+        bool        ACQ_MASK_ENABLED;
+        std::string      ACQ_MASK_PATH;
+        cv::Mat         MASK;
+        bool        DET_ENABLED;
+        TimeMode    DET_MODE;
+        bool        DET_DEBUG;
+        std::string      DET_DEBUG_PATH;
+        int         DET_TIME_AROUND;
+        int         DET_TIME_MAX;
+        DetMeth     DET_METHOD;
+        bool        DET_SAVE_FITS3D;
+        bool        DET_SAVE_FITS2D;
+        bool        DET_SAVE_SUM;
+        bool        DET_SUM_REDUCTION;
+        StackMeth   DET_SUM_MTHD;
+        bool        DET_SAVE_SUM_WITH_HIST_EQUALIZATION;
+        bool        DET_SAVE_AVI;
+        bool        DET_UPDATE_MASK;
+        int         DET_UPDATE_MASK_FREQUENCY;
+        bool        DET_DEBUG_UPDATE_MASK;
+        bool        DET_DOWNSAMPLE_ENABLED;
+
+        struct detectionMethod1 {
+            bool    DET_SAVE_GEMAP;
+            bool    DET_SAVE_DIRMAP;
+            bool    DET_SAVE_POS;
+            int     DET_LE_MAX;
+            int     DET_GE_MAX;
+            //bool    DET_SAVE_GE_INFOS;
+        };
+        detectionMethod1 temporal;
+
+        bool status;
+        std::vector<std::string> errormsg;
+
     };
-    scheduledCaptures schcap;
 
-    bool status;
-    std::vector<std::string> errormsg;
-};
+    // ******************************************************
+    // ******************* STACK PARAMETERS *****************
+    // ******************************************************
 
-// ******************************************************
-// **************** DETECTION PARAMETERS ****************
-// ******************************************************
-
-struct detectionParam {
-    int         ACQ_BUFFER_SIZE;
-    bool        ACQ_MASK_ENABLED;
-    std::string      ACQ_MASK_PATH;
-    Mat         MASK;
-    bool        DET_ENABLED;
-    TimeMode    DET_MODE;
-    bool        DET_DEBUG;
-    std::string      DET_DEBUG_PATH;
-    int         DET_TIME_AROUND;
-    int         DET_TIME_MAX;
-    DetMeth     DET_METHOD;
-    bool        DET_SAVE_FITS3D;
-    bool        DET_SAVE_FITS2D;
-    bool        DET_SAVE_SUM;
-    bool        DET_SUM_REDUCTION;
-    StackMeth   DET_SUM_MTHD;
-    bool        DET_SAVE_SUM_WITH_HIST_EQUALIZATION;
-    bool        DET_SAVE_AVI;
-    bool        DET_UPDATE_MASK;
-    int         DET_UPDATE_MASK_FREQUENCY;
-    bool        DET_DEBUG_UPDATE_MASK;
-    bool        DET_DOWNSAMPLE_ENABLED;
-
-    struct detectionMethod1 {
-        bool    DET_SAVE_GEMAP;
-        bool    DET_SAVE_DIRMAP;
-        bool    DET_SAVE_POS;
-        int     DET_LE_MAX;
-        int     DET_GE_MAX;
-        //bool    DET_SAVE_GE_INFOS;
+    struct stackParam {
+        bool        STACK_ENABLED;
+        TimeMode    STACK_MODE;
+        int         STACK_TIME;
+        int         STACK_INTERVAL;
+        StackMeth   STACK_MTHD;
+        bool        STACK_REDUCTION;
+        bool status;
+        std::vector<std::string> errormsg;
     };
-    detectionMethod1 temporal;
 
-    bool status;
-    std::vector<std::string> errormsg;
+    // ******************************************************
+    // ****************** STATION PARAMETERS ****************
+    // ******************************************************
 
-};
+    struct stationParam {
+        std::string STATION_NAME;
+        std::string TELESCOP;
+        std::string OBSERVER;
+        std::string INSTRUME;
+        std::string CAMERA;
+        double FOCAL;
+        double APERTURE;
+        double SITELONG;
+        double SITELAT;
+        double SITEELEV;
+        bool status;
+        std::vector<std::string> errormsg;
+    };
 
-// ******************************************************
-// ******************* STACK PARAMETERS *****************
-// ******************************************************
+    // ******************************************************
+    // ***************** FITS KEYS PARAMETERS ***************
+    // ******************************************************
 
-struct stackParam{
-    bool        STACK_ENABLED;
-    TimeMode    STACK_MODE;
-    int         STACK_TIME;
-    int         STACK_INTERVAL;
-    StackMeth   STACK_MTHD;
-    bool        STACK_REDUCTION;
-    bool status;
-    std::vector<std::string> errormsg;
-};
+    struct fitskeysParam {
+        std::string FILTER;
+        double K1;
+        double K2;
+        std::string COMMENT;
+        double CD1_1;
+        double CD1_2;
+        double CD2_1;
+        double CD2_2;
+        double XPIXEL;
+        double YPIXEL;
+        bool status;
+        std::vector<std::string> errormsg;
+    };
 
-// ******************************************************
-// ****************** STATION PARAMETERS ****************
-// ******************************************************
+    // ******************************************************
+    // ****************** FREETURE PARAMETERS ***************
+    // ******************************************************
 
- struct stationParam {
-    std::string STATION_NAME;
-    std::string TELESCOP;
-    std::string OBSERVER;
-    std::string INSTRUME;
-    std::string CAMERA;
-    double FOCAL;
-    double APERTURE;
-    double SITELONG;
-    double SITELAT;
-    double SITEELEV;
-    bool status;
-    std::vector<std::string> errormsg;
-};
+    struct parameters {
+        //std::pair<std::pair<int, bool>,std::string> DEVICE_ID; // Pair : <value, status>
+        int             DEVICE_ID;
+        std::string     CAMERA_SERIAL;
+        bool            CAMERA_INIT;
+        std::string     CAMERA_INIT_CONFIG;
+        dataParam       data;
+        logParam        log;
+        framesParam     framesInput;
+        videoParam      vidInput;
+        cameraParam     camInput;
+        detectionParam  det;
+        stackParam      st;
+        stationParam    station;
+        fitskeysParam   fitskeys;
+        mailParam       mail;
+    };
 
-// ******************************************************
-// ***************** FITS KEYS PARAMETERS ***************
-// ******************************************************
-
-struct fitskeysParam{
-    std::string FILTER;
-    double K1;
-    double K2;
-    std::string COMMENT;
-    double CD1_1;
-    double CD1_2;
-    double CD2_1;
-    double CD2_2;
-    double XPIXEL;
-    double YPIXEL;
-    bool status;
-    std::vector<std::string> errormsg;
-};
-
-// ******************************************************
-// ****************** FREETURE PARAMETERS ***************
-// ******************************************************
-
-struct parameters {
-    //std::pair<std::pair<int, bool>,std::string> DEVICE_ID; // Pair : <value, status>
-    int             DEVICE_ID;
-    std::string     CAMERA_SERIAL;
-    bool            CAMERA_INIT;
-    std::string     CAMERA_INIT_CONFIG;
-    dataParam       data;
-    logParam        log;
-    framesParam     framesInput;
-    videoParam      vidInput;
-    cameraParam     camInput;
-    detectionParam  det;
-    stackParam      st;
-    stationParam    station;
-    fitskeysParam   fitskeys;
-    mailParam       mail;
-};
-
+}

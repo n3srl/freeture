@@ -33,29 +33,30 @@
 */
 
 #include "ImgProcessing.h"
+using namespace freeture;
 
-Mat ImgProcessing::correctGammaOnMono8(Mat& img, double gamma) {
+cv::Mat ImgProcessing::correctGammaOnMono8(cv::Mat& img, double gamma) {
 
     double gammaInverse = 1.0 / gamma;
 
-    Mat lutMatrix(1, 256, CV_8UC1 );
+    cv::Mat lutMatrix(1, 256, CV_8UC1 );
     uchar * ptr = NULL;
     ptr = lutMatrix.ptr();
     for( int i = 0; i < 256; i++ )
     ptr[i] = (int)( pow( (double) i / 255.0, gammaInverse ) * 255.0 );
 
-    Mat result;
+    cv::Mat result;
     LUT( img, lutMatrix, result );
 
     return result;
 
 }
 
-Mat ImgProcessing::correctGammaOnMono12(Mat& img, double gamma) {
+cv::Mat ImgProcessing::correctGammaOnMono12(cv::Mat& img, double gamma) {
 
     double gammaInverse = 1.0 / gamma;
 
-    Mat result = Mat(img.rows, img.cols, CV_16UC1, Scalar(0));
+    cv::Mat result = cv::Mat(img.rows, img.cols, CV_16UC1, cv::Scalar(0));
 
     unsigned short * ptr = NULL;
     unsigned short * ptr2 = NULL;
@@ -77,9 +78,9 @@ Mat ImgProcessing::correctGammaOnMono12(Mat& img, double gamma) {
 
 }
 
-Mat ImgProcessing::buildSaturatedMap(Mat &img, int maxval) {
+cv::Mat ImgProcessing::buildSaturatedMap(cv::Mat &img, int maxval) {
 
-    Mat saturatedMap = Mat(img.rows, img.cols, CV_8UC1, Scalar(0));
+    cv::Mat saturatedMap = cv::Mat(img.rows, img.cols, CV_8UC1, cv::Scalar(0));
 
     if(img.type() == CV_16UC1) {
 
@@ -123,10 +124,10 @@ Mat ImgProcessing::buildSaturatedMap(Mat &img, int maxval) {
 
 }
 
-Mat ImgProcessing::thresholding(Mat &img, Mat &mask, int factor, Thresh threshType) {
+cv::Mat ImgProcessing::thresholding(cv::Mat &img, cv::Mat &mask, int factor, Thresh threshType) {
 
-    Mat thresholdedMap = Mat(img.rows,img.cols, CV_8UC1,Scalar(0));
-    Scalar mean, stddev;
+    cv::Mat thresholdedMap = cv::Mat(img.rows,img.cols, CV_8UC1, cv::Scalar(0));
+    cv::Scalar mean, stddev;
     cv::meanStdDev(img, mean, stddev, mask);
     int threshold = 0;
 
@@ -203,7 +204,7 @@ Mat ImgProcessing::thresholding(Mat &img, Mat &mask, int factor, Thresh threshTy
 }
 
 // Create n * n region in a frame ( n is a pair value)
-void ImgProcessing::subdivideFrame(std::vector<Point> &sub, int n, int imgH, int imgW) {
+void ImgProcessing::subdivideFrame(std::vector<cv::Point> &sub, int n, int imgH, int imgW) {
 
     /*
 
@@ -219,8 +220,8 @@ void ImgProcessing::subdivideFrame(std::vector<Point> &sub, int n, int imgH, int
     int subW = imgW/n;
     int subH = imgH/n;
 
-    Point first = cv::Point((n/2 - 1) * subW, (n/2)*subH);
-    Point last = Point(imgW - subW, imgH - subH);
+    cv::Point first = cv::Point((n/2 - 1) * subW, (n/2)*subH);
+    cv::Point last = cv::Point(imgW - subW, imgH - subH);
 
     sub.push_back(first);
 
@@ -238,7 +239,7 @@ void ImgProcessing::subdivideFrame(std::vector<Point> &sub, int n, int imgH, int
         if(dep == 1){
 
             y = y - subH;
-            sub.push_back(Point(x,y));
+            sub.push_back(cv::Point(x,y));
             nbdep ++;
             if(nbdep == nbdepLimit){
                 nbdep = 0;
@@ -248,7 +249,7 @@ void ImgProcessing::subdivideFrame(std::vector<Point> &sub, int n, int imgH, int
         }else if(dep == 2){
 
             x = x + subW;
-            sub.push_back(Point(x,y));
+            sub.push_back(cv::Point(x,y));
             nbdep ++;
             if(nbdep == nbdepLimit){
                 nbdep = 0;
@@ -259,7 +260,7 @@ void ImgProcessing::subdivideFrame(std::vector<Point> &sub, int n, int imgH, int
         }else if(dep == 3){
 
             y = y + subH;
-            sub.push_back(Point(x,y));
+            sub.push_back(cv::Point(x,y));
             nbdep ++;
             if(nbdep == nbdepLimit){
                 nbdep = 0;
@@ -269,7 +270,7 @@ void ImgProcessing::subdivideFrame(std::vector<Point> &sub, int n, int imgH, int
         }else if(dep == 4){
 
             x = x - subW;
-            sub.push_back(Point(x,y));
+            sub.push_back(cv::Point(x,y));
             nbdep ++;
             if(nbdep == nbdepLimit){
                 nbdep = 0;
@@ -280,9 +281,9 @@ void ImgProcessing::subdivideFrame(std::vector<Point> &sub, int n, int imgH, int
     }
 }
 
-Mat ImgProcessing::subdivideFrame(Mat img, int n) {
+cv::Mat ImgProcessing::subdivideFrame(cv::Mat img, int n) {
 
-    std::vector<Point> listSubPos;
+    std::vector<cv::Point> listSubPos;
 
     int subW = img.cols/n;
     int subH = img.rows/n;
@@ -294,21 +295,21 @@ Mat ImgProcessing::subdivideFrame(Mat img, int n) {
 
         for(int i = 0; i < n; i++) {
 
-            listSubPos.push_back(Point(i*subW, j*subH));
+            listSubPos.push_back(cv::Point(i*subW, j*subH));
             // cout << Point(i*subW, j*subH)<< endl;
 
         }
 
     }
 
-    Mat imgSubdivided;
+    cv::Mat imgSubdivided;
     img.copyTo(imgSubdivided);
 
     for(int i = 0; i < n; i++)
-        line(imgSubdivided, Point(i * subW, 0), Point(i*subW, subH * n), Scalar(255), 1, 8);
+        line(imgSubdivided, cv::Point(i * subW, 0), cv::Point(i*subW, subH * n), cv::Scalar(255), 1, 8);
 
     for(int j = 0; j < n; j++)
-        line(imgSubdivided, Point(0, j * subH), Point(subW * n, j * subH), Scalar(255), 1, 8);
+        line(imgSubdivided, cv::Point(0, j * subH), cv::Point(subW * n, j * subH), cv::Scalar(255), 1, 8);
 
     return imgSubdivided;
 

@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 EAstStackMeth.h
 
@@ -25,17 +26,18 @@
 *
 *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-#pragma once
 
 /**
  * \brief       Possible methods used for stacking frames.
  * \details     The final stacked frame can result from the sum or average of n frames.
  */
+namespace freeture
+{
+    enum StackMeth {
 
-enum StackMeth{
+        SUM,        /*!< Sum of n frames.*/
+        MEAN        /*!< Mean of n frames.*/
 
-    SUM,        /*!< Sum of n frames.*/
-    MEAN        /*!< Mean of n frames.*/
+    };
 
-};
-
+}

@@ -34,40 +34,44 @@
 * \brief   Get parameters from configuration file.
 */
 
-
-#include <fstream>
-#include <string>
-#include <iostream>
-#include <map>
-#include <stdlib.h>
-
-#include <filesystem>
+// 
+// #include <fstream>
+// #include <string>
+// #include <iostream>
+// #include <map>
+// #include <stdlib.h>
+// 
+// #include <filesystem>
+// 
+// 
+// 
+// #include "ECamPixFmt.h"
+// #include "ETimeMode.h"
+// #include "EImgFormat.h"
+// #include "EDetMeth.h"
+// #include "ELogSeverityLevel.h"
+// #include "EStackMeth.h"
+// #include "ESmtpSecurity.h"
+// #include "Device.h"
+// #include "SParam.h"
+// #include "ECamSdkType.h"
+// 
+// #include "EParser.h"
 
 #include <boost/filesystem.hpp>
+#include <boost/tokenizer.hpp>
 
-#include "ECamPixFmt.h"
-#include "ETimeMode.h"
-#include "EImgFormat.h"
-#include "EDetMeth.h"
-#include "ELogSeverityLevel.h"
-#include "EStackMeth.h"
-#include "ESmtpSecurity.h"
-#include "CfgLoader.h"
-#include "Device.h"
-#include "SParam.h"
-#include "ECamSdkType.h"
 #include "CfgParam.h"
+
 #include "Logger.h"
+#include "EParser.h"
+#include "Conversion.h"
+#include "Fits2D.h"
 
-
-
-using namespace boost::filesystem;
 using namespace std;
-using namespace cv;
+using namespace freeture;
 
-boost::log::sources::severity_logger< LogSeverityLevel >  freeture::CfgParam::m_Logger;
-
-freeture::CfgParam::Init freeture::CfgParam::initializer;
+namespace fs = boost::filesystem;
 
 freeture::CfgParam::CfgParam(Device* device, string cfgFilePath)
 {
@@ -154,8 +158,8 @@ freeture::CfgParam::CfgParam(Device* device, string cfgFilePath)
 
     // Load parameters.
 
-    boost::filesystem::path pcfg(cfgFilePath);
-    if(boost::filesystem::exists(pcfg)) {
+    fs::path pcfg(cfgFilePath);
+    if(fs::exists(pcfg)) {
         if(m_Cfg.Load(cfgFilePath)) {
             loadCameraSerial();
             loadCameraInit();
@@ -196,12 +200,11 @@ freeture::CfgParam::CfgParam(Device* device, string cfgFilePath)
             loadMailParam();
         }else{
             m_EMsg.push_back("Fail to load configuration file.");
-            cout << "Fail to load configuration file." << endl;
+            LOG_ERROR << "Fail to load configuration file." << endl;
         }
     }else{
         m_EMsg.push_back("Configuration file path not exists : " + cfgFilePath);
-        //cout << "Configuration file path not exists : " << cfgFilePath << endl;
-        freeture::LogError("Configuration file path not exists : " , cfgFilePath);
+        LOG_ERROR << "Configuration file path not exists : " << cfgFilePath;
     }
 }
 void freeture::CfgParam::setInitRequired(bool init)
@@ -211,7 +214,7 @@ void freeture::CfgParam::setInitRequired(bool init)
     std::ifstream file(m_CfgFilePath);
     if(!file.is_open())
     {
-        std::cout << "Impossibile resettare il file di configurazione" << std::endl;
+        LOG_ERROR << "reset configuration file failed." << std::endl;
         return;
     }
 
@@ -228,6 +231,7 @@ void freeture::CfgParam::setInitRequired(bool init)
         line += '\n';
         fprintf(ofile, "%s", line.c_str());
     }
+
     fclose(ofile);
     file.close();
     const char* newFileName = (m_CfgFilePath  + ".old").c_str();
@@ -280,14 +284,13 @@ void freeture::CfgParam::loadCameraInit()
             std::remove(FREETURE_CHECK_INIT_DONE);
         }
         message = "YES";
-        std::cout << "Camera init file " << m_Param.CAMERA_INIT_CONFIG << std::endl;
+        LOG_INFO   << "Camera init file " << m_Param.CAMERA_INIT_CONFIG << std::endl;
     } else 
     {
         message = "NO";
     }
-    std::cout << "Need to init camera: " << message << std::endl;
 
-
+    LOG_INFO << "Need to init camera: " << message << std::endl;
 }
 
 void freeture::CfgParam::loadCameraSerial()
@@ -301,7 +304,7 @@ void freeture::CfgParam::loadCameraSerial()
     if(!m_Cfg.Get("CAMERA_SERIAL", cString))
     {
         failStringSerial = true;
-        failmsg += "Fail to get camera seria, DeviceId will be used for camera selection";
+        failmsg += "Fail to get camera serial, DeviceId will be used for camera selection";
     }
 
     m_Param.CAMERA_SERIAL = cString;
@@ -334,7 +337,7 @@ void freeture::CfgParam::loadDeviceID() {
 
     }
     if (manager.deviceNumber < 0 || cId > (manager.deviceNumber - 1)) {
-        std::cout << "- CAMERA_ID's value not exist." << std::endl;
+        LOG_ERROR << "- CAMERA_ID's value not exist." << std::endl;
         m_Param.DEVICE_ID = -1;
         return;
     }
@@ -352,8 +355,7 @@ void freeture::CfgParam::loadDataParam() {
         e = true;
     }else{
 
-        namespace fs = boost::filesystem;
-        path p(m_Param.data.DATA_PATH);
+        fs::path p(m_Param.data.DATA_PATH);
 
         if(!fs::exists(p)){
             try {
@@ -392,8 +394,7 @@ void freeture::CfgParam::loadLogParam() {
         e = true;
     }else{
 
-        namespace fs = boost::filesystem;
-        path p(m_Param.log.LOG_PATH);
+        fs::path p(m_Param.log.LOG_PATH);
 
         if(!fs::exists(p)){
             try {
@@ -454,7 +455,7 @@ void freeture::CfgParam::loadFramesParam() {
     tokenizer tokens(inputPaths, sep);
 
     for(tokenizer::iterator tok_iter = tokens.begin();tok_iter != tokens.end(); ++tok_iter){
-        boost::filesystem::path p_input_frames_dir(*tok_iter);
+        fs::path p_input_frames_dir(*tok_iter);
         if(!boost::filesystem::exists(p_input_frames_dir)) {
             m_Param.framesInput.errormsg.push_back("- INPUT_FRAMES_DIRECTORY_PATH : " + *tok_iter + " not exists.");
             e = true;
@@ -487,7 +488,7 @@ void freeture::CfgParam::loadVidParam() {
     tokenizer tokens(input_video_path, sep);
 
     for(tokenizer::iterator tok_iter = tokens.begin();tok_iter != tokens.end(); ++tok_iter){
-        boost::filesystem::path p_input_video_path(*tok_iter);
+       fs::path p_input_video_path(*tok_iter);
         if(!is_regular_file(p_input_video_path)) {
             m_Param.vidInput.errormsg.push_back("- INPUT_VIDEO_PATH : " + *tok_iter + " not exists.");
             e = true;
@@ -519,13 +520,13 @@ void freeture::CfgParam::loadCamParam() {
     int camera_id_f = manager.getCameraDeviceBySerial(m_Param.CAMERA_SERIAL);
     if(camera_id_f == -2)
     {
-        freeture::Log("CAMERA WITH SERIAL " + m_Param.CAMERA_SERIAL + " NOT FOUND");
+        LOG_ERROR << "CAMERA WITH SERIAL " << m_Param.CAMERA_SERIAL << " NOT FOUND";
         return;
     }
     if(camera_id_f != -1) camera_id = camera_id_f;
     
     if(!device->createCamera(camera_id, true)) {
-        freeture::Log("FAIL CREATING CAMERA ");
+        LOG_ERROR << "FAIL CREATING CAMERA ";
         return;
     }
 
@@ -533,7 +534,7 @@ void freeture::CfgParam::loadCamParam() {
     {
         if(!device->firstIinitializeCamera(m_Param.CAMERA_INIT_CONFIG))
         {
-            freeture::Log("Inizializing camera using " + m_Param.CAMERA_INIT_CONFIG + " Failed!");
+            LOG_ERROR << "Inizializing camera using " << m_Param.CAMERA_INIT_CONFIG << " Failed!";
             return;
         }
         
@@ -681,7 +682,7 @@ void freeture::CfgParam::loadCamParam() {
             }
         }
 
-        std::cout << "EXP NIGHT " << m_Param.camInput.ACQ_NIGHT_EXPOSURE << std::endl;
+       LOG_INFO << "EXP NIGHT " << m_Param.camInput.ACQ_NIGHT_EXPOSURE << std::endl;
     }
 
     //-------------------------------------------------------------------
@@ -1246,7 +1247,7 @@ void freeture::CfgParam::loadDetParam() {
                 e = true;
                 m_Param.det.errormsg.push_back("- ACQ_MASK_PATH : Fail to load value.");
             }else {
-                Mat tempmask = imread(m_Param.det.ACQ_MASK_PATH, IMREAD_GRAYSCALE);
+                cv::Mat tempmask = cv::imread(m_Param.det.ACQ_MASK_PATH, cv::IMREAD_GRAYSCALE);
 
                 if(!tempmask.data) {
                     e = true;
@@ -1268,7 +1269,7 @@ void freeture::CfgParam::loadDetParam() {
                                     if(vidParamIsCorrect()) {
 
                                         for(int i = 0; i < m_Param.vidInput.INPUT_VIDEO_PATH.size(); i++) {
-                                            VideoCapture cap = VideoCapture(m_Param.vidInput.INPUT_VIDEO_PATH.at(i));
+                                            cv::VideoCapture cap = cv::VideoCapture(m_Param.vidInput.INPUT_VIDEO_PATH.at(i));
                                             if(cap.isOpened()) {
                                                 if(cap.get(cv::CAP_PROP_FRAME_HEIGHT) != tempmask.rows) {
                                                     e = true;
@@ -1306,9 +1307,9 @@ void freeture::CfgParam::loadDetParam() {
                                             // Search a fits file.
                                             bool fitsfilefound = false;
                                             string filefound = "";
-                                            path p(m_Param.framesInput.INPUT_FRAMES_DIRECTORY_PATH.at(i));
-                                            for(directory_iterator file(p);file!= directory_iterator(); ++file){
-                                                path curr(file->path());
+                                            fs::path p(m_Param.framesInput.INPUT_FRAMES_DIRECTORY_PATH.at(i));
+                                            for(fs::directory_iterator file(p);file!= fs::directory_iterator(); ++file){
+                                                fs::path curr(file->path());
                                                 if(is_regular_file(curr)) {
                                                     if(file->path().string().find(".fit") != std::string::npos) {
                                                         fitsfilefound = true;
@@ -1417,8 +1418,7 @@ void freeture::CfgParam::loadDetParam() {
                 m_Param.det.errormsg.push_back("- DET_DEBUG_PATH : Fail to load value.");
             }else{
 
-                namespace fs = boost::filesystem;
-                path p(m_Param.det.DET_DEBUG_PATH);
+                fs::path p(m_Param.det.DET_DEBUG_PATH);
 
                 if(!fs::exists(p)){
                     if(!fs::create_directory(p)){
@@ -1531,9 +1531,7 @@ void freeture::CfgParam::loadDetParam() {
                 e = true;
                 m_Param.det.errormsg.push_back("- DET_DEBUG_PATH : Fail to load value.");
             }else{
-
-                namespace fs = boost::filesystem;
-                path p(m_Param.det.DET_DEBUG_PATH);
+                fs::path p(m_Param.det.DET_DEBUG_PATH);
 
                 if(!fs::exists(p)){
                     try {
@@ -1897,7 +1895,7 @@ bool freeture::CfgParam::deviceIdIsCorrect() {
     
     if(m_Param.DEVICE_ID == -1) {
         if(showErrors) {
-            cout << "Device not valid" << endl;
+            LOG_ERROR << "Device not valid" << endl;
         }
         return false;
     }
@@ -1908,7 +1906,7 @@ bool freeture::CfgParam::dataParamIsCorrect() {
     if(!m_Param.data.status) {
         if(showErrors) {
             for(int i = 0; i < m_Param.data.errormsg.size(); i++)
-                cout << m_Param.data.errormsg.at(i) << endl;
+                LOG_ERROR << m_Param.data.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1919,7 +1917,7 @@ bool freeture::CfgParam::logParamIsCorrect() {
     if(!m_Param.log.status) {
         if(showErrors) {
             for(int i = 0; i < m_Param.log.errormsg.size(); i++)
-                cout << m_Param.log.errormsg.at(i) << endl;
+                LOG_ERROR << m_Param.log.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1931,7 +1929,7 @@ bool freeture::CfgParam::framesParamIsCorrect() {
     if(!m_Param.framesInput.status) {
         if(showErrors) {
             for(int i = 0; i < m_Param.framesInput.errormsg.size(); i++)
-                cout << m_Param.framesInput.errormsg.at(i) << endl;
+                LOG_ERROR << m_Param.framesInput.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1942,7 +1940,7 @@ bool freeture::CfgParam::vidParamIsCorrect() {
     if(!m_Param.vidInput.status) {
         if(showErrors) {
             for(int i = 0; i < m_Param.vidInput.errormsg.size(); i++)
-                cout << m_Param.vidInput.errormsg.at(i) << endl;
+                LOG_ERROR << m_Param.vidInput.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1953,7 +1951,7 @@ bool freeture::CfgParam::camParamIsCorrect() {
     if(!m_Param.camInput.status) {
         if(showErrors) {
             for(int i = 0; i < m_Param.camInput.errormsg.size(); i++)
-                cout << m_Param.camInput.errormsg.at(i) << endl;
+                LOG_ERROR << m_Param.camInput.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1964,7 +1962,7 @@ bool freeture::CfgParam::detParamIsCorrect() {
     if(!m_Param.det.status) {
         if(showErrors) {
             for(int i = 0; i < m_Param.det.errormsg.size(); i++)
-                cout << m_Param.det.errormsg.at(i) << endl;
+                LOG_ERROR << m_Param.det.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1975,7 +1973,7 @@ bool freeture::CfgParam::stackParamIsCorrect() {
     if(!m_Param.st.status) {
         if(showErrors) {
             for(int i = 0; i < m_Param.st.errormsg.size(); i++)
-                cout << m_Param.st.errormsg.at(i) << endl;
+                LOG_ERROR << m_Param.st.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1986,7 +1984,7 @@ bool freeture::CfgParam::stationParamIsCorrect() {
     if(!m_Param.station.status) {
         if(showErrors) {
             for(int i = 0; i < m_Param.station.errormsg.size(); i++)
-                cout << m_Param.station.errormsg.at(i) << endl;
+                LOG_ERROR << m_Param.station.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1997,7 +1995,7 @@ bool freeture::CfgParam::fitskeysParamIsCorrect() {
     if(!m_Param.fitskeys.status) {
         if(showErrors) {
             for(int i = 0; i < m_Param.fitskeys.errormsg.size(); i++)
-                cout << m_Param.fitskeys.errormsg.at(i) << endl;
+                LOG_ERROR << m_Param.fitskeys.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -2008,7 +2006,7 @@ bool freeture::CfgParam::mailParamIsCorrect() {
     if(!m_Param.mail.status) {
         if(showErrors) {
             for(int i = 0; i < m_Param.mail.errormsg.size(); i++)
-                cout << m_Param.mail.errormsg.at(i) << endl;
+                LOG_ERROR << m_Param.mail.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -2040,12 +2038,12 @@ bool freeture::CfgParam::inputIsCorrect() {
 bool freeture::CfgParam::allParamAreCorrect()
 {
     //check configuration file
-    boost::filesystem::path pcfg(m_CfgFilePath);
+   fs::path pcfg(m_CfgFilePath);
 
     if(!boost::filesystem::exists(pcfg))
     {
-       cout << ">> Error. Configuration file not exists at "<< m_CfgFilePath << " use -c to set a different location. " <<endl;
-       cout << "Checking command line parameter." << endl;
+        LOG_ERROR << ">> Error. Configuration file not exists at "<< m_CfgFilePath << " use -c to set a different location. " <<endl;
+        LOG_ERROR << "Checking command line parameter." << endl;
     }
 
     bool eFound = false;
@@ -2053,47 +2051,47 @@ bool freeture::CfgParam::allParamAreCorrect()
     if(!deviceIdIsCorrect())
     {
         eFound = true;
-        cout << ">> Errors on device ID. " << endl;
+        LOG_ERROR << ">> Errors on device ID. " << endl;
     }
 
     if(!dataParamIsCorrect()){
         eFound = true;
-        cout << ">> Errors on data parameters. " << endl;
+        LOG_ERROR << ">> Errors on data parameters. " << endl;
     }
 
     if(!logParamIsCorrect()){
         eFound = true;
-        cout << ">> Errors on log parameters. " << endl;
+        LOG_ERROR << ">> Errors on log parameters. " << endl;
     }
 
     if(!inputIsCorrect()){
         eFound = true;
-        cout << ">> Errors on input parameters. " << endl;
+        LOG_ERROR << ">> Errors on input parameters. " << endl;
     }
 
     if(!detParamIsCorrect()){
         eFound = true;
-        cout << ">> Errors on detection parameters. " << endl;
+        LOG_ERROR << ">> Errors on detection parameters. " << endl;
     }
 
     if(!stackParamIsCorrect()){
         eFound = true;
-        cout << ">> Errors on stack parameters. " << endl;
+        LOG_ERROR << ">> Errors on stack parameters. " << endl;
     }
 
     if(!stationParamIsCorrect()){
         eFound = true;
-        cout << ">> Errors on station parameters. " << endl;
+        LOG_ERROR << ">> Errors on station parameters. " << endl;
     }
 
     if(!fitskeysParamIsCorrect()){
         eFound = true;
-        cout << ">> Errors on fitskeys parameters. " << endl;
+        LOG_ERROR << ">> Errors on fitskeys parameters. " << endl;
     }
 
     if(!mailParamIsCorrect()){
         eFound = true;
-        cout << ">> Errors on mail parameters. " << endl;
+        LOG_ERROR << ">> Errors on mail parameters. " << endl;
     }
 
     if(eFound)

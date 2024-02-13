@@ -32,13 +32,18 @@
 * \date    19/06/2014
 * \brief   Stack frames.
 */
-#include "Constants.h"
+//header refactoring ok
 #include "StackThread.h"
+
 #include "NodeExporterMetrics.h"
+#include "Stack.h"
+#include "Logger.h"
 
-boost::log::sources::severity_logger< LogSeverityLevel >  StackThread::logger;
+#include <boost/date_time.hpp>
 
-StackThread::Init StackThread::initializer;
+
+using namespace freeture;
+using namespace std;
 
 StackThread::StackThread(   bool                            *sS,
                             boost::mutex                    *sS_m,
@@ -73,7 +78,7 @@ StackThread::StackThread(   bool                            *sS,
 
 StackThread::~StackThread(void){
 
-    BOOST_LOG_SEV(logger,notification) << "Cleaning ressources and deleting StackThread...";
+    LOG_INFO << "Cleaning ressources and deleting StackThread...";
 
     if(mThread!=NULL)
         delete mThread;
@@ -82,7 +87,7 @@ StackThread::~StackThread(void){
 
 bool StackThread::startThread(){
 
-    BOOST_LOG_SEV(logger,notification) << "Creating StackThread...";
+    LOG_INFO << "Creating StackThread...";
     mThread = new boost::thread(boost::ref(*this));
     return true;
 }
@@ -107,7 +112,7 @@ bool StackThread::interruptThread(){
 
     interruptionStatusMutex.lock();
     interruptionStatus = true;
-    BOOST_LOG_SEV(logger,notification) << "StackThread interruption.";
+    LOG_INFO << "StackThread interruption.";
     interruptionStatusMutex.unlock();
     return true;
 
@@ -116,17 +121,17 @@ bool StackThread::interruptThread(){
 bool StackThread::buildStackDataDirectory(TimeDate::Date date){
 
     namespace fs = boost::filesystem;
-    std::string YYYYMMDD = TimeDate::getYYYYMMDD(date);
-    std::string root = mdp.DATA_PATH + mstp.STATION_NAME + "_" + YYYYMMDD +"/";
-    std::string subDir = "stacks/";
-    std::string finalPath = root + subDir;
+    string YYYYMMDD = TimeDate::getYYYYMMDD(date);
+    string root = mdp.DATA_PATH + mstp.STATION_NAME + "_" + YYYYMMDD +"/";
+    string subDir = "stacks/";
+    string finalPath = root + subDir;
     completeDataPath = finalPath;
 
     if(YYYYMMDD == "00000000")
         return false;
 
 
-    BOOST_LOG_SEV(logger,notification) << "Stacks data path : " << completeDataPath;
+    LOG_INFO << "Stacks data path : " << completeDataPath;
 
     path p(mdp.DATA_PATH);
     path p1(root);
@@ -144,13 +149,13 @@ bool StackThread::buildStackDataDirectory(TimeDate::Date date){
                 // If fail to create DATA_PATH/STATION_YYYYMMDD/stacks/
                 if(!fs::create_directory(p2)){
 
-                    BOOST_LOG_SEV(logger,critical) << "Unable to create stacks directory : " << p2.string();
+                    LOG_ERROR << "Unable to create stacks directory : " << p2.string();
                     return false;
 
                 // If success to create DATA_PATH/STATION_YYYYMMDD/stacks/
                 }else{
 
-                   BOOST_LOG_SEV(logger,notification) << "Success to create stacks directory : " << p2.string();
+                   LOG_INFO << "Success to create stacks directory : " << p2.string();
                    return true;
 
                 }
@@ -162,24 +167,24 @@ bool StackThread::buildStackDataDirectory(TimeDate::Date date){
             // If fail to create DATA_PATH/STATION_YYYYMMDD/
             if(!fs::create_directory(p1)){
 
-                BOOST_LOG_SEV(logger,fail) << "Unable to create STATION_YYYYMMDD directory : " << p1.string();
+                LOG_ERROR << "Unable to create STATION_YYYYMMDD directory : " << p1.string();
                 return false;
 
             // If success to create DATA_PATH/STATION_YYYYMMDD/
             }else{
 
-                BOOST_LOG_SEV(logger,notification) << "Success to create STATION_YYYYMMDD directory : " << p1.string();
+                LOG_INFO << "Success to create STATION_YYYYMMDD directory : " << p1.string();
 
                 // If fail to create DATA_PATH/STATION_YYYYMMDD/stacks/
                 if(!fs::create_directory(p2)){
 
-                    BOOST_LOG_SEV(logger,critical) << "Unable to create stacks directory : " << p2.string();
+                    LOG_ERROR << "Unable to create stacks directory : " << p2.string();
                     return false;
 
                 // If success to create DATA_PATH/STATION_YYYYMMDD/stacks/
                 }else{
 
-                    BOOST_LOG_SEV(logger,notification) << "Success to create stacks directory : " << p2.string();
+                    LOG_INFO << "Success to create stacks directory : " << p2.string();
                     return true;
 
                 }
@@ -192,35 +197,35 @@ bool StackThread::buildStackDataDirectory(TimeDate::Date date){
         // If fail to create DATA_PATH
         if(!fs::create_directory(p)){
 
-            BOOST_LOG_SEV(logger,fail) << "Unable to create DATA_PATH directory : " << p.string();
+            LOG_ERROR << "Unable to create DATA_PATH directory : " << p.string();
             return false;
 
         // If success to create DATA_PATH
         }else{
 
-            BOOST_LOG_SEV(logger,notification) << "Success to create DATA_PATH directory : " << p.string();
+            LOG_INFO << "Success to create DATA_PATH directory : " << p.string();
 
             // If fail to create DATA_PATH/STATION_YYYYMMDD/
             if(!fs::create_directory(p1)){
 
-                BOOST_LOG_SEV(logger,fail) << "Unable to create STATION_YYYYMMDD directory : " << p1.string();
+                LOG_ERROR << "Unable to create STATION_YYYYMMDD directory : " << p1.string();
                 return false;
 
             // If success to create DATA_PATH/STATION_YYYYMMDD/
             }else{
 
-                BOOST_LOG_SEV(logger,notification) << "Success to create STATION_YYYYMMDD directory : " << p1.string();
+                LOG_INFO << "Success to create STATION_YYYYMMDD directory : " << p1.string();
 
                 // If fail to create DATA_PATH/STATION_YYYYMMDD/stacks/
                 if(!fs::create_directory(p2)){
 
-                    BOOST_LOG_SEV(logger,critical) << "Unable to create stacks directory : " << p2.string();
+                    LOG_ERROR << "Unable to create stacks directory : " << p2.string();
                     return false;
 
                 // If success to create DATA_PATH/STATION_YYYYMMDD/stacks/
                 }else{
 
-                    BOOST_LOG_SEV(logger,notification) << "Success to create stacks directory : " << p2.string();
+                    LOG_INFO << "Success to create stacks directory : " << p2.string();
                     return true;
 
                 }
@@ -241,16 +246,15 @@ void StackThread::operator()(){
     bool stop = false;
     isRunning = true;
 
-    BOOST_LOG_SCOPED_THREAD_TAG("LogName", "STACK_THREAD");
-    BOOST_LOG_SEV(logger,notification) << "\n";
-    BOOST_LOG_SEV(logger,notification) << "==============================================";
-    BOOST_LOG_SEV(logger,notification) << "============== Start stack thread ============";
-    BOOST_LOG_SEV(logger,notification) << "==============================================";
+    LOG_INFO << "\n";
+    LOG_INFO << "==============================================";
+    LOG_INFO << "============== Start stack thread ============";
+    LOG_INFO << "==============================================";
 
     try{
 
         do{
-            std::string cDate ="";
+            string cDate ="";
             try {
 
                 // Thread is sleeping...
@@ -262,8 +266,8 @@ void StackThread::operator()(){
                 // First reference date.
                 boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
                 cDate = to_simple_string(time);
-                std::string dateDelimiter = ".";
-                std::string refDate = cDate.substr(0, cDate.find(dateDelimiter));
+                string dateDelimiter = ".";
+                string refDate = cDate.substr(0, cDate.find(dateDelimiter));
 
                 long secTime = 0;
 
@@ -275,7 +279,7 @@ void StackThread::operator()(){
                     *stackSignal = false;
                     lock.unlock();
 
-                    double t = (double)getTickCount();
+                    double t = (double)cv::getTickCount();
 
                     // Check interruption signal from AcqThread.
                     bool forceToSave = false;
@@ -296,16 +300,15 @@ void StackThread::operator()(){
                         // Add the new frame to the stack.
                         frameStack.addFrame(newFrame);
 
-                        t = (((double)getTickCount() - t)/getTickFrequency())*1000;
+                        t = (((double)cv::getTickCount() - t)/ cv::getTickFrequency())*1000;
                         if (LOG_FRAME_STATUS){
-                            std::cout << "[ TIME STACK ] : " << std::setprecision(5) << std::fixed << t << " ms" << std::endl;
-                            BOOST_LOG_SEV(logger,normal) << "[ TIME STACK ] : " << std::setprecision(5) << std::fixed << t << " ms" ;
+                            LOG_INFO << "[ TIME STACK ] : " << setprecision(5) << fixed << t << " ms" ;
                         }
 
                     }else{
 
                         // Interruption is active.
-                        BOOST_LOG_SEV(logger,notification) << "Interruption status : " << forceToSave;
+                        LOG_INFO << "Interruption status : " << forceToSave;
 
                         // Interruption operations terminated. Rest interruption signal.
                         interruptionStatusMutex.lock();
@@ -318,13 +321,13 @@ void StackThread::operator()(){
 
                     time = boost::posix_time::microsec_clock::universal_time();
                     cDate = to_simple_string(time);
-                    std::string nowDate = cDate.substr(0, cDate.find(dateDelimiter));
+                    string nowDate = cDate.substr(0, cDate.find(dateDelimiter));
                     boost::posix_time::ptime t1(boost::posix_time::time_from_string(refDate));
                     boost::posix_time::ptime t2(boost::posix_time::time_from_string(nowDate));
                     boost::posix_time::time_duration td = t2 - t1;
                     secTime = td.total_seconds();
                     if (LOG_FRAME_STATUS)
-                        std::cout << "NEXT STACK : " << (int)(msp.STACK_TIME - secTime) << "s" <<  std::endl;
+                        LOG_DEBUG << "NEXT STACK : " << (int)(msp.STACK_TIME - secTime) << "s" <<  endl;
 
                 } while(secTime <= msp.STACK_TIME);
 
@@ -333,22 +336,22 @@ void StackThread::operator()(){
 
                     if(!frameStack.saveStack(completeDataPath, msp.STACK_MTHD, msp.STACK_REDUCTION)){
 
-                        BOOST_LOG_SEV(logger,fail) << "Fail to save stack.";
+                        LOG_ERROR << "Fail to save stack.";
 
                     }
 
-                    BOOST_LOG_SEV(logger,notification) << "Stack saved : " << completeDataPath;
+                    LOG_INFO << "Stack saved : " << completeDataPath;
 
                 }else{
 
-                    BOOST_LOG_SEV(logger,fail) << "Fail to build stack directory. " << completeDataPath;
+                    LOG_ERROR << "Fail to build stack directory. " << completeDataPath;
 
                 }
 
             } catch(const boost::thread_interrupted&) {
 
-                BOOST_LOG_SEV(logger,notification) << "Stack thread INTERRUPTED";
-                std::cout << "Stack thread INTERRUPTED" << std::endl;
+                LOG_INFO << "Stack thread INTERRUPTED";
+                LOG_DEBUG << "Stack thread INTERRUPTED" << endl;
             }
 
             // Get the "must stop" state (thread-safe)
@@ -362,17 +365,17 @@ void StackThread::operator()(){
 
     }catch(const char * msg){
 
-        BOOST_LOG_SEV(logger,critical) << msg;
+        LOG_ERROR << msg;
 
-    }catch(std::exception& e){
+    }catch(exception& e){
 
-        BOOST_LOG_SEV(logger, critical) << e.what();
+        LOG_ERROR << e.what();
 
     }
 
     isRunning = false;
 
-    BOOST_LOG_SEV(logger,notification) << "StackThread ended.";
+    LOG_INFO << "StackThread ended.";
 
 }
 

@@ -1,11 +1,12 @@
 #include <iostream>
 
 #include <SaveApi.h>
-
+#include <ArenaApi.h>
 #include "ErrorManager.cpp"
 #include "CameraLucidArena_PHX016SScanner.h"
 #include "Logger.h"
 
+using namespace freeture;
 
 CameraLucidArena_PHX016SScanner::CameraLucidArena_PHX016SScanner(CamSdkType sdk): CameraScanner(sdk)
 {
@@ -17,7 +18,7 @@ CameraLucidArena_PHX016SScanner::CameraLucidArena_PHX016SScanner(CamSdkType sdk)
  */
 void CameraLucidArena_PHX016SScanner::UpdateCameraList()
 {
-    freeture::LogDebug("CameraLucidArena_PHX016SScanner::UpdateCameraList");
+    LOG_DEBUG << "CameraLucidArena_PHX016SScanner::UpdateCameraList";
 
     try
     {
@@ -27,28 +28,28 @@ void CameraLucidArena_PHX016SScanner::UpdateCameraList()
         if (m_ArenaSDKSystem == nullptr)
             throw std::runtime_error("Arena::OpenSystem returned nullptr");
 
-        freeture::LogDebug("CameraLucidArena_PHX016SScanner::UpdateCameraList","UpdateDevices");
+        LOG_DEBUG << ("CameraLucidArena_PHX016SScanner::UpdateCameraList","UpdateDevices");
 
         //arv_update_device_list();
         m_ArenaSDKSystem->UpdateDevices(100);
-        freeture::LogDebug("CameraLucidArena_PHX016SScanner::UpdateCameraList","GetDevices");
+        LOG_DEBUG << ("CameraLucidArena_PHX016SScanner::UpdateCameraList","GetDevices");
 
         std::vector<Arena::DeviceInfo> deviceInfos = m_ArenaSDKSystem->GetDevices();
 
         int ni =  deviceInfos.size();
-        freeture::LogDebug("CameraLucidArena_PHX016SScanner::UpdateCameraList","Found ",ni, "candidates devices");
+        LOG_DEBUG << ("CameraLucidArena_PHX016SScanner::UpdateCameraList","Found ",ni, "candidates devices");
 
         for (int i = 0; i< ni; i++)
         {
             Arena::DeviceInfo& device_info = deviceInfos[i];
             const char* name = device_info.ModelName();
 
-            freeture::LogDebug("CameraLucidArena_PHX016SScanner::UpdateCameraList","#",i," ",name);
+            LOG_DEBUG << ("CameraLucidArena_PHX016SScanner::UpdateCameraList","#",i," ",name);
             std::string s_name = std::string(name);
             std::string s_test = std::string("PHX016S");
             if ( s_name.find ( s_test ) != std::string::npos )
             {
-                freeture::LogDebug("CameraLucidArena_PHX016SScanner::UpdateCameraList","PHX016S found");
+                LOG_DEBUG << ("CameraLucidArena_PHX016SScanner::UpdateCameraList","PHX016S found");
 
                 CameraDescription c;
 
@@ -69,7 +70,7 @@ void CameraLucidArena_PHX016SScanner::UpdateCameraList()
     }
     catch (std::exception& e)
     {
-        freeture::LogError("CameraLucidArena_PHX016SScanner::UpdateCameraList","Arena::OpenSystem failure ",e.what());
+        LOG_DEBUG << ("CameraLucidArena_PHX016SScanner::UpdateCameraList","Arena::OpenSystem failure ",e.what());
         ErrorManager::Exception(e);
         return;
     }

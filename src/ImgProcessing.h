@@ -1,3 +1,4 @@
+#pragma once
 /*
                               ImgProcessing.h
 
@@ -31,28 +32,25 @@
 * \version 1.0
 * \date    03/06/2014
 */
+#include "Commons.h"
 
-#pragma once
-
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
 #include <string>
-#include <iostream>
-#include "SaveImg.h"
+#include <vector>
 
+#include <opencv2/opencv.hpp>
 
-using namespace cv;
+namespace freeture
+{
+    enum class Thresh {
 
-enum class Thresh {
+        MEAN,
+        STDEV
 
-    MEAN,
-    STDEV
+    };
 
-};
+    class ImgProcessing {
 
-class ImgProcessing {
-
-    public :
+    public:
 
         /**
         * Gamma correction on Mono8 image..
@@ -61,7 +59,7 @@ class ImgProcessing {
         * @param gamma Gamma value.
         * @return Image with gamma corrected.
         */
-        static Mat correctGammaOnMono8(Mat& img, double gamma);
+        static cv::Mat correctGammaOnMono8(cv::Mat& img, double gamma);
 
         /**
         * Gamma correction on Mono12 image.
@@ -70,17 +68,18 @@ class ImgProcessing {
         * @param gamma Gamma value.
         * @return Image with gamma corrected.
         */
-        static Mat correctGammaOnMono12(Mat& img, double gamma);
+        static cv::Mat correctGammaOnMono12(cv::Mat& img, double gamma);
 
-        static Mat buildSaturatedMap(Mat &img, int maxval);
+        static cv::Mat buildSaturatedMap(cv::Mat& img, int maxval);
 
-        static Mat thresholding(Mat &img, Mat &mask, int factor, Thresh threshType);
+        static cv::Mat thresholding(cv::Mat& img, cv::Mat& mask, int factor, Thresh threshType);
 
         // Subdivise a frame in n regions and fetch their coordinates.
-        static void subdivideFrame(std::vector<Point> &sub, int n, int imgH, int imgW);
+        static void subdivideFrame(std::vector<cv::Point>& sub, int n, int imgH, int imgW);
 
         // Subdivise a frame in n regions and draw them.
-        static Mat subdivideFrame(Mat img, int n);
+        static cv::Mat subdivideFrame(cv::Mat img, int n);
 
 
-};
+    };
+}

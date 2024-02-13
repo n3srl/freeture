@@ -1,45 +1,33 @@
+#pragma once
 /**
 * \file    CameraLucidArena.h
 * \author  Andrea Novati -- N3 S.r.l.
 * \version 1.2
 * \date    03/15/2023
-* \brief   Use Aravis library to pilot Lucid phoenix cameras.
+* \brief   Use ArenaSDK library to pilot Lucid phoenix cameras.
 *
 */
+#include "Commons.h"
 
-#pragma once
-
-#ifdef LINUX
 #include <string>
 
-#include <ArenaApi.h>
+#include <GenICam.h>
+
 #include "Camera.h"
+#include "ECamPixFmt.h"
 
 #define IMAGE_TIMEOUT 40000
 
-
+namespace Arena {
+    class ISystem;
+    class IDevice;
+}
 namespace freeture
 {
 
     class CameraLucidArena_PHX016S: public Camera
     {
-
         private:
-
-            static boost::log::sources::severity_logger< LogSeverityLevel > logger;
-
-            static class Init{
-
-                public:
-
-                    Init(){
-
-                        logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CameraLucidArena_PHX016S"));
-
-                    }
-
-            }initializer;
-
             Arena::ISystem* m_ArenaSDKSystem    = nullptr;
             Arena::IDevice* m_Camera            = nullptr;
             int m_Id                            = -1;
@@ -58,17 +46,11 @@ namespace freeture
             int             gain                = 0;        // Camera's gain.
             double          exp                 = 0;        // Camera's exposure time.
 
-            guint64         nbCompletedBuffers  = 0;        // Number of frames successfully received.
-            guint64         nbFailures          = 0;        // Number of frames failed to be received.
-            guint64         nbUnderruns         = 0;
+            uint64_t         nbCompletedBuffers  = 0;        // Number of frames successfully received.
+            uint64_t         nbFailures          = 0;        // Number of frames failed to be received.
+            uint64_t         nbUnderruns         = 0;
 
             GenICam::gcstring   pixFormat;                  // Image format.
-
-
-
-            GError*         error               = nullptr;  // ARAVIS API Error
-            ArvCamera*      camera              = nullptr;  // Camera to control.
-            ArvStream*      stream              = nullptr;  // Object for video stream reception.
 
             unsigned int    payload;                        // Width x height.
             const char*     capsString          = nullptr;
@@ -108,7 +90,7 @@ namespace freeture
 
             bool grabImage(Frame& newFrame) override;
 
-            bool grabSingleImage(Frame &frame, int camID) override;
+            bool grabSingleImage(Frame& frame, int camID) override;
 
             void getExposureBounds(double &eMin, double &eMax) override;
 
@@ -116,11 +98,11 @@ namespace freeture
 
             void getGainBounds(double &gMin, double &gMax) override;
 
-            bool getPixelFormat(CamPixFmt &format) override;
+            bool getPixelFormat(CamPixFmt& format) override;
 
             bool getFrameSize(int &x, int &y, int &w, int &h) override;
 
-            bool getFPS(double &value) override;
+            bool getFPS(double& value) override;
 
             //getFPSenum
 
@@ -151,4 +133,3 @@ namespace freeture
 
     };
 }
-#endif

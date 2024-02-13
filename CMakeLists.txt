@@ -1,63 +1,236 @@
 # configure minimum cmake version
 cmake_minimum_required(VERSION 3.10)
 
+
+#Configure project
 # configure project name and version
 project(freeture VERSION 1.4)
 
 #set cpp standard
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 
+
+#Configure CMAKE
+
+#unset this to run cmake find_packages debug
+set(CMAKE_FIND_DEBUG_MODE TRUE) 
+
 # Set the output directory for generated solution files (Visual Studio)
 set(BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build" CACHE PATH "Build directory")
-
-message(STATUS "Build directory: ${BUILD_DIR}")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${BUILD_DIR}/bin")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${BUILD_DIR}/lib")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${BUILD_DIR}/lib")
 set(CMAKE_BINARY_DIR "${BUILD_DIR}/prj")
-#include config.h
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+message(STATUS "CMake Configuration; Runtime output directory: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+message(STATUS "CMake Configuration; Archive output directory: ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
+message(STATUS "CMake Configuration; Library output directory: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+message(STATUS "CMake Configuration; Binary directory: ${CMAKE_BINARY_DIR}")
+message(STATUS "CMake Configuration; Build directory: ${BUILD_DIR}")
 
-message(STATUS "Runtime output directory: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-message(STATUS "Archive output directory: ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
-message(STATUS "Library output directory: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-message(STATUS "Binary directory: ${CMAKE_BINARY_DIR}")
+
+
+
+
+
+
+
+
+
+#Platform detection
+
+if ( "${CMAKE_HOST_SYSTEM_NAME}" MATCHES "Windows")
+	message(STATUS "Platform detection; Windows platform detected")
+	add_definitions(-D_WIN32_WINNT="0x0A00")
+endif()
+
+message(STATUS "Platform detection; CMAKE_HOST_SYSTEM_NAME ${CMAKE_HOST_SYSTEM_NAME}")
+message(STATUS "Platform detection; CMAKE_HOST_SYSTEM_VERSION ${CMAKE_HOST_SYSTEM_VERSION}")
+message(STATUS "Platform detection; CMAKE_GENERATOR_TOOLSET ${CMAKE_GENERATOR_TOOLSET}")
+message(STATUS "Platform detection; CMAKE_GENERATOR_PLATFORM ${CMAKE_GENERATOR_PLATFORM}")
+message(STATUS "Platform detection; CMAKE_GENERATOR_INSTANCE ${CMAKE_GENERATOR_INSTANCE}")
+message(STATUS "Platform detection; CMAKE_GENERATOR_INSTANCE ${CMAKE_GENERATOR}")
+
+
+
+
+
 
 
 # boost section
-set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "C:/local/boost_1_74_0")
+#set (Boost_USE_STATIC_LIBS ON) 
+set (Boost_USE_MULTITHREADED ON)  
+set (Boost_USE_STATIC_LIBS ON)
 
-#set(Boost_USE_STATIC_LIBS OFF) 
-#set(Boost_USE_MULTITHREADED ON)  
-#set(Boost_USE_STATIC_RUNTIME OFF) 
+#set( CMAKE_PREFIX_PATH 		"$ENV{Boost_DIR}/lib64-msvc-14.3/cmake/Boost-1.82.0;$ENV{Boost_DIR}/lib64-msvc-14.1/cmake/Boost-1.82.0;$ENV{Boost_DIR}/lib64-msvc-14.2/cmake/Boost-1.82.0")
 
-find_package(Boost 1.74 REQUIRED system ) 
+message (STATUS "Boost Configuration; Boost_DIR:  $ENV{Boost_DIR}" )
+message (STATUS "Boost Configuration; CMAKE_PREFIX_PATH:  ${CMAKE_PREFIX_PATH}" )
 
 
-if (Boost_FOUND)
-	LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
-endif()
+find_package(Boost 1.82.0 REQUIRED COMPONENTS system thread filesystem log program_options) 
+
+
+message (STATUS "Boost Configuration; Boost_INCLUDE_DIRS:  ${Boost_INCLUDE_DIRS}" )
+message (STATUS "Boost Configuration; Boost_LIBRARY_DIRS: ${Boost_LIBRARY_DIRS}" )
+message (STATUS "Boost Configuration; Boost_LIBRARIES: ${Boost_LIBRARIES}" )
+message (STATUS "Boost Configuration; Boost_INCLUDES: ${Boost_INCLUDES}" )
+
+
+
+
 
 
 #OpenCV Section
-set(OpenCV_DIR "C:/Program Files/opencv/build")
-								 
+set(OpenCV_DIR "C:/local/OpenCV/build/")
+							 
 find_package(OpenCV REQUIRED) 
 
-#openssl
-set (OpenSSLDir "C:/Program Files/OpenSSL-Win64/include")
 
 
 
 
-#add config.h
-configure_file(config.h.in config.h COPYONLY)
+
+#LUCID ArenaSDK
+set (Lucid_DIR "C:/Program Files/Lucid Vision Labs/Arena SDK")
+				
+set (Lucid_RELEASE "C:/Program Files/Lucid Vision Labs/Arena SDK/x64Release")
+set (Lucid_Arena_INCLUDE "${Lucid_DIR}/include/Arena")
+set (Lucid_Save_INCLUDE "${Lucid_DIR}/include/Save")
+set (Lucid_GenICam_INCLUDE "${Lucid_DIR}/GenICam/library/CPP/include")
+
+set (Lucid_INCLUDE_DIRS  
+	${Lucid_Arena_INCLUDE}
+	${Lucid_Save_INCLUDE}
+	${Lucid_GenICam_INCLUDE}
+)
+
+set (Lucid_GenICam_LIBARARY "${Lucid_DIR}/GenICam/library/CPP/lib/Win64_x64")
+										  
+set (Lucid_GenICam_LIBARARIES 
+ "${Lucid_GenICam_LIBARARY}/GCBase_MDd_VC140_v3_3_LUCID.lib"
+ #"${Lucid_GenICam_LIBARARY}/GCBase_MD_VC140_v3_3_LUCID.lib"
+ "${Lucid_GenICam_LIBARARY}/GenApi_MDd_VC140_v3_3_LUCID.lib"
+ #"${Lucid_GenICam_LIBARARY}/GenApi_MD_VC140_v3_3_LUCID.lib"
+ "${Lucid_GenICam_LIBARARY}/Log_MDd_VC140_v3_3_LUCID.lib"
+ #"${Lucid_GenICam_LIBARARY}/Log_MD_VC140_v3_3_LUCID.lib"
+ "${Lucid_GenICam_LIBARARY}/MathParser_MDd_VC140_v3_3_LUCID.lib"
+ #"${Lucid_GenICam_LIBARARY}/MathParser_MD_VC140_v3_3_LUCID.lib"
+ "${Lucid_GenICam_LIBARARY}/NodeMapData_MDd_VC140_v3_3_LUCID.lib"
+ #"${Lucid_GenICam_LIBARARY}/NodeMapData_MD_VC140_v3_3_LUCID.lib"
+ "${Lucid_GenICam_LIBARARY}/ResUsageStat_MDd_VC140_v3_3_LUCID.lib"
+ #"${Lucid_GenICam_LIBARARY}/ResUsageStat_MD_VC140_v3_3_LUCID.lib"
+ "${Lucid_GenICam_LIBARARY}/XmlParser_MDd_VC140_v3_3_LUCID.lib"
+ #"${Lucid_GenICam_LIBARARY}/XmlParser_MD_VC140_v3_3_LUCID.lib"
+)
+
+foreach(file  ${Lucid_GenICam_LIBARARIES})
+	if ( NOT EXISTS "${file}")
+		message (ERROR " Lucid Library missing : ${file}" )
+	endif()
+endforeach()
+
+set(Lucid_ARENA_LIBRARIES
+"${Lucid_DIR}/lib64/Arena/Arenad_v140.lib"
+"${Lucid_DIR}/lib64/Arena/ArenaUId_v140.lib"
+"${Lucid_DIR}/lib64/Arena/ArenaUI_v140.lib"
+"${Lucid_DIR}/lib64/Arena/Arena_v140.lib"
+"${Lucid_DIR}/lib64/Arena/GenTL_LUCIDd_v140.lib"
+"${Lucid_DIR}/lib64/Arena/GenTL_LUCID_v140.lib"
+"${Lucid_DIR}/lib64/Arena/lucidlogd_v140.lib"
+"${Lucid_DIR}/lib64/Arena/lucidlog_v140.lib"
+"${Lucid_DIR}/lib64/Arena/Saved_v140.lib"
+"${Lucid_DIR}/lib64/Arena/Save_v140.lib"
+)
+
+set(Lucid_DLL 
+#"${Lucid_RELEASE}/ArenaC_v140.dll"
+#"${Lucid_RELEASE}/ArenaNET_v140.dll"
+#"${Lucid_RELEASE}/ArenaUI_v140.dll"
+#"${Lucid_RELEASE}/Arena_v140.dll"
+#"${Lucid_RELEASE}/avcodec-58.dll"
+#"${Lucid_RELEASE}/avformat-58.dll"
+#"${Lucid_RELEASE}/avutil-56.dll"
+#"${Lucid_RELEASE}/chrome_elf.dll"
+#"${Lucid_RELEASE}/CLAllSerial_MD_VC140_v3_3_LUCID.dll"
+#"${Lucid_RELEASE}/CLProtocol_MD_VC140_v3_3_LUCID.dll"
+#"${Lucid_RELEASE}/d3dcompiler_43.dll"
+#"${Lucid_RELEASE}/d3dcompiler_47.dll"
+#"${Lucid_RELEASE}/FreeImage_v140.dll"
+#"${Lucid_RELEASE}/GCBase_MD_VC140_v3_3_LUCID.dll"
+#"${Lucid_RELEASE}/GenApi_MD_VC140_v3_3_LUCID.dll"
+#"${Lucid_RELEASE}/GenTL_LUCID_v140.dll"
+#"${Lucid_RELEASE}/libcef.dll"
+#"${Lucid_RELEASE}/libEGL.dll"
+#"${Lucid_RELEASE}/libGLESv2.dll"
+#"${Lucid_RELEASE}/Log_MD_VC140_v3_3_LUCID.dll"
+#"${Lucid_RELEASE}/lucidlog_v140.dll"
+#"${Lucid_RELEASE}/MathParser_MD_VC140_v3_3_LUCID.dll"
+#"${Lucid_RELEASE}/NodeMapData_MD_VC140_v3_3_LUCID.dll"
+#"${Lucid_RELEASE}/ResUsageStat_MD_VC140_v3_3_LUCID.dll"
+#"${Lucid_RELEASE}/rply.dll"
+#"${Lucid_RELEASE}/SaveC_v140.dll"
+#"${Lucid_RELEASE}/SaveNET_v140.dll"
+#"${Lucid_RELEASE}/Save_v140.dll"
+#"${Lucid_RELEASE}/swresample-3.dll"
+#"${Lucid_RELEASE}/XmlParser_MD_VC140_v3_3_LUCID.dll"
+)
+
+
+
+
+
+
+#OpenSSL
+set(OpenSSL_DIR "C:/Program Files/OpenSSL-Win64")
+set(OpenSSL_INCLUDE_DIRS "${OpenSSL_DIR}/include")
+set(OpenSSL_LIBARARY "${OpenSSL_DIR}/lib")
+
+set (OpenSSL_LIBARARIES 
+	"${OpenSSL_LIBARARY}/capi.lib"
+	"${OpenSSL_LIBARARY}/dasync.lib"
+	"${OpenSSL_LIBARARY}/libapps.lib"
+	"${OpenSSL_LIBARARY}/libcrypto.lib"
+	"${OpenSSL_LIBARARY}/libcrypto_static.lib"
+	"${OpenSSL_LIBARARY}/libssl.lib"
+	"${OpenSSL_LIBARARY}/libssl_static.lib"
+	"${OpenSSL_LIBARARY}/libtestutil.lib"
+	"${OpenSSL_LIBARARY}/openssl.lib"
+	"${OpenSSL_LIBARARY}/ossltest.lib"
+	"${OpenSSL_LIBARARY}/padlock.lib"
+	"${OpenSSL_LIBARARY}/uitest.lib"
+)
+
+
+
+
+
+
+
+#CFITS
+set(CFITS_DIR "C:/Program Files/cfits")
+set(CFITS_INCLUDE_DIRS "${CFITS_DIR}/include")
+set(CFITS_LIBARARY "${CFITS_DIR}/lib")
+
+set (CFITS_LIBARARIES 
+	"${CFITS_LIBARARY}/cfitsio.lib"
+)
+
+
+
+
+
+
+
+
 
 #adding sources
+configure_file(config.h.in config.h COPYONLY)
+
 set(SOURCES
 	src/AcqSchedule.cpp
 	src/AcqSchedule.h
@@ -102,7 +275,8 @@ set(SOURCES
 	src/Circle.h
 	src/Constants.h
 	src/Conversion.cpp
-	src/Conversion.h
+	src/PlatformSwitches.h
+	src/Commons.h
 	src/Detection.h
 	src/DetectionTemplate.cpp
 	src/DetectionTemplate.h
@@ -178,28 +352,30 @@ set(SOURCES
 )
 
 
-include_directories(freeture 
+include_directories(
+	freeture 
+	${Boost_INCLUDE_DIRS}
 	${OpenCV_INCLUDE_DIRS} 
-	${OpenSSLDir} 
-	${Boost_INCLUDE_DIR} 
-	"C:/Program Files/cfits/include" 
-	"libs/ArenaSDK/include/Arena" 
-	"libs/ArenaSDK/GenICam/library/CPP/include" 
-	"libs/ArenaSDK/include/Save" 
-	"C:/gtk-build/gtk/x64/release/include/glib-2.0"  
-	"C:/gtk-build/gtk/x64/release/lib/glib-2.0/include"
-	"C:/msys64/mingw64/include/aravis-0.8")
+	${Lucid_INCLUDE_DIRS}
+	${OpenSSL_INCLUDE_DIRS}
+	${CFITS_INCLUDE_DIRS}
+	)
 
 add_executable(freeture ${SOURCES})
 
+add_definitions(-D_WIN32_WINNT=0x0601)
 
 #openssl
 set_property(TARGET freeture
     PROPERTY VS_PACKAGE_REFERENCES "openssl-vc142"
 )
 
-target_link_libraries (
-	freeture  
-	${OpenCV_LIBS}
-	${Boost_LIBRARIES}
-)
+target_link_libraries (freeture  
+	${OpenCV_LIBS} 
+	${Boost_LIBRARIES} 
+	${Lucid_GenICam_LIBARARIES} 
+	${Lucid_ARENA_LIBRARIES}
+	${OpenSSL_LIBARARIES}
+	${CFITS_LIBARARIES}
+	${Lucid_DLL}
+	)

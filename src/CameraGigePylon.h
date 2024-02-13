@@ -1,3 +1,4 @@
+#pragma once
 /*
                             CameraGigePylon.h
 
@@ -34,11 +35,12 @@
  * \brief   Use Pylon library to pilot GigE Cameras.
  */
 
-#pragma once
+#ifdef USE_PYLON
+#include "Commons.h"
+
 
 #include "config.h"
 
-#ifdef USE_PYLON
 
     #include "Frame.h"
     #include "TimeDate.h"
@@ -59,26 +61,26 @@
 
     using namespace Pylon;
     using namespace GenApi;
-    using namespace cv;
     using namespace Basler_GigECameraParams;
 
     static const uint32_t nbBuffers = 20; // Buffer's number used for grabbing
+    namespace freeture
+    {
+        class CameraGigePylon : public Camera {
 
-    class CameraGigePylon : public Camera {
-
-        private :
+        private:
 
             static boost::log::sources::severity_logger< LogSeverityLevel > logger;
 
             static class Init {
 
-                public :
+            public:
 
-                    Init() {
+                Init() {
 
-                        logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CameraGigePylon"));
+                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CameraGigePylon"));
 
-                    }
+                }
 
             } initializer;
 
@@ -86,13 +88,13 @@
             // is initialized during the lifetime of this object.
             Pylon::PylonAutoInitTerm                autoInitTerm;
 
-            uint8_t*                                ppBuffersUC[nbBuffers];         // Buffer for the grabbed images in 8 bits format.
-            uint16_t*                               ppBuffersUS[nbBuffers];         // Buffer for the grabbed images in 16 bits format.
+            uint8_t* ppBuffersUC[nbBuffers];         // Buffer for the grabbed images in 8 bits format.
+            uint16_t* ppBuffersUS[nbBuffers];         // Buffer for the grabbed images in 16 bits format.
             StreamBufferHandle                      handles[nbBuffers];
-            CTlFactory                              *pTlFactory;
-            ITransportLayer                         *pTl;                    // Pointer on the transport layer.
-            CBaslerGigECamera                       *pCamera;                       // Pointer on basler camera.
-            CBaslerGigECamera::StreamGrabber_t      *pStreamGrabber;
+            CTlFactory* pTlFactory;
+            ITransportLayer* pTl;                    // Pointer on the transport layer.
+            CBaslerGigECamera* pCamera;                       // Pointer on basler camera.
+            CBaslerGigECamera::StreamGrabber_t* pStreamGrabber;
             DeviceInfoList_t                        devices;
             GrabResult                              result;
             bool                                    connectionStatus;
@@ -106,7 +108,7 @@
 
             bool createDevice(int id);
 
-            bool getDeviceNameById(int id, string &device);
+            bool getDeviceNameById(int id, string& device);
 
             bool grabInitialization();
 
@@ -118,17 +120,17 @@
 
             bool grabImage(Frame& newFrame);
 
-            bool grabSingleImage(Frame &frame, int camID);
+            bool grabSingleImage(Frame& frame, int camID);
 
-            void getExposureBounds(double &eMin, double &eMax);
+            void getExposureBounds(double& eMin, double& eMax);
 
-            void getGainBounds(double &gMin, double &gMax);
+            void getGainBounds(double& gMin, double& gMax);
 
-            bool getPixelFormat(CamPixFmt &format);
+            bool getPixelFormat(CamPixFmt& format);
 
-            bool getFrameSize(int &w, int &h);
+            bool getFrameSize(int& w, int& h);
 
-            bool getFPS(double &value);
+            bool getFPS(double& value);
 
             string getModelName();
 
@@ -146,6 +148,6 @@
 
             void getAvailablePixelFormats();
 
-    };
-
+        };
+    }
 #endif

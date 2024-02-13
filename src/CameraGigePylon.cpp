@@ -37,6 +37,7 @@
 #include "CameraGigePylon.h"
 
 #ifdef USE_PYLON
+using namespace freeture;
 
 boost::log::sources::severity_logger< LogSeverityLevel >  CameraGigePylon::logger;
 

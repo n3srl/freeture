@@ -34,21 +34,22 @@
 */
 
 #include "HistogramRGB.h"
+using namespace freeture;
 
 HistogramRGB::HistogramRGB(){
 
-    bins = Mat( 3, 256, CV_32F, Scalar( 0.f ) );
+    bins = cv::Mat( 3, 256, CV_32F, cv::Scalar( 0.f ) );
 
 }
 
-int HistogramRGB::calculate(Mat& image){
+int HistogramRGB::calculate(cv::Mat& image){
 
     if( image.type() != CV_8UC3 ) { return 1; }
 
     this->clear();
 
-    Mat_< Vec3b >::iterator it = image.begin< Vec3b >();
-    Mat_< Vec3b >::iterator itend = image.end< Vec3b >();
+    cv::Mat_< cv::Vec3b >::iterator it = image.begin< cv::Vec3b >();
+    cv::Mat_< cv::Vec3b >::iterator itend = image.end< cv::Vec3b >();
 
     for( ; it != itend; ++it ){
         bins.at< float >( 0, (*it)[0] ) += 1.f;
@@ -61,8 +62,8 @@ int HistogramRGB::calculate(Mat& image){
 
 void HistogramRGB::normalize(void){
 
-    Mat_< float >::iterator it = bins.begin< float >();
-    Mat_< float >::iterator itend = bins.end< float >();
+    cv::Mat_< float >::iterator it = bins.begin< float >();
+    cv::Mat_< float >::iterator itend = bins.end< float >();
 
     float max = 1.f;
 
@@ -73,41 +74,41 @@ void HistogramRGB::normalize(void){
     bins /= max;
 }
 
-Mat HistogramRGB::render(void){
+cv::Mat HistogramRGB::render(void){
 
     int w_hist = 256;
     int h_hist = 100;
 
-    Mat result( h_hist, w_hist, CV_8UC3, Scalar( 0 ) );
-    Point start( 0, h_hist - 1 ), end( 0, h_hist - 1 );
+    cv::Mat result( h_hist, w_hist, CV_8UC3, cv::Scalar( 0 ) );
+    cv::Point start( 0, h_hist - 1 ), end( 0, h_hist - 1 );
 
     for( int i = 0; i < w_hist; i++ ){
         start.x = end.x = i;
 
         end.y = h_hist - cvRound( h_hist * bins.at< float >( 0, i ) );
-        line( result, start, end, Scalar( 150, 40, 40 ) );
+        line( result, start, end, cv::Scalar( 150, 40, 40 ) );
 
         end.y = h_hist - cvRound( h_hist * bins.at< float >( 1, i ) );
-        line( result, start, end, Scalar( 40, 150, 40 ) );
+        line( result, start, end, cv::Scalar( 40, 150, 40 ) );
 
         end.y = h_hist - cvRound( h_hist * bins.at< float >( 2, i ) );
-        line( result, start, end, Scalar( 40, 40, 160 ) );
+        line( result, start, end, cv::Scalar( 40, 40, 160 ) );
     }
 
     for( int i = 1; i < w_hist; i++ ){
         /// Contour line
 
-        line( result,   Point( i - 1,   h_hist - cvRound( h_hist * bins.at< float >(0, i - 1    ) ) ),
-                        Point( i,       h_hist - cvRound( h_hist * bins.at< float >(0, i        ) ) ),
-                        Scalar( 255, 0, 0 ) );
+        line( result, cv::Point( i - 1,   h_hist - cvRound( h_hist * bins.at< float >(0, i - 1    ) ) ),
+            cv::Point(i, h_hist - cvRound(h_hist * bins.at< float >(0, i))),
+            cv::Scalar(255, 0, 0));
 
-        line( result,   Point( i - 1,   h_hist - cvRound( h_hist * bins.at< float >(1, i - 1    ) ) ),
-                        Point( i,       h_hist - cvRound( h_hist * bins.at< float >(1, i        ) ) ),
-                        Scalar( 0, 255, 0) );
+        line( result, cv::Point( i - 1,   h_hist - cvRound( h_hist * bins.at< float >(1, i - 1    ) ) ),
+            cv::Point( i,       h_hist - cvRound( h_hist * bins.at< float >(1, i        ) ) ),
+            cv::Scalar( 0, 255, 0) );
 
-        line( result,   Point( i - 1,   h_hist - cvRound( h_hist * bins.at< float >(2, i - 1    ) ) ),
-                        Point( i,       h_hist - cvRound( h_hist * bins.at< float >(2, i        ) ) ),
-                        Scalar( 0, 0, 255) );
+        line( result, cv::Point( i - 1,   h_hist - cvRound( h_hist * bins.at< float >(2, i - 1    ) ) ),
+            cv::Point( i,       h_hist - cvRound( h_hist * bins.at< float >(2, i        ) ) ),
+            cv::Scalar( 0, 0, 255) );
     }
 
     return result;

@@ -1,3 +1,4 @@
+#pragma once
 /*
                             HistogramRGB.h
 
@@ -32,30 +33,30 @@
 * \date    03/06/2014
 * \brief   Create/Analyse histogram of a rgb image.
 */
+#include "Commons.h"
 
-#pragma once
 
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/opencv.hpp>
+
 #include <iostream>
 #include "Histogram.h"
 
 
-using namespace cv;
+namespace freeture
+{
+    class HistogramRGB : public Histogram {
 
-class HistogramRGB : public Histogram {
+        /**
+        * Clear bins.
+        *
+        */
+        void clear() {
 
-    /**
-    * Clear bins.
-    *
-    */
-    void clear() {
+            bins.setTo(cv::Scalar(0.f));
 
-        bins.setTo(Scalar( 0.f ));
+        };
 
-    };
-
-    public :
+    public:
 
         /**
         * Constructor.
@@ -69,7 +70,7 @@ class HistogramRGB : public Histogram {
         * @param image Opencv mat image to analysis.
         * @return Success status.
         */
-        int calculate(Mat& image);
+        int calculate(cv::Mat& image);
 
         /**
         * Normalize bins.
@@ -82,5 +83,6 @@ class HistogramRGB : public Histogram {
         *
         * @return Histogram.
         */
-        Mat render(void);
-};
+        cv::Mat render(void);
+    };
+}

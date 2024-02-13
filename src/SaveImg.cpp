@@ -37,12 +37,12 @@
 #include <opencv2/imgcodecs/legacy/constants_c.h>
 
 #include "SaveImg.h"
+using namespace freeture;
 
 
 using namespace std;
-using namespace cv;
 
-bool SaveImg::saveJPEG(Mat img, string name){
+bool SaveImg::saveJPEG(cv::Mat img, string name){
 
     // Vector that stores the compression parameters of the image.
     vector<int> compression_params;
@@ -58,13 +58,13 @@ bool SaveImg::saveJPEG(Mat img, string name){
 
 }
 
-bool SaveImg::saveBMP(Mat img, string name){
+bool SaveImg::saveBMP(cv::Mat img, string name){
 
     return imwrite(name+".bmp", img);
 
 }
 
-bool SaveImg::savePNG(Mat img, string name){
+bool SaveImg::savePNG(cv::Mat img, string name){
 
     vector<int> compression_params;
     compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);

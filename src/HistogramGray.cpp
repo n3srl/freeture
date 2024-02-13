@@ -35,18 +35,20 @@
 
 #include "HistogramGray.h"
 
+using namespace freeture;
+
 HistogramGray::HistogramGray(){
 
-        bins = Mat(1, 256, CV_32F, Scalar(0.f));
+        bins = cv::Mat(1, 256, CV_32F, cv::Scalar(0.f));
 
 }
 
-int HistogramGray::calculate(Mat& image){
+int HistogramGray::calculate(cv::Mat& image){
 
     if( image.channels() != 1 || image.type() != CV_8U ) { return 1; }
     this->clear();
-    Mat_< uchar >::iterator it = image.begin< uchar >();
-    Mat_< uchar >::iterator itend = image.end< uchar >();
+    cv::Mat_< uchar >::iterator it = image.begin< uchar >();
+    cv::Mat_< uchar >::iterator itend = image.end< uchar >();
 
     for( ; it != itend; ++it ) {
         bins.at< float >( 0, *it ) += 1.f;
@@ -58,8 +60,8 @@ int HistogramGray::calculate(Mat& image){
 
 void HistogramGray::normalize(void){
 
-    Mat_< float >::iterator it = bins.begin< float >();
-    Mat_< float >::iterator itend = bins.end< float >();
+    cv::Mat_< float >::iterator it = bins.begin< float >();
+    cv::Mat_< float >::iterator itend = bins.end< float >();
     float max = 1.f;
 
     for( ; it != itend; ++it ) {
@@ -69,15 +71,15 @@ void HistogramGray::normalize(void){
     bins /= max;
 }
 
-Mat HistogramGray::render(void){
+cv::Mat HistogramGray::render(void){
 
-    Mat result( 100, 256, CV_8U, Scalar( 0 ) );
-    Point start( 0, 0 ), end( 0, 0 );
+    cv::Mat result( 100, 256, CV_8U, cv::Scalar( 0 ) );
+    cv::Point start( 0, 0 ), end( 0, 0 );
 
     for( int i = 0; i < 256; i++ ) {
         start.x = end.x = i;
         end.y = cvRound( 100.f * bins.at< float >( i ) );
-        line( result, start, end, Scalar( 255 ) );
+        line( result, start, end, cv::Scalar( 255 ) );
     }
 
     flip( result, result, 0 );
@@ -85,11 +87,11 @@ Mat HistogramGray::render(void){
     return result;
 }
 
-Mat HistogramGray::renderHistogramOnImage(Mat image){
+cv::Mat HistogramGray::renderHistogramOnImage(cv::Mat image){
 
-    Mat h = render();
+    cv::Mat h = render();
 
-    h.copyTo(image(Rect(0, image.rows - h.rows,h.cols,h.rows)));
+    h.copyTo(image(cv::Rect(0, image.rows - h.rows,h.cols,h.rows)));
 
     return image;
 

@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 AcqThread.h
 
@@ -6,7 +7,8 @@
 *   This file is part of:   freeture
 *
 *   Copyright:      (C) 2014-2016 Yoan Audureau, Chiara Marmo -- GEOPS-UPSUD
-*
+*                   (C) 2022-2024 Andrea Novati - N3 S.r.l.
+* 
 *   License:        GNU General Public License
 *
 *   FreeTure is free software: you can redistribute it and/or modify
@@ -32,57 +34,42 @@
 * \brief   Acquisition thread.
 */
 
-#ifndef ACQTHREAD_H
-#define ACQTHREAD_H
+//headers refactoring ok
+#include "Commons.h"
 
-#include "config.h"
+#include "TimeDate.h"
+#include "Frame.h"
 
-#ifdef LINUX
-    #define BOOST_LOG_DYN_LINK 1
-#endif
 
-#include "ECamPixFmt.h"
-#include "EImgFormat.h"
-#include "DetThread.h"
-#include "StackThread.h"
-#include "Device.h"
-#include "ExposureControl.h"
-#include "ImgProcessing.h"
-#include "Ephemeris.h"
-#include "Fits2D.h"
 #include "SParam.h"
-#include "Device.h"
-#include "CameraDeviceManager.h"
 
-class AcqThread {
+#include <boost/thread/thread.hpp>
+#include <boost/thread/condition_variable.hpp>
+#include <boost/circular_buffer.hpp>
 
-    private :
 
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
+namespace freeture
+{
+    class DetThread;
+    class StackThread;
+    class Device;
+    class ExposureControl;
 
-        static class Init {
+    class AcqThread {
 
-            public:
-
-                Init() {
-
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("AcqThread"));
-
-                }
-
-        }initializer;
+    private:
 
         bool                mMustStop;              // Signal to stop thread.
         boost::mutex        mMustStopMutex;
-        boost::thread       *mThread;               // Acquisition thread.
+        boost::thread* mThread;               // Acquisition thread.
         bool                mThreadTerminated;      // Terminated status of the thread.
-        freeture::Device    *mDevice;               // Device used for acquisition.
+        Device* mDevice;               // Device used for acquisition.
         int                 mDeviceID;              // Index of the device to use.
         scheduleParam       mNextAcq;               // Next scheduled acquisition.
         int                 mNextAcqIndex;
-        DetThread           *pDetection;            // Pointer on detection thread in order to stop it or reset it when a regular capture occurs.
-        StackThread         *pStack;                // Pointer on stack thread in order to save and reset a stack when a regular capture occurs.
-        ExposureControl     *pExpCtrl;              // Pointer on exposure time control object while sunrise and sunset.
+        DetThread* pDetection;            // Pointer on detection thread in order to stop it or reset it when a regular capture occurs.
+        StackThread* pStack;                // Pointer on stack thread in order to save and reset a stack when a regular capture occurs.
+        ExposureControl* pExpCtrl;              // Pointer on exposure time control object while sunrise and sunset.
         std::string              mOutputDataPath;        // Dynamic location where to save data (regular captures etc...).
         std::string              mCurrentDate;
         int                 mStartSunriseTime;      // In seconds.
@@ -102,43 +89,43 @@ class AcqThread {
         videoParam          mvp;
 
         // Communication with the shared framebuffer.
-        boost::condition_variable *frameBuffer_condition;
-        boost::mutex *frameBuffer_mutex;
-        boost::circular_buffer<Frame> *frameBuffer;
+        boost::condition_variable* frameBuffer_condition;
+        boost::mutex* frameBuffer_mutex;
+        boost::circular_buffer<Frame>* frameBuffer;
 
         // Communication with DetThread.
-        bool *stackSignal;
-        boost::mutex *stackSignal_mutex;
-        boost::condition_variable *stackSignal_condition;
+        bool* stackSignal;
+        boost::mutex* stackSignal_mutex;
+        boost::condition_variable* stackSignal_condition;
 
         // Communication with StackThread.
-        bool *detSignal;
-        boost::mutex *detSignal_mutex;
-        boost::condition_variable *detSignal_condition;
+        bool* detSignal;
+        boost::mutex* detSignal_mutex;
+        boost::condition_variable* detSignal_condition;
 
-    public :
+    public:
 
-        AcqThread(  boost::circular_buffer<Frame>   *fb,
-                    boost::mutex                    *fb_m,
-                    boost::condition_variable       *fb_c,
-                    bool                            *sSignal,
-                    boost::mutex                    *sSignal_m,
-                    boost::condition_variable       *sSignal_c,
-                    bool                            *dSignal,
-                    boost::mutex                    *dSignal_m,
-                    boost::condition_variable       *dSignal_c,
-                    DetThread                       *detection,
-                    StackThread                     *stack,
-                    int                                 cid,
-                    dataParam                           dp,
-                    stackParam                          sp,
-                    stationParam                        stp,
-                    detectionParam                      dtp,
-                    cameraParam                         acq,
-                    framesParam                         fp,
-                    videoParam                          vp,
-                    fitskeysParam                       fkp,
-                    freeture::Device*                           device  );
+        AcqThread(boost::circular_buffer<Frame>* fb,
+            boost::mutex* fb_m,
+            boost::condition_variable* fb_c,
+            bool* sSignal,
+            boost::mutex* sSignal_m,
+            boost::condition_variable* sSignal_c,
+            bool* dSignal,
+            boost::mutex* dSignal_m,
+            boost::condition_variable* dSignal_c,
+            DetThread* detection,
+            StackThread* stack,
+            int                                 cid,
+            dataParam                           dp,
+            stackParam                          sp,
+            stationParam                        stp,
+            detectionParam                      dtp,
+            cameraParam                         acq,
+            framesParam                         fp,
+            videoParam                          vp,
+            fitskeysParam                       fkp,
+            freeture::Device* device);
 
         ~AcqThread(void);
 
@@ -173,7 +160,7 @@ class AcqThread {
         // Added
         bool buildCameraInContinousMode(bool);
 
-    private :
+    private:
         bool cleanStatus = false;
 
 
@@ -187,13 +174,12 @@ class AcqThread {
         void selectNextAcquisitionSchedule(TimeDate::Date date);
 
         // Save a capture on disk.
-        void saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, std::string imgPrefix);
+        void saveImageCaptured(Frame& img, int imgNum, ImgFormat outputType, std::string imgPrefix);
 
         // Run a regular or scheduled acquisition.
         void runImageCapture(int imgNumber, int imgExposure, int imgGain, CamPixFmt imgFormat, ImgFormat imgOutput, std::string imgPrefix);
 
         // Prepare the device for a continuous acquisition.
         bool prepareAcquisitionOnDevice();
-};
-
-#endif
+    };
+}

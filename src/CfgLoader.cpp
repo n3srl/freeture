@@ -34,6 +34,7 @@
 */
 
 #include "CfgLoader.h"
+using namespace freeture;
 
 CfgLoader::CfgLoader(void){}
 

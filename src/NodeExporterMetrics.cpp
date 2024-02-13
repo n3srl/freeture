@@ -8,6 +8,7 @@
 #include "Base64.h"
 
 using namespace std;
+using namespace freeture;
 
 NodeExporterMetrics* NodeExporterMetrics::m_Instance = nullptr;
 

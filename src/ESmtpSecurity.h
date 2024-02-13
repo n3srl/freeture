@@ -1,3 +1,4 @@
+#pragma once
 /*
                             ESmtpSecurity.h
 
@@ -25,13 +26,13 @@
 *
 *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-#pragma once
+namespace freeture
+{
+    enum SmtpSecurity {
 
-enum SmtpSecurity {
+        NO_SECURITY,
+        USE_TLS,
+        USE_SSL
 
-    NO_SECURITY,
-    USE_TLS,
-    USE_SSL
-
-};
-
+    };
+}

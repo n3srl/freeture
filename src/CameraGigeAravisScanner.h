@@ -1,12 +1,18 @@
 #pragma once
+#ifdef LINUX
+#include "Commons.h"
 
 #include "CameraScanner.h"
 
-class CameraGigeAravisScanner: public CameraScanner
+namespace freeture
 {
+    class CameraGigeAravisScanner : public CameraScanner
+    {
     public:
-       CameraGigeAravisScanner(CamSdkType);
+        CameraGigeAravisScanner(CamSdkType);
 
-       virtual void UpdateCameraList() override;
+        virtual void UpdateCameraList() override;
 
-};
+    };
+}
+#endif

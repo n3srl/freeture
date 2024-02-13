@@ -1,3 +1,4 @@
+#pragma once
 /*
                                     Conversion.h
 
@@ -32,8 +33,8 @@
 * \date    13/06/2014
 * \brief   Various conversion tools.
 */
+#include "Commons.h"
 
-#pragma once
 
 #include <iostream>
 #include <list>
@@ -43,9 +44,12 @@ namespace cv {
     class Mat;
 }
 
-class Conversion {
+namespace freeture
+{
 
-    public :
+    class Conversion {
+
+    public:
 
         /**
         * Get type of opencv mat object.
@@ -80,7 +84,7 @@ class Conversion {
         * @param in String to analyse.
         * @param delimiters
         */
-        static void stringTok(std::list<std::string>  &container, std::string const &in, const char * const delimiters);
+        static void stringTok(std::list<std::string>& container, std::string const& in, const char* const delimiters);
 
         /**
         * Convert an opencv image to 8 bits.
@@ -88,7 +92,7 @@ class Conversion {
         * @param img Opencv image to convert.
         * @return 8 bits opencv mat.
         */
-        static cv::Mat convertTo8UC1(cv::Mat &img);
+        static cv::Mat convertTo8UC1(cv::Mat& img);
 
         /**
         * Determine the number of "0" required.
@@ -117,5 +121,5 @@ class Conversion {
 
         static float roundToNearest(float value, float precision);
 
-};
-
+    };
+}

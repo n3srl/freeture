@@ -1,3 +1,4 @@
+#pragma once
 /*
                                     Ephemeris.h
 
@@ -33,18 +34,19 @@
 * \version 1.0
 * \date    06/07/2015
 */
+#include "Commons.h"
 
-#pragma once
 #include <math.h>
 #include <string>
 #include <iostream>
 #include <stdio.h>
 #include "TimeDate.h"
 
+namespace freeture
+{
+    class Ephemeris {
 
-class Ephemeris {
-
-    private :
+    private:
 
         double mPI;
         int mDay;
@@ -54,16 +56,17 @@ class Ephemeris {
         double mStationLongitude;
         double mStationLatitude;
 
-    public :
+    public:
 
         Ephemeris(std::string date, double sunElevation, double longitude, double latitude);
         ~Ephemeris();
-        bool computeEphemeris(int &sunriseHours, int &sunriseMinutes, int &sunsetHours, int &sunsetMinutes);
+        bool computeEphemeris(int& sunriseHours, int& sunriseMinutes, int& sunsetHours, int& sunsetMinutes);
 
-    private :
+    private:
 
         double dateToJulianDate();
         double longitudeSun(double JJ);
         double obliquity(double JJ);
 
-};
+    };
+}

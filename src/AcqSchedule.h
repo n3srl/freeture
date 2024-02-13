@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 AcqSchedule.h
 
@@ -32,13 +33,17 @@
 * \brief
 */
 
-#pragma once
+//headers refactoring ok
+#include "Commons.h"
 
-#include <stdio.h>
-#include <iostream>
+#include <string>
 
+#include "Commons.h"
 
-class AcqSchedule{
+namespace freeture
+{
+    class AcqSchedule
+    {
 
     private:
 
@@ -83,62 +88,63 @@ class AcqSchedule{
         *
         * @return Hours.
         */
-        int getH() {return mH;};
+        int getH() { return mH; };
 
         /**
         * Get acquisition minutes.
         *
         * @return Minutes.
         */
-        int getM() {return mM;};
+        int getM() { return mM; };
 
         /**
         * Get acquisition seconds.
         *
         * @return Seconds.
         */
-        int getS() {return mS;};
+        int getS() { return mS; };
 
         /**
         * Get acquisition exposure time value.
         *
         * @return Exposure time.
         */
-        int getE() {return mE;};
+        int getE() { return mE; };
 
         /**
         * Get acquisition gain.
         *
         * @return Gain.
         */
-        int getG() {return mG;};
+        int getG() { return mG; };
 
         /**
         * Get acquisition format.
         *
         * @return Format : 8 or 12.
         */
-        int getF() {return mF;};
+        int getF() { return mF; };
 
         /**
         * Get acquisition repetition number.
         *
         * @return Repetition number.
         */
-        int getN() {return mN;};
+        int getN() { return mN; };
 
         /**
         * Set acquisition date.
         *
         * @param Date : YYYY-MM-DDTHH:MM:SS,fffffffff
         */
-        void setDate(std::string date) {mDate = date;};
+        void setDate(std::string date) { mDate = date; };
 
         /**
         * Get acquisition date.
         *
         * @return Date : YYYY-MM-DDTHH:MM:SS,fffffffff
         */
-        std::string getDate() {return mDate;};
+        std::string getDate() { return mDate; };
 
-};
+    };
+}

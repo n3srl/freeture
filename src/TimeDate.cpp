@@ -32,16 +32,26 @@
 * \date    13/06/2014
 * \brief   Manage time.
 */
+#include <iostream>
+#include <boost/tokenizer.hpp>
+#include <boost/date_time.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/date_time/posix_time/posix_time_io.hpp>
+#include <list>
+#include "Conversion.h"
 
 #include "TimeDate.h"
 
-//http://rhubbarb.wordpress.com/2009/10/17/boost-datetime-locales-and-facets/
-std::string TimeDate::localDateTime(::boost::posix_time::ptime pt, std::string format){
+using namespace std;
+using namespace freeture;
 
-    std::string s;
-    std::ostringstream datetime_ss;
+//http://rhubbarb.wordpress.com/2009/10/17/boost-datetime-locales-and-facets/
+string freeture::TimeDate::localDateTime(::boost::posix_time::ptime pt, string format){
+
+    string s;
+    ostringstream datetime_ss;
     ::boost::posix_time::time_facet * p_time_output = new ::boost::posix_time::time_facet;
-    std::locale special_locale (std::locale(""), p_time_output);
+    locale special_locale (locale(""), p_time_output);
     // special_locale takes ownership of the p_time_output facet
     datetime_ss.imbue (special_locale);
     (*p_time_output).format(format.c_str()); // date time
@@ -52,14 +62,14 @@ std::string TimeDate::localDateTime(::boost::posix_time::ptime pt, std::string f
 
 }
 
-std::string TimeDate::getCurrentDateYYYYMMDD() {
+string TimeDate::getCurrentDateYYYYMMDD() {
 
 
     boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
 
     // Convert to form YYYYMMDDTHHMMSS,fffffffff where T is the date-time separator
-    std::string date = to_iso_string(time);
-    std::list<std::string> ch;
+    string date = to_iso_string(time);
+    list<string> ch;
     Conversion::stringTok(ch, date.c_str(), "T");
 
     return ch.front();
@@ -82,11 +92,11 @@ double TimeDate::gregorianToJulian(Date date){
     double f2 = modf(365.25*date.year,&C);
     double f3 = modf(30.6001*(date.month+1),&D);
 
-    std::ostringstream strs;
+    ostringstream strs;
     double val = B+C+D+date.day+1720994.5;
     strs << val;
-    std::string str = strs.str();
-    //cout <<std::setprecision(5)<< std::fixed<< val<<endl;
+    string str = strs.str();
+    //cout <<setprecision(5)<< fixed<< val<<endl;
 
     return B+C+D+date.day+1720994.5;
 
@@ -115,13 +125,12 @@ double TimeDate::hmsToHdecimal(int H, int M, int S){
     res = res + fractPartS;
 
     return res;
-
 }
 
 //conversion longitude degrées en H M S
-std::vector <int> TimeDate::HdecimalToHMS(double val){
+vector <int> TimeDate::HdecimalToHMS(double val){
 
-    std::vector<int> res;
+    vector<int> res;
 
     double entPart_h;
     double fractPart_ms_dec = modf(val,&entPart_h);
@@ -194,10 +203,10 @@ double TimeDate::localSideralTime_2(double julianCentury, int gregorianH, int gr
     double fractPart_s = modf(fractPart_ms_dec*60,&entPart_m);
     //cout << "fractPart_s "<< fractPart_s<<endl;
 
-    std::vector<int> GTSM0_hms;
+    vector<int> GTSM0_hms;
     GTSM0_hms.push_back((int)entPart_h%24); // H
     GTSM0_hms.push_back((int)entPart_m); // M
-    GTSM0_hms.push_back((int)std::floor(fractPart_s*60 + 0.5)); // S
+    GTSM0_hms.push_back((int)floor(fractPart_s*60 + 0.5)); // S
 
     //cout << "GTSM0_hms-> "<<GTSM0_hms.at(0)<<"h "<<GTSM0_hms.at(1)<< "m "<<GTSM0_hms.at(2)<< "s"<<endl;
 
@@ -238,7 +247,7 @@ double TimeDate::localSideralTime_2(double julianCentury, int gregorianH, int gr
     double fractPart_gtsm_s = modf(fractPart_gtsm_ms_dec*60,&entPart_gtsm_m);
   //  cout << "fractPart_gtsm_s "<< fractPart_gtsm_s<<endl;
 
-    std::vector<double> GTSM0Local_hms;
+    vector<double> GTSM0Local_hms;
     GTSM0Local_hms.push_back((double)((int)entPart_gtsm_h%24)); // H
     GTSM0Local_hms.push_back(entPart_gtsm_m); // M
     GTSM0Local_hms.push_back(fractPart_gtsm_s*60); // S
@@ -254,10 +263,10 @@ double TimeDate::localSideralTime_2(double julianCentury, int gregorianH, int gr
 
 }
 
-std::vector<int> TimeDate::splitStringToInt(std::string str){
+vector<int> TimeDate::splitStringToInt(string str){
 
-    std::vector<std::string> output;
-    std::vector<int> intOutput;
+    vector<string> output;
+    vector<int> intOutput;
     typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
     boost::char_separator<char> sep(":");
     tokenizer tokens(str, sep);
@@ -276,13 +285,13 @@ std::vector<int> TimeDate::splitStringToInt(std::string str){
 
 // Input date format : YYYY:MM:DD from YYYY-MM-DDTHH:MM:SS,fffffffff
 // Output : vector<int> with YYYY, MM, DD, hh, mm, ss
-std::vector<int> TimeDate::getIntVectorFromDateString(std::string date){
+vector<int> TimeDate::getIntVectorFromDateString(string date){
 
-    std::vector<std::string> output1;
-    std::vector<std::string> output2;
-    std::vector<std::string> output3;
-    std::vector<std::string> output4;
-    std::vector<int> finalOuput;
+    vector<string> output1;
+    vector<string> output2;
+    vector<string> output3;
+    vector<string> output4;
+    vector<int> finalOuput;
 
     // Extract YYYY:MM:DD and HH:MM:SS,fffffffff from YYYY-MM-DDTHH:MM:SS,fffffffff
     typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
@@ -325,7 +334,7 @@ std::vector<int> TimeDate::getIntVectorFromDateString(std::string date){
 
 // Input date format : YYYY-MM-DDTHH:MM:SS,fffffffff
 // Output : YYYY, MM, DD, hh, mm, ss.ss
-TimeDate::Date TimeDate::splitIsoExtendedDate(std::string date) {
+TimeDate::Date TimeDate::splitIsoExtendedDate(string date) {
 
     Date res;
     res.year = atoi(date.substr(0,4).c_str());
@@ -333,7 +342,7 @@ TimeDate::Date TimeDate::splitIsoExtendedDate(std::string date) {
     res.day = atoi(date.substr(8,2).c_str());
     res.hours = atoi(date.substr(11,2).c_str());
     res.minutes = atoi(date.substr(14,2).c_str());
-    res.seconds = std::stod(date.substr(17,std::string::npos).c_str());
+    res.seconds = stod(date.substr(17,string::npos).c_str());
 
     return res;
 
@@ -341,9 +350,9 @@ TimeDate::Date TimeDate::splitIsoExtendedDate(std::string date) {
 
 // Input : YYYY, MM, DD, hh, mm, ss.ss
 // Output  YYYY-MM-DDTHH:MM:SS,fffffffff
-std::string TimeDate::getIsoExtendedFormatDate(Date date) {
+string TimeDate::getIsoExtendedFormatDate(Date date) {
 
-    std::string isoExtendedDate =    Conversion::intToString(date.year) + "-" +
+    string isoExtendedDate =    Conversion::intToString(date.year) + "-" +
                                 Conversion::numbering(2,date.month) + Conversion::intToString(date.month) + "-" +
                                 Conversion::numbering(2,date.day) + Conversion::intToString(date.day) + "T" +
                                 Conversion::numbering(2,date.hours) + Conversion::intToString(date.hours) + ":" +
@@ -355,10 +364,10 @@ std::string TimeDate::getIsoExtendedFormatDate(Date date) {
 }
 
 // Input date format : YYYY:MM:DD from YYYY-MM-DDTHH:MM:SS,fffffffff
-std::string TimeDate::getYYYYMMDDfromDateString(std::string date){
+string TimeDate::getYYYYMMDDfromDateString(string date){
 
-    std::vector<std::string> output1;
-    std::vector<std::string> output2;
+    vector<string> output1;
+    vector<string> output2;
 
     // Extract YYYY:MM:DD from YYYY-MM-DDTHH:MM:SS,fffffffff
     typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
@@ -376,7 +385,7 @@ std::string TimeDate::getYYYYMMDDfromDateString(std::string date){
     }
 
     // Build YYYYMMDD string.
-    std::string yyyymmdd = "";
+    string yyyymmdd = "";
     for(int i = 0; i< output2.size(); i++){
 
         yyyymmdd += output2.at(i);
@@ -388,9 +397,9 @@ std::string TimeDate::getYYYYMMDDfromDateString(std::string date){
 }
 
 // output : YYYYMMJJTHHMMSS
-std::string TimeDate::getYYYYMMDDThhmmss(Date date) {
+string TimeDate::getYYYYMMDDThhmmss(Date date) {
 
-    std::string res =    Conversion::numbering(4,date.year) + Conversion::intToString(date.year) +
+    string res =    Conversion::numbering(4,date.year) + Conversion::intToString(date.year) +
                     Conversion::numbering(2,date.month) + Conversion::intToString(date.month) +
                     Conversion::numbering(2,date.day) + Conversion::intToString(date.day) + "T" +
                     Conversion::numbering(2,date.hours) + Conversion::intToString(date.hours) +
@@ -401,18 +410,18 @@ std::string TimeDate::getYYYYMMDDThhmmss(Date date) {
 
 }
 
-std::string TimeDate::getYYYYMMDD(Date date) {
+string TimeDate::getYYYYMMDD(Date date) {
 
-    std::string res =    Conversion::numbering(4,date.year) + Conversion::intToString(date.year) +
+    string res =    Conversion::numbering(4,date.year) + Conversion::intToString(date.year) +
                     Conversion::numbering(2,date.month) + Conversion::intToString(date.month) +
                     Conversion::numbering(2,date.day) + Conversion::intToString(date.day);
 
     return res;
 }
 
-std::string TimeDate::getYYYYMMDDThhmmss(std::string date){
+string TimeDate::getYYYYMMDDThhmmss(string date){
 
-    std::string finalDate = "";
+    string finalDate = "";
 
     boost::char_separator<char> sep(".");
     boost::char_separator<char> sep1("T");
@@ -420,7 +429,7 @@ std::string TimeDate::getYYYYMMDDThhmmss(std::string date){
     boost::char_separator<char> sep3(":");
 
     // Extract YYYY-MM-DDTHH:MM:SS from YYYY-MM-DDTHH:MM:SS,fffffffff
-    std::vector<std::string> output; // Two elements : YYYY-MM-DDTHH:MM:SS and fffffffff
+    vector<string> output; // Two elements : YYYY-MM-DDTHH:MM:SS and fffffffff
     typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
     tokenizer tokens(date, sep);
     for (tokenizer::iterator tok_iter = tokens.begin();tok_iter != tokens.end(); ++tok_iter){
@@ -428,7 +437,7 @@ std::string TimeDate::getYYYYMMDDThhmmss(std::string date){
     }
 
     // Extract YYYY-MM-DD and HH:MM:SS from YYYY-MM-DDTHH:MM:SS
-    std::vector<std::string> output1; // Two elements : YYYY-MM-DD and HH:MM:SS
+    vector<string> output1; // Two elements : YYYY-MM-DD and HH:MM:SS
     tokenizer tokens1(output.front(), sep1);
     for (tokenizer::iterator tok_iter = tokens1.begin();tok_iter != tokens1.end(); ++tok_iter){
         output1.push_back(*tok_iter);
@@ -454,14 +463,14 @@ std::string TimeDate::getYYYYMMDDThhmmss(std::string date){
 
 int TimeDate::secBetweenTwoDates(Date d1, Date d2) {
 
-    std::string sd2 =    Conversion::numbering(4,d2.year) + Conversion::intToString(d2.year) +
+    string sd2 =    Conversion::numbering(4,d2.year) + Conversion::intToString(d2.year) +
                     Conversion::numbering(2,d2.month) + Conversion::intToString(d2.month) +
                     Conversion::numbering(2,d2.day) + Conversion::intToString(d2.day) + "T" +
                     Conversion::numbering(2,d2.hours) + Conversion::intToString(d2.hours) +
                     Conversion::numbering(2,d2.minutes) + Conversion::intToString(d2.minutes) +
                     Conversion::numbering(2,d2.seconds) + Conversion::intToString((int)d2.seconds);
 
-    std::string sd1 =    Conversion::numbering(4,d1.year) + Conversion::intToString(d1.year) +
+    string sd1 =    Conversion::numbering(4,d1.year) + Conversion::intToString(d1.year) +
                     Conversion::numbering(2,d1.month) + Conversion::intToString(d1.month) +
                     Conversion::numbering(2,d1.day) + Conversion::intToString(d1.day) + "T" +
                     Conversion::numbering(2,d1.hours) + Conversion::intToString(d1.hours) +
@@ -474,5 +483,3 @@ int TimeDate::secBetweenTwoDates(Date d1, Date d2) {
     return td.total_seconds();
 
 }
-
-

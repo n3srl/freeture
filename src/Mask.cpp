@@ -37,6 +37,8 @@
 #include "Constants.h"
 #include "Mask.h"
 
+using namespace freeture;
+
 
 Mask::Mask(int timeInterval, bool customMask, std::string customMaskPath, bool downsampleMask, CamPixFmt format, bool updateMask):
 mUpdateInterval(timeInterval), mUpdateMask(updateMask) {
@@ -44,7 +46,7 @@ mUpdateInterval(timeInterval), mUpdateMask(updateMask) {
     mMaskToCreate = false;
     updateStatus = false;
     refDate = to_simple_string(boost::posix_time::second_clock::universal_time());
-    satMap = boost::circular_buffer<Mat>(2);
+    satMap = boost::circular_buffer<cv::Mat>(2);
 
     // Load a mask from file.
     if(customMask) {
@@ -55,7 +57,7 @@ mUpdateInterval(timeInterval), mUpdateMask(updateMask) {
             throw "Fail to load the mask from its path.";
 
         if(downsampleMask)
-            pyrDown(mOriginalMask, mOriginalMask, Size(mOriginalMask.cols/2, mOriginalMask.rows/2));
+            pyrDown(mOriginalMask, mOriginalMask, cv::Size(mOriginalMask.cols/2, mOriginalMask.rows/2));
 
         mOriginalMask.copyTo(mCurrentMask);
 
@@ -82,11 +84,11 @@ mUpdateInterval(timeInterval), mUpdateMask(updateMask) {
 
 }
 
-bool Mask::applyMask(Mat &currFrame) {
+bool Mask::applyMask(cv::Mat &currFrame) {
 
     if(mMaskToCreate) {
 
-        mOriginalMask = Mat(currFrame.rows, currFrame.cols, CV_8UC1,Scalar(255));
+        mOriginalMask = cv::Mat(currFrame.rows, currFrame.cols, CV_8UC1, cv::Scalar(255));
         mOriginalMask.copyTo(mCurrentMask);
         mMaskToCreate = false;
 
@@ -105,24 +107,24 @@ bool Mask::applyMask(Mat &currFrame) {
             // Reference date.
             refDate = to_simple_string(boost::posix_time::second_clock::universal_time());
 
-            Mat saturateMap = ImgProcessing::buildSaturatedMap(currFrame, saturatedValue);
+            cv::Mat saturateMap = ImgProcessing::buildSaturatedMap(currFrame, saturatedValue);
 
             // Dilatation of the saturated map.
             int dilation_size = 10;
-            Mat element = getStructuringElement(MORPH_RECT, Size(2*dilation_size + 1, 2*dilation_size+1), Point(dilation_size, dilation_size));
+            cv::Mat element = getStructuringElement(cv::MORPH_RECT, cv::Size(2*dilation_size + 1, 2*dilation_size+1), cv::Point(dilation_size, dilation_size));
             cv::dilate(saturateMap, saturateMap, element);
 
             satMap.push_back(saturateMap);
 
             if(satMap.size() == 2) {
 
-                Mat temp = satMap.front() & satMap.back();
+                cv::Mat temp = satMap.front() & satMap.back();
                 bitwise_not(temp,temp);
                 temp.copyTo(mCurrentMask, mOriginalMask);
 
             }
 
-            Mat temp; currFrame.copyTo(temp, mCurrentMask);
+            cv::Mat temp; currFrame.copyTo(temp, mCurrentMask);
             temp.copyTo(currFrame);
 
             updateStatus = false;
@@ -152,7 +154,7 @@ bool Mask::applyMask(Mat &currFrame) {
         return true;
     }
 
-    Mat temp; currFrame.copyTo(temp, mCurrentMask);
+    cv::Mat temp; currFrame.copyTo(temp, mCurrentMask);
     temp.copyTo(currFrame);
 
     return false; // Mask applied.

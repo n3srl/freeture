@@ -1,3 +1,4 @@
+#pragma once
 /*
                             ECamPixFmt.h
 
@@ -7,7 +8,8 @@
 *
 *   Copyright:      (C) 2014-2015 Yoan Audureau
 *                               GEOPS-UPSUD-CNRS
-*
+*                   (C) 2020-2024 Andrea Novati - N3 S.r.l.
+* 
 *   License:        GNU General Public License
 *
 *   FreeTure is free software: you can redistribute it and/or modify
@@ -24,20 +26,20 @@
 *   Last modified:      01/12/2014
 *
 *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
+namespace freeture
+{
+    enum CamPixFmt {
 
-#pragma once
+        MONO8,  // = Y800 = GREY
+        MONO12, // Msb aligned : XXXXnnnnnnnnnnnn (X = unused)
+        GREY,
+        Y800,
+        YUYV,
+        UYVY,
+        RGB565,
+        MONO16,
+        BGR3,
+        RGB3
 
-enum CamPixFmt{
-
-    MONO8,  // = Y800 = GREY
-    MONO12, // Msb aligned : XXXXnnnnnnnnnnnn (X = unused)
-    GREY,
-    Y800,
-    YUYV,
-    UYVY,
-    RGB565,
-    MONO16,
-    BGR3,
-    RGB3
-
-};
+    };
+}

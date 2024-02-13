@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 Fits.h
 
@@ -32,19 +33,19 @@
 * \date    04/12/2014
 */
 
-#pragma once
+#include "Commons.h"
 
 #include "SParam.h"
-#include "config.h"
 
 #include <boost/filesystem.hpp>
 
 using namespace boost::filesystem;
 
+namespace freeture
+{
+    class Fits {
 
-class Fits {
-
-     public :
+    public:
 
         std::string  STATION;
 
@@ -152,12 +153,13 @@ class Fits {
         std::string  cK2;
         std::string  cCOMMENT;
 
-    public :
+    public:
 
         Fits();
 
         ~Fits();
 
         void loadKeys(fitskeysParam fkp, stationParam sp);
-};
+    };
+}
 

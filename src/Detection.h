@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 Detection.h
 
@@ -32,66 +33,54 @@
 * \date    03/06/2014
 * \brief   Detection interface.
 */
+//header refactoring true
+#include "Commons.h"
 
-#pragma once
-
-#include "config.h"
-
-#ifdef LINUX
-    #define BOOST_LOG_DYN_LINK 1
-#endif
-
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <boost/log/common.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/attributes/named_scope.hpp>
-#include <boost/log/attributes.hpp>
-#include <boost/log/sinks.hpp>
-#include <boost/log/sources/logger.hpp>
-#include <boost/log/core.hpp>
-#include "ELogSeverityLevel.h"
-#include <boost/tokenizer.hpp>
+#include <string>
 #include <vector>
-#include <iterator>
-#include <algorithm>
+
 #include "TimeDate.h"
-#include "Fits2D.h"
-#include "Fits.h"
 #include "Frame.h"
-#include "EStackMeth.h"
-#include "ECamPixFmt.h"
-#include <boost/filesystem.hpp>
-#include "SParam.h"
 
-using namespace boost::filesystem;
+// 
+// 
+// #ifdef LINUX
+// #define BOOST_LOG_DYN_LINK 1
+// #endif
+// 
+// #include <boost/log/common.hpp>
+// #include <boost/log/expressions.hpp>
+// #include <boost/log/utility/setup/file.hpp>
+// #include <boost/log/utility/setup/console.hpp>
+// #include <boost/log/utility/setup/common_attributes.hpp>
+// #include <boost/log/attributes/named_scope.hpp>
+// #include <boost/log/attributes.hpp>
+// #include <boost/log/sinks.hpp>
+// #include <boost/log/sources/logger.hpp>
+// #include <boost/log/core.hpp>
+// #include "ELogSeverityLevel.h"
+// #include <boost/tokenizer.hpp>
+// #include <vector>
+// #include <iterator>
+// #include <algorithm>
+// #include "TimeDate.h"
+// #include "Fits2D.h"
+// #include "Fits.h"
+// #include "Frame.h"
+// #include "EStackMeth.h"
+// #include "ECamPixFmt.h"
+// #include <boost/filesystem.hpp>
+// #include "SParam.h"
 
-using namespace cv;
+namespace freeture
+{
+    class Detection {
 
-class Detection {
-
-    private :
-
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
-
-        static class Init {
-
-            public:
-
-                Init() {
-
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("Detection"));
-
-                }
-
-        }initializer;
+    private:
 
     public:
 
-        virtual ~Detection() {};
+        virtual ~Detection() {}
 
         /**
         * Run meteor detection method.
@@ -99,11 +88,11 @@ class Detection {
         * @param c Current frame.
         * @return Success to perform analysis.
         */
-        virtual bool runDetection(Frame &c) {
+        virtual bool runDetection(Frame& c) {
 
             return false;
 
-        };
+        }
 
         /**
         * Get the number of the first detected event's frame.
@@ -114,7 +103,7 @@ class Detection {
 
             return 0;
 
-        };
+        }
 
         /**
         * Get the number of the last detected event's frame.
@@ -125,7 +114,7 @@ class Detection {
 
             return 0;
 
-        };
+        }
 
         /**
         * Get date of the detected event.
@@ -137,27 +126,27 @@ class Detection {
             TimeDate::Date date;
             return date;
 
-        };
+        }
 
         /**
         * Reset detection method.
         *
         */
-        virtual void resetDetection(bool loadNewDataSet){};
+        virtual void resetDetection(bool loadNewDataSet) {}
 
         /**
         * Reset mask.
         *
         */
-        virtual void resetMask(){};
+        virtual void resetMask() {}
 
         /**
         * Save infos on the detected event.
         *
         */
-        virtual void saveDetectionInfos(std::string p, int nbFramesAround){};
+        virtual void saveDetectionInfos(std::string p, int nbFramesAround) {}
 
-        virtual std::vector<std::string> getDebugFiles() {std::vector<std::string> files; return files;};
+        virtual std::vector<std::string> getDebugFiles() { std::vector<std::string> files; return files; }
 
-};
-
+    };
+}

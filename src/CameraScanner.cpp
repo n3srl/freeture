@@ -1,17 +1,20 @@
 #include "CameraScanner.h"
 
+#include <string>
+
 #include "CameraGigeAravisScanner.h"
 #include "CameraLucidArenaScanner.h"
 #include "CameraLucidArena_PHX016SScanner.h"
 
+#include "Logger.h"
+
 using namespace std;
-
-
+using namespace freeture;
 
 /**
   Update the List of camera descriptions and return back the vector
  */
-std::vector<CameraDescription>& CameraScanner::getCamerasList()
+vector<CameraDescription>& CameraScanner::getCamerasList()
 {
     UpdateCameraList();
     return Devices;
@@ -25,11 +28,12 @@ CameraScanner* CameraScanner::CreateScanner(CamSdkType sdk)
 
     switch (sdk)
     {
+#ifdef LINUX
         case CamSdkType::ARAVIS:
             return new CameraGigeAravisScanner(sdk);
-
         case CamSdkType::LUCID_ARAVIS:
             return new CameraLucidArenaScanner(sdk);
+#endif
 
         case CamSdkType::LUCID_ARENA:
             return new CameraLucidArena_PHX016SScanner(sdk);
@@ -53,13 +57,13 @@ CameraScanner* CameraScanner::CreateScanner(CamSdkType sdk)
   */
 bool CameraScanner::listCameras()
 {
-    cout << "CameraLucidArena::listCameras"<< endl;
-    cout << endl << "------------ GIGE CAMERAS WITH ARAVIS ----------" << endl << endl;
+    LOG_DEBUG << "CameraLucidArena::listCameras"<< endl;
+    LOG_DEBUG << endl << "------------ GIGE CAMERAS WITH ARAVIS ----------" << endl << endl;
 
     for(int i = 0; i < Devices.size(); i++)
-        cout << "-> [" << Devices[i].Id << "] " << Devices[i].Description<< endl;
+        LOG_DEBUG << "-> [" << Devices[i].Id << "] " << Devices[i].Description<< endl;
 
-    cout << endl << "------------------------------------------------" << endl << endl;
+    LOG_DEBUG << endl << "------------------------------------------------" << endl << endl;
 
     return true;
 }

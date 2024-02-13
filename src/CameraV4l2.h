@@ -1,3 +1,4 @@
+#pragma once
 /*                      CameraV4l2.h
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -31,10 +32,8 @@
 * \version 1.2
 * \date    19/03/2019
 */
+#include "Commons.h"
 
-#pragma once
-
-#include "config.h"
 
 #ifdef LINUX
 
@@ -65,8 +64,6 @@
 
     #include <linux/videodev2.h>
 
-    #define BOOST_LOG_DYN_LINK 1
-
     #include "EParser.h"
     #include <boost/log/common.hpp>
     #include <boost/log/expressions.hpp>
@@ -82,23 +79,23 @@
     #include "PixFmtConv.h"
     #include <algorithm>
 
-    using namespace cv;
-
-    class CameraV4l2: public Camera {
+    namespace freeture
+    {
+        class CameraV4l2 : public Camera {
 
         private:
 
             static boost::log::sources::severity_logger< LogSeverityLevel > logger;
 
-            static class Init{
+            static class Init {
 
-                public:
+            public:
 
-                    Init(){
+                Init() {
 
-                        logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CameraV4l2"));
+                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CameraV4l2"));
 
-                    }
+                }
 
             }initializer;
 
@@ -111,14 +108,14 @@
             struct v4l2_format mFormat;
             bool mCustomSize;
 
-        public :
+        public:
 
-             void init_userp (unsigned int buffer_size);
-             void init_mmap (void);
-             void init_read (unsigned int buffer_size);
-             int read_frame (void);
-             void errno_exit (const char *s);
-             int xioctl (int fh, int request, void *arg);
+            void init_userp(unsigned int buffer_size);
+            void init_mmap(void);
+            void init_read(unsigned int buffer_size);
+            int read_frame(void);
+            void errno_exit(const char* s);
+            int xioctl(int fh, int request, void* arg);
 
 
             CameraV4l2();
@@ -127,7 +124,7 @@
 
             bool getInfos();
 
-            std::vector<std::pair<int,std::string>> getCamerasList();
+            std::vector<std::pair<int, std::string>> getCamerasList();
 
             bool listCameras();
 
@@ -145,25 +142,25 @@
 
             bool grabImage(Frame& newFrame);
 
-            bool grabSingleImage(Frame &frame, int camID);
+            bool grabSingleImage(Frame& frame, int camID);
 
-            bool getDeviceNameById(int id, std::string &device);
+            bool getDeviceNameById(int id, std::string& device);
 
             bool getCameraName();
 
-            void getExposureBounds(double &eMin, double &eMax);
+            void getExposureBounds(double& eMin, double& eMax);
 
-            void getGainBounds(int &gMin, int &gMax);
+            void getGainBounds(int& gMin, int& gMax);
 
-            bool getPixelFormat(CamPixFmt &format);
+            bool getPixelFormat(CamPixFmt& format);
 
-            bool getFrameSize(int &x, int &y, int &w, int &h);
+            bool getFrameSize(int& x, int& y, int& w, int& h);
 
             bool getFrameSizeEnum();
 
-            bool getFPS(double &value);
+            bool getFPS(double& value);
 
-            bool getFpsEnum(std::vector<double> &values);
+            bool getFpsEnum(std::vector<double>& values);
 
             std::string getModelName();
 
@@ -180,12 +177,12 @@
             void getAvailablePixelFormats();
 
 
-        private :
+        private:
 
-            bool convertImage(unsigned char* buffer, Mat &image);
+            bool convertImage(unsigned char* buffer, Mat& image);
 
             bool setSize();
 
-    };
-
+        };
+    }
 #endif

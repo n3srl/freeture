@@ -34,6 +34,7 @@
 */
 
 #include "EParser.h"
+using namespace freeture;
 
 template<> EParser<CamPixFmt>::EParser() {
 

@@ -34,8 +34,9 @@
  */
 
 #include "GlobalEvent.h"
+using namespace freeture;
 
-GlobalEvent::GlobalEvent(TimeDate::Date frameDate, int frameNum, int frameHeight, int frameWidth, Scalar c){
+GlobalEvent::GlobalEvent(TimeDate::Date frameDate, int frameNum, int frameHeight, int frameWidth, cv::Scalar c){
 
     geAge               = 0;
     geAgeLastLE         = 0;
@@ -43,15 +44,15 @@ GlobalEvent::GlobalEvent(TimeDate::Date frameDate, int frameNum, int frameHeight
     geFirstFrameNum     = frameNum;
     geLastFrameNum      = frameNum;
     newLeAdded          = false;
-    geMap               = Mat(frameHeight,frameWidth, CV_8UC1, Scalar(0));
-    geMapColor          = Mat(frameHeight,frameWidth, CV_8UC3, Scalar(0,0,0));
-    geDirMap            = Mat(frameHeight,frameWidth, CV_8UC3, Scalar(0,0,0));
+    geMap               = cv::Mat(frameHeight,frameWidth, CV_8UC1, cv::Scalar(0));
+    geMapColor          = cv::Mat(frameHeight,frameWidth, CV_8UC3, cv::Scalar(0,0,0));
+    geDirMap            = cv::Mat(frameHeight,frameWidth, CV_8UC3, cv::Scalar(0,0,0));
     geLinear            = true;
     geBadPoint          = 0;
     geGoodPoint         = 0;
     geShifting          = 0;
     geColor             = c;
-    geDir               = Point(0,0);
+    geDir               = cv::Point(0,0);
 
 }
 
@@ -62,7 +63,7 @@ GlobalEvent::~GlobalEvent(){
 bool GlobalEvent::addLE(LocalEvent le){
 
     // Get LE position.
-    Point center = Point(le.getMassCenter().x, le.getMassCenter().y);
+    cv::Point center = cv::Point(le.getMassCenter().x, le.getMassCenter().y);
 
     // Indicates if the le in input can be added to the global event.
     bool addLeDecision = true;
@@ -100,22 +101,22 @@ bool GlobalEvent::addLE(LocalEvent le){
             if(mainPts.size()>=2){
 
                 // Get first main point.
-                Point A = mainPts.front();
+                cv::Point A = mainPts.front();
                 listA.push_back(A);
                 // Get last main point.
-                Point B = mainPts.back();
+                cv::Point B = mainPts.back();
                 listB.push_back(B);
                 // Get current le position.
-                Point C = center;
+                cv::Point C = center;
                 listC.push_back(C);
                 // Vector from first main point to last main point.
-                Point u  = Point(B.x - A.x, B.y - A.y);
+                cv::Point u  = cv::Point(B.x - A.x, B.y - A.y);
                 listu.push_back(u);
 
 
 
                 // Vector from last main point to current le position.
-                Point v  = Point(C.x - B.x, C.y - B.y);
+                cv::Point v  = cv::Point(C.x - B.x, C.y - B.y);
                 listv.push_back(v);
                 geDir = v;
 
@@ -167,7 +168,7 @@ bool GlobalEvent::addLE(LocalEvent le){
                         addLeDecision = false;
                         ptsValidity.push_back(false);
                         mainPtsValidity.push_back(false);
-                        circle(geDirMap, center, 5, Scalar(0,0,255), 1, 8, 0);
+                        circle(geDirMap, center, 5, cv::Scalar(0,0,255), 1, 8, 0);
 
                     }else{
 
@@ -176,7 +177,7 @@ bool GlobalEvent::addLE(LocalEvent le){
                         mainPts.push_back(center);
                         ptsValidity.push_back(true);
                         mainPtsValidity.push_back(true);
-                        circle(geDirMap, center, 5, Scalar(255,255,255), 1, 8, 0);
+                        circle(geDirMap, center, 5, cv::Scalar(255,255,255), 1, 8, 0);
 
                     }
 
@@ -188,7 +189,7 @@ bool GlobalEvent::addLE(LocalEvent le){
                 mainPts.push_back(center);
                 geGoodPoint++;
                 ptsValidity.push_back(true);
-                circle(geDirMap, center, 5, Scalar(255,255,255), 1, 8, 0);
+                circle(geDirMap, center, 5, cv::Scalar(255,255,255), 1, 8, 0);
 
             }
         }
@@ -207,26 +208,26 @@ bool GlobalEvent::addLE(LocalEvent le){
         geAgeLastLE = 0;
 
         // Update ge map.
-        Mat res = geMap + le.getMap();
+        cv::Mat res = geMap + le.getMap();
         res.copyTo(geMap);
 
         // Update colored ge map.
-        std::vector<Point>::iterator it;
+        std::vector<cv::Point>::iterator it;
         int roiH = 10, roiW = 10;
         for(it = le.mLeRoiList.begin(); it != le.mLeRoiList.end(); ++it){
 
-            Mat roi(roiH,roiW,CV_8UC3,geColor);
-            roi.copyTo(geMapColor(Rect((*it).x-roiW/2,(*it).y-roiH/2,roiW,roiH)));
+            cv::Mat roi(roiH,roiW,CV_8UC3,geColor);
+            roi.copyTo(geMapColor(cv::Rect((*it).x-roiW/2,(*it).y-roiH/2,roiW,roiH)));
 
         }
 
         // Update dirMap
-        geDirMap.at<Vec3b>(center.y,center.x) = Vec3b(0,255,0);
+        geDirMap.at<cv::Vec3b>(center.y,center.x) = cv::Vec3b(0,255,0);
 
     }else{
 
         // Update dirMap
-        geDirMap.at<Vec3b>(center.y,center.x) = Vec3b(0,0,255);
+        geDirMap.at<cv::Vec3b>(center.y,center.x) = cv::Vec3b(0,0,255);
 
     }
 

@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 Fits2D.h
 
@@ -33,61 +34,29 @@
 * \date    12/03/2018
 * \brief   Write/Read fits2D file.
 */
+#include "Commons.h"
 
-#pragma once
-
-#include "config.h"
-
-#ifdef LINUX
-    #define BOOST_LOG_DYN_LINK 1
-#endif
+#include <string>
 
 #include "fitsio.h"
-#include <boost/log/common.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/attributes/named_scope.hpp>
-#include <boost/log/attributes.hpp>
-#include <boost/log/sinks.hpp>
-#include <boost/log/sources/logger.hpp>
-#include <boost/log/core.hpp>
-#include "ELogSeverityLevel.h"
-#include "TimeDate.h"
 #include "EImgBitDepth.h"
 #include "Fits.h"
-#include "Conversion.h"
 
 namespace cv 
 {
     class Mat;
 }
 
-using namespace boost::posix_time;
+namespace freeture
+{
+    class Fits2D : public Fits {
 
-class Fits2D : public Fits {
-
-    private :
+    private:
 
         // Location where to save fits or path of a fits file to read.
         std::string mFitsPath;
 
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
-
-        static class Init {
-
-            public :
-
-                Init() {
-
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("Fits2D"));
-
-                }
-
-        }initializer;
-
-    public :
+    public:
 
         /**
         * Constructor.
@@ -116,35 +85,35 @@ class Fits2D : public Fits {
         * @param img Reference on the container which will contain the read fits.
         *
         */
-        bool readFits32F(cv::Mat &img);
+        bool readFits32F(cv::Mat& img);
 
         /**
         * Read a Fits file in 16 bits unsigned char format.
         * @param img Reference on the container which will contain the read fits.
         *
         */
-        bool readFits16US(cv::Mat &img);
+        bool readFits16US(cv::Mat& img);
 
         /**
         * Read a Fits file in 16 bits signed char format.
         * @param img Reference on the container which will contain the read fits.
         *
         */
-        bool readFits16S(cv::Mat &img);
+        bool readFits16S(cv::Mat& img);
 
         /**
         * Read a Fits file in 8 bits unsigned char format.
         * @param img Reference on the container which will contain the read fits.
         *
         */
-        bool readFits8UC(cv::Mat &img);
+        bool readFits8UC(cv::Mat& img);
 
         /**
         * Read a Fits file in 8 bits signed char format.
         * @param img Reference on the container which will contain the read fits.
         *
         */
-        bool readFits8C(cv::Mat &img);
+        bool readFits8C(cv::Mat& img);
 
         /**
         * Read a keyword in integer type.
@@ -152,7 +121,7 @@ class Fits2D : public Fits {
         * @param value Reference on the found keyword's value.
         *
         */
-        bool readIntKeyword(std::string keyword, int &value);
+        bool readIntKeyword(std::string keyword, int& value);
 
         /**
         * Read a keyword in string type.
@@ -160,7 +129,7 @@ class Fits2D : public Fits {
         * @param value Reference on the found keyword's value.
         *
         */
-        bool readStringKeyword(std::string keyword, std::string &value);
+        bool readStringKeyword(std::string keyword, std::string& value);
 
         /**
         * Read a keyword in double type.
@@ -168,9 +137,9 @@ class Fits2D : public Fits {
         * @param value Reference on the found keyword's value.
         *
         */
-        bool readDoubleKeyword(std::string keyword, double &value);
+        bool readDoubleKeyword(std::string keyword, double& value);
 
-    private :
+    private:
 
         /**
         * Helper function to get cfitsio error.
@@ -193,6 +162,7 @@ class Fits2D : public Fits {
         * @return Success to write keywords.
         *
         */
-        bool writeKeywords(fitsfile *fptr);
+        bool writeKeywords(fitsfile* fptr);
 
-};
+    };
+}

@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 Camera.h
 
@@ -34,9 +35,10 @@
 * \brief
 */
 
-#pragma once
+//headers refactoring ok
+#include "Commons.h"
 
-#include "config.h"
+#include <string>
 
 #include "ECamPixFmt.h"
 #include "EInputDeviceType.h"
@@ -44,10 +46,12 @@
 #include "CameraScanner.h"
 #include "Frame.h"
 
-class Camera {
+namespace freeture
+{
+    class Camera {
 
-    public :
-        static CameraScanner*       Scanner;
+    public:
+        static CameraScanner* Scanner;
 
         bool                mExposureAvailable;
         bool                mGainAvailable;
@@ -57,11 +61,13 @@ class Camera {
         int                 mCamSizeWidth;
         int                 mCamSizeHeight;
         InputDeviceType     mInputDeviceType;
+
         bool                mVerbose;
+
         std::string         mCamDescription;
         std::string         mCamSerial;
 
-    public :
+    public:
 
         Camera() {
 
@@ -79,15 +85,15 @@ class Camera {
         * Get informations about a specific device.
         *
         */
-        virtual bool getInfos() {return false;};
+        virtual bool getInfos() { return false; };
 
         /**
         * Open/create a device.
         *
         * @param id Identification number of the camera to create.
         */
-        virtual bool createDevice(int id) {return false;};
-        virtual bool recreateDevice(int id) {return false;};
+        virtual bool createDevice(int id) { return false; };
+        virtual bool recreateDevice(int id) { return false; };
 
         /**
         * Get camera name from its ID.
@@ -96,31 +102,31 @@ class Camera {
         * @param device The camera's name found.
         * @return Success status to find camera's name.
         */
-        virtual bool getDeviceNameById(int id, std::string &deviceName) {return false;};
+        virtual bool getDeviceNameById(int id, std::string& deviceName) { return false; };
 
-        virtual bool getCameraName() {return false;};
+        virtual bool getCameraName() { return false; };
 
-        InputDeviceType getDeviceType() {return mInputDeviceType;};
+        InputDeviceType getDeviceType() { return mInputDeviceType; };
 
         /**
         * Get device's grabbing status.
         *
         * @return Device grabs frames or not.
         */
-        virtual bool getStopStatus() {return false;};
+        virtual bool getStopStatus() { return false; };
 
         /**
         * Prepare device to grab frames.
         *
         * @return Success status to prepare camera.
         */
-        virtual bool grabInitialization() {return false;};
+        virtual bool grabInitialization() { return false; };
 
         /**
         * Run acquisition.
         *
         */
-        virtual bool acqStart() {return false;};
+        virtual bool acqStart() { return false; };
 
         /**
         * Stop acquisition.
@@ -140,7 +146,7 @@ class Camera {
         * @param newFrame New frame's container object.
         * @return Success status to grab a frame.
         */
-        virtual bool grabImage(Frame &newFrame) {return false;};
+        virtual bool grabImage(Frame& newFrame) { return false; };
 
         /**
         * Get a frame from single acquisition.
@@ -149,7 +155,7 @@ class Camera {
         * @param camID Device's identification number from which the single acquisition will be performed.
         * @return Success status to grab a frame.
         */
-        virtual bool grabSingleImage(Frame &frame, int camID) {return false;};
+        virtual bool grabSingleImage(Frame& frame, int camID) { return false; };
 
         /**
         * Get device's exposure time bounds.
@@ -157,14 +163,14 @@ class Camera {
         * @param eMin Return minimum exposure time value.
         * @param eMax Return maximum exposure time value.
         */
-        virtual void getExposureBounds(double &eMin, double &eMax) {};
+        virtual void getExposureBounds(double& eMin, double& eMax) {};
         /**
         * Get device's frame acquisition bounds.
         *
         * @param eMin Return minimum frame acquisition value.
         * @param eMax Return maximum frame acquisition value.
         */
-        virtual void getFPSBounds(double &fMin, double &fMax) {};
+        virtual void getFPSBounds(double& fMin, double& fMax) {};
 
 
         /**
@@ -173,7 +179,7 @@ class Camera {
         * @param gMin Return minimum gain value.
         * @param gMax Return maximum gain value.
         */
-        virtual void getGainBounds(double &gMin, double &gMax) {};
+        virtual void getGainBounds(double& gMin, double& gMax) {};
 
         /**
         * Get device's image format.
@@ -181,7 +187,7 @@ class Camera {
         * @param format Return image format.
         * @return Success status to get format.
         */
-        virtual bool getPixelFormat(CamPixFmt &format) {return false;};
+        virtual bool getPixelFormat(CamPixFmt& format) { return false; };
 
         /**
         * Get device's frame size.
@@ -190,42 +196,42 @@ class Camera {
         * @param frame's height
         * @return Success to get frame'size.
         */
-        virtual bool getFrameSize(int &x, int &y, int &w, int &h) {return false;};
+        virtual bool getFrameSize(int& x, int& y, int& w, int& h) { return false; };
 
         /**
         * Get device's acquisition frequency.
         *
         * @return Device's fps.
         */
-        virtual bool getFPS(double &value) {return false;};
+        virtual bool getFPS(double& value) { return false; };
 
         /**
         * Get FPS enumeration values.
         *
         * @return Possible fps values.
         */
-        virtual bool getFpsEnum(std::vector<double> &values) {return false;};
+        virtual bool getFpsEnum(std::vector<double>& values) { return false; };
 
         /**
         * Get device's model name.
         *
         * @return Device's model name.
         */
-        virtual std::string getModelName() {return "";};
+        virtual std::string getModelName() { return ""; };
 
         /**
         * Get device's gain value.
         *
         * @return Device's gain.
         */
-        virtual double getGain() {return 0;};
+        virtual double getGain() { return 0; };
 
         /**
         * Get device's exposure time value.
         *
         * @return Device's exposure time.
         */
-        virtual double getExposureTime() {return 0.0;};
+        virtual double getExposureTime() { return 0.0; };
 
         /**
         * Set device's exposure time value.
@@ -233,7 +239,7 @@ class Camera {
         * @param value New exposure time value (us).
         * @return Success status to set new exposure time.
         */
-        virtual bool setExposureTime(double value)  {return false;};
+        virtual bool setExposureTime(double value) { return false; };
 
         /**
         * Set device's gain value.
@@ -241,9 +247,9 @@ class Camera {
         * @param value New gain value.
         * @return Success status to set new gain.
         */
-        virtual bool setGain(double value) {return false;};
+        virtual bool setGain(double value) { return false; };
 
-        virtual bool setAutoExposure(bool val) {return false;};
+        virtual bool setAutoExposure(bool val) { return false; };
 
         /**
         * Set device's acquisition frequency.
@@ -251,9 +257,9 @@ class Camera {
         * @param value New fps value.
         * @return Success status to set fps.
         */
-        virtual bool setFPS(double value) {return false;};
+        virtual bool setFPS(double value) { return false; };
 
-        virtual bool setSize(int startx, int starty, int width, int height, bool customSize) {return false;};
+        virtual bool setSize(int startx, int starty, int width, int height, bool customSize) { return false; };
 
         /**
         * Set device's format.
@@ -261,27 +267,28 @@ class Camera {
         * @param format New format.
         * @return Success status to set format.
         */
-        virtual bool setPixelFormat(CamPixFmt format) {return false;};
+        virtual bool setPixelFormat(CamPixFmt format) { return false; };
 
         /**
         * Get data status if a set of directories or videos are used in input.
         *
         * @return If there is still recorded frames to load in input.
         */
-        virtual bool getDataSetStatus() {return false;};
+        virtual bool getDataSetStatus() { return false; };
 
         /**
         * Load next data set of frames.
         *
         * @return Success status to load next data set.
         */
-        virtual bool loadNextDataSet(std::string &location) {location = ""; return true; };
+        virtual bool loadNextDataSet(std::string& location) { location = ""; return true; };
 
-        virtual void test() {std::cout << " in camera.h" << std::endl;};
+        virtual void test() { std::cout << " in camera.h" << std::endl; };
 
         virtual bool FirstInitializeCamera(std::string) {
             std::cout << "Inizialize camera done" << std::endl;
             return true;
         };
 
-};
+    };
+}

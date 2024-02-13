@@ -33,18 +33,27 @@
 * \date    12/03/2018
 * \brief   Auto Exposure time adjustment.
 */
+#include <ostream>
 
 #include "ExposureControl.h"
+#include "Logger.h"
+#include "Conversion.h"
+#include "SaveImg.h"
+#include "Device.h"
 
-boost::log::sources::severity_logger< LogSeverityLevel >  ExposureControl::logger;
+#include <boost/date_time.hpp>
+#include <boost/filesystem.hpp>
 
-ExposureControl::Init ExposureControl::initializer;
+using namespace freeture;
+using namespace std;
+
+namespace fs = boost::filesystem;
 
 ExposureControl::ExposureControl(int timeInterval,
                                  bool saveImage,
                                  bool saveInfos,
-                                 std::string dataPath,
-                                 std::string station){
+                                 string dataPath,
+                                 string station){
 
     bin_0 = 0;
     bin_1 = 0;
@@ -95,18 +104,18 @@ ExposureControl::ExposureControl(int timeInterval,
 
     // First reference date.
     boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
-    std::string cDate = to_simple_string(time);
-    std::string dateDelimiter = ".";
+    string cDate = to_simple_string(time);
+    string dateDelimiter = ".";
     mRefDate = cDate.substr(0, cDate.find(dateDelimiter));
     mSecTime = 0;
     mNbFramesControlled = 0;
 }
 
-bool ExposureControl::calculate(Mat& image, Mat &mask){
+bool ExposureControl::calculate(cv::Mat& image, cv::Mat &mask){
 
     if(!mask.data){
 
-        mask = Mat(image.rows, image.cols, CV_8UC1, Scalar(255));
+        mask = cv::Mat(image.rows, image.cols, CV_8UC1, cv::Scalar(255));
 
     }
 
@@ -216,15 +225,15 @@ float ExposureControl::computeMSV(){
 
 }
 
-bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, TimeDate::Date imageDate, Mat mask, double minExposureTime, double fps){
+bool ExposureControl::controlExposureTime(freeture::Device *camera, cv::Mat image, TimeDate::Date imageDate, cv::Mat mask, double minExposureTime, double fps){
 
     try {
 
         // Get current DATE and check number of seconds passed since last exposure control.
         boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
-        std::string cDate = to_simple_string(time);
-        std::string dateDelimiter = ".";
-        std::string nowDate = cDate.substr(0, cDate.find(dateDelimiter));
+        string cDate = to_simple_string(time);
+        string dateDelimiter = ".";
+        string nowDate = cDate.substr(0, cDate.find(dateDelimiter));
         boost::posix_time::ptime t1(boost::posix_time::time_from_string(mRefDate));
         boost::posix_time::ptime t2(boost::posix_time::time_from_string(nowDate));
         boost::posix_time::time_duration td = t2 - t1;
@@ -240,8 +249,8 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
 
                 // Get new reference DATE to count the next exposure control.
                 boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
-                std::string cDate = to_simple_string(time);
-                std::string dateDelimiter = ".";
+                string cDate = to_simple_string(time);
+                string dateDelimiter = ".";
                 mRefDate = cDate.substr(0, cDate.find(dateDelimiter));
                 mSecTime = 0;
 
@@ -261,7 +270,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
                     // Compute Mean Sample Value
                     float msv = computeMSV();
 
-                    BOOST_LOG_SEV(logger,notification) << mNbFramesControlled << " -> EXP : " << exposureValue <<  " MSV : " << msv;
+                    LOG_INFO << mNbFramesControlled << " -> EXP : " << exposureValue <<  " MSV : " << msv;
 
                     // If method has not been initialized
                     if(!autoExposureInitialized) {
@@ -270,13 +279,13 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
 
                             // Save initial status before exposure control
 
-                            Mat saveFrame; image.copyTo(saveFrame);
+                            cv::Mat saveFrame; image.copyTo(saveFrame);
 
                             if(saveFrame.type() == CV_16U) saveFrame = Conversion::convertTo8UC1(saveFrame);
 
-                            putText(saveFrame, "BEFORE EC -> MSV : " + Conversion::floatToString(msv), cv::Point(20,20),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(255), 1, cv::LINE_AA);
+                            putText(saveFrame, "BEFORE EC -> MSV : " + Conversion::floatToString(msv), cv::Point(20,20), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(255), 1, cv::LINE_AA);
 
-                            putText(saveFrame, "EXP : ? " /*Conversion::intToString(camera->mCam->getExposureTime())*/, cv::Point(20,40),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(255), 1, cv::LINE_AA);
+                            putText(saveFrame, "EXP : ? " /*Conversion::intToString(camera->mCam->getExposureTime())*/, cv::Point(20,40), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(255), 1, cv::LINE_AA);
 
                             if(checkDataLocation(imageDate))
                                 SaveImg::saveBMP(saveFrame, finalDataLocation + "expControl_" + TimeDate::getYYYYMMDDThhmmss(imageDate) + "_before");
@@ -285,12 +294,12 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
 
                         // Get minimum exposure time.
                         minCameraExposureValue = minExposureTime;
-                        BOOST_LOG_SEV(logger,notification) << "Min EXP : " << minCameraExposureValue;
+                        LOG_INFO << "Min EXP : " << minCameraExposureValue;
 
                         // Set maximum exposure time (us) according fps value.
                         if(fps > 0) maxCameraExposureValue = (int)((1.0/fps) * 1000000.0);
                         else throw "Fail to get FPS value from camera.";
-                        BOOST_LOG_SEV(logger,notification) << "Max EXP : " << maxCameraExposureValue;
+                        LOG_INFO << "Max EXP : " << maxCameraExposureValue;
 
                         // Compute msv with the following exposure time
                         exposureValue = minCameraExposureValue;
@@ -299,7 +308,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
                         if(!camera->setCameraExposureTime(minCameraExposureValue))
                             throw "Fail to set exposure time in initialization.";
 
-                        BOOST_LOG_SEV(logger,notification) << "Set EXP to : " << minCameraExposureValue;
+                        LOG_INFO<< "Set EXP to : " << minCameraExposureValue;
                         expArray_1.push_back(minCameraExposureValue);
                         autoExposureInitialized = true;
 
@@ -311,7 +320,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
 
                         if(step1) {
 
-                            BOOST_LOG_SEV(logger,notification) << "STEP 1";
+                            LOG_INFO << "STEP 1";
 
                             msvArray_1.push_back(msv);
 
@@ -320,7 +329,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
 
                                 double delta = 1000;
 
-                                BOOST_LOG_SEV(logger,notification) << "STEP 1 : Incrementation by " << delta;
+                                LOG_INFO << "STEP 1 : Incrementation by " << delta;
 
                                 if(exposureValue + delta > maxCameraExposureValue) {
 
@@ -342,12 +351,12 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
                                 if(!camera->setCameraExposureTime(exposureValue))
                                     throw "Fail to set exposure time in step 1 : incrementation";
 
-                                BOOST_LOG_SEV(logger,notification) << "Set EXP to : " << exposureValue;
+                                LOG_INFO << "Set EXP to : " << exposureValue;
 
                             } else {
 
-                                BOOST_LOG_SEV(logger,notification) << "STEP 1 : Analyse msv";
-                                BOOST_LOG_SEV(logger,notification) << "MSV ARRAY1 SIZE : " << msvArray_1.size() << "EXP ARRAY1 SIZE " << expArray_1.size();
+                                LOG_INFO << "STEP 1 : Analyse msv";
+                                LOG_INFO << "MSV ARRAY1 SIZE : " << msvArray_1.size() << "EXP ARRAY1 SIZE " << expArray_1.size();
 
                                 // MSV too high (over exposition) -> set camera with minimum exposure time.
                                 if(msvArray_1.front() > 2.5) {
@@ -357,7 +366,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
                                     if(!camera->setCameraExposureTime(minCameraExposureValue))
                                         throw "Fail to set exposure time in step 1 : Analyse MSV > 2.5";
 
-                                    BOOST_LOG_SEV(logger,notification) << "Set EXP to : " << exposureValue;
+                                    LOG_INFO  << "Set EXP to : " << exposureValue;
 
                                 // MSV too low (under exposition) -> set camera with maximum exposure time.
                                 }else if(msvArray_1.back() < 2.5) {
@@ -367,7 +376,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
                                     if(!camera->setCameraExposureTime(maxCameraExposureValue))
                                         throw "Fail to set exposure time in step 1 : Analyse MSV < 2.5";
 
-                                    BOOST_LOG_SEV(logger,notification) << "Set EXP to : " << exposureValue;
+                                    LOG_INFO << "Set EXP to : " << exposureValue;
 
                                 // Search best MSV and attached exposure time.
                                 }else {
@@ -393,12 +402,12 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
                                                 exposureValue = expMin_1;
                                                 expMax_2 = expMax_1;
 
-                                                BOOST_LOG_SEV(logger,notification) << "New interval found -> MSV[" << msvMin_1 << "-" << msvMax_1 << "] EXP[" << expMin_1 << "-" << expMax_1 << "]";
+                                                LOG_INFO << "New interval found -> MSV[" << msvMin_1 << "-" << msvMax_1 << "] EXP[" << expMin_1 << "-" << expMax_1 << "]";
 
                                                 if(!camera->setCameraExposureTime(exposureValue))
                                                     throw "Fail to set exposure time in step 1 : Analyse MSV : search";
 
-                                                BOOST_LOG_SEV(logger,notification) << "Set EXP to : " << exposureValue;
+                                                LOG_INFO << "Set EXP to : " << exposureValue;
 
                                                 break;
 
@@ -425,7 +434,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
 
                         }else if(step2) {
 
-                            BOOST_LOG_SEV(logger,notification) << "STEP 2";
+                            LOG_INFO << "STEP 2";
 
                             msvArray_2.push_back(msv);
 
@@ -433,7 +442,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
 
                                 double delta = 30;
 
-                                BOOST_LOG_SEV(logger,notification) << "STEP 2 : Incrementation by " << delta;
+                                LOG_INFO << "STEP 2 : Incrementation by " << delta;
 
                                 if(exposureValue + delta > expMax_1) {
 
@@ -451,12 +460,12 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
                                 if(!camera->setCameraExposureTime(exposureValue))
                                     throw "Fail to set exposure time in step 2 : incrementation";
 
-                                BOOST_LOG_SEV(logger,notification) << "Set EXP to : " << exposureValue;
+                                LOG_INFO << "Set EXP to : " << exposureValue;
 
                             }else {
 
-                                BOOST_LOG_SEV(logger,notification) << "STEP 2 : Analyse msv";
-                                BOOST_LOG_SEV(logger,notification) << "MSV ARRAY2 SIZE : " << msvArray_2.size() << "EXP ARRAY2 SIZE " << expArray_2.size();
+                                LOG_INFO << "STEP 2 : Analyse msv";
+                                LOG_INFO << "MSV ARRAY2 SIZE : " << msvArray_2.size() << "EXP ARRAY2 SIZE " << expArray_2.size();
 
                                 // MSV too high (over exposition) -> set camera with minimum exposure time.
                                 if(msvArray_2.front() > 2.5) {
@@ -464,7 +473,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
                                     finalExposureTime = expMin_1;
                                     if(!camera->setCameraExposureTime(expMin_1))
                                         throw "Fail to set exposure time in step 2 : Analyse MSV > 2.5";
-                                    BOOST_LOG_SEV(logger,notification) << "Set EXP to : " << expMin_1;
+                                    LOG_INFO << "Set EXP to : " << expMin_1;
 
                                 // MSV too low (under exposition) -> set camera with maximum exposure time.
                                 }else if(msvArray_2.back() < 2.5) {
@@ -472,7 +481,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
                                     finalExposureTime = expMax_2;
                                     if(!camera->setCameraExposureTime(expMax_2))
                                         throw "Fail to set exposure time in step 2 : Analyse MSV < 2.5";
-                                    BOOST_LOG_SEV(logger,notification) << "Set EXP to : " << expMax_2;
+                                    LOG_INFO << "Set EXP to : " << expMax_2;
 
                                 // Search best MSV and attached exposure time.
                                 }else {
@@ -502,9 +511,9 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
 
                                                 if(!camera->setCameraExposureTime(exposureValue))
                                                     throw "Fail to set exposure time in step 2";
-                                                BOOST_LOG_SEV(logger,notification) << "Set EXP to : " << exposureValue;
+                                                LOG_INFO << "Set EXP to : " << exposureValue;
 
-                                                BOOST_LOG_SEV(logger,notification) << "Interval choose -> MSV[" << msvMin_2 << "-" << msvMax_2 << "] EXP[" << expMin_2 << "-" << expMax_2 << "]";
+                                                LOG_INFO << "Interval choose -> MSV[" << msvMin_2 << "-" << msvMax_2 << "] EXP[" << expMin_2 << "-" << expMax_2 << "]";
 
                                                 break;
 
@@ -528,7 +537,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
 
                                 }*/
 
-                                BOOST_LOG_SEV(logger,notification) << "FINAL EXPOSURE : " << finalExposureTime;
+                                LOG_INFO << "FINAL EXPOSURE : " << finalExposureTime;
 
                             }
 
@@ -537,13 +546,13 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
                             // Save data to control exposure time process
                             if(autoExposureSaveImage) {
 
-                                Mat saveFrame; image.copyTo(saveFrame);
+                                cv::Mat saveFrame; image.copyTo(saveFrame);
 
                                 if(saveFrame.type() == CV_16U) saveFrame = Conversion::convertTo8UC1(saveFrame);
 
-                                putText(saveFrame, "AFTER EC -> MSV : " + Conversion::floatToString(msv), cv::Point(20,20),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(255), 1, cv::LINE_AA);
+                                putText(saveFrame, "AFTER EC -> MSV : " + Conversion::floatToString(msv), cv::Point(20,20), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(255), 1, cv::LINE_AA);
 
-                                putText(saveFrame, "EXP : " + Conversion::intToString(finalExposureTime), cv::Point(20,40),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(255), 1, cv::LINE_AA);
+                                putText(saveFrame, "EXP : " + Conversion::intToString(finalExposureTime), cv::Point(20,40), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(255), 1, cv::LINE_AA);
 
                                 if(checkDataLocation(imageDate))
                                     SaveImg::saveBMP(saveFrame, finalDataLocation + "expControl_" + TimeDate::getYYYYMMDDThhmmss(imageDate) + "_after" );
@@ -554,11 +563,11 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
 
                                 if(checkDataLocation(imageDate)) {
 
-                                    boost::filesystem::ofstream infFile;
-                                    std::string infFilePath = finalDataLocation + "ECInfos.txt";
-                                    infFile.open(infFilePath.c_str(),std::ios_base::app);
+                                    ofstream infFile;
+                                    string infFilePath = finalDataLocation + "ECInfos.txt";
+                                    infFile.open(infFilePath.c_str(),ios_base::app);
 
-                                    std::string d = TimeDate::getYYYYMMDDThhmmss(imageDate);
+                                    string d = TimeDate::getYYYYMMDDThhmmss(imageDate);
 
                                     infFile << "# DATE : " << d << "  EXP : " << Conversion::doubleToString(exposureValue) << "  MSV : "<< Conversion::floatToString(msv) << "\n";
 
@@ -610,17 +619,17 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, Mat image, T
 
         }else{
 
-            std::cout << "EXPOSURE CONTROL : " << mSecTime << "/" << autoExposureTimeInterval <<  std::endl;
+            LOG_DEBUG << "EXPOSURE CONTROL : " << mSecTime << "/" << autoExposureTimeInterval <<  endl;
             return false;
         }
 
-    }catch(std::exception& e) {
+    }catch(exception& e) {
 
-        std::cout << "An exception occured : " << e.what() << std::endl;
+        LOG_DEBUG << "An exception occured : " << e.what() << endl;
 
     }catch(const char * msg) {
 
-        BOOST_LOG_SEV(logger,fail) << msg << std::endl;
+       LOG_ERROR << msg << endl;
     }
 
     // Reset variables
@@ -657,15 +666,15 @@ bool ExposureControl::checkDataLocation(TimeDate::Date date){
     namespace fs = boost::filesystem;
 
     // data/
-    path p(autoExposureDataLocation);
+    fs::path p(autoExposureDataLocation);
 
     // data/STATION_YYYYMMDD/
-    std::string sp1 = autoExposureDataLocation + stationName + "_" + TimeDate::getYYYYMMDD(date) +"/";
-    path p1(sp1);
+    string sp1 = autoExposureDataLocation + stationName + "_" + TimeDate::getYYYYMMDD(date) +"/";
+    fs::path p1(sp1);
 
     // data/STATION_YYYMMDD/exposure/
-    std::string sp2 = sp1 + "exposure/";
-    path p2(sp2);
+    string sp2 = sp1 + "exposure/";
+    fs::path p2(sp2);
 
     finalDataLocation = sp2;
 

@@ -1,3 +1,4 @@
+#pragma once
 /*
                                     PixFmtConv.h
 
@@ -31,8 +32,8 @@
 * \version 1.0
 * \date    26/11/2015
 */
+#include "Commons.h"
 
-#pragma once
 
 #include <iostream>
 #include <string>
@@ -40,16 +41,19 @@
 #define CLIP(color) (unsigned char)(((color) > 0xFF) ? 0xff : (((color) < 0) ? 0 : (color)))
 
 
+namespace freeture
+{
 
-class PixFmtConv {
+    class PixFmtConv {
 
-    public :
+    public:
 
-        static void UYVY_to_BGR24(const unsigned char *src, unsigned char *dest, int width, int height, int stride);
+        static void UYVY_to_BGR24(const unsigned char* src, unsigned char* dest, int width, int height, int stride);
 
-        static void YUYV_to_BGR24(const unsigned char *src, unsigned char *dest, int width, int height, int stride);
+        static void YUYV_to_BGR24(const unsigned char* src, unsigned char* dest, int width, int height, int stride);
 
-        static void RGB565_to_BGR24(const unsigned char *src, unsigned char *dest, int width, int height);
+        static void RGB565_to_BGR24(const unsigned char* src, unsigned char* dest, int width, int height);
 
-};
+    };
 
+}

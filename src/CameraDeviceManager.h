@@ -1,22 +1,28 @@
 #pragma once
 
+//headers refactoring ok
+#include "Commons.h"
+
+#include <vector>
+
 #include "CameraScanner.h"
 #include "Device.h"
 
-
-class CameraDeviceManager
+namespace freeture
 {
+    class CameraDeviceManager
+    {
     private:
 
         std::vector<CameraDescription> deviceList;
-        freeture::Device dev;
+        Device dev;
         CameraDeviceManager();
 
 
 
     public:
         int deviceNumber;
-         
+
         CameraDeviceManager(CameraDeviceManager&) = delete;
 
         static CameraDeviceManager& Get()
@@ -28,8 +34,9 @@ class CameraDeviceManager
         // Getters
         std::vector<CameraDescription> getListDevice();
 
-        freeture::Device* getDevice();
+        Device* getDevice();
 
         void listDevice(bool);
         int getCameraDeviceBySerial(std::string);
-};
+    };
+}

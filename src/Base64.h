@@ -1,3 +1,5 @@
+#pragma once
+
 /*
                                     Base64.h
 
@@ -32,14 +34,16 @@
 * \date    26/11/2014
 * \brief   Handle Base64 encryption.
 */
-
-#pragma once
+//header refactoring ok
+#include "Commons.h"
 
 #include <string>
 
-class Base64 {
+namespace freeture
+{
+    class Base64 {
 
-    public :
+    public:
 
         /**
          * Constructor.
@@ -58,4 +62,5 @@ class Base64 {
          * @return Encoded string.
          */
         static std::string encodeBase64(std::string data);
-};
+    };
+}

@@ -35,10 +35,13 @@
 */
 
 #include "Fits2D.h"
+#include "TimeDate.h"
+#include "Logger.h"
 
-boost::log::sources::severity_logger< LogSeverityLevel >  Fits2D::logger;
+#include <boost/date_time.hpp>
 
-Fits2D::Init Fits2D::initializer;
+using namespace freeture;
+using namespace std;
 
 Fits2D::~Fits2D(void){}
 
@@ -618,7 +621,7 @@ bool Fits2D::writeKeywords(fitsfile *fptr){
 
 }
 
-bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, std::string fileName, std::string compression) {
+bool Fits2D::writeFits(cv::Mat img, ImgBitDepth imgType, std::string fileName, std::string compression) {
 
     int status = 0;
 
@@ -682,7 +685,7 @@ bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, std::string fileName, std::
 
             if(tab == NULL){
 
-                BOOST_LOG_SEV(logger, fail) << "Fail to allocate unsigned char** array (NULL).";
+                LOG_ERROR << "Fail to allocate unsigned char** array (NULL).";
                 return false;
 
             }
@@ -691,7 +694,7 @@ bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, std::string fileName, std::
 
             if(tab[0] == NULL){
 
-                BOOST_LOG_SEV(logger, fail) << "Fail to allocate unsigned char* array (NULL).";
+                LOG_ERROR << "Fail to allocate unsigned char* array (NULL).";
                 return false;
 
             }
@@ -756,7 +759,7 @@ bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, std::string fileName, std::
 
             if(tab == NULL){
 
-                BOOST_LOG_SEV(logger, fail) << "Fail to allocate char** array (NULL).";
+                LOG_ERROR << "Fail to allocate char** array (NULL).";
                 return false;
 
             }
@@ -765,7 +768,7 @@ bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, std::string fileName, std::
 
             if(tab[0] == NULL){
 
-                BOOST_LOG_SEV(logger, fail) << "Fail to allocate char* array (NULL).";
+                LOG_ERROR << "Fail to allocate char* array (NULL).";
                 return false;
 
             }
@@ -832,7 +835,7 @@ bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, std::string fileName, std::
 
             if(tab == NULL){
 
-                BOOST_LOG_SEV(logger, fail) << "Fail to allocate unsigned short** array (NULL).";
+                LOG_ERROR << "Fail to allocate unsigned short** array (NULL).";
                 return false;
 
             }
@@ -841,7 +844,7 @@ bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, std::string fileName, std::
 
             if(tab[0] == NULL){
 
-                BOOST_LOG_SEV(logger, fail) << "Fail to allocate unsigned short* array (NULL).";
+                LOG_ERROR << "Fail to allocate unsigned short* array (NULL).";
                 return false;
 
             }
@@ -904,12 +907,12 @@ bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, std::string fileName, std::
         case 3 :
         {
 
-            Mat newMat;
+            cv::Mat newMat;
 
             if(img.type() == CV_16UC1) {
 
                 // Convert unsigned short type image in short type image.
-                newMat = Mat(img.rows, img.cols, CV_16SC1, Scalar(0));
+                newMat = cv::Mat(img.rows, img.cols, CV_16SC1, cv::Scalar(0));
 
                 // Set bzero and bscale for print unsigned short value in soft visualization.
                 kBZERO = 32768;
@@ -947,7 +950,7 @@ bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, std::string fileName, std::
 
             if(tab == NULL){
 
-                BOOST_LOG_SEV(logger, fail) << "Fail to allocate short** array (NULL).";
+                LOG_ERROR << "Fail to allocate short** array (NULL).";
                 return false;
 
             }
@@ -956,7 +959,7 @@ bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, std::string fileName, std::
 
             if(tab[0] == NULL){
 
-                BOOST_LOG_SEV(logger, fail) << "Fail to allocate short* array (NULL).";
+                LOG_ERROR << "Fail to allocate short* array (NULL).";
                 return false;
 
             }
@@ -1024,7 +1027,7 @@ bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, std::string fileName, std::
 
             if(tab == NULL){
 
-                BOOST_LOG_SEV(logger, fail) << "Fail to allocate float** array (NULL).";
+                LOG_ERROR << "Fail to allocate float** array (NULL).";
                 return false;
             }
 
@@ -1032,7 +1035,7 @@ bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, std::string fileName, std::
 
             if(tab[0] == NULL){
 
-                BOOST_LOG_SEV(logger, fail) << "Fail to allocate float* array (NULL).";
+                LOG_ERROR << "Fail to allocate float* array (NULL).";
                 return false;
             }
 
@@ -1112,7 +1115,7 @@ bool Fits2D::writeFits(Mat img, ImgBitDepth imgType, std::string fileName, std::
 }
 
 //Float 32bits float -1.18*10-38~3.40*10-38
-bool Fits2D::readFits32F(Mat &img){
+bool Fits2D::readFits32F(cv::Mat &img){
 
     float * ptr = NULL;
     float  * ptr1 = NULL;
@@ -1144,7 +1147,7 @@ bool Fits2D::readFits32F(Mat &img){
 
     }
 
-    Mat image = Mat::zeros( naxes[1],naxes[0], CV_32FC1);
+    cv::Mat image = cv::Mat::zeros( naxes[1],naxes[0], CV_32FC1);
 
     npixels  = naxes[0] * naxes[1];         // number of pixels in the image
     fpixel   = 1;                           // first pixel
@@ -1164,7 +1167,7 @@ bool Fits2D::readFits32F(Mat &img){
 
     memcpy(image.ptr(), buffer, npixels * 4);
 
-    Mat loadImg = Mat::zeros( naxes[1],naxes[0], CV_32FC1 );
+    cv::Mat loadImg = cv::Mat::zeros( naxes[1],naxes[0], CV_32FC1 );
 
     // y
     for(int i = 0; i < naxes[1]; i++){
@@ -1194,7 +1197,7 @@ bool Fits2D::readFits32F(Mat &img){
 }
 
 //Unsigned 16bits ushort 0~65535
-bool Fits2D::readFits16US(Mat &img){
+bool Fits2D::readFits16US(cv::Mat &img){
 
     unsigned short * ptr = NULL;
     unsigned short  * ptr1 = NULL;
@@ -1226,7 +1229,7 @@ bool Fits2D::readFits16US(Mat &img){
 
     }
 
-    Mat image = Mat::zeros( naxes[1],naxes[0], CV_16UC1);
+    cv::Mat image = cv::Mat::zeros( naxes[1],naxes[0], CV_16UC1);
 
     npixels  = naxes[0] * naxes[1];         // number of pixels in the image
     fpixel   = 1;                           // first pixel
@@ -1245,7 +1248,7 @@ bool Fits2D::readFits16US(Mat &img){
 
     memcpy(image.ptr(), buffer, npixels * 2);
 
-    Mat loadImg = Mat::zeros( naxes[1],naxes[0], CV_16UC1 );
+    cv::Mat loadImg = cv::Mat::zeros( naxes[1],naxes[0], CV_16UC1 );
 
     // y
     for(int i = 0; i < naxes[1]; i++){
@@ -1275,7 +1278,7 @@ bool Fits2D::readFits16US(Mat &img){
 }
 
 //Signed 16bits short -32768~32767
-bool Fits2D::readFits16S(Mat &img){
+bool Fits2D::readFits16S(cv::Mat &img){
 
     short * ptr = NULL;
     unsigned short  * ptr1 = NULL;
@@ -1304,7 +1307,7 @@ bool Fits2D::readFits16S(Mat &img){
         return false;
     }
 
-    Mat image = Mat::zeros( naxes[1],naxes[0], CV_16SC1);
+    cv::Mat image = cv::Mat::zeros( naxes[1],naxes[0], CV_16SC1);
 
     npixels  = naxes[0] * naxes[1];         // number of pixels in the image
     fpixel   = 1;                           // first pixel
@@ -1322,7 +1325,7 @@ bool Fits2D::readFits16S(Mat &img){
 
     memcpy(image.ptr(), buffer, npixels * 2);
 
-    Mat loadImg = Mat::zeros( naxes[1],naxes[0], CV_16UC1 );
+    cv::Mat loadImg = cv::Mat::zeros( naxes[1],naxes[0], CV_16UC1 );
 
     // y
     for(int i = 0; i < naxes[1]; i++){
@@ -1351,7 +1354,7 @@ bool Fits2D::readFits16S(Mat &img){
 }
 
 //Unsigned 8bits uchar 0~255
-bool Fits2D::readFits8UC(Mat &img){
+bool Fits2D::readFits8UC(cv::Mat &img){
 
     unsigned char * ptr = NULL;
     unsigned char  * ptr1 = NULL;
@@ -1380,7 +1383,7 @@ bool Fits2D::readFits8UC(Mat &img){
         return false;
     }
 
-    Mat image = Mat::zeros( naxes[1],naxes[0], CV_8UC1);
+    cv::Mat image = cv::Mat::zeros( naxes[1],naxes[0], CV_8UC1);
 
     npixels  = naxes[0] * naxes[1];         // number of pixels in the image
     fpixel   = 1;                           // first pixel
@@ -1399,7 +1402,7 @@ bool Fits2D::readFits8UC(Mat &img){
 
     memcpy(image.ptr(), buffer, npixels * 2);
 
-    Mat loadImg = Mat::zeros( naxes[1],naxes[0], CV_8UC1 );
+    cv::Mat loadImg = cv::Mat::zeros( naxes[1],naxes[0], CV_8UC1 );
 
     // y
     for(int i = 0; i < naxes[1]; i++){
@@ -1428,7 +1431,7 @@ bool Fits2D::readFits8UC(Mat &img){
 }
 
 //Signed 8bits char -128~127
-bool Fits2D::readFits8C(Mat &img){
+bool Fits2D::readFits8C(cv::Mat &img){
 
     char * ptr = NULL;
     char  * ptr1 = NULL;
@@ -1457,7 +1460,7 @@ bool Fits2D::readFits8C(Mat &img){
         return false;
     }
 
-    Mat image = Mat::zeros( naxes[1],naxes[0], CV_8SC1);
+    cv::Mat image = cv::Mat::zeros( naxes[1],naxes[0], CV_8SC1);
 
     npixels  = naxes[0] * naxes[1];         // number of pixels in the image
     fpixel   = 1;                           // first pixel
@@ -1476,7 +1479,7 @@ bool Fits2D::readFits8C(Mat &img){
 
     memcpy(image.ptr(), buffer, npixels * 2);
 
-    Mat loadImg = Mat::zeros( naxes[1],naxes[0], CV_8SC1 );
+    cv::Mat loadImg = cv::Mat::zeros( naxes[1],naxes[0], CV_8SC1 );
 
     // y
     for(int i = 0; i < naxes[1]; i++){
@@ -1629,11 +1632,11 @@ void Fits2D::printerror(int status, std::string errorMsg){
         char status_str[200];
         fits_get_errstatus(status, status_str);
 
-        BOOST_LOG_SEV(logger, fail) << errorMsg;
-        std::cout << errorMsg << std::endl;
+        LOG_ERROR << errorMsg;
+        LOG_DEBUG << errorMsg << std::endl;
         std::string str(status_str);
-        BOOST_LOG_SEV(logger, fail) << "CFITSIO ERROR : " << status << " -> " << str;
-        std::cout << "CFITSIO ERROR : " << status << " -> " << str << std::endl;
+        LOG_ERROR << "CFITSIO ERROR : " << status << " -> " << str;
+        LOG_DEBUG << "CFITSIO ERROR : " << status << " -> " << str << std::endl;
 
     }
 
@@ -1646,8 +1649,8 @@ void Fits2D::printerror(int status){
         char status_str[200];
         fits_get_errstatus(status, status_str);
         std::string str(status_str);
-        BOOST_LOG_SEV(logger, fail) << "CFITSIO ERROR : " << status << " -> " << str;
-        std::cout << "CFITSIO ERROR : " << status << " -> " << str << std::endl;
+        LOG_ERROR << "CFITSIO ERROR : " << status << " -> " << str;
+        LOG_DEBUG << "CFITSIO ERROR : " << status << " -> " << str << std::endl;
 
     }
 }

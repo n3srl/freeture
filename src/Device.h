@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 Device.h
 
@@ -33,82 +34,53 @@
 * \date    19/03/2018
 * \brief
 */
+//header refactoring ok
+#include "Commons.h"
 
-#pragma once
-
-#include <vector>
-#include <algorithm>
 #include <string>
-#include <iterator>
+#include <vector>
 
-
-#include "config.h"
-
-
-#ifdef LINUX
-#define BOOST_LOG_DYN_LINK 1
-#endif
-
-#include <boost/log/common.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/attributes/named_scope.hpp>
-#include <boost/log/attributes.hpp>
-#include <boost/log/sinks.hpp>
-#include <boost/log/sources/logger.hpp>
-#include <boost/log/core.hpp>
-#include <boost/tokenizer.hpp>
-#include <boost/circular_buffer.hpp>
-#include <boost/filesystem.hpp>
-
-#include "ELogSeverityLevel.h"
-#include "EImgBitDepth.h"
-#include "ECamPixFmt.h"
-#include "EParser.h"
-#include "Conversion.h"
-#include "Camera.h"
-#include "CameraGigeAravis.h"
-#include "CameraGigePylon.h"
-#include "CameraGigeTis.h"
-#include "CameraVideo.h"
-#include "CameraV4l2.h"
-#include "CameraFrames.h"
-#include "CameraWindows.h"
+#include "CameraScanner.h"
 #include "EInputDeviceType.h"
+#include "ECamPixFmt.h"
 #include "ECamSdkType.h"
+
 #include "SParam.h"
+
+// #include "ELogSeverityLevel.h"
+// #include "EImgBitDepth.h"
+// #include "ECamPixFmt.h"
+// #include "EParser.h"
+// #include "Conversion.h"
+// #include "Camera.h"
+// #include "CameraGigeAravis.h"
+// #include "CameraGigePylon.h"
+// #include "CameraGigeTis.h"
+// #include "CameraVideo.h"
+// #include "CameraV4l2.h"
+// #include "CameraFrames.h"
+// #include "CameraWindows.h"
+// #include "EInputDeviceType.h"
+// #include "ECamSdkType.h"
+// #include "SParam.h"
 
 namespace freeture
 {
+    class Camera;
+    class Frame;
 
 #define ARENA_SDK false    //Set this to true to use Arena SDK instead of aravis for LUCID cameras
 
-class Device {
+    class Device {
 
-    public :
+    public:
 
         bool mVideoFramesInput; // TRUE if input is a video file or frames directories.
 
-    private :
+    private:
         std::vector<CameraDescription> listCams;
 
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
-
-        static class Init {
-
-            public:
-
-                Init() {
-
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("Device"));
-
-                }
-
-        } initializer;
-
-        std::vector<std::pair<int,std::pair<int,CamSdkType>>> mDevices;
+        std::vector<std::pair<int, std::pair<int, CamSdkType>>> mDevices;
 
         bool        mCustomSize;
         int         mStartX;
@@ -120,19 +92,19 @@ class Device {
         int         mDayExposure;
         int         mDayGain;
         int         mFPS;
-        
-        
-        
+
+
+
         bool        mShiftBits;
         bool        mVerbose;
         framesParam mfp;
         videoParam  mvp;
 
         void mergeList(std::vector<CameraDescription>&);
-    public :
+    public:
         int         mCamID;         // ID in a specific sdk.
         int         mGenCamID;      // General ID.
-        Camera*      mCam;
+        Camera* mCam;
         int         mNbDev;
         CamPixFmt   mFormat;
         std::string      mCfgPath;
@@ -166,9 +138,9 @@ class Device {
 
         bool initializeCamera();
 
-        bool runContinuousCapture(Frame &img);
+        bool runContinuousCapture(Frame& img);
 
-        bool runSingleCapture(Frame &img);
+        bool runSingleCapture(Frame& img);
 
         bool startCamera();
 
@@ -176,15 +148,15 @@ class Device {
 
         bool setCameraPixelFormat();
 
-        bool getCameraGainBounds(double &min, double &max);
+        bool getCameraGainBounds(double& min, double& max);
 
         void getCameraGainBounds();
 
-        bool getCameraExposureBounds(double &min, double &max);
+        bool getCameraExposureBounds(double& min, double& max);
 
         void getCameraExposureBounds();
 
-        bool getCameraFPSBounds(double &min, double &max);
+        bool getCameraFPSBounds(double& min, double& max);
 
         void getCameraFPSBounds();
 
@@ -214,7 +186,7 @@ class Device {
 
         bool setCameraSize();
 
-        bool getCameraFPS(double &fps);
+        bool getCameraFPS(double& fps);
 
         bool getCameraStatus();
 
@@ -222,28 +194,28 @@ class Device {
 
         bool getSupportedPixelFormats();
 
-        bool loadNextCameraDataSet(std::string &location);
+        bool loadNextCameraDataSet(std::string& location);
 
         bool getExposureStatus();
 
         bool getGainStatus();
 
         bool setCameraSize(int x, int y, int w, int h);
-        bool getDeviceCameraSizeParams(int& x,int& y,int& height,int& width);    
+        bool getDeviceCameraSizeParams(int& x, int& y, int& height, int& width);
 
-        int getNightExposureTime() {return mNightExposure;};
-        int getNightGain() {return mNightGain;};
-        int getDayExposureTime() {return mDayExposure;};
-        int getDayGain() {return mDayGain;};
+        int getNightExposureTime() { return mNightExposure; };
+        int getNightGain() { return mNightGain; };
+        int getDayExposureTime() { return mDayExposure; };
+        int getDayGain() { return mDayGain; };
 
         void setVerbose(bool status);
 
         Camera* getCamera();
         bool firstIinitializeCamera(std::string);
 
-    private :
+    private:
 
         bool createDevicesWith(CamSdkType sdk);
 
-};
+    };
 }

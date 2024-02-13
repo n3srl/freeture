@@ -33,32 +33,35 @@
 * \date    19/03/2018
 * \brief
 */
-#include <regex>
-
 #include "Device.h"
+
 #include "Camera.h"
+
 #include "Logger.h"
-
-#include "CameraLucidArena_PHX016S.h"
-#include "CameraLucidArena.h"
-
+#include "EParser.h"
+#include "ECamSdkType.h"
 #include "CameraDeviceManager.h"
+#include "CameraFrames.h"
+#include "CameraVideo.h"
 
+#ifdef LINUX
+#include "CameraLucidArena_PHX016S.h"
+#include "CameraV4l2.h"
+#include "CameraGigeAravis.h"
+#include "CameraLucidArena.h"
+#endif
 
-using namespace boost::filesystem;
-using namespace cv;
 using namespace std;
+using namespace freeture;
 
-boost::log::sources::severity_logger< LogSeverityLevel >  freeture::Device::logger;
-
-freeture::Device::Init freeture::Device::initializer;
+namespace fs = boost::filesystem;
 
 void freeture::Device::Setup(cameraParam cp, framesParam fp, videoParam vp, int cid)
 {
-    freeture::LogDebug("Device::Setup");
+    LOG_DEBUG << "Device::Setup";
     CameraDeviceManager& manager = CameraDeviceManager::Get();
     
-    std::cout << "PARAM NIGHT EXP " << cp.ACQ_NIGHT_EXPOSURE << std::endl;
+    LOG_DEBUG << "PARAM NIGHT EXP " << cp.ACQ_NIGHT_EXPOSURE << endl;
 
     /* mCam        = NULL;
     mCamID      = 0;
@@ -91,7 +94,7 @@ void freeture::Device::Setup(cameraParam cp, framesParam fp, videoParam vp, int 
 
 
 freeture::Device::Device() {
-    freeture::Log("Device::Device");
+    LOG_DEBUG << ("Device::Device");
 
     mFormat         = MONO8;
     mNightExposure  = 0;
@@ -125,19 +128,19 @@ freeture::Device::Device() {
 
 freeture::Device::~Device()
 {
-    freeture::LogDebug( "Device::~Device");
+    LOG_DEBUG << ( "Device::~Device");
 
     if(mCam != nullptr)
     {
-        freeture::LogDebug( "Device::~Device: deallocating camera");
+        LOG_DEBUG << ( "Device::~Device: deallocating camera");
         delete mCam;
     }
 
 }
 
-bool freeture::Device::firstIinitializeCamera(std::string configPath)
+bool freeture::Device::firstIinitializeCamera(string configPath)
 {
-    std::cout << "Device:firstIinitializeCamera(\"" << configPath << "\")" << std::endl;
+    LOG_DEBUG << "Device:firstIinitializeCamera(\"" << configPath << "\")" << endl;
     CameraDeviceManager& manager = CameraDeviceManager::Get();
     freeture::Device* device = manager.getDevice();
     if(device != NULL)
@@ -149,7 +152,7 @@ bool freeture::Device::firstIinitializeCamera(std::string configPath)
 
 bool freeture::Device::createCamera(int id, bool create)
 {
-    freeture::Log("Device::createCamera(int,bool)");
+    LOG_DEBUG << ("Device::createCamera(int,bool)");
     CameraDeviceManager& manager = CameraDeviceManager::Get();
     
     freeture::Device* device = manager.getDevice();
@@ -157,13 +160,13 @@ bool freeture::Device::createCamera(int id, bool create)
     if(id >=0 && id <= manager.deviceNumber - 1)
     {
         CameraDescription camera = manager.getListDevice().at(id);
-        freeture::Log("CREATE CAMERA " + camera.Description); 
+        LOG_DEBUG << ("CREATE CAMERA " + camera.Description);
         // Create Camera object with the correct sdk.
         if ( !createDevicesWith(camera.Sdk) )
         {
-            std::cout << "Fail to select correct sdk"<< std::endl;
+            LOG_DEBUG << "Fail to select correct sdk"<< endl;
             EParser<CamSdkType> parser;
-            std::cout << "Fail to select correct sdk : "<<parser.getStringEnum( mDevices.at(id).second.second )<< std::endl;
+            LOG_DEBUG << "Fail to select correct sdk : "<<parser.getStringEnum( mDevices.at(id).second.second )<< endl;
             return false;
         }
         
@@ -175,20 +178,20 @@ bool freeture::Device::createCamera(int id, bool create)
                 
                 if(!device->mCam->createDevice(device->mCamID))
                 {
-                    BOOST_LOG_SEV(logger, fail) << "Fail to create device with ID  : " << id;
+                    LOG_ERROR << "Fail to create device with ID  : " << id;
                     device->mCam->grabCleanse();
                     return false;
                 }
-            freeture::LogDebug ( "Device::createCamera(int,bool) - created new camera");
+                LOG_DEBUG << ( "Device::createCamera(int,bool) - created new camera");
             return true;
         } else {
-            freeture::LogDebug( "Device::createCamera(int,bool) - camera already exists");
+            LOG_DEBUG << ( "Device::createCamera(int,bool) - camera already exists");
             return true;
         }
         
     }
 
-    BOOST_LOG_SEV(logger, fail) << "No device with ID " << id;
+    LOG_ERROR << "No device with ID " << id;
 
     return false;
 
@@ -197,7 +200,7 @@ bool freeture::Device::createCamera(int id, bool create)
 bool freeture::Device::createCamera()
 {
     CameraDeviceManager& manager = CameraDeviceManager::Get();
-    freeture::LogDebug("Device::createCamera ");
+    LOG_DEBUG << ("Device::createCamera ");
     if(mGenCamID >=0 && mGenCamID < manager.deviceNumber) {
 
         // Create Camera object with the correct sdk.
@@ -205,11 +208,12 @@ bool freeture::Device::createCamera()
         try {
             
             if(!createDevicesWith(manager.getListDevice().at(mGenCamID).Sdk)) {
-            std::cout << "CREATE CAMERA ERROR " << std::endl;
+                LOG_ERROR <<  "CREATE CAMERA ERROR " << endl;
             return false;
         } 
-        } catch (std::exception &e) {
-            std::cout << "I FOUND EXC" << std::endl;
+        } catch (exception &e) {
+            LOG_DEBUG << "I FOUND EXC" << endl;
+            LOG_DEBUG << e.what() << endl;
             return false;
         }   
             
@@ -220,29 +224,29 @@ bool freeture::Device::createCamera()
             
             if(!manager.getDevice()->mCam->createDevice(mCamID))
             {
-                BOOST_LOG_SEV(logger, fail) << "Fail to create device with ID  : " << mGenCamID;
+                LOG_ERROR << "Fail to create device with ID  : " << mGenCamID;
                 manager.getDevice()->mCam->grabCleanse();
                 return false;
             }
-            freeture::LogDebug("Device::createCamera - created new camera");
+            LOG_DEBUG << ("Device::createCamera - created new camera");
             return true;
         }
         else
         {
-            freeture::LogDebug("Device::createCamera - camera already exists");
+            LOG_DEBUG << ("Device::createCamera - camera already exists");
             return true;
         }
     }
 
-    std::cout << "No s with ID " << mGenCamID << "DEVICES " << manager.deviceNumber << std::endl;
-    BOOST_LOG_SEV(logger, fail) << "No device with ID " << mGenCamID;
+    LOG_DEBUG << "No s with ID " << mGenCamID << "DEVICES " << manager.deviceNumber << endl;
+    LOG_ERROR << "No device with ID " << mGenCamID;
 
     return false;
 
 }
 
 bool freeture::Device::recreateCamera() {
-    freeture::LogDebug("Device::recreateCamera" );
+    LOG_DEBUG << ("Device::recreateCamera" );
     CameraDeviceManager& manager = CameraDeviceManager::Get();
     if(mGenCamID >=0 && mGenCamID < manager.deviceNumber) {
 
@@ -250,28 +254,27 @@ bool freeture::Device::recreateCamera() {
 
         if(mCam != nullptr) {
             if(!mCam->recreateDevice(mCamID)){
-                freeture::LogDebug("Fail to create device with ID  : ", mGenCamID);
-                BOOST_LOG_SEV(logger, fail) << "Fail to create device with ID  : " << mGenCamID;
+                LOG_ERROR << "Fail to create device with ID  : " << mGenCamID;
                 mCam->grabCleanse();
                 return false;
             }
-            freeture::LogDebug("Device::recreateCamera - created new camera" );
+            LOG_DEBUG << ("Device::recreateCamera - created new camera" );
             return true;
         } else {
-            freeture::LogDebug("Device::recreateCamera - camera already exists");
+            LOG_DEBUG << ("Device::recreateCamera - camera already exists");
             return true;
          }
 
     }
 
-    BOOST_LOG_SEV(logger, fail) << "No device with ID " << mGenCamID;
+    LOG_ERROR << "No device with ID " << mGenCamID;
 
     return false;
 
 }
 
 void freeture::Device::setVerbose(bool status) {
-    freeture::LogDebug( "Device::setVerbose" );
+    LOG_DEBUG << ( "Device::setVerbose" );
     mVerbose = status;
 
 }
@@ -287,22 +290,22 @@ void freeture::Device::setVerbose(bool status) {
 
 CamSdkType freeture::Device::getDeviceSdk(int id) {
     CameraDeviceManager& manager = CameraDeviceManager::Get();
-    std::vector<CameraDescription> devices = manager.getListDevice();
+    vector<CameraDescription> devices = manager.getListDevice();
     
     if(id >=0 && id <= (manager.deviceNumber - 1)) {
         return devices.at(id).Sdk;
     }
-    std::cout << "ERROR GETTING DEVICE SDK FOR CAMERA ID " << id << " NUM OF DEVICES " << manager.deviceNumber - 1 << std::endl;
+    LOG_DEBUG << "ERROR GETTING DEVICE SDK FOR CAMERA ID " << id << " NUM OF DEVICES " << manager.deviceNumber - 1 << endl;
 }
 
 bool freeture::Device::createDevicesWith(CamSdkType sdk) {
-    freeture::LogDebug( "Device::createDevicesWith" );
+    LOG_DEBUG << ( "Device::createDevicesWith" );
     CameraDeviceManager& manager = CameraDeviceManager::Get();
     freeture::Device* device = manager.getDevice();
     
     if (device->mCam!=nullptr){
         
-        freeture::LogError("Device::createDevicesWith","Error","MEMORY LEAKING" );
+        LOG_DEBUG << ("Device::createDevicesWith","Error","MEMORY LEAKING" );
         assert (device->mCam != nullptr);
         free(device->mCam);
         return true;
@@ -337,7 +340,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::V4L2 :
 
             {
-                freeture::LogDebug("SDK: V4L2");
+                LOG_DEBUG << ("SDK: V4L2");
                 #ifdef LINUX
                     device->mCam = new CameraV4l2();
                 #endif
@@ -348,8 +351,8 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::VIDEOINPUT :
 
             {
-                freeture::LogDebug("SDK: VIDEOINPUT");
-                #ifdef WINDOWS
+                LOG_DEBUG << "SDK: VIDEOINPUT";
+                #ifdef VIDEOINPUT
                     device->mCam = new CameraWindows();
                 #endif
             }
@@ -359,7 +362,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::ARAVIS :
 
             {
-                freeture::LogDebug("SDK: ARAVIS");
+                LOG_DEBUG << ("SDK: ARAVIS");
                 #ifdef LINUX
                     device->mCam = new CameraGigeAravis(mShiftBits);
                 #endif
@@ -370,7 +373,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::LUCID_ARAVIS :
 
             {
-                freeture::LogDebug("SDK: LUCID_ARAVIS");
+            LOG_DEBUG << ("SDK: LUCID_ARAVIS");
                 #ifdef LINUX
 
                     device->mCam = new CameraLucidArena(mShiftBits);
@@ -386,7 +389,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
             {
                 
                 #ifdef LINUX
-                    freeture::LogDebug("SDK: LUCID_ARENA");
+            LOG_DEBUG << ("SDK: LUCID_ARENA");
                     device->mCam = new CameraLucidArena_PHX016S(mShiftBits);
                     
                 #endif
@@ -397,8 +400,8 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::PYLONGIGE :
 
             {
-                freeture::LogDebug("SDK: PYLONGIGE");
-                #ifdef WINDOWS
+            LOG_DEBUG << ("SDK: PYLONGIGE");
+                #ifdef USE_PYLON
                     device = new CameraGigePylon();
                 #endif
             }
@@ -408,8 +411,8 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
         case CamSdkType::TIS :
 
             {
-                freeture::LogDebug("SDK: TIS");
-                #ifdef WINDOWS
+            LOG_DEBUG << ("SDK: TIS");
+                #ifdef TISCAMERA
                     device = new CameraGigeTis();
                 #endif
             }
@@ -418,7 +421,7 @@ bool freeture::Device::createDevicesWith(CamSdkType sdk) {
 
         default :
 
-            freeture::LogDebug( "Device::createDevicesWith - Unknown sdk.");
+            LOG_DEBUG << ( "Device::createDevicesWith - Unknown sdk.");
 
     }
 
@@ -457,7 +460,7 @@ InputDeviceType freeture::Device::getDeviceType(CamSdkType t) {
     return UNDEFINED_INPUT_TYPE;
 }
 
-void freeture::Device::mergeList( std::vector<CameraDescription>& Devices )
+void freeture::Device::mergeList( vector<CameraDescription>& Devices )
 {
         //foreach device found test if already exists. if not add to list
         for (int i=0;i<Devices.size();i++)
@@ -479,7 +482,7 @@ void freeture::Device::mergeList( std::vector<CameraDescription>& Devices )
 
 void freeture::Device::listDevices(bool printInfos)
 {
-    freeture::LogDebug("Device::listDevices");
+    LOG_DEBUG << "Device::listDevices";
 
     int nbCam = 0;
     mNbDev = 0;
@@ -489,7 +492,7 @@ void freeture::Device::listDevices(bool printInfos)
     #ifdef WINDOWS
 
         // PYLONGIGE
-
+#ifdef USE_PYLON
         mCam = new CameraGigePylon();
         listCams = mCam->getCamerasList();
         for(int i = 0; i < listCams.size(); i++) {
@@ -500,7 +503,8 @@ void freeture::Device::listDevices(bool printInfos)
             mNbDev++;
         }
         delete mCam;
-
+#endif
+#ifdef TISCAMERA
         // TIS
 
         mCam = new CameraGigeTis();
@@ -513,7 +517,8 @@ void freeture::Device::listDevices(bool printInfos)
             mNbDev++;
         }
         delete mCam;
-
+#endif
+#ifdef VIDEOINPUT
         // WINDOWS
 
         mCam = new CameraWindows();
@@ -521,10 +526,10 @@ void freeture::Device::listDevices(bool printInfos)
         for(int i = 0; i < listCams.size(); i++) {
 
             // Avoid to list basler
-            std::string::size_type pos1 = listCams.at(i).second.find("Basler");
-            std::string::size_type pos2 = listCams.at(i).second.find("BASLER");
-            if((pos1 != std::string::npos) || (pos2 != std::string::npos)) {
-                //std::cout << "found \"words\" at position " << pos1 << std::endl;
+            string::size_type pos1 = listCams.at(i).second.find("Basler");
+            string::size_type pos2 = listCams.at(i).second.find("BASLER");
+            if((pos1 != string::npos) || (pos2 != string::npos)) {
+                //LOG_DEBUG << "found \"words\" at position " << pos1 << endl;
             } else {
                 elem.first = mNbDev; elem.second = VIDEOINPUT;
                 subElem.first = listCams.at(i).first; subElem.second = elem;
@@ -535,7 +540,7 @@ void freeture::Device::listDevices(bool printInfos)
         }
 
         delete mCam;
-
+#endif
     #else
         //PRECEDENTE TO LUCID_ARAVIS
         CameraDeviceManager& manager = CameraDeviceManager::Get();
@@ -567,9 +572,9 @@ void freeture::Device::listDevices(bool printInfos)
 }
 
 
-std::vector<CameraDescription> freeture::Device::getListDevice()
+vector<CameraDescription> freeture::Device::getListDevice()
 {
-    freeture::LogDebug("Device::getListDevice");
+    LOG_DEBUG << "Device::getListDevice";
 
     int nbCam = 0;
     mNbDev = 0;
@@ -579,7 +584,7 @@ std::vector<CameraDescription> freeture::Device::getListDevice()
     #ifdef WINDOWS
 
         // PYLONGIGE
-
+#ifdef USE_PYLON
         mCam = new CameraGigePylon();
         listCams = mCam->getCamerasList();
         for(int i = 0; i < listCams.size(); i++) {
@@ -590,7 +595,8 @@ std::vector<CameraDescription> freeture::Device::getListDevice()
             mNbDev++;
         }
         delete mCam;
-
+#endif
+#ifdef TISCAMERA
         // TIS
 
         mCam = new CameraGigeTis();
@@ -603,7 +609,8 @@ std::vector<CameraDescription> freeture::Device::getListDevice()
             mNbDev++;
         }
         delete mCam;
-
+#endif
+#ifdef VIDEOINPUT
         // WINDOWS
 
         mCam = new CameraWindows();
@@ -611,10 +618,10 @@ std::vector<CameraDescription> freeture::Device::getListDevice()
         for(int i = 0; i < listCams.size(); i++) {
 
             // Avoid to list basler
-            std::string::size_type pos1 = listCams.at(i).second.find("Basler");
-            std::string::size_type pos2 = listCams.at(i).second.find("BASLER");
-            if((pos1 != std::string::npos) || (pos2 != std::string::npos)) {
-                //std::cout << "found \"words\" at position " << pos1 << std::endl;
+            string::size_type pos1 = listCams.at(i).second.find("Basler");
+            string::size_type pos2 = listCams.at(i).second.find("BASLER");
+            if((pos1 != string::npos) || (pos2 != string::npos)) {
+                //LOG_DEBUG << "found \"words\" at position " << pos1 << endl;
             } else {
                 elem.first = mNbDev; elem.second = VIDEOINPUT;
                 subElem.first = listCams.at(i).first; subElem.second = elem;
@@ -625,7 +632,7 @@ std::vector<CameraDescription> freeture::Device::getListDevice()
         }
 
         delete mCam;
-
+#endif
     #else
         //PRECEDENTE TO LUCID_ARAVIS
         CameraScanner* lucid_aravis_scanner = Camera::Scanner->CreateScanner(CamSdkType::LUCID_ARAVIS);
@@ -648,7 +655,7 @@ std::vector<CameraDescription> freeture::Device::getListDevice()
         mergeList(aravis_scanner->Devices);
 
         
-        return listCams;
+       
 
     #endif
 
@@ -668,21 +675,23 @@ std::vector<CameraDescription> freeture::Device::getListDevice()
     if(printInfos) cout << "[" << mNbDev << "]    FRAMES DIRECTORY" << endl;
     mNbDev++;
     */
+
+   return listCams;
 }
 
 bool freeture::Device::getDeviceName() {
-    freeture::LogDebug(  "Device::getDeviceName" );
+    LOG_DEBUG << "Device::getDeviceName";
 
     return mCam->getCameraName();
 
 }
 
 bool freeture::Device::setCameraPixelFormat() {
-    freeture::LogDebug(  "Device::setCameraPixelFormat");
+    LOG_DEBUG << "Device::setCameraPixelFormat";
     if(!mCam->setPixelFormat(mFormat)){
         mCam->grabCleanse();
         
-        BOOST_LOG_SEV(logger,fail) << "Fail to set camera format.";
+        LOG_ERROR << "Fail to set camera format.";
         return false;
     }
 
@@ -690,7 +699,7 @@ bool freeture::Device::setCameraPixelFormat() {
 }
 
 bool freeture::Device::getSupportedPixelFormats() {
-    freeture::LogDebug(  "Device::getSupportedPixelFormats" );
+    LOG_DEBUG << "Device::getSupportedPixelFormats";
 
 
     mCam->getAvailablePixelFormats();
@@ -699,28 +708,28 @@ bool freeture::Device::getSupportedPixelFormats() {
 }
 
 InputDeviceType freeture::Device::getDeviceType() {
-    freeture::LogDebug(  "Device::getDeviceType" );
+    LOG_DEBUG << "Device::getDeviceType";
 
     return mCam->getDeviceType();
 
 }
 
 bool freeture::Device::getCameraExposureBounds(double &min, double &max) {
-    freeture::LogDebug(  "Device::getCameraExposureBounds(double,double)" );
+    LOG_DEBUG << "Device::getCameraExposureBounds(double,double)";
 
     mCam->getExposureBounds(min, max);
     return true;
 }
 
 void freeture::Device::getCameraExposureBounds() {
-    freeture::LogDebug(  "Device::getCameraExposureBounds" );
+    LOG_DEBUG << "Device::getCameraExposureBounds";
 
     mCam->getExposureBounds(mMinExposureTime, mMaxExposureTime);
 
 }
 
 bool freeture::Device::getCameraFPSBounds(double &min, double &max) {
-    freeture::LogDebug(  "Device::getCameraFPSBounds(double,double)" );
+    LOG_DEBUG << "Device::getCameraFPSBounds(double,double)";
     CameraDeviceManager& manager = CameraDeviceManager::Get();
     
     manager.getDevice()->mCam->getFPSBounds(min, max);
@@ -730,13 +739,13 @@ bool freeture::Device::getCameraFPSBounds(double &min, double &max) {
 }
 
 void freeture::Device::getCameraFPSBounds() {
-    freeture::LogDebug(  "Device::getCameraFPSBounds" );
+    LOG_DEBUG << "Device::getCameraFPSBounds";
     mCam->getFPSBounds(mMinFPS, mMaxFPS);
 }
 
 
 bool freeture::Device::getCameraGainBounds(double &min, double &max) {
-    freeture::LogDebug(  "Device::getCameraGainBounds(double,double)" );
+    LOG_DEBUG << "Device::getCameraGainBounds(double,double)";
 
 
     mCam->getGainBounds(min, max);
@@ -744,21 +753,17 @@ bool freeture::Device::getCameraGainBounds(double &min, double &max) {
 }
 
 void freeture::Device::getCameraGainBounds() {
-    freeture::LogDebug(  "Device::getCameraGainBounds" );
+    LOG_DEBUG << "Device::getCameraGainBounds";
 
     mCam->getGainBounds(mMinGain, mMaxGain);
-
 }
 
 bool freeture::Device::setCameraNightExposureTime()
 {   
-    
-
     freeture::Device* device = CameraDeviceManager::Get().getDevice();
     
-
     if(!mCam->setExposureTime(mNightExposure)) {
-        BOOST_LOG_SEV(logger, fail) << "Fail to set night exposure time to " << mNightExposure;
+        LOG_ERROR << "Fail to set night exposure time to " << mNightExposure;
         mCam->grabCleanse();
         return false;
     }
@@ -766,15 +771,14 @@ bool freeture::Device::setCameraNightExposureTime()
     getCameraFPSBounds();
 
     return true;
-
 }
 
 bool freeture::Device::setCameraDayExposureTime() {
-    freeture::LogDebug(  "Device::setCameraDayExposureTime" );
+    LOG_DEBUG << "Device::setCameraDayExposureTime";
 
     if(!mCam->setExposureTime(mDayExposure)) {
     
-        BOOST_LOG_SEV(logger, fail) << "Fail to set day exposure time to " << mDayExposure;
+        LOG_ERROR << "Fail to set day exposure time to " << mDayExposure;
         mCam->grabCleanse();
         return false;
     }
@@ -782,81 +786,75 @@ bool freeture::Device::setCameraDayExposureTime() {
     getCameraFPSBounds();
 
     return true;
-
 }
 
 bool freeture::Device::setCameraNightGain() {
-    freeture::LogDebug(  "Device::setCameraNightGain "+mNightGain );
+    LOG_DEBUG << "Device::setCameraNightGain "<<mNightGain;
 
     if(!mCam->setGain(mNightGain)) {
-        BOOST_LOG_SEV(logger, fail) << "Fail to set night gain to " << mNightGain;
+        LOG_ERROR << "Fail to set night gain to " << mNightGain;
         mCam->grabCleanse();
         return false;
     }
 
     return true;
-
 }
 
 bool freeture::Device::setCameraDayGain() {
-    freeture::Log(  "Device::setCameraDayGain" );
+    LOG_DEBUG <<  "Device::setCameraDayGain";
 
     if(!mCam->setGain(mDayGain)) {
-        BOOST_LOG_SEV(logger, fail) << "Fail to set day gain to " << mDayGain;
+        LOG_ERROR << "Fail to set day gain to " << mDayGain;
         mCam->grabCleanse();
         return false;
     }
 
     return true;
-
 }
 
 bool freeture::Device::setCameraFPS(double value) {
-    freeture::LogDebug("Device::setCameraFPS [", value , "]");
+    LOG_DEBUG << "Device::setCameraFPS ["<< value << "]";
 
     if(!mCam->setFPS(value)) {
-        BOOST_LOG_SEV(logger, fail) << "Fail to set fps to " << value;
+        LOG_ERROR << "Fail to set fps to " << value;
         mCam->grabCleanse();
         return false;
     }
 
     return true;
-
 }
 
 
 bool freeture::Device::setCameraExposureTime(double value) {
-    freeture::LogDebug(  "Device::setCameraExposureTime" );
+    LOG_DEBUG << "Device::setCameraExposureTime";
 
     if(!mCam->setExposureTime(value)) {
-        BOOST_LOG_SEV(logger, fail) << "Fail to set exposure time to " << value;
+        LOG_ERROR << "Fail to set exposure time to " << value;
         mCam->grabCleanse();
         return false;
     }
 
     return true;
-
 }
 
 bool freeture::Device::setCameraGain(double value) {
-    freeture::LogDebug(  "Device::setCameraGain" );
+    LOG_DEBUG <<  "Device::setCameraGain";
 
     if(!mCam->setGain(value)) {
-        BOOST_LOG_SEV(logger, fail) << "Fail to set gain to " << value;
+        LOG_ERROR << "Fail to set gain to " << value;
         mCam->grabCleanse();
         return false;
     }
 
     return true;
-
 }
 
 bool freeture::Device::setCameraAutoExposure(bool value)
 {
-    freeture::LogDebug(  "Device::setCameraAutoExposure" );
+    LOG_DEBUG << "Device::setCameraAutoExposure";
     //arv_camera_set_exposure_time_auto(camera, &error)
     if(!mCam->setAutoExposure(value)) {
-        BOOST_LOG_SEV(logger, fail) << "Fail to set gain to " << value;
+        LOG_ERROR << "Fail to set gain to " << value;
         mCam->grabCleanse();
         return false;
     }
@@ -865,51 +863,47 @@ bool freeture::Device::setCameraAutoExposure(bool value)
 }
 
 bool freeture::Device::setCameraFPS() {
-    freeture::LogDebug(  "Device::setCameraFPS" );
+    LOG_DEBUG << "Device::setCameraFPS";
 
     if(!mCam->setFPS(mFPS)) {
-        BOOST_LOG_SEV(logger, fail) << "Fail to set FPS to " << mFPS;
+        LOG_ERROR << "Fail to set FPS to " << mFPS;
         mCam->grabCleanse();
         return false;
     }
 
     return true;
-
 }
 
 bool freeture::Device::initializeCamera() {
-    freeture::LogDebug(  "Device::initializeCamera" );
+    LOG_DEBUG << "Device::initializeCamera";
 
     if(!mCam->grabInitialization()){
-        BOOST_LOG_SEV(logger, fail) << "Fail to initialize camera.";
+        LOG_ERROR << "Fail to initialize camera.";
         mCam->grabCleanse();
         return false;
     }
 
     return true;
-
 }
 
 bool freeture::Device::startCamera() {
-    freeture::LogDebug(  "Device::startCamera" );
+    LOG_DEBUG << "Device::startCamera";
 
-    BOOST_LOG_SEV(logger, notification) << "Starting camera...";
+    LOG_INFO << "Starting camera...";
     if(!mCam->acqStart())
         return false;
 
     return true;
-
 }
 
 bool freeture::Device::stopCamera()
 {
-    freeture::LogDebug(  "Device::stopCamera" );
-
-    BOOST_LOG_SEV(logger, notification) << "Stopping camera...";
+    LOG_DEBUG << "Device::stopCamera" ;
+    LOG_INFO << "Stopping camera...";
     mCam->acqStop();
     mCam->grabCleanse();
-    return true;
 
+    return true;
 }
 
 /*
@@ -921,7 +915,8 @@ bool freeture::Device::runContinuousCapture(Frame &img)
 
     try
     {
-        if(mCam == nullptr) std::cout << "MCAM IS NULL" << std::endl;
+        if(mCam == nullptr) 
+            LOG_ERROR << "MCAM IS NULL" << endl;
         
         if(mCam->grabImage(img)) {
             //img.mFrameNumber = mNbFrame;
@@ -931,17 +926,15 @@ bool freeture::Device::runContinuousCapture(Frame &img)
     }
     catch (exception& ex)
     {
-        std::cout << "Exception grabImage..." << ex.what();
-        BOOST_LOG_SEV(logger, fail) << "Exception grabImage..." << ex.what();
+        LOG_ERROR << "Exception grabImage..." << ex.what();
     }
     
     return false;
-
 }
 
 bool freeture::Device::runSingleCapture(Frame &img) {
-    freeture::LogDebug( "Device::runSingleCapture" );
-    std::cout << "single capture with cam: " << mCamID << std::endl;
+    LOG_DEBUG << "Device::runSingleCapture";
+    LOG_INFO << "single capture with cam: " << mCamID << endl;
     if(mCam->grabSingleImage(img, mCamID))
         return true;
 
@@ -960,38 +953,35 @@ bool freeture::Device::getDeviceCameraSizeParams(int& x,int& y,int& height,int& 
     return true;
 }
 
-bool freeture::Device::setCameraSize() {
-    
+bool freeture::Device::setCameraSize()
+{
     CameraDeviceManager& manager = CameraDeviceManager::Get();
-    freeture::LogDebug("Device::setCameraSize : ", manager.getDevice()->mSizeWidth ,"x", manager.getDevice()->mSizeHeight );
-    
+    LOG_DEBUG << "Device::setCameraSize : ", manager.getDevice()->mSizeWidth ,"x", manager.getDevice()->mSizeHeight ;
     
     Camera* mCam = manager.getDevice()->mCam;
     
     if(!mCam->setSize(manager.getDevice()->mStartX, manager.getDevice()->mStartY, manager.getDevice()->mSizeWidth, manager.getDevice()->mSizeHeight, manager.getDevice()->mCustomSize)) {
-        BOOST_LOG_SEV(logger, fail) << "Fail to set camera size.";
+        LOG_ERROR << "Fail to set camera size.";
         return false;
     }
 
 
     return true;
-
 }
 
 bool freeture::Device::setCameraSize(int x, int y, int w, int h) {
-    freeture::LogDebug(  "Device::setCameraSize(int,int,int,int): ",w,"x",h );
+    LOG_DEBUG << "Device::setCameraSize(int,int,int,int): "<<w<<"x"<<h;
 
     if(!mCam->setSize(x, y, w, h, true)) {
-        BOOST_LOG_SEV(logger, fail) << "Fail to set camera size.";
+       LOG_ERROR << "Fail to set camera size.";
         return false;
     }
 
     return true;
-
 }
 
 bool freeture::Device::getCameraFPS(double &fps) {
-    freeture::LogDebug(  "Device::getCameraFPS" );
+    LOG_DEBUG << "Device::getCameraFPS" ;
 
     if(!mCam->getFPS(fps)) {
         //BOOST_LOG_SEV(logger, fail) << "Fail to get fps value from camera.";
@@ -999,7 +989,6 @@ bool freeture::Device::getCameraFPS(double &fps) {
     }
 
     return true;
-
 }
 
 /*
@@ -1009,33 +998,28 @@ bool freeture::Device::getCameraStatus() {
     //cout << "Device::getCameraStatus" << endl;
 
     return mCam->getStopStatus();
-
 }
 
 bool freeture::Device::getCameraDataSetStatus() {
-    freeture::LogDebug(  "Device::getCameraDataSetStatus" );
+    LOG_DEBUG << "Device::getCameraDataSetStatus";
 
     return mCam->getDataSetStatus();
-
 }
 
 bool freeture::Device::loadNextCameraDataSet(string &location) {
-    freeture::LogDebug(  "Device::loadNextCameraDataSet" );
+    LOG_DEBUG << "Device::loadNextCameraDataSet";
 
     return mCam->loadNextDataSet(location);
-
 }
 
 bool freeture::Device::getExposureStatus() {
-    freeture::LogDebug(  "Device::getExposureStatus" );
+    LOG_DEBUG << "Device::getExposureStatus";
 
     return mCam->mExposureAvailable;
-
 }
 
 bool freeture::Device::getGainStatus() {
-    freeture::LogDebug(  "Device::getGainStatus" );
+    LOG_DEBUG << "Device::getGainStatus";
 
     return mCam->mGainAvailable;
-
 }

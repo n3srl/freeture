@@ -33,14 +33,28 @@
 * \date    12/03/2018
 * \brief   Detection thread.
 */
-#include "Constants.h"
-
 #include "DetThread.h"
+
+#include <iostream>
+
+#include <boost/filesystem.hpp>
+#include "boost/date_time/posix_time/posix_time.hpp"
+
 #include "NodeExporterMetrics.h"
+#include "DetectionTemporal.h"
+#include "Logger.h"
+#include "DetectionTemplate.h"
+#include "SMTPClient.h"
+#include "Stack.h"
+#include "Fits3D.h"
+#include "Fits2D.h"
+#include "TimeDate.h"
 
-boost::log::sources::severity_logger< LogSeverityLevel >  DetThread::logger;
+namespace fs = boost::filesystem;
+namespace pt = boost::posix_time;
 
-DetThread::Init DetThread::initializer;
+using namespace freeture;
+using namespace std;
 
 DetThread::DetThread(   boost::circular_buffer<Frame>  *fb,
                         boost::mutex                   *fb_m,
@@ -107,14 +121,14 @@ DetThread::~DetThread(void){
 
     if(pDetMthd != NULL){
 
-        BOOST_LOG_SEV(logger, notification) << "Remove pDetMthd instance.";
+        LOG_INFO << "Remove pDetMthd instance.";
         delete pDetMthd;
 
     }
 
     if (pThread!=NULL){
 
-        BOOST_LOG_SEV(logger, notification) << "Remove detThread instance.";
+        LOG_INFO<< "Remove detThread instance.";
         delete pThread;
 
     }
@@ -122,7 +136,7 @@ DetThread::~DetThread(void){
 
 bool DetThread::startThread(){
 
-    BOOST_LOG_SEV(logger, notification) << "Creating detThread...";
+    LOG_INFO<< "Creating detThread...";
     pThread = new boost::thread(boost::ref(*this));
 
     return true;
@@ -130,7 +144,7 @@ bool DetThread::startThread(){
 
 void DetThread::stopThread(){
 
-    BOOST_LOG_SEV(logger, notification) << "Stopping detThread...";
+    LOG_INFO<< "Stopping detThread...";
 
     // Signal the thread to stop (thread-safe)
     mMustStopMutex.lock();
@@ -138,9 +152,9 @@ void DetThread::stopThread(){
     mMustStopMutex.unlock();
 
     // Wait for the thread to finish.
-    while(pThread->timed_join(boost::posix_time::seconds(2)) == false){
+    while(pThread->timed_join(pt::seconds(2)) == false){
 
-        BOOST_LOG_SEV(logger, notification) << "Interrupting detThread...";
+        LOG_INFO<< "Interrupting detThread...";
         pThread->interrupt();
 
     }
@@ -161,20 +175,18 @@ void DetThread::interruptThread(){
 }
 
 void DetThread::operator ()(){
-
     bool stopThread = false;
     mIsRunning = true;
     // Flag to indicate that an event must be complete with more frames.
     bool eventToComplete = false;
     // Reference date to count time to complete an event.
-    std::string refDate;
+    string refDate;
 
-    BOOST_LOG_SCOPED_THREAD_TAG("LogName", "DET_THREAD");
-    BOOST_LOG_SEV(logger,notification) << "\n";
-    BOOST_LOG_SEV(logger,notification) << "==============================================";
-    BOOST_LOG_SEV(logger,notification) << "=========== Start detection thread ===========";
-    BOOST_LOG_SEV(logger,notification) << "==============================================";
-    std::string errorWhen = "NO";
+    LOG_INFO << "\n";
+    LOG_INFO << "==============================================";
+    LOG_INFO << "=========== Start detection thread ===========";
+    LOG_INFO << "==============================================";
+    string errorWhen = "NO";
     /// Thread loop.
     try{
 
@@ -191,14 +203,12 @@ void DetThread::operator ()(){
                 // Check interruption signal from AcqThread.
                 mForceToReset = false;
                 mInterruptionStatusMutex.lock();
-                //std::cout << "DetThread after lock ok" << std::endl;
                 if(mInterruptionStatus) {
-                    BOOST_LOG_SEV(logger, notification) << "Interruption status : " << mInterruptionStatus;
-                    BOOST_LOG_SEV(logger, notification) << "-> reset forced on detection method.";
+                    LOG_INFO<< "Interruption status : " << mInterruptionStatus;
+                    LOG_INFO<< "-> reset forced on detection method.";
                     mForceToReset = true;
                 }
                 mInterruptionStatusMutex.unlock();
-                //std::cout << "DetThread after unlock ok" << std::endl;
                 if(!mForceToReset){
                     errorWhen = "!Force to reset";
                     // Fetch the last grabbed frame.
@@ -207,7 +217,7 @@ void DetThread::operator ()(){
                     if(frameBuffer->size() > 2) lastFrame = frameBuffer->back();
                     lock2.unlock();
 
-                    t = (double)getTickCount();
+                    t = (double)cv::getTickCount();
 
                     if(lastFrame.mImg.data) {
                         mFormat = lastFrame.mFormat;
@@ -219,19 +229,19 @@ void DetThread::operator ()(){
                             if(pDetMthd->runDetection(lastFrame) && !eventToComplete){
 
                             // Event detected.
-                            BOOST_LOG_SEV(logger, notification) << "Event detected ! Waiting frames to complete the event..." << std::endl;
+                            LOG_INFO<< "Event detected ! Waiting frames to complete the event..." << endl;
                             eventToComplete = true;
 
                             // Get a reference date.
-                            std::string currDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
+                            string currDate = to_simple_string(pt::microsec_clock::universal_time());
                             refDate = currDate.substr(0, currDate.find("."));
 
                             mNbDetection++;
 
                         }
-                        } catch (std::exception& e)
+                        } catch (exception& e)
                         {
-                            BOOST_LOG_SEV(logger, notification) << "Frameis not valid" << std::endl;
+                            LOG_INFO<< "Frameis not valid" << endl;
                            
                         }
                         
@@ -239,38 +249,38 @@ void DetThread::operator ()(){
                         // Wait frames to complete the detection.
                         if(eventToComplete){
 
-                            std::string currDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
-                            std::string nowDate = currDate.substr(0, currDate.find("."));
-                            boost::posix_time::ptime t1(boost::posix_time::time_from_string(refDate));
-                            boost::posix_time::ptime t2(boost::posix_time::time_from_string(nowDate));
-                            boost::posix_time::time_duration td = t2 - t1;
+                            string currDate = to_simple_string(pt::microsec_clock::universal_time());
+                            string nowDate = currDate.substr(0, currDate.find("."));
+                            pt::ptime t1(pt::time_from_string(refDate));
+                            pt::ptime t2(pt::time_from_string(nowDate));
+                            pt::time_duration td = t2 - t1;
 
                             if(td.total_seconds() > mdtp.DET_TIME_AROUND) {
 
-                                BOOST_LOG_SEV(logger, notification) << "Event completed." << std::endl;
+                                LOG_INFO<< "Event completed." << endl;
 
                                 // Build event directory.
                                 mEventDate = pDetMthd->getEventDate();
-                                BOOST_LOG_SEV(logger, notification) << "Building event directory..." << std::endl;
+                                LOG_INFO<< "Building event directory..." << endl;
 
                                 if(buildEventDataDirectory())
-                                    BOOST_LOG_SEV(logger, notification) << "Success to build event directory." << std::endl;
+                                    LOG_INFO<< "Success to build event directory." << endl;
                                 else
-                                    BOOST_LOG_SEV(logger, fail) << "Fail to build event directory." << std::endl;
+                                   LOG_ERROR << "Fail to build event directory." << endl;
 
                                 // Save event.
-                                BOOST_LOG_SEV(logger, notification) << "Saving event..." << std::endl;
+                                LOG_INFO<< "Saving event..." << endl;
                                 pDetMthd->saveDetectionInfos(mEventPath, mNbFramesAround);
                                 boost::mutex::scoped_lock lock(*frameBuffer_mutex);
                                 if(!saveEventData(pDetMthd->getEventFirstFrameNb(), pDetMthd->getEventLastFrameNb()))
-                                    BOOST_LOG_SEV(logger,critical) << "Error saving event data.";
+                                    LOG_ERROR << "Error saving event data.";
                                 else
-                                    BOOST_LOG_SEV(logger, notification) << "Success to save event !" << std::endl;
+                                    LOG_INFO<< "Success to save event !" << endl;
 
                                 lock.unlock();
 
                                 // Reset detection.
-                                BOOST_LOG_SEV(logger, notification) << "Reset detection process." << std::endl;
+                                LOG_INFO<< "Reset detection process." << endl;
                                 pDetMthd->resetDetection(false);
                                 eventToComplete = false;
                                 mNbFramesAround = 0;
@@ -281,11 +291,10 @@ void DetThread::operator ()(){
                         }
                     }
 
-                    t = (((double)getTickCount() - t)/getTickFrequency())*1000;
+                    t = (((double)cv::getTickCount() - t)/ cv::getTickFrequency())*1000;
                     if (LOG_FRAME_STATUS)
                     {
-                        std::cout << " [ TIME DET ] : " << std::setprecision(3) << std::fixed << t << " ms " << std::endl;
-                        BOOST_LOG_SEV(logger,normal) << " [ TIME DET ] : " << std::setprecision(3) << std::fixed << t << " ms ";
+                        LOG_DEBUG << " [ TIME DET ] : " << setprecision(3) << fixed << t << " ms " << endl;
                     }
                 }else{
                     errorWhen = "Force to reset";
@@ -301,18 +310,15 @@ void DetThread::operator ()(){
                     mInterruptionStatusMutex.unlock();
 
                 }
-                //std::cout << "End of try ok" << std::endl;
 
             }catch(const boost::thread_interrupted&){
 
-                BOOST_LOG_SEV(logger,notification) << "Detection Thread INTERRUPTED";
+                LOG_WARNING << "Detection Thread INTERRUPTED";
 
-            } catch(std::exception& e)
+            } catch(exception& e)
             {
-                std::cout << errorWhen << " An error occured in internal try. See log for details." << std::endl;
-                std::cout << e.what() << std::endl;
-                BOOST_LOG_SEV(logger, critical) << errorWhen << " An error occured in internal try. See log for details.";
-                BOOST_LOG_SEV(logger, critical) << e.what();
+                LOG_ERROR << errorWhen << " An error occured in internal try. See log for details.";
+                LOG_ERROR << e.what();
             }
 
             mMustStopMutex.lock();
@@ -325,81 +331,73 @@ void DetThread::operator ()(){
 
         if(mDetectionResults.size() == 0) {
 
-            std::cout << "-----------------------------------------------" << std::endl;
-            std::cout << "------------->> DETECTED EVENTS : " << mNbDetection << std::endl;
-            std::cout << "-----------------------------------------------" << std::endl;
+            LOG_INFO << "-----------------------------------------------" << endl;
+            LOG_INFO << "------------->> DETECTED EVENTS : " << mNbDetection << endl;
+            LOG_INFO << "-----------------------------------------------" << endl;
 
         }else {
 
             // Create Report for videos and frames in input.
-            boost::filesystem::ofstream report;
-            std::string reportPath = mdp.DATA_PATH + "detections_report.txt";
+            ofstream report;
+            string reportPath = mdp.DATA_PATH + "detections_report.txt";
             report.open(reportPath.c_str());
 
-            std::cout << "--------------- DETECTION REPORT --------------" << std::endl;
+            LOG_INFO << "--------------- DETECTION REPORT --------------" << endl;
 
             for(int i = 0; i < mDetectionResults.size(); i++) {
                 report << mDetectionResults.at(i).first << "------> " << mDetectionResults.at(i).second << "\n";
-                std::cout << "- DATASET " << i << " : ";
+                cout << "- DATASET " << i << " : ";
 
                 if(mDetectionResults.at(i).second > 1)
-                    std::cout << mDetectionResults.at(i).second << " events" << std::endl;
+                    cout << mDetectionResults.at(i).second << " events" << endl;
                 else
-                    std::cout << mDetectionResults.at(i).second << " event" << std::endl;
+                    cout << mDetectionResults.at(i).second << " event" << endl;
             }
 
-            std::cout << "-----------------------------------------------" << std::endl;
+            LOG_INFO << "-----------------------------------------------" << endl;
 
             report.close();
 
         }
 
     }catch(const char * msg){
-
-        std::cout << msg << std::endl;
-        BOOST_LOG_SEV(logger,critical) << msg;
-
-    }catch(std::exception& e){
-
-        std::cout << "An error occured. See log for details." << std::endl;
-        std::cout << e.what() << std::endl;
-        BOOST_LOG_SEV(logger, critical) << e.what();
-
+        LOG_ERROR << msg;
+    }catch(exception& e){
+        LOG_ERROR << e.what();
     }
 
     mIsRunning = false;
 
-    BOOST_LOG_SEV(logger,notification) << "DetThread ended.";
+    LOG_INFO << "DetThread ended.";
 
 }
 
 bool DetThread::getRunStatus(){
 
-    //std::cout << "DetThrad getRunstatus" << std::endl;
     return mIsRunning;
 
 }
 
 bool DetThread::buildEventDataDirectory(){
-    std::cout << "DetThrad buildEventDataDirectory" << std::endl;
-    namespace fs = boost::filesystem;
+    cout << "DetThrad buildEventDataDirectory" << endl;
+    namespace fs =fs;
 
     // eventDate is the date of the first frame attached to the event.
-    std::string YYYYMMDD = TimeDate::getYYYYMMDD(mEventDate);
+    string YYYYMMDD = TimeDate::getYYYYMMDD(mEventDate);
 
     // Data location.
     path p(mdp.DATA_PATH);
 
     // Create data directory for the current day.
-    std::string fp = mdp.DATA_PATH + mStationName + "_" + YYYYMMDD +"/";
+    string fp = mdp.DATA_PATH + mStationName + "_" + YYYYMMDD +"/";
     path p0(fp);
 
     // Events directory.
-    std::string fp1 = "events/";
+    string fp1 = "events/";
     path p1(fp + fp1);
 
     // Current event directory with the format : STATION_AAAAMMDDThhmmss_UT
-    std::string fp2 = mStationName + "_" + TimeDate::getYYYYMMDDThhmmss(mEventDate) + "_UT/";
+    string fp2 = mStationName + "_" + TimeDate::getYYYYMMDDThhmmss(mEventDate) + "_UT/";
     path p2(fp + fp1 + fp2);
 
     // Final path used by an other function to save event data.
@@ -420,12 +418,12 @@ bool DetThread::buildEventDataDirectory(){
                     // Create DataLocation/STATION_AAMMDD/events/STATION_AAAAMMDDThhmmss_UT/
                     if(!fs::create_directory(p2)){
 
-                        BOOST_LOG_SEV(logger,fail) << "Fail to create : " << p2;
+                        LOG_ERROR << "Fail to create : " << p2;
                         return false;
 
                     }else{
 
-                        BOOST_LOG_SEV(logger,notification) << "Success to create : " << p2;
+                        LOG_INFO << "Success to create : " << p2;
                         return true;
                     }
 
@@ -436,7 +434,7 @@ bool DetThread::buildEventDataDirectory(){
                 // Create DataLocation/STATION_AAMMDD/events/
                 if(!fs::create_directory(p1)){
 
-                    BOOST_LOG_SEV(logger,fail) << "Fail to create : " << p1;
+                    LOG_ERROR << "Fail to create : " << p1;
                     return false;
 
                 }else{
@@ -444,12 +442,12 @@ bool DetThread::buildEventDataDirectory(){
                     // Create DataLocation/STATION_AAMMDD/events/STATION_AAAAMMDDThhmmss_UT/
                     if(!fs::create_directory(p2)){
 
-                        BOOST_LOG_SEV(logger,fail) << "Fail to create : " << p2;
+                        LOG_ERROR << "Fail to create : " << p2;
                         return false;
 
                     }else{
 
-                        BOOST_LOG_SEV(logger,notification) << "Success to create : " << p2;
+                        LOG_INFO << "Success to create : " << p2;
                         return true;
 
                     }
@@ -461,7 +459,7 @@ bool DetThread::buildEventDataDirectory(){
             // Create DataLocation/STATION_AAMMDD/
             if(!fs::create_directory(p0)){
 
-                BOOST_LOG_SEV(logger,fail) << "Fail to create : " << p0;
+                LOG_ERROR << "Fail to create : " << p0;
                 return false;
 
             }else{
@@ -469,7 +467,7 @@ bool DetThread::buildEventDataDirectory(){
                 // Create DataLocation/STATION_AAMMDD/events/
                 if(!fs::create_directory(p1)){
 
-                    BOOST_LOG_SEV(logger,fail) << "Fail to create : " << p1;
+                    LOG_ERROR << "Fail to create : " << p1;
                     return false;
 
                 }else{
@@ -477,12 +475,12 @@ bool DetThread::buildEventDataDirectory(){
                     // Create DataLocation/STATION_AAMMDD/events/STATION_AAAAMMDDThhmmss_UT/
                     if(!fs::create_directory(p2)){
 
-                        BOOST_LOG_SEV(logger,fail) << "Fail to create : " << p2;
+                        LOG_ERROR << "Fail to create : " << p2;
                         return false;
 
                     }else{
 
-                        BOOST_LOG_SEV(logger,notification) << "Success to create : " << p2;
+                        LOG_INFO << "Success to create : " << p2;
                         return true;
 
                     }
@@ -495,7 +493,7 @@ bool DetThread::buildEventDataDirectory(){
         // Create DataLocation/
         if(!fs::create_directory(p)){
 
-            BOOST_LOG_SEV(logger,fail) << "Fail to create : " << p;
+            LOG_ERROR << "Fail to create : " << p;
             return false;
 
         }else{
@@ -503,7 +501,7 @@ bool DetThread::buildEventDataDirectory(){
             // Create DataLocation/STATION_AAMMDD/
             if(!fs::create_directory(p0)){
 
-                BOOST_LOG_SEV(logger,fail) << "Fail to create : " << p0;
+                LOG_ERROR << "Fail to create : " << p0;
                 return false;
 
             }else{
@@ -511,7 +509,7 @@ bool DetThread::buildEventDataDirectory(){
                 //Create DataLocation/STATION_AAMMDD/events/
                 if(!fs::create_directory(p1)){
 
-                    BOOST_LOG_SEV(logger,fail) << "Fail to create : " << p1;
+                    LOG_ERROR << "Fail to create : " << p1;
                     return false;
 
                 }else{
@@ -519,12 +517,12 @@ bool DetThread::buildEventDataDirectory(){
                     // Create DataLocation/STATION_AAMMDD/events/STATION_AAAAMMDDThhmmss_UT/
                     if(!fs::create_directory(p2)){
 
-                        BOOST_LOG_SEV(logger,fail) << "Fail to create : " << p2;
+                        LOG_ERROR << "Fail to create : " << p2;
                         return false;
 
                     }else{
 
-                        BOOST_LOG_SEV(logger,notification) << "Success to create : " << p1;
+                        LOG_INFO << "Success to create : " << p1;
                         return true;
 
                     }
@@ -537,11 +535,11 @@ bool DetThread::buildEventDataDirectory(){
 }
 
 bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
-    std::cout << "DetThread SAVE EVENT DATA" << std::endl;
-    namespace fs = boost::filesystem;
+    cout << "DetThread SAVE EVENT DATA" << endl;
+    namespace fs =fs;
 
     // List of data path to attach to the mail notification.
-    std::vector<std::string> mailAttachments;
+    vector<string> mailAttachments;
 
     // Number of the first frame to save. It depends of how many frames we want to keep before the event.
     int numFirstFrameToSave = firstEvPosInFB - mNbFramesAround;
@@ -570,24 +568,24 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
         ++nbDigitOnNbTotalFramesToSave;
     }
 
-    BOOST_LOG_SEV(logger,notification) << "> First frame to save  : " << numFirstFrameToSave;
-    BOOST_LOG_SEV(logger,notification) << "> Lst frame to save    : " << numLastFrameToSave;
-    BOOST_LOG_SEV(logger,notification) << "> First event frame    : " << firstEvPosInFB;
-    BOOST_LOG_SEV(logger,notification) << "> Last event frame     : " << lastEvPosInFB;
-    BOOST_LOG_SEV(logger,notification) << "> Frames before        : " << mNbFramesAround;
-    BOOST_LOG_SEV(logger,notification) << "> Frames after         : " << mNbFramesAround;
-    BOOST_LOG_SEV(logger,notification) << "> Total frames to save : " << nbTotalFramesToSave;
-    BOOST_LOG_SEV(logger,notification) << "> Total digit          : " << nbDigitOnNbTotalFramesToSave;
+    LOG_INFO << "> First frame to save  : " << numFirstFrameToSave;
+    LOG_INFO << "> Lst frame to save    : " << numLastFrameToSave;
+    LOG_INFO << "> First event frame    : " << firstEvPosInFB;
+    LOG_INFO << "> Last event frame     : " << lastEvPosInFB;
+    LOG_INFO << "> Frames before        : " << mNbFramesAround;
+    LOG_INFO << "> Frames after         : " << mNbFramesAround;
+    LOG_INFO << "> Total frames to save : " << nbTotalFramesToSave;
+    LOG_INFO << "> Total digit          : " << nbDigitOnNbTotalFramesToSave;
 
     TimeDate::Date dateFirstFrame;
 
     int c = 0;
 
     // Init video avi
-    VideoWriter *video = NULL;
+    cv::VideoWriter *video = NULL;
 
     if(mdtp.DET_SAVE_AVI) {
-        video = new VideoWriter(mEventPath + "video.avi", VideoWriter::fourcc('M', 'J', 'P', 'G'), 5, Size(static_cast<int>(frameBuffer->front().mImg.cols), static_cast<int>(frameBuffer->front().mImg.rows)), false);
+        video = new cv::VideoWriter(mEventPath + "video.avi", cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 5, cv::Size(static_cast<int>(frameBuffer->front().mImg.cols), static_cast<int>(frameBuffer->front().mImg.rows)), false);
     }
 
     // Init fits 3D.
@@ -596,8 +594,8 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
     if(mdtp.DET_SAVE_FITS3D) {
 
         fits3d = Fits3D(mFormat, frameBuffer->front().mImg.rows, frameBuffer->front().mImg.cols, (numLastFrameToSave - numFirstFrameToSave +1), mEventPath + "fits3D");
-        boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
-        fits3d.kDATE = to_iso_extended_string(time);
+        pt::ptime time = pt::microsec_clock::universal_time();
+        fits3d.kDATE = pt::to_iso_extended_string(time);
 
         // Name of the fits file.
         fits3d.kFILENAME = mEventPath + "fitscube.fit";
@@ -644,8 +642,8 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
 
         // Get infos about the last frame of the event record for fits 3D.
         if((*it).mFrameNumber == numLastFrameToSave && mdtp.DET_SAVE_FITS3D){
-            std::cout << "DATE first : " << dateFirstFrame.hours << " H " << dateFirstFrame.minutes << " M " << dateFirstFrame.seconds << " S" << std::endl;
-            std::cout << "DATE last : " << (*it).mDate.hours << " H " << (*it).mDate.minutes << " M " << (*it).mDate.seconds << " S" << std::endl;
+            cout << "DATE first : " << dateFirstFrame.hours << " H " << dateFirstFrame.minutes << " M " << dateFirstFrame.seconds << " S" << endl;
+            cout << "DATE last : " << (*it).mDate.hours << " H " << (*it).mDate.minutes << " M " << (*it).mDate.seconds << " S" << endl;
             fits3d.kELAPTIME = ((*it).mDate.hours*3600 + (*it).mDate.minutes*60 + (*it).mDate.seconds) - (dateFirstFrame.hours*3600 + dateFirstFrame.minutes*60 + dateFirstFrame.seconds);
 
         }
@@ -656,18 +654,18 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
             // Save fits2D.
             if(mdtp.DET_SAVE_FITS2D) {
 
-                std::string fits2DPath = mEventPath + "fits2D/";
-                std::string fits2DName = "frame_" + Conversion::numbering(nbDigitOnNbTotalFramesToSave, c) + Conversion::intToString(c);
-                BOOST_LOG_SEV(logger,notification) << ">> Saving fits2D : " << fits2DName;
+                string fits2DPath = mEventPath + "fits2D/";
+                string fits2DName = "frame_" + Conversion::numbering(nbDigitOnNbTotalFramesToSave, c) + Conversion::intToString(c);
+                LOG_INFO << ">> Saving fits2D : " << fits2DName;
 
                 Fits2D newFits(fits2DPath);
                 newFits.loadKeys(mfkp, mstp);
                 // Frame's acquisition date.
                 newFits.kDATEOBS = TimeDate::getIsoExtendedFormatDate((*it).mDate);
                 // Fits file creation date.
-                boost::posix_time::ptime time = boost::posix_time::second_clock::universal_time();
+                boost::posix_time::ptime time = pt::second_clock::universal_time();
                 // YYYYMMDDTHHMMSS,fffffffff where T is the date-time separator
-                newFits.kDATE = to_iso_string(time);
+                newFits.kDATE = pt::to_iso_string(time);
                 // Name of the fits file.
                 newFits.kFILENAME = fits2DName;
                 // Exposure time.
@@ -692,7 +690,7 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
 
                 if(!fs::exists(path(fits2DPath))) {
                     if(fs::create_directory(path(fits2DPath)))
-                        BOOST_LOG_SEV(logger,notification) << "Success to create directory : " << fits2DPath;
+                        LOG_INFO << "Success to create directory : " << fits2DPath;
                 }
 
                 switch(mFormat) {
@@ -714,7 +712,7 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
             }
 
             if(mdtp.DET_SAVE_AVI) {
-                Mat iv = Conversion::convertTo8UC1((*it).mImg);
+                cv::Mat iv = Conversion::convertTo8UC1((*it).mImg);
                 if(video->isOpened()) {
                     video->write(iv);
                 }
@@ -779,11 +777,11 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
 
     if(mdtp.DET_SAVE_SUM_WITH_HIST_EQUALIZATION) {
 
-        Mat s,s1, eqHist;
+        cv::Mat s,s1, eqHist;
         float bzero  = 0.0;
         float bscale = 1.0;
         s = stack.reductionByFactorDivision(bzero,bscale);
-        std::cout << "mFormat : " << mFormat << std::endl;
+        cout << "mFormat : " << mFormat << endl;
         if(mFormat != MONO8)
             Conversion::convertTo8UC1(s).copyTo(s);
 
@@ -793,24 +791,24 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
     }
 
     // *********************************** SEND MAIL NOTIFICATION ***********************************
-    BOOST_LOG_SEV(logger,notification) << "Prepare mail..." << mmp.MAIL_DETECTION_ENABLED;
+    LOG_INFO << "Prepare mail..." << mmp.MAIL_DETECTION_ENABLED;
     if(mmp.MAIL_DETECTION_ENABLED) {
 
-        BOOST_LOG_SEV(logger,notification) << "Sending mail...";
+        LOG_INFO << "Sending mail...";
 
         for(int i = 0; i < pDetMthd->getDebugFiles().size(); i++) {
 
-            if(boost::filesystem::exists( mEventPath + pDetMthd->getDebugFiles().at(i))) {
+            if(fs::exists( mEventPath + pDetMthd->getDebugFiles().at(i))) {
 
-                BOOST_LOG_SEV(logger,notification) << "Send : " << mEventPath << pDetMthd->getDebugFiles().at(i);
+                LOG_INFO << "Send : " << mEventPath << pDetMthd->getDebugFiles().at(i);
                 mailAttachments.push_back(mEventPath + pDetMthd->getDebugFiles().at(i));
 
             }
         }
 
-        if(mdtp.DET_SAVE_SUM_WITH_HIST_EQUALIZATION && boost::filesystem::exists(mEventPath + mStationName + "_" + TimeDate::getYYYYMMDDThhmmss(mEventDate) + "_UT.jpg")) {
+        if(mdtp.DET_SAVE_SUM_WITH_HIST_EQUALIZATION &&fs::exists(mEventPath + mStationName + "_" + TimeDate::getYYYYMMDDThhmmss(mEventDate) + "_UT.jpg")) {
 
-            BOOST_LOG_SEV(logger,notification) << "Send : " << mEventPath << mStationName << "_" << TimeDate::getYYYYMMDDThhmmss(mEventDate) << "_UT.jpg";
+            LOG_INFO << "Send : " << mEventPath << mStationName << "_" << TimeDate::getYYYYMMDDThhmmss(mEventDate) << "_UT.jpg";
             mailAttachments.push_back(mEventPath + mStationName + "_" + TimeDate::getYYYYMMDDThhmmss(mEventDate) + "_UT.jpg");
 
         }

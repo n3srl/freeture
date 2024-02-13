@@ -1,3 +1,4 @@
+#pragma once
 /*
                                     SaveImg.h
 
@@ -31,8 +32,7 @@
 * \version 1.0
 * \date    03/06/2014
 */
-
-#pragma once
+#include "Commons.h"
 
 #include <string>
 
@@ -40,8 +40,10 @@ namespace cv
 {
     class Mat;
 }
+namespace freeture
+{
 
-class SaveImg{
+    class SaveImg {
 
     public:
 
@@ -75,4 +77,5 @@ class SaveImg{
         */
         static bool savePNG(cv::Mat img, std::string name);
 
-};
+    };
+}

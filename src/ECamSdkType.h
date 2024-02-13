@@ -1,3 +1,4 @@
+#pragma once
 /*
                             ECamSdkType.h
 
@@ -25,20 +26,21 @@
 *
 *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-#pragma once
-
-enum class CamSdkType
+namespace freeture
 {
+    enum class CamSdkType
+    {
 
-    ARAVIS,         //Generic implementation of ARAVIS camera
-    LUCID_ARENA,    //Arena SDK for lucid camera
-    LUCID_ARAVIS,   //Specific implementation implementation for lucid cameras with ARAVIS
-    PYLONGIGE,
-    TIS,
-    VIDEOFILE,
-    FRAMESDIR,
-    V4L2,
-    VIDEOINPUT,
-    UNKNOWN
+        ARAVIS,         //Generic implementation of ARAVIS camera
+        LUCID_ARENA,    //Arena SDK for lucid camera
+        LUCID_ARAVIS,   //Specific implementation implementation for lucid cameras with ARAVIS
+        PYLONGIGE,
+        TIS,
+        VIDEOFILE,
+        FRAMESDIR,
+        V4L2,
+        VIDEOINPUT,
+        UNKNOWN
 
-};
+    };
+}

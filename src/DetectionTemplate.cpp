@@ -31,12 +31,14 @@
 * \version 1.0
 * \date    03/03/2015
 */
-
 #include "DetectionTemplate.h"
 
-boost::log::sources::severity_logger< LogSeverityLevel > DetectionTemplate::logger;
+#include "Mask.h"
+#include "Frame.h"
+#include "Logger.h"
 
-DetectionTemplate::Init DetectionTemplate::initializer;
+using namespace std;
+using namespace freeture;
 
 DetectionTemplate::DetectionTemplate(detectionParam dtp, CamPixFmt fmt):mImgNum(0), mDataSetCounter(0) {
 
@@ -57,10 +59,10 @@ void DetectionTemplate::createDebugDirectories(bool cleanDebugDirectory) {
 
 bool DetectionTemplate::runDetection(Frame &c) {
     
-    Mat currImg;
+    cv::Mat currImg;
 
     if(mdtp.DET_DOWNSAMPLE_ENABLED)
-        pyrDown(c.mImg, currImg, Size(c.mImg.cols / 2, c.mImg.rows / 2));
+        pyrDown(c.mImg, currImg, cv::Size(c.mImg.cols / 2, c.mImg.rows / 2));
     else
         c.mImg.copyTo(currImg);
 
@@ -76,13 +78,13 @@ bool DetectionTemplate::runDetection(Frame &c) {
 
         if(!mPrevFrame.data) {
 
-            std::cout << "PrevFrame has no data ! " << std::endl;
+            LOG_DEBUG << "PrevFrame has no data ! " << endl;
             currImg.copyTo(mPrevFrame);
             return false;
 
         }
 
-        Mat absdiffImg;
+        cv::Mat absdiffImg;
         cv::absdiff(currImg, mPrevFrame, absdiffImg);
 
         // ---------------------------------
@@ -90,15 +92,15 @@ bool DetectionTemplate::runDetection(Frame &c) {
         // ---------------------------------
 
         int dilation_size = 2;
-        Mat element = getStructuringElement(MORPH_RECT, Size(2*dilation_size + 1, 2*dilation_size+1), Point(dilation_size, dilation_size));
+        cv::Mat element = getStructuringElement(cv::MORPH_RECT, cv::Size(2*dilation_size + 1, 2*dilation_size+1), cv::Point(dilation_size, dilation_size));
         cv::dilate(absdiffImg, absdiffImg, element);
 
         // ----------------------------------
         //   Threshold absolute difference.
         // ----------------------------------
 
-        Mat absDiffBinaryMap = Mat(currImg.rows,currImg.cols, CV_8UC1,Scalar(0));
-        Scalar meanAbsDiff, stddevAbsDiff;
+        cv::Mat absDiffBinaryMap = cv::Mat(currImg.rows,currImg.cols, CV_8UC1, cv::Scalar(0));
+        cv::Scalar meanAbsDiff, stddevAbsDiff;
         cv::meanStdDev(absdiffImg, meanAbsDiff, stddevAbsDiff, mMaskControl->mCurrentMask);
         int absDiffThreshold = meanAbsDiff[0] * 3;
 
@@ -135,7 +137,7 @@ bool DetectionTemplate::runDetection(Frame &c) {
 
 }
 
-void DetectionTemplate::saveDetectionInfos(std::string p, int nbFramesAround) {
+void DetectionTemplate::saveDetectionInfos(string p, int nbFramesAround) {
 
 
 }

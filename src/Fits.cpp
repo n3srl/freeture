@@ -34,6 +34,7 @@
 */
 
 #include "Fits.h"
+using namespace freeture;
 
 Fits::Fits() {
 

@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 CfgParam.h
 
@@ -32,38 +33,23 @@
 * \date    03/06/2014
 * \brief   FreeTure parameters
 */
-
-#pragma once
+#include "Commons.h"
 
 #include <vector>
+#include <string>
 
-#include "EInputDeviceType.h"
-#include "CfgParam.h"
-#include "CfgLoader.h"
-#include "Device.h"
-#include "CameraDeviceManager.h"
 #include "CameraFirstInit.h"
+#include "CameraDeviceManager.h"
+#include "CfgLoader.h"
 
 namespace freeture {
+    class Device;
 
     class CfgParam{
 
         private :
-            
-            static class Init {
-
-                public :
-
-                    Init() {
-
-                        m_Logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CfgParam"));
-
-                    }
-
-            }initializer;
             std::string m_CfgFilePath;
 
-            static boost::log::sources::severity_logger< LogSeverityLevel > m_Logger;
             std::vector<std::string> m_EMsg;
 
             CfgLoader m_Cfg;

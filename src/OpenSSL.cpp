@@ -33,6 +33,7 @@
 */
 
 #include "OpenSSL.h"
+using namespace freeture;
 
 boost::log::sources::severity_logger< LogSeverityLevel >  OpenSSL::logger;
 

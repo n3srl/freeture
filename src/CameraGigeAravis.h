@@ -1,3 +1,4 @@
+#pragma once
 /*                      CameraGigeAravis.h
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -33,8 +34,9 @@
 * \brief   Use Aravis library to pilot GigE Cameras.
 *          https://wiki.gnome.org/action/show/Projects/Aravis?action=show&redirect=Aravis
 */
+#ifdef LINUX
+#include "Commons.h"
 
-#pragma once
 #include <iostream>
 #include <string>
 #include <algorithm>
@@ -64,105 +66,115 @@
 #include "Frame.h"
 #include "TimeDate.h"
 
-#include <arv.h>
-#include "arvinterface.h"
 #include "CameraFirstInit.h"
 
-    class CameraGigeAravis: public Camera
+#include <arv.h>
+#include "arvinterface.h"
+
+namespace freeture
+{
+    class CameraGigeAravis : public Camera
     {
 
-        private:
 
-            static boost::log::sources::severity_logger< LogSeverityLevel > logger;
+    private:
 
-            static class Init{
+        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
 
-                public:
+        static class Init {
 
-                    Init(){
+        public:
 
-                        logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CameraGigeAravis"));
+            Init() {
 
-                    }
+                logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CameraGigeAravis"));
 
-            }initializer;
+            }
 
-            GError*         error = nullptr;        // ARAVIS API Error
-            ArvCamera*      camera;                // Camera to control.
-            ArvPixelFormat  pixFormat;              // Image format.
-            ArvStream*      stream;                // Object for video stream reception.
-            int             mStartX;                // Crop starting X.
-            int             mStartY;                // Crop starting Y.
-            int             mWidth;                 // Camera region's width.
-            int             mHeight;                // Camera region's height.
-            double          fps;                    // Camera acquisition frequency.
-            double          gainMin;                // Camera minimum gain.
-            double          gainMax;                // Camera maximum gain.
-            unsigned int    payload;                // Width x height.
-            double          exposureMin;            // Camera's minimum exposure time.
-            double          exposureMax;            // Camera's maximum exposure time.
-            const char*     capsString;
-            int             gain;                   // Camera's gain.
-            double          exp;                    // Camera's exposure time.
-            bool            shiftBitsImage;         // For example : bits are shifted for dmk's frames.
-            guint64         nbCompletedBuffers;     // Number of frames successfully received.
-            guint64         nbFailures;             // Number of frames failed to be received.
-            guint64         nbUnderruns;
-            int             frameCounter;           // Counter of success received frames.
+        }initializer;
 
-        public :
+        GError* error = nullptr;        // ARAVIS API Error
+        ArvCamera* camera;                // Camera to control.
+        ArvPixelFormat  pixFormat;              // Image format.
+        ArvStream* stream;                // Object for video stream reception.
 
-            CameraGigeAravis(bool shift);
+        int             mStartX;                // Crop starting X.
+        int             mStartY;                // Crop starting Y.
+        int             mWidth;                 // Camera region's width.
+        int             mHeight;                // Camera region's height.
+        double          fps;                    // Camera acquisition frequency.
+        double          gainMin;                // Camera minimum gain.
+        double          gainMax;                // Camera maximum gain.
+        unsigned int    payload;                // Width x height.
+        double          exposureMin;            // Camera's minimum exposure time.
+        double          exposureMax;            // Camera's maximum exposure time.
+        const char* capsString;
+        int             gain;                   // Camera's gain.
+        double          exp;                    // Camera's exposure time.
+        bool            shiftBitsImage;         // For example : bits are shifted for dmk's frames.
 
-            CameraGigeAravis();
 
-            ~CameraGigeAravis();
+        guint64         nbCompletedBuffers;     // Number of frames successfully received.
+        guint64         nbFailures;             // Number of frames failed to be received.
+        guint64         nbUnderruns;
 
-            bool createDevice(int id);
+        int             frameCounter;           // Counter of success received frames.
 
-            bool grabInitialization();
+    public:
 
-            void grabCleanse();
+        CameraGigeAravis(bool shift);
 
-            bool acqStart();
+        CameraGigeAravis();
 
-            void acqStop();
+        ~CameraGigeAravis();
 
-            bool grabImage(Frame& newFrame);
+        bool createDevice(int id);
 
-            bool grabSingleImage(Frame &frame, int camID);
+        bool grabInitialization();
 
-            bool getDeviceNameById(int id, std::string &device);
+        void grabCleanse();
 
-            void getExposureBounds(double &eMin, double &eMax);
+        bool acqStart();
 
-            void getGainBounds(double &gMin, double &gMax);
+        void acqStop();
 
-            bool getPixelFormat(CamPixFmt &format);
+        bool grabImage(Frame& newFrame);
 
-            bool getFrameSize(int &x, int &y, int &w, int &h);
+        bool grabSingleImage(Frame& frame, int camID);
 
-            bool getFPS(double &value);
+        bool getDeviceNameById(int id, std::string& device);
 
-            std::string getModelName();
+        void getExposureBounds(double& eMin, double& eMax);
 
-            double getExposureTime();
+        void getGainBounds(double& gMin, double& gMax);
 
-            bool setExposureTime(double exp);
+        bool getPixelFormat(CamPixFmt& format);
 
-            bool setGain(double gain);
+        bool getFrameSize(int& x, int& y, int& w, int& h);
 
-            bool setFPS(double fps);
+        bool getFPS(double& value);
 
-            bool setFrameSize(int startx, int starty, int width, int height, bool customSize);
+        std::string getModelName();
 
-            bool setPixelFormat(CamPixFmt depth);
+        double getExposureTime();
 
-            void saveGenicamXml(std::string p);
+        bool setExposureTime(double exp);
 
-            bool setSize(int startx, int starty, int width, int height, bool customSize);
+        bool setGain(double gain);
 
-            void getAvailablePixelFormats();
+        bool setFPS(double fps);
 
-            bool FirstInitializeCamera(std::string);
+        bool setFrameSize(int startx, int starty, int width, int height, bool customSize);
+
+        bool setPixelFormat(CamPixFmt depth);
+
+        void saveGenicamXml(std::string p);
+
+        bool setSize(int startx, int starty, int width, int height, bool customSize);
+
+        void getAvailablePixelFormats();
+
+        bool FirstInitializeCamera(std::string);
     };
+}
+#endif

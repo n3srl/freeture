@@ -34,3 +34,4 @@
 */
 
 #include "Histogram.h"
+using namespace freeture;

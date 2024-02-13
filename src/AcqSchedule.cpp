@@ -32,10 +32,11 @@
 * \date    19/06/2014
 * \brief
 */
-
 #include "AcqSchedule.h"
 
-AcqSchedule::AcqSchedule(int H, int M, int S, int E, int G, int F, int N):
+using namespace freeture;
+
+AcqSchedule::AcqSchedule(int H, int M, int S, int E, int G, int F, int N) :
     mH(H), mM(M), mS(S), mE(E), mG(G), mN(N), mF(F) {
 
 }

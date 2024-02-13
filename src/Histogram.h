@@ -1,3 +1,4 @@
+#pragma once
 /*
                             Histogram.h
 
@@ -32,22 +33,21 @@
 * \date    03/06/2014
 * \brief   Create/Analyse histogram of a given image.
 */
+#include "Commons.h"
 
-#pragma once
 
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/opencv.hpp>
 #include <iostream>
 
-using namespace cv;
+namespace freeture
+{
+    class Histogram {
 
-class Histogram {
-
-    protected :
+    protected:
 
         cv::Mat bins;
 
-    public :
+    public:
 
         /**
         * Constructor.
@@ -67,7 +67,7 @@ class Histogram {
         * @param image Opencv mat image to analysis.
         * @return Success status.
         */
-        virtual int calculate(cv::Mat &image) = 0;
+        virtual int calculate(cv::Mat& image) = 0;
 
         /**
         * Normalize bins.
@@ -82,4 +82,5 @@ class Histogram {
         */
         virtual cv::Mat render(void) = 0;
 
-};
+    };
+}

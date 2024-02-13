@@ -1,3 +1,4 @@
+#pragma once
 /*
                             HistogramGray.h
 
@@ -33,29 +34,28 @@
 * \brief   Create/Analyse histogram of a gray image.
 */
 
-#pragma once
+#include "Commons.h"
 
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/opencv.hpp>
 #include <iostream>
 #include "Histogram.h"
 
 
-using namespace cv;
+namespace freeture
+{
+    class HistogramGray : public Histogram {
 
-class HistogramGray : public Histogram {
+        /**
+        * Clear bins.
+        *
+        */
+        void clear() {
 
-    /**
-    * Clear bins.
-    *
-    */
-    void clear() {
+            bins.setTo(cv::Scalar(0.f));
 
-        bins.setTo(Scalar( 0.f ));
+        };
 
-    };
-
-    public :
+    public:
 
         /**
         * Constructor.
@@ -69,7 +69,7 @@ class HistogramGray : public Histogram {
         * @param image Opencv mat image to analysis.
         * @return Success status.
         */
-        int calculate(Mat& image);
+        int calculate(cv::Mat& image);
 
         /**
         * Normalize bins.
@@ -82,7 +82,7 @@ class HistogramGray : public Histogram {
         *
         * @return Histogram.
         */
-        Mat render(void);
+        cv::Mat render(void);
 
         /**
         * Add histogram to an image.
@@ -90,6 +90,7 @@ class HistogramGray : public Histogram {
         * @param image Target.
         * @return Final image with histogram.
         */
-        Mat renderHistogramOnImage(Mat image);
+        cv::Mat renderHistogramOnImage(cv::Mat image);
 
-};
+    };
+}

@@ -32,14 +32,20 @@
 * \date    02/09/2014
 * \brief   Fits frames in input of acquisition thread.
 */
-
+//header refactoring ok
 #include "CameraFrames.h"
 
-boost::log::sources::severity_logger< LogSeverityLevel > CameraFrames::logger;
+#include <boost/filesystem.hpp>
+#include <boost/date_time.hpp>
+#include "Logger.h"
+#include "Conversion.h"
+#include "Fits2D.h"
 
-CameraFrames::Init CameraFrames::initializer;
+namespace fs = boost::filesystem;
+using namespace std;
+using namespace freeture;
 
-CameraFrames::CameraFrames(std::vector<std::string> locationList, int numPos, bool verbose):
+CameraFrames::CameraFrames(vector<string> locationList, int numPos, bool verbose):
 mNumFramePos(numPos), mReadDataStatus(false), mCurrDirId(0),
 mFirstFrameNum(0), mLastFrameNum(0) {
 
@@ -59,9 +65,9 @@ CameraFrames::~CameraFrames(void) {
 
 }
 
-bool CameraFrames::loadNextDataSet(std::string &location) {
+bool CameraFrames::loadNextDataSet(string &location) {
 
-    std::cout << mCurrDirId << std::endl;
+    LOG_DEBUG << mCurrDirId << endl;
 
     location = mFramesDir.at(mCurrDirId);
 
@@ -93,35 +99,35 @@ bool CameraFrames::getDataSetStatus() {
 }
 
 bool CameraFrames::getCameraName() {
-    std::cout << "Fits frames data." << std::endl;
+    LOG_DEBUG << "Fits frames data." << endl;
     return true;
 }
 
-bool CameraFrames::searchMinMaxFramesNumber(std::string location) {
+bool CameraFrames::searchMinMaxFramesNumber(string location) {
 
     namespace fs = boost::filesystem;
 
-    path p(location);
+    fs::path p(location);
 
     if(fs::exists(p)){
 
-        if(mVerbose) BOOST_LOG_SEV(logger, normal) << "Frame's directory exists : " << location;
+        if(mVerbose) LOG_INFO << "Frame's directory exists : " << location;
 
         int firstFrame = -1, lastFrame = 0;
-        std::string filename = "";
+        string filename = "";
 
         // Search first and last frames numbers in the directory.
-        for(directory_iterator file(p);file!= directory_iterator(); ++file) {
+        for(fs::directory_iterator file(p);file!= fs::directory_iterator(); ++file) {
 
-            path curr(file->path());
+            fs::path curr(file->path());
 
             if(is_regular_file(curr)) {
 
                 // Get file name.
-                std::string fname = curr.filename().string();
+                string fname = curr.filename().string();
 
                 // Split file name according to the separator "_".
-                std::vector<std::string> output;
+                vector<string> output;
                 typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
                 boost::char_separator<char> sep("_");
                 tokenizer tokens(fname, sep);
@@ -145,7 +151,7 @@ bool CameraFrames::searchMinMaxFramesNumber(std::string location) {
                     // If the frame number is at the end (before the file extension).
                     if(j == mNumFramePos && j == output.size() - 1) {
 
-                        std::vector<std::string> output2;
+                        vector<string> output2;
                         typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
                         boost::char_separator<char> sep2(".");
                         tokenizer tokens2(output.back(), sep2);
@@ -182,8 +188,8 @@ bool CameraFrames::searchMinMaxFramesNumber(std::string location) {
 
         }
 
-        if(mVerbose) BOOST_LOG_SEV(logger, normal) << "First frame number in frame's directory : " << firstFrame;
-        if(mVerbose) BOOST_LOG_SEV(logger, normal) << "Last frame number in frame's directory : " << lastFrame;
+        if(mVerbose) LOG_INFO << "First frame number in frame's directory : " << firstFrame;
+        if(mVerbose) LOG_INFO << "Last frame number in frame's directory : " << lastFrame;
 
         mLastFrameNum = lastFrame;
         mFirstFrameNum = firstFrame;
@@ -192,8 +198,8 @@ bool CameraFrames::searchMinMaxFramesNumber(std::string location) {
 
     }else{
 
-        if(mVerbose) BOOST_LOG_SEV(logger, fail) << "Frame's directory not found.";
-        if(mVerbose) std::cout << "Frame's directory not found." << std::endl;
+        if(mVerbose) LOG_ERROR << "Frame's directory not found.";
+        if(mVerbose) LOG_DEBUG << "Frame's directory not found." << endl;
         return false;
 
     }
@@ -217,21 +223,21 @@ bool CameraFrames::grabImage(Frame &img) {
 
     bool fileFound = false;
 
-    std::string filename = "";
+    string filename = "";
 
-    path p(mFramesDir.at(mCurrDirId));
+    fs::path p(mFramesDir.at(mCurrDirId));
 
     /// Search a frame in the directory.
-    for(directory_iterator file(p);file!= directory_iterator(); ++file){
+    for(fs::directory_iterator file(p);file!= fs::directory_iterator(); ++file){
 
-        path curr(file->path());
+        fs::path curr(file->path());
 
         if(is_regular_file(curr)){
 
-            std::list<std::string> ch;
-            std::string fname = curr.filename().string();
+            list<string> ch;
+            string fname = curr.filename().string();
             Conversion::stringTok(ch, fname.c_str(), "_");
-            std::list<std::string>::const_iterator lit(ch.begin()), lend(ch.end());
+            list<string>::const_iterator lit(ch.begin()), lend(ch.end());
             int i = 0;
             int number = 0;
 
@@ -244,7 +250,7 @@ bool CameraFrames::grabImage(Frame &img) {
 
                 if(i == ch.size() - 1){
 
-                    std::list<std::string> ch_;
+                    list<string> ch_;
                     Conversion::stringTok(ch_, (*lit).c_str(), ".");
                     number = atoi(ch_.front().c_str());
                     break;
@@ -260,8 +266,8 @@ bool CameraFrames::grabImage(Frame &img) {
                 mFirstFrameNum++;
                 fileFound = true;
 
-                std::cout << "FILE:" << file->path().string() << std::endl;
-                BOOST_LOG_SEV(logger, normal) <<  "FILE:" << file->path().string();
+                LOG_DEBUG << "FILE:" << file->path().string() << endl;
+                LOG_INFO <<  "FILE:" << file->path().string();
 
                 filename = file->path().string() ;
 
@@ -275,25 +281,25 @@ bool CameraFrames::grabImage(Frame &img) {
     if(mFirstFrameNum > mLastFrameNum || !fileFound){
 
         mReadDataStatus = true;
-        BOOST_LOG_SEV(logger, normal) <<  "End read frames.";
+        LOG_INFO <<  "End read frames.";
         return false;
 
     }else{
 
-        BOOST_LOG_SEV(logger, normal) <<  "Frame found.";
+        LOG_INFO <<  "Frame found.";
 
         Fits2D newFits(filename);
         int bitpix;
 
         if(!newFits.readIntKeyword("BITPIX", bitpix)){
-            BOOST_LOG_SEV(logger, fail) << " Fail to read fits keyword : BITPIX";
+            LOG_ERROR << " Fail to read fits keyword : BITPIX";
 
             return false;
         }
 
         /// Read the frame.
 
-        Mat resMat;
+        cv::Mat resMat;
         CamPixFmt frameFormat = MONO8;
 
         switch(bitpix){

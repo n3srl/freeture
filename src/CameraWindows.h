@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 CameraWindows.h
 
@@ -31,22 +32,21 @@
 * \version 1.0
 * \date    02/10/2015
 */
+#include "Commons.h"
 
-#pragma once
 
-#include "config.h"
-
-#ifdef WINDOWS
+#ifdef VIDEOINPUT
 
 #include <iostream>
 #include <opencv2/highgui/highgui.hpp>
 #include "videoInput.h"
 #include "Frame.h"
 #include "Camera.h"
+namespace freeture
+{
+    class CameraWindows : public Camera {
 
-class CameraWindows: public Camera {
-
-    private :
+    private:
 
         int mDevNumber;
         videoInput mVideoInput;
@@ -55,12 +55,12 @@ class CameraWindows: public Camera {
         int mWidth;
         int mHeight;
         int mSize;
-        unsigned char * mBuffer;
+        unsigned char* mBuffer;
         int mFrameCounter;
 
         // see : http://msdn.microsoft.com/en-us/library/dd318253(v=vs.85).aspx
         // and : http://msdn.microsoft.com/en-us/library/dd389148(v=vs.85).aspx
-        typedef enum  {
+        typedef enum {
 
             CameraControl_Pan,
             CameraControl_Tilt,
@@ -73,14 +73,14 @@ class CameraWindows: public Camera {
         }CameraControlProperty;
 
         // see : http://msdn.microsoft.com/en-us/library/dd318251(v=vs.85).aspx
-        typedef enum   {
+        typedef enum {
 
-            CameraControl_Flags_Auto     = 0x0001,
-            CameraControl_Flags_Manual   = 0x0002
+            CameraControl_Flags_Auto = 0x0001,
+            CameraControl_Flags_Manual = 0x0002
 
         }CameraControlFlags;
 
-    static const long mDefaultFocus = 0;
+        static const long mDefaultFocus = 0;
 
     public:
 
@@ -88,19 +88,19 @@ class CameraWindows: public Camera {
 
         ~CameraWindows();
 
-        vector<pair<int,string>> getCamerasList();
+        vector<pair<int, string>> getCamerasList();
 
-        bool grabSingleImage(Frame &frame, int camID);
+        bool grabSingleImage(Frame& frame, int camID);
 
         bool createDevice(int id);
 
         bool setPixelFormat(CamPixFmt format);
 
-        void getExposureBounds(double &eMin, double &eMax);
+        void getExposureBounds(double& eMin, double& eMax);
 
-        void getGainBounds(int &gMin, int &gMax);
+        void getGainBounds(int& gMin, int& gMax);
 
-        bool getFPS(double &value);
+        bool getFPS(double& value);
 
         bool setExposureTime(double value);
 
@@ -116,16 +116,16 @@ class CameraWindows: public Camera {
 
         bool acqStart();
 
-        bool grabImage(Frame &newFrame);
+        bool grabImage(Frame& newFrame);
 
         void acqStop();
 
         void grabCleanse();
 
-        bool getPixelFormat(CamPixFmt &format);
+        bool getPixelFormat(CamPixFmt& format);
 
         double getExposureTime();
 
-};
+    };
+}
 #endif
-

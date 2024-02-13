@@ -1,3 +1,5 @@
+#pragma once
+
 /*
                                 Stack.h
 
@@ -31,60 +33,26 @@
 * \date    19/06/2014
 * \brief
 */
+//header refactoring ok
+#include "Commons.h"
 
-#pragma once
+#include <string>
 
-#include "config.h"
+#include <opencv2/opencv.hpp>
 
-#ifdef LINUX
-#define BOOST_LOG_DYN_LINK 1
-#endif
-
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <boost/tokenizer.hpp>
-#include <boost/log/common.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/attributes/named_scope.hpp>
-#include <boost/log/attributes.hpp>
-#include <boost/log/sinks.hpp>
-#include <boost/log/sources/logger.hpp>
-#include <boost/log/core.hpp>
-#include "ELogSeverityLevel.h"
 #include "TimeDate.h"
-#include "Fits2D.h"
-#include "Fits.h"
+#include "ECamPixFmt.h"
+#include "SParam.h"
 #include "Frame.h"
-#include "EStackMeth.h"
-#include <boost/filesystem.hpp>
 
-using namespace boost::filesystem;
+namespace freeture
+{
+    class Stack {
 
+    private:
 
-using namespace cv;
-
-class Stack {
-
-    private :
-
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
-
-        static class Init {
-
-            public :
-
-                Init() {
-
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("Stack"));
-
-                }
-
-        }initializer;
-
-        Mat             stack;
+      
+        cv::Mat             stack;
         int             curFrames;
         int             gainFirstFrame;
         int             expFirstFrame;
@@ -98,7 +66,7 @@ class Stack {
         stationParam mstp;
         fitskeysParam mfkp;
 
-    public :
+    public:
 
         /**
         * Constructor.
@@ -117,14 +85,14 @@ class Stack {
         *
         * @param i Frame to add.
         */
-        void addFrame(Frame &i);
+        void addFrame(Frame& i);
 
         /**
         * Get Date of the first frame of the stack.
         *
         * @return Date.
         */
-        TimeDate::Date getDateFirstFrame(){return mDateFirstFrame;};
+        TimeDate::Date getDateFirstFrame() { return mDateFirstFrame; };
 
         /**
         * Save stack.
@@ -143,9 +111,9 @@ class Stack {
         *
         * @return Number of frames.
         */
-        int getNbFramesStacked(){return curFrames;};
+        int getNbFramesStacked() { return curFrames; };
 
-        Mat getStack() {return stack;};
+        cv::Mat getStack() { return stack; };
 
         /**
         * Reduce stack in float 32 bits to 8 or 16 bits.
@@ -154,6 +122,7 @@ class Stack {
         * @param bscale
         * @return Reduced image.
         */
-        Mat reductionByFactorDivision(float &bzero, float &bscale);
+        cv::Mat reductionByFactorDivision(float& bzero, float& bscale);
 
-};
+    };
+}

@@ -8,6 +8,8 @@
 */
 #include <iostream>
 
+#include "Logger.h"
+
 #include <time.h>
 #include <algorithm>
 
@@ -27,38 +29,20 @@
 #include <ArenaApi.h>
 #include <SaveApi.h>
 
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/opencv.hpp>
 
-
-#define BOOST_LOG_DYN_LINK 1
-#include <boost/log/common.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/attributes/named_scope.hpp>
-#include <boost/log/attributes.hpp>
-#include <boost/log/sinks.hpp>
-#include <boost/log/sources/logger.hpp>
-#include <boost/log/core.hpp>
 
 using namespace freeture;
 using namespace std;
 
 
-
-    boost::log::sources::severity_logger< LogSeverityLevel >  freeture::CameraLucidArena_PHX016S::logger;
-
-    freeture::CameraLucidArena_PHX016S::Init freeture::CameraLucidArena_PHX016S::initializer;
-
     /**
      * CTor.
      */
     freeture::CameraLucidArena_PHX016S::CameraLucidArena_PHX016S(bool shift):
-    camera(NULL), mStartX(0), mStartY(0), mWidth(0), mHeight(0), fps(0), gainMin(0.0), gainMax(0.0),
+     mStartX(0), mStartY(0), mWidth(0), mHeight(0), fps(0), gainMin(0.0), gainMax(0.0),
     payload(0), exposureMin(0), exposureMax(0),fpsMin(0),fpsMax(0), gain(0), exp(0), nbCompletedBuffers(0),
-    nbFailures(0), nbUnderruns(0), frameCounter(0), shiftBitsImage(shift), stream(NULL)
+    nbFailures(0), nbUnderruns(0), frameCounter(0), shiftBitsImage(shift)
     {
         mExposureAvailable = true;
         mGainAvailable = true;
@@ -69,9 +53,9 @@ using namespace std;
      * Default CTor.
      */
     freeture::CameraLucidArena_PHX016S::CameraLucidArena_PHX016S():
-    camera(NULL), mStartX(0), mStartY(0), mWidth(0), mHeight(0), fps(0), gainMin(0.0), gainMax(0.0),
+    mStartX(0), mStartY(0), mWidth(0), mHeight(0), fps(0), gainMin(0.0), gainMax(0.0),
     payload(0), exposureMin(0), exposureMax(0), gain(0), exp(0), nbCompletedBuffers(0),
-    nbFailures(0), nbUnderruns(0), frameCounter(0), shiftBitsImage(false), stream(NULL)
+    nbFailures(0), nbUnderruns(0), frameCounter(0), shiftBitsImage(false)
     {
         mExposureAvailable = true;
         mGainAvailable = true;
@@ -108,7 +92,7 @@ using namespace std;
         if(m_Camera == nullptr)
         {
 
-            BOOST_LOG_SEV(logger, fail) << "Fail to connect the camera.";
+            LOG_ERROR << "Fail to connect the camera.";
             return false;
         }
 
@@ -192,8 +176,7 @@ using namespace std;
             }
         }
 
-
-        BOOST_LOG_SEV(logger, fail) << "Fail to retrieve camera with this ID.";
+        LOG_ERROR << "Fail to retrieve camera with this ID.";
         return false;
     }
 
@@ -318,8 +301,7 @@ using namespace std;
         }
         else
         {
-            cout << "> Gain value (" << val << ") is not in range [ " << gMin << " - " << gMax << " ]" << endl;
-            BOOST_LOG_SEV(logger, fail) << "> Gain value (" << val << ") is not in range [ " << gMin << " - " << gMax << " ]";
+            LOG_ERROR << "> Gain value (" << val << ") is not in range [ " << gMin << " - " << gMax << " ]";
             return false;
         }
 
@@ -410,10 +392,10 @@ using namespace std;
         int64_t xx = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "OffsetX");
         int64_t yy = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "OffsetY");
 
-        x = xx;
-        y = yy;
-        w = ww;
-        h = hh;
+        x = int( xx );
+        y = int( yy );
+        w = int( ww );
+        h = int( hh );
 
         return true;
     }
@@ -424,12 +406,11 @@ using namespace std;
 
         if (xx>0)
         {
-            cout << "Starting from : " << mStartX << "," << mStartY;
-            BOOST_LOG_SEV(logger, notification) << "Starting from : " << mStartX << "," << mStartY;
+            LOG_INFO <<  "Starting from : " << mStartX << "," << mStartY;
         }
         else
         {
-            BOOST_LOG_SEV(logger, warning) << "OffsetX, OffsetY are not available: cannot set offset.";
+            LOG_WARNING << "OffsetX, OffsetY are not available: cannot set offset.";
             return false;
         }
 
@@ -445,7 +426,7 @@ using namespace std;
         mHeight = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "Height");
 
 
-        BOOST_LOG_SEV(logger, notification) << "Camera region size : " << mWidth << "x" << mHeight;
+        LOG_INFO << "Camera region size : " << mWidth << "x" << mHeight;
 
         return true;
     }
@@ -455,7 +436,7 @@ using namespace std;
         int64_t sensor_width  = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "SensorWidth");
         int64_t sensor_height = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "SensorHeigth");
 
-        BOOST_LOG_SEV(logger, notification) << "Camera sensor size : " << sensor_width << "x" << sensor_height;
+        LOG_INFO << "Camera sensor size : " << sensor_width << "x" << sensor_height;
 
         Arena::SetNodeValue<int64_t>( m_Camera->GetNodeMap(), "OffsetX", 0 );
         Arena::SetNodeValue<int64_t>( m_Camera->GetNodeMap(), "OffsetY", 0 );
@@ -465,6 +446,8 @@ using namespace std;
 
         mWidth  = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "Width");
         mHeight = Arena::GetNodeValue<int64_t>(m_Camera->GetNodeMap(), "Height");
+
+        return true;
     }
 
     bool freeture::CameraLucidArena_PHX016S::setSize(int startx, int starty, int width, int height, bool customSize)
@@ -690,21 +673,21 @@ using namespace std;
         //cout << "Failures          = " << (unsigned long long) nbFailures           << endl;
         //cout << "Underruns         = " << (unsigned long long) nbUnderruns          << endl;
 
-        BOOST_LOG_SEV(logger, notification) << "Completed buffers = " << (unsigned long long) nbCompletedBuffers;
-        BOOST_LOG_SEV(logger, notification) << "Failures          = " << (unsigned long long) nbFailures;
-        BOOST_LOG_SEV(logger, notification) << "Underruns         = " << (unsigned long long) nbUnderruns;
+        LOG_INFO << "Completed buffers = " << (unsigned long long) nbCompletedBuffers;
+        LOG_INFO << "Failures          = " << (unsigned long long) nbFailures;
+        LOG_INFO << "Underruns         = " << (unsigned long long) nbUnderruns;
 
-        BOOST_LOG_SEV(logger, notification) << "Stopping acquisition...";
+        LOG_INFO << "Stopping acquisition...";
 
       	m_Camera->StopStream();
 
-        BOOST_LOG_SEV(logger, notification) << "Acquisition stopped.";
+        LOG_INFO << "Acquisition stopped.";
 
-        BOOST_LOG_SEV(logger, notification) << "Unreferencing stream.";
+        LOG_INFO << "Unreferencing stream.";
         //g_object_unref(stream);
         //stream = NULL;
 
-        BOOST_LOG_SEV(logger, notification) << "Unreferencing camera.";
+        LOG_INFO << "Unreferencing camera.";
         m_ArenaSDKSystem->DestroyDevice(m_Camera);
         m_Camera = nullptr;
     }
@@ -724,7 +707,7 @@ using namespace std;
         //    has been started. Setting the acquisition mode to 'Continuous' keeps
         //    the stream from stopping. This example returns the camera to its
         //    initial acquisition mode near the end of the example.
-        BOOST_LOG_SEV(logger, notification) << "Set camera to CONTINUOUS MODE";
+        LOG_INFO << "Set camera to CONTINUOUS MODE";
       	Arena::SetNodeValue<GenICam::gcstring>( m_Camera->GetNodeMap(), "AcquisitionMode", "Continuous");
 
       	// Set buffer handling mode
@@ -734,7 +717,7 @@ using namespace std;
         //    the underlying stream engine. Setting the buffer handling mode to
         //    'NewestOnly' ensures the most recent image is delivered, even if it
         //    means skipping frames.
-      	BOOST_LOG_SEV(logger, notification) << "Set buffer handling mode to 'NewestOnly'";
+        LOG_INFO << "Set buffer handling mode to 'NewestOnly'";
         Arena::SetNodeValue<GenICam::gcstring>( m_Camera->GetTLStreamNodeMap(), "StreamBufferHandlingMode", "NewestOnly");
 
         // Enable stream auto negotiate packet size
@@ -745,7 +728,7 @@ using namespace std;
 		//    interrupts per image, thereby reducing CPU load on the host system.
 		//    Ethernet settings may also be manually changed to allow for a
 		//    larger packet size.
-        BOOST_LOG_SEV(logger, notification) << "Enable stream to auto negotiate packet size";
+        LOG_INFO << "Enable stream to auto negotiate packet size";
 
         // Disable stream packet resend
 		//    Enable stream packet resend before starting the stream. Images are
@@ -754,13 +737,13 @@ using namespace std;
 		//    information. If a packet is missed while receiving an image, a
 		//    packet resend is requested and this information is used to retrieve
 		//    and redeliver the missing packet in the correct order.
-        BOOST_LOG_SEV(logger, notification) << "Disable stream packet resend";
+        LOG_INFO << "Disable stream packet resend";
 		Arena::SetNodeValue<bool>( m_Camera->GetTLStreamNodeMap(), "StreamPacketResendEnable", false);
 
 
 		Arena::SetNodeValue<bool>( m_Camera->GetTLStreamNodeMap(), "StreamAutoNegotiatePacketSize", true);
 
-        BOOST_LOG_SEV(logger, notification) << "Set camera TriggerMode to Off";
+        LOG_INFO << "Set camera TriggerMode to Off";
         Arena::SetNodeValue<GenICam::gcstring>( m_Camera->GetNodeMap(), "TriggerMode", "Off");
 
         // Start stream
@@ -770,7 +753,7 @@ using namespace std;
         //    access to many features such as width, height, and pixel format, as
         //    well as acquisition and buffer handling modes, among others. The stream
         //    needs to be stopped later.
-        BOOST_LOG_SEV(logger, notification) << "Start acquisition on camera";
+        LOG_INFO << "Start acquisition on camera";
         m_Camera->StartStream();
 
         return true;
@@ -780,64 +763,64 @@ using namespace std;
     {
         frameCounter = 0;
 
-        BOOST_LOG_SEV(logger, notification) << "Camera payload (NOT USED): " << payload;
+        LOG_INFO << "Camera payload (NOT USED): " << payload;
 
         pixFormat == Arena::GetNodeValue<GenICam::gcstring>(m_Camera->GetNodeMap(), "PixelFormat");
 
         getFPSBounds(fpsMin,fpsMax);
 
-        BOOST_LOG_SEV(logger, notification) << "Camera FPS bound min : " << fpsMin;
-        BOOST_LOG_SEV(logger, notification) << "Camera FPS bound max : " << fpsMax;
+        LOG_INFO << "Camera FPS bound min : " << fpsMin;
+        LOG_INFO << "Camera FPS bound max : " << fpsMax;
 
         getExposureBounds(exposureMin,exposureMax);
 
-        BOOST_LOG_SEV(logger, notification) << "Camera exposure bound min : " << exposureMin;
-        BOOST_LOG_SEV(logger, notification) << "Camera exposure bound max : " << exposureMax;
+        LOG_INFO << "Camera exposure bound min : " << exposureMin;
+        LOG_INFO << "Camera exposure bound max : " << exposureMax;
 
         getGainBounds(gainMin,gainMax);
 
-        BOOST_LOG_SEV(logger, notification) << "Camera gain bound min : " << gainMin;
-        BOOST_LOG_SEV(logger, notification) << "Camera gain bound max : " << gainMax;
+        LOG_INFO << "Camera gain bound min : " << gainMin;
+        LOG_INFO << "Camera gain bound max : " << gainMax;
 
-        BOOST_LOG_SEV(logger, notification) << "Camera frame rate : " << fps;
+        LOG_INFO << "Camera frame rate : " << fps;
 
         capsString = pixFormat.c_str();
 
-        BOOST_LOG_SEV(logger, notification) << "Camera format : " << capsString;
+        LOG_INFO << "Camera format : " << capsString;
 
         gain = getGain();
 
-        BOOST_LOG_SEV(logger, notification) << "Camera gain : " << gain;
+        LOG_INFO << "Camera gain : " << gain;
 
         exp = getExposureTime();
 
-        BOOST_LOG_SEV(logger, notification) << "Camera exposure : " << exp;
+        LOG_INFO << "Camera exposure : " << exp;
 
-        cout << endl;
+        LOG_INFO << endl;
 
-        cout << "DEVICE SELECTED : " << m_Id    << endl;
+        LOG_INFO << "DEVICE SELECTED : " << m_Id    << endl;
 
         string model_name;
 
         getDeviceNameById(m_Id, model_name);
 
-        cout << "DEVICE NAME     : " << model_name  << endl;
+        LOG_INFO << "DEVICE NAME     : " << model_name  << endl;
 
-        cout << "DEVICE VENDOR   : " << "Lucid" << endl;
+        LOG_INFO << "DEVICE VENDOR   : " << "Lucid" << endl;
 
-        cout << "PAYLOAD         : " << payload                             << endl;
-        cout << "Start X         : " << mStartX                             << endl
+        LOG_INFO << "PAYLOAD         : " << payload                             << endl;
+        LOG_INFO << "Start X         : " << mStartX                             << endl
              << "Start Y         : " << mStartY                             << endl;
-        cout << "Width           : " << mWidth                               << endl
+        LOG_INFO << "Width           : " << mWidth                               << endl
              << "Height          : " << mHeight                              << endl;
-        cout << "Exp Range       : [" << exposureMin    << " - " << exposureMax   << "]"  << endl;
-        cout << "Exp             : " << exp                                 << endl;
-        cout << "Gain Range      : [" << gainMin        << " - " << gainMax       << "]"  << endl;
-        cout << "Gain            : " << gain                                << endl;
-        cout << "Fps             : " << fps                                 << endl;
-        cout << "Type            : " << capsString                         << endl;
+        LOG_INFO << "Exp Range       : [" << exposureMin    << " - " << exposureMax   << "]"  << endl;
+        LOG_INFO << "Exp             : " << exp                                 << endl;
+        LOG_INFO << "Gain Range      : [" << gainMin        << " - " << gainMax       << "]"  << endl;
+        LOG_INFO << "Gain            : " << gain                                << endl;
+        LOG_INFO << "Fps             : " << fps                                 << endl;
+        LOG_INFO << "Type            : " << capsString                         << endl;
 
-        cout << endl;
+        LOG_INFO << endl;
 
 
       	// Set buffer handling mode
@@ -847,7 +830,7 @@ using namespace std;
         //    the underlying stream engine. Setting the buffer handling mode to
         //    'NewestOnly' ensures the most recent image is delivered, even if it
         //    means skipping frames.
-      	BOOST_LOG_SEV(logger, notification) << "Set buffer handling mode to 'NewestOnly'";
+        LOG_INFO << "Set buffer handling mode to 'NewestOnly'";
         Arena::SetNodeValue<GenICam::gcstring>( m_Camera->GetTLStreamNodeMap(), "StreamBufferHandlingMode", "NewestOnly");
 
         // Enable stream auto negotiate packet size
@@ -858,7 +841,7 @@ using namespace std;
 		//    interrupts per image, thereby reducing CPU load on the host system.
 		//    Ethernet settings may also be manually changed to allow for a
 		//    larger packet size.
-        BOOST_LOG_SEV(logger, notification) << "Enable stream to auto negotiate packet size";
+        LOG_INFO << "Enable stream to auto negotiate packet size";
 		Arena::SetNodeValue<bool>( m_Camera->GetTLStreamNodeMap(), "StreamAutoNegotiatePacketSize", true);
 
         // Disable stream packet resend
@@ -868,7 +851,7 @@ using namespace std;
 		//    information. If a packet is missed while receiving an image, a
 		//    packet resend is requested and this information is used to retrieve
 		//    and redeliver the missing packet in the correct order.
-        BOOST_LOG_SEV(logger, notification) << "Disable stream packet resend";
+        LOG_INFO << "Disable stream packet resend";
 		Arena::SetNodeValue<bool>( m_Camera->GetTLStreamNodeMap(), "StreamPacketResendEnable", false);
 
         // Create a new stream object. Open stream on Camera.
@@ -975,7 +958,7 @@ using namespace std;
         //    the underlying stream engine. Setting the buffer handling mode to
         //    'NewestOnly' ensures the most recent image is delivered, even if it
         //    means skipping frames.
-      	BOOST_LOG_SEV(logger, notification) << "Set buffer handling mode to 'NewestOnly'";
+        LOG_INFO << "Set buffer handling mode to 'NewestOnly'";
         Arena::SetNodeValue<GenICam::gcstring>( m_Camera->GetTLStreamNodeMap(), "StreamBufferHandlingMode", "NewestOnly");
 
         // Enable stream auto negotiate packet size
@@ -986,7 +969,7 @@ using namespace std;
 		//    interrupts per image, thereby reducing CPU load on the host system.
 		//    Ethernet settings may also be manually changed to allow for a
 		//    larger packet size.
-        BOOST_LOG_SEV(logger, notification) << "Enable stream to auto negotiate packet size";
+        LOG_INFO << "Enable stream to auto negotiate packet size";
 		Arena::SetNodeValue<bool>( m_Camera->GetTLStreamNodeMap(), "StreamAutoNegotiatePacketSize", true);
 
         // Disable stream packet resend
@@ -996,11 +979,12 @@ using namespace std;
 		//    information. If a packet is missed while receiving an image, a
 		//    packet resend is requested and this information is used to retrieve
 		//    and redeliver the missing packet in the correct order.
-        BOOST_LOG_SEV(logger, notification) << "Disable stream packet resend";
+        LOG_INFO << "Disable stream packet resend";
 		Arena::SetNodeValue<bool>( m_Camera->GetTLStreamNodeMap(), "StreamPacketResendEnable", false);
 
 		m_Camera->StartStream();
 
+        /*
         // Create a new stream object. Open stream on Camera.
         stream = arv_camera_create_stream(camera, NULL, NULL, &error);
         ErrorManager::CheckAravisError(&error);
@@ -1154,6 +1138,7 @@ using namespace std;
             camera = NULL;
 
         }
+        */
 
         return res;
 
@@ -1170,17 +1155,16 @@ using namespace std;
      */
     freeture::CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S()
     {
-
-        if(stream != nullptr)
-            g_object_unref(stream);
-
         m_ArenaSDKSystem->DestroyDevice(m_Camera);
 		Arena::CloseSystem(m_ArenaSDKSystem);
     }
 
-    bool freeture::CameraLucidArena_PHX016S::grabImage(Frame &newFrame)
+    bool freeture::CameraLucidArena_PHX016S::grabImage(Frame& newFrame)
     {
+        LOG_ERROR << "NOT IMPLEMENTED";
 
+        return false;
+        /*
         ArvBuffer *arv_buffer;
         //exp = arv_camera_get_exposure_time(camera);
 
@@ -1334,6 +1318,5 @@ using namespace std;
                 return false;
 
             }
-        }
+        }*/
     }
-

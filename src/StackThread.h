@@ -1,3 +1,5 @@
+#pragma once
+
 /*
                                 StackThread.h
 
@@ -31,63 +33,55 @@
 * \date    19/06/2014
 * \brief   Stack frames.
 */
+//header refactoring ok
+#include "Commons.h"
 
-#pragma once
+#include <string.h>
 
-#include "config.h"
-
-#ifdef LINUX
-    #define BOOST_LOG_DYN_LINK 1
-#endif
-
-#include <iostream>
-#include "EStackMeth.h"
-#include "Stack.h"
-#include "Fits.h"
-#include "Fits2D.h"
-#include "TimeDate.h"
-#include "EParser.h"
-#include <boost/filesystem.hpp>
+#include <boost/thread/thread.hpp>
+#include <boost/thread/condition_variable.hpp>
 #include <boost/circular_buffer.hpp>
-#include <assert.h>
+
+#include "Fits.h"
 #include "SParam.h"
+#include "TimeDate.h"
+#include "Frame.h"
+// 
+// #ifdef LINUX
+//     #define BOOST_LOG_DYN_LINK 1
+// #endif
+// 
+// #include <iostream>
+// #include "EStackMeth.h"
+// #include "Stack.h"
+// #include "Fits.h"
+// #include "Fits2D.h"
+// #include "TimeDate.h"
+// #include "EParser.h"
+// #include <boost/filesystem.hpp>
+// #include <boost/circular_buffer.hpp>
+// #include <assert.h>
+// #include "SParam.h"
 
-using namespace boost::filesystem;
+namespace freeture
+{
+    class StackThread {
 
-using namespace cv;
-using namespace boost::posix_time;
+    private:
 
-class StackThread {
-
-    private :
-
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
-
-        static class Init {
-
-            public :
-
-                Init() {
-
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("StackThread"));
-
-                }
-
-        }initializer;
-
-        boost::thread   *mThread;
+        boost::thread* mThread;
         bool            mustStop;
         boost::mutex    mustStopMutex;
         bool            isRunning;
         bool            interruptionStatus;
         boost::mutex    interruptionStatusMutex;
 
-        boost::condition_variable       *frameBuffer_condition;
-        boost::mutex                    *frameBuffer_mutex;
-        boost::circular_buffer<Frame>   *frameBuffer;
-        bool                            *stackSignal;
-        boost::mutex                    *stackSignal_mutex;
-        boost::condition_variable       *stackSignal_condition;
+        boost::condition_variable* frameBuffer_condition;
+        boost::mutex* frameBuffer_mutex;
+        boost::circular_buffer<Frame>* frameBuffer;
+        bool* stackSignal;
+        boost::mutex* stackSignal_mutex;
+        boost::condition_variable* stackSignal_condition;
 
         stationParam    mstp;
         fitskeysParam   mfkp;
@@ -97,19 +91,19 @@ class StackThread {
 
         std::string completeDataPath;
 
-    public :
+    public:
 
-        StackThread(    bool                            *sS,
-                        boost::mutex                    *sS_m,
-                        boost::condition_variable       *sS_c,
-                        boost::circular_buffer<Frame>   *fb,
-                        boost::mutex                    *fb_m,
-                        boost::condition_variable       *fb_c,
-                        dataParam       dp,
-                        stackParam      sp,
-                        stationParam    stp,
-                        CamPixFmt       pfmt,
-                        fitskeysParam   fkp);
+        StackThread(bool* sS,
+            boost::mutex* sS_m,
+            boost::condition_variable* sS_c,
+            boost::circular_buffer<Frame>* fb,
+            boost::mutex* fb_m,
+            boost::condition_variable* fb_c,
+            dataParam       dp,
+            stackParam      sp,
+            stationParam    stp,
+            CamPixFmt       pfmt,
+            fitskeysParam   fkp);
 
         ~StackThread(void);
 
@@ -123,8 +117,9 @@ class StackThread {
 
         bool interruptThread();
 
-    private :
+    private:
 
         bool buildStackDataDirectory(TimeDate::Date date);
 
-};
+    };
+}

@@ -1,12 +1,12 @@
-
-#include "CameraGigeAravis.h"
+#include <string>
+#include <iostream>
 
 class ErrorManager
 {
     public:
         static void ArenaSDKError(std::string message)
         {
-            std::cout  << "> ArenaSDKError - "<< message << std::endl;
+            std::cout  << "> ArenaSDKError - " << message << std::endl;
         }
 
         static void Exception(std::exception& e)
@@ -14,6 +14,7 @@ class ErrorManager
             std::cout  << "> Freeture - "<< e.what() << std::endl;
         }
 
+#ifdef LINUX
         static void CheckAravisError(GError** gError)
         {
 
@@ -33,5 +34,6 @@ class ErrorManager
                 }
             }
         }
+#endif
 
 };

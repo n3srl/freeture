@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 Fits3D.h
 
@@ -33,58 +34,43 @@
 * \date    12/03/2018
 * \brief   Write fits3D file.
 */
+#include "Commons.h"
 
-#pragma once
+#include <opencv2/opencv.hpp>
 
-#include "config.h"
+#include <string>
 
-#ifdef LINUX
-#define BOOST_LOG_DYN_LINK 1
-#endif
-
-#include "fitsio.h"
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-
-#include <boost/log/common.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/attributes/named_scope.hpp>
-#include <boost/log/attributes.hpp>
-#include <boost/log/sinks.hpp>
-#include <boost/log/sources/logger.hpp>
-#include <boost/log/core.hpp>
-#include "ELogSeverityLevel.h"
-#include "CfgLoader.h"
-#include "TimeDate.h"
 #include "Fits.h"
 #include "ECamPixFmt.h"
 
-using namespace cv;
+#include "fitsio.h"
 
+// 
+//
+// #include <boost/log/common.hpp>
+// #include <boost/log/expressions.hpp>
+// #include <boost/log/utility/setup/file.hpp>
+// #include <boost/log/utility/setup/console.hpp>
+// #include <boost/log/utility/setup/common_attributes.hpp>
+// #include <boost/log/attributes/named_scope.hpp>
+// #include <boost/log/attributes.hpp>
+// #include <boost/log/sinks.hpp>
+// #include <boost/log/sources/logger.hpp>
+// #include <boost/log/core.hpp>
+// #include "ELogSeverityLevel.h"
+// #include "CfgLoader.h"
+// #include "TimeDate.h"
+// #include "Fits.h"
+// #include "ECamPixFmt.h"
 
-class Fits3D : public Fits {
+namespace freeture
+{
+    class Fits3D : public Fits {
 
-    private :
+    private:
 
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
-
-        static class Init {
-
-            public :
-
-                Init() {
-
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("Fits3D"));
-
-                }
-
-        }initializer;
-
-        fitsfile        *fptr;
-        const char      *mFileName;
+        fitsfile* fptr;
+        const char* mFileName;
         int             status;
         long            naxis;
         long            naxes[3];
@@ -93,10 +79,10 @@ class Fits3D : public Fits {
         int             imgSize;
         CamPixFmt       imgDepth;
         int             n;                  // Index for the number of images
-        unsigned char   *array3D_MONO_8;
-        unsigned short  *array3D_MONO_12;
+        unsigned char* array3D_MONO_8;
+        unsigned short* array3D_MONO_12;
 
-    public :
+    public:
 
         /**
         * Constructor.
@@ -113,9 +99,9 @@ class Fits3D : public Fits {
         * Constructor.
         *
         */
-        Fits3D():
-        fptr(NULL), mFileName("noFileName"), status(0), naxis(3), size3d(0), imgSize(0),
-        imgDepth(MONO8), n(0), array3D_MONO_12(NULL), array3D_MONO_8(NULL) {
+        Fits3D() :
+            fptr(NULL), mFileName("noFileName"), status(0), naxis(3), size3d(0), imgSize(0),
+            imgDepth(MONO8), n(0), array3D_MONO_12(NULL), array3D_MONO_8(NULL) {
 
         };
 
@@ -123,9 +109,9 @@ class Fits3D : public Fits {
         * Destructor.
         *
         */
-        ~Fits3D(){};
+        ~Fits3D() {};
 
-        void addImageToFits3D(Mat frame);
+        void addImageToFits3D(cv::Mat frame);
 
         /**
         * Create and write fits 3D.
@@ -134,7 +120,7 @@ class Fits3D : public Fits {
         */
         bool writeFits3D();
 
-    private :
+    private:
 
         /**
         * Helper function to get cfitsio error.
@@ -160,5 +146,5 @@ class Fits3D : public Fits {
         bool writeKeywords();
 
 
-};
-
+    };
+}

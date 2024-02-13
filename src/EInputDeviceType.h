@@ -1,3 +1,4 @@
+#pragma once
 /*
                             EInputDeviceType.h
 
@@ -25,13 +26,14 @@
 *
 *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-#pragma once
+namespace freeture
+{
+    enum InputDeviceType {
 
-enum InputDeviceType{
+        SINGLE_FITS_FRAME,
+        VIDEO,
+        CAMERA,
+        UNDEFINED_INPUT_TYPE
 
-    SINGLE_FITS_FRAME,
-    VIDEO,
-    CAMERA,
-    UNDEFINED_INPUT_TYPE
-
-};
+    };
+}

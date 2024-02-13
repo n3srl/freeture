@@ -1,3 +1,4 @@
+#pragma once
 /*
                             ELogSeverityLevel.h
 
@@ -25,13 +26,14 @@
 *
 *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-#pragma once
-
-enum LogSeverityLevel
+namespace freeture
 {
-    normal,
-    notification,
-    warning,
-    fail,
-    critical
-};
+    enum LogSeverityLevel
+    {
+        normal,
+        notification,
+        warning,
+        fail,
+        critical
+    };
+}

@@ -1,3 +1,4 @@
+#pragma once
 /*
                             CameraVideo.h
 
@@ -32,9 +33,8 @@
 * \date    03/06/2014
 * \brief   Acquisition thread with video in input.
 */
+#include "Commons.h"
 
-#pragma once
-#include "config.h"
 
 #ifdef LINUX
 #define BOOST_LOG_DYN_LINK 1
@@ -62,29 +62,29 @@
 #include <boost/circular_buffer.hpp>
 
 using namespace boost::filesystem;
-using namespace cv;
-
-class CameraVideo : public Camera{
+namespace freeture
+{
+    class CameraVideo : public Camera {
 
     private:
 
         static boost::log::sources::severity_logger< LogSeverityLevel > logger;
 
-        static class Init{
+        static class Init {
 
-            public:
+        public:
 
-                Init(){
+            Init() {
 
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CameraVideo"));
+                logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CameraVideo"));
 
-                }
+            }
 
         }initializer;
 
         int                 mFrameWidth;
         int                 mFrameHeight;
-        VideoCapture        mCap;
+        cv::VideoCapture        mCap;
         bool                mReadDataStatus;
         int                 mVideoID;
         std::vector<std::string>      mVideoList;
@@ -97,11 +97,11 @@ class CameraVideo : public Camera{
 
         bool createDevice(int id);
 
-        bool acqStart() {return true;};
+        bool acqStart() { return true; };
 
-        bool listCameras() {return true;};
+        bool listCameras() { return true; };
 
-        bool grabImage(Frame &img);
+        bool grabImage(Frame& img);
 
         bool grabInitialization();
 
@@ -119,19 +119,19 @@ class CameraVideo : public Camera{
         *
         * @return Success status to load next data set.
         */
-        bool loadNextDataSet(std::string &location);
+        bool loadNextDataSet(std::string& location);
 
-        bool getFPS(double &value) {value = 0; return false;};
+        bool getFPS(double& value) { value = 0; return false; };
 
-        bool setExposureTime(double exp){return true;};
+        bool setExposureTime(double exp) { return true; };
 
-        bool setGain(int gain) {return true;};
+        bool setGain(int gain) { return true; };
 
-        bool setFPS(double fps){return true;};
+        bool setFPS(double fps) { return true; };
 
-        bool setPixelFormat(CamPixFmt format){return true;};
+        bool setPixelFormat(CamPixFmt format) { return true; };
 
-        bool setSize(int x, int y, int width, int height, bool customSize) {return true;};
+        bool setSize(int x, int y, int width, int height, bool customSize) { return true; };
 
-};
-
+    };
+}

@@ -1,62 +1,19 @@
 #pragma once
+/*
+*  
+ * \author Andrea Novati - N3 S.r.l. 
+ */
 
-#include "config.h"
-
-#ifdef WINDOWS
-    #define WIN32_LEAN_AND_MEAN
-    #include <windows.h>
-    #include <process.h>
-#else
-    #ifdef LINUX
-        #include <signal.h>
-        #include <unistd.h>
-        #include <termios.h>
-        #include <sys/types.h>
-        #include <sys/time.h>
-
-        #define BOOST_LOG_DYN_LINK 1
-    #endif
-#endif
-
-#include "Device.h"
-#include "Frame.h"
-#include "Histogram.h"
-#include "HistogramGray.h"
-#include "HistogramRGB.h"
-#include "SaveImg.h"
-#include "Conversion.h"
-#include "Fits2D.h"
-#include "EImgBitDepth.h"
-#include "EParser.h"
-#include "EDetMeth.h"
-#include "DetThread.h"
-#include "StackThread.h"
-#include "AcqThread.h"
-#include "CameraGigeTis.h"
-#include "ImgProcessing.h"
-#include "Logger.h"
-#include "CameraWindows.h"
-#include "ECamPixFmt.h"
-#include "CfgParam.h"
-
-
-
-
-
+ //header refactoring ok
+#include "Commons.h"
 
 #include <boost/program_options.hpp>
 
 namespace po        = boost::program_options;
-namespace logging   = boost::log;
-namespace sinks     = boost::log::sinks;
-namespace attrs     = boost::log::attributes;
-namespace src       = boost::log::sources;
-namespace expr      = boost::log::expressions;
-namespace keywords  = boost::log::keywords;
-
 
 namespace freeture
 {
+    class Device;
 
     enum class Mode
     {
@@ -109,9 +66,7 @@ namespace freeture
 
             void selectListDevices();
             void selectListFormats();
-            void selectMode( boost::program_options::variables_map&);
-
-            void initLogger( std::string , LogSeverityLevel );
+            void selectMode( po::variables_map&);
 
             void signalHandler( int signum );
 

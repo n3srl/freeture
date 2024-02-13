@@ -41,6 +41,8 @@
 
 #ifdef LINUX
 
+using namespace freeture;
+
     boost::log::sources::severity_logger< LogSeverityLevel >  CameraGigeAravis::logger;
     CameraGigeAravis::Init CameraGigeAravis::initializer;
 

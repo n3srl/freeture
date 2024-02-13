@@ -35,11 +35,9 @@
 
 #include "Conversion.h"
 
-#include "opencv2\opencv.hpp"
-#include "opencv2\highgui\highgui.hpp" 
-#include "opencv2\imgproc\imgproc.hpp" 
+#include <opencv2/opencv.hpp>
 
-using namespace cv;
+using namespace freeture;
 
 std::string Conversion::matTypeToString(int type) {
 
@@ -137,8 +135,8 @@ void Conversion::stringTok(std::list<std::string> &container, std::string const 
     }
 }
 
-Mat Conversion::convertTo8UC1(Mat &img) {
-    Mat tmp;
+cv::Mat Conversion::convertTo8UC1(cv::Mat &img) {
+    cv::Mat tmp;
     img.copyTo(tmp);
     double min, max;
     minMaxLoc(tmp, &min, &max);

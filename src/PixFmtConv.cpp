@@ -34,6 +34,7 @@
 
 #include "PixFmtConv.h"
 
+using namespace freeture;
 
 // https://github.com/gjasny/v4l-utils/blob/master/lib/libv4lconvert/rgbyuv.c
 void PixFmtConv::UYVY_to_BGR24(const unsigned char *src, unsigned char *dest, int width, int height, int stride) {

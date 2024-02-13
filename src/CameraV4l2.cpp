@@ -36,6 +36,7 @@
 #include "CameraV4l2.h"
 
 #ifdef LINUX
+using namespace freeture;
 
     enum io_method {
         IO_METHOD_READ,

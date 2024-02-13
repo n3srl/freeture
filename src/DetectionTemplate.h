@@ -1,3 +1,4 @@
+#pragma once
 /*
                             DetectionTemplate.h
 
@@ -31,85 +32,75 @@
 * \version 1.0
 * \date    03/03/2015
 */
+//header refactoring ok
+#include "Commons.h"
 
-#pragma once
-
-#include "config.h"
-
-#ifdef LINUX
-    #define BOOST_LOG_DYN_LINK 1
-#endif
-
-#include <boost/circular_buffer.hpp>
-#include <opencv2/video/tracking.hpp>
-#include <boost/tokenizer.hpp>
-#include <boost/log/common.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/attributes/named_scope.hpp>
-#include <boost/log/attributes.hpp>
-#include <boost/log/sinks.hpp>
-#include <boost/log/sources/logger.hpp>
-#include <boost/log/core.hpp>
-#include "ELogSeverityLevel.h"
-#include "TimeDate.h"
-#include "Fits2D.h"
-#include "Fits.h"
-#include "Frame.h"
-#include "EStackMeth.h"
-#include "ECamPixFmt.h"
-#include "GlobalEvent.h"
-#include "LocalEvent.h"
-#include "Detection.h"
-#include "EParser.h"
-#include "SaveImg.h"
+#include <string>
 #include <vector>
-#include <utility>
-#include <iterator>
-#include <algorithm>
-#include <boost/filesystem.hpp>
-#include "ImgProcessing.h"
-#include "Mask.h"
 
-using namespace boost::filesystem;
-namespace logging = boost::log;
-namespace sinks = boost::log::sinks;
-namespace attrs = boost::log::attributes;
-namespace src = boost::log::sources;
-namespace expr = boost::log::expressions;
-namespace keywords = boost::log::keywords;
+#include "Detection.h"
+#include "SParam.h"
+#include "TimeDate.h"
+#include "ECamPixFmt.h"
 
-class cv::Mat;
+// 
+// #ifdef LINUX
+//     #define BOOST_LOG_DYN_LINK 1
+// #endif
+// 
+// #include <boost/circular_buffer.hpp>
+// #include <opencv2/video/tracking.hpp>
+// #include <boost/tokenizer.hpp>
+// #include <boost/log/common.hpp>
+// #include <boost/log/expressions.hpp>
+// #include <boost/log/utility/setup/file.hpp>
+// #include <boost/log/utility/setup/console.hpp>
+// #include <boost/log/utility/setup/common_attributes.hpp>
+// #include <boost/log/attributes/named_scope.hpp>
+// #include <boost/log/attributes.hpp>
+// #include <boost/log/sinks.hpp>
+// #include <boost/log/sources/logger.hpp>
+// #include <boost/log/core.hpp>
+// #include "ELogSeverityLevel.h"
+// #include "TimeDate.h"
+// #include "Fits2D.h"
+// #include "Fits.h"
+// #include "Frame.h"
+// #include "EStackMeth.h"
+// #include "ECamPixFmt.h"
+// #include "GlobalEvent.h"
+// #include "LocalEvent.h"
+// #include "Detection.h"
+// #include "EParser.h"
+// #include "SaveImg.h"
+// #include <vector>
+// #include <utility>
+// #include <iterator>
+// #include <algorithm>
+// #include <boost/filesystem.hpp>
+// #include "ImgProcessing.h"
+// #include "Mask.h"
 
-class DetectionTemplate : public Detection {
 
-    private :
+namespace freeture
+{
+    class Mask;
+    class Frame;
 
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
+    class DetectionTemplate : public Detection {
 
-        static class Init {
+    private:
 
-            public :
-
-                Init() {
-
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("DetectionTemplate"));
-
-                }
-
-        }initializer;
 
         int                 mImgNum;                // Current frame number.
         cv::Mat                 mPrevFrame;             // Previous frame.
         cv::Mat                 mMask;                  // Mask applied to frames.
         int                 mDataSetCounter;
         detectionParam      mdtp;
-        Mask                *mMaskControl;
+        Mask* mMaskControl;
 
 
-    public :
+    public:
 
         DetectionTemplate(detectionParam dtp, CamPixFmt fmt);
 
@@ -117,7 +108,7 @@ class DetectionTemplate : public Detection {
 
         void initMethod(std::string cfgPath);
 
-        bool runDetection(Frame &c);
+        bool runDetection(Frame& c);
 
         void saveDetectionInfos(std::string p, int nbFramesAround);
 
@@ -131,10 +122,9 @@ class DetectionTemplate : public Detection {
 
         int getEventLastFrameNb();
 
-    private :
+    private:
 
         void createDebugDirectories(bool cleanDebugDirectory);
 
-};
-
-
+    };
+}

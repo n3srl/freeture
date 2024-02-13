@@ -34,7 +34,8 @@
 
 #include "CameraWindows.h"
 
-#ifdef WINDOWS
+#ifdef VIDEOINPUT
+using namespace freeture;
 
 CameraWindows::CameraWindows() {
 

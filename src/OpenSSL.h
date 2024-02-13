@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 OpenSSL.h
 
@@ -31,27 +32,17 @@
 * \version 1.0
 * \date    30/05/2015
 */
+#include "Commons.h"
 
-#pragma once
-
-#include "config.h"
-
-#ifdef WINDOWS
-    #define WIN32_LEAN_AND_MEAN
-    #include <boost/asio.hpp>
-    #include <windows.h>
-    #include <iphlpapi.h>
-    #include <stdint.h>
-
-#else
-    #ifdef LINUX
-        #include <boost/asio.hpp>
-        #define BOOST_LOG_DYN_LINK 1
-    #endif
+#ifdef LINUX
+    #define BOOST_LOG_DYN_LINK 1
 #endif
+
+#include <boost/asio.hpp>
 
 #include <openssl/err.h>
 #include <openssl/ssl.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
@@ -74,30 +65,31 @@
 #include <boost/log/sources/logger.hpp>
 #include <boost/log/core.hpp>
 #include "ELogSeverityLevel.h"
+namespace freeture
+{
 
+    class OpenSSL {
 
-class OpenSSL {
-
-    private :
+    private:
 
         static boost::log::sources::severity_logger< LogSeverityLevel > logger;
 
         static class Init {
 
-            public:
+        public:
 
-                Init() {
+            Init() {
 
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("OpenSSL"));
+                logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("OpenSSL"));
 
-                }
+            }
 
         }initializer;
 
-    public :
+    public:
 
         std::unique_ptr< SSL_CTX, decltype(SSL_CTX_free)*> ctx_;
-        std::unique_ptr< SSL, decltype( SSL_free )* > ssl_;
+        std::unique_ptr< SSL, decltype(SSL_free)* > ssl_;
         enum {
             errorBufSize = 256,
             readBufSize = 256
@@ -115,7 +107,7 @@ class OpenSSL {
         *
         * @param msg Data to write.
         */
-        void Write(const std::string &msg);
+        void Write(const std::string& msg);
 
         /**
         * Read data on the SSL connection.
@@ -128,18 +120,18 @@ class OpenSSL {
             char buf[readBufSize];
             std::string read;
 
-            while(true) {
+            while (true) {
 
                 const int rstRead = SSL_read(ssl_.get(), buf, readBufSize);
-                if(0==rstRead) {
-                    BOOST_LOG_SEV(logger,fail) << "Connection lost while read.";
+                if (0 == rstRead) {
+                    BOOST_LOG_SEV(logger, fail) << "Connection lost while read.";
                     throw "Connection lost while read.";
                     //throw runtime_error("Connection lost while read.");
                 }
-                if(0>rstRead && SSL_ERROR_WANT_READ == SSL_get_error(ssl_.get(), rstRead))
+                if (0 > rstRead && SSL_ERROR_WANT_READ == SSL_get_error(ssl_.get(), rstRead))
                     continue;
-                read+= std::string(buf, buf + rstRead);
-                if(isDoneReceiving(read)) return read;
+                read += std::string(buf, buf + rstRead);
+                if (isDoneReceiving(read)) return read;
             }
         }
 
@@ -166,4 +158,5 @@ class OpenSSL {
                 ERR_free_strings();
             }
         };
-};
+    };
+}

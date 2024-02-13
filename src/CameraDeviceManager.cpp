@@ -1,9 +1,12 @@
 #include "CameraDeviceManager.h"
 
+#include "Logger.h"
+
+using namespace freeture;
 
 
 CameraDeviceManager::CameraDeviceManager() {
-    std::cout << "INIT CAMERADEVICE MANAGER " << std::endl;
+    LOG_DEBUG << "INIT CAMERADEVICE MANAGER " << std::endl;
     deviceNumber = -1;
     dev = freeture::Device();
     deviceList = dev.getListDevice();
@@ -27,17 +30,17 @@ void CameraDeviceManager::listDevice(bool print = true) {
     {
         CameraDescription cam = deviceList[i];
         cam.Id = i;
-        if(print) std::cout << "[" << cam.Id << "]    " << cam.Description << std::endl;
+        if(print) LOG_DEBUG << "[" << cam.Id << "]    " << cam.Description << std::endl;
     }
 }
 
 int CameraDeviceManager::getCameraDeviceBySerial(std::string serial)
 {
     if(serial == "") {
-        std::cout << "CAMERA SERIAL IS MISSING DEVICE ID WILL BE USED " << std::endl;
+        LOG_DEBUG << "CAMERA SERIAL IS MISSING DEVICE ID WILL BE USED " << std::endl;
         return -1;
     }
-    std::cout << "LOOKING FOR CAMERA SERIAL " << serial << std::endl;
+    LOG_DEBUG << "LOOKING FOR CAMERA SERIAL " << serial << std::endl;
     for (int i = 0; i < deviceList.size(); i++)
     {
         CameraDescription cameraDescrption = deviceList.at(i);

@@ -1,3 +1,5 @@
+#ifdef LINUX
+
 #include <iostream>
 
 #include "CameraGigeAravisScanner.h"
@@ -7,6 +9,7 @@
 #include "arvinterface.h"
 
 using namespace std;
+using namespace freeture;
 
 CameraGigeAravisScanner::CameraGigeAravisScanner(CamSdkType sdk):CameraScanner(sdk)
 {
@@ -61,3 +64,6 @@ CameraGigeAravisScanner::CameraGigeAravisScanner(CamSdkType sdk):CameraScanner(s
             }
         }
 
+
+
+#endif

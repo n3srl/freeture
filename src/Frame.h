@@ -1,3 +1,4 @@
+#pragma once
 /*
                                     Frame.h
 
@@ -33,22 +34,20 @@
 * \date    19/03/2018
 * \brief   Image container.
 */
+#include "Commons.h"
 
-#pragma once
+#include <string>
 
-#include <boost/tokenizer.hpp>
-#include "Conversion.h"
-#include "SaveImg.h"
-#include "ECamPixFmt.h"
+#include <opencv2/opencv.hpp>
+
 #include "TimeDate.h"
+#include "ECamPixFmt.h"
 
-#include "opencv2\opencv.hpp"
-#include "opencv2\highgui\highgui.hpp" 
-#include "opencv2\imgproc\imgproc.hpp" 
+namespace freeture
+{
+    class Frame {
 
-class Frame {
-
-    public :
+    public:
 
         TimeDate::Date      mDate;               // Acquisition date.
         double              mExposure;           // Camera's exposure value used to grab the frame.
@@ -71,4 +70,5 @@ class Frame {
 
         ~Frame();
 
-};
+    };
+}

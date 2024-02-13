@@ -1,3 +1,4 @@
+#pragma once
 /*
                             CameraFrames.h
 
@@ -34,47 +35,33 @@
 * \brief   Fits frames in input of acquisition thread.
 */
 
-#pragma once
-#include "config.h"
+// #include "ELogSeverityLevel.h"
+// #include "Conversion.h"
+// #include "TimeDate.h"
+// #include "Frame.h"
+// #include "Fits2D.h"
+// #include "Fits.h"
+// #include <list>
+// #include <iterator>
+// #include <boost/filesystem.hpp>
+// #include <boost/tokenizer.hpp>
 
-#ifdef LINUX
-#define BOOST_LOG_DYN_LINK 1
-#endif
+//headers refactoring ok
+#include "Commons.h"
 
-#include <boost/log/sources/logger.hpp>
-#include "ELogSeverityLevel.h"
-#include "Conversion.h"
-#include "TimeDate.h"
-#include "Frame.h"
-#include "Fits2D.h"
-#include "Fits.h"
-#include <list>
-#include <iterator>
-#include <boost/filesystem.hpp>
-#include <boost/tokenizer.hpp>
+#include <vector>
+#include <string>
 
 #include "Camera.h"
 
 using namespace boost::posix_time;
-using namespace cv;
 
-class CameraFrames: public Camera {
+namespace freeture
+{
+
+    class CameraFrames : public Camera {
 
     private:
-
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
-
-        static class Init {
-
-            public:
-
-                Init() {
-
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CameraFrames"));
-
-                }
-
-        } initializer;
 
         bool searchMinMaxFramesNumber(std::string location);
 
@@ -92,33 +79,34 @@ class CameraFrames: public Camera {
 
         ~CameraFrames();
 
-        bool acqStart() {return true;};
+        bool acqStart() { return true; };
 
-        bool createDevice(int id) { return true;};
+        bool createDevice(int id) { return true; };
 
         bool grabInitialization();
 
-        bool grabImage(Frame &img);
+        bool grabImage(Frame& img);
 
         bool getStopStatus();
 
-        bool loadNextDataSet(std::string &location);
+        bool loadNextDataSet(std::string& location);
 
         bool getDataSetStatus();
 
-        bool getFPS(double &value);
+        bool getFPS(double& value);
 
-        bool setExposureTime(double exp){return true;};
+        bool setExposureTime(double exp) { return true; };
 
-        bool setGain(double gain) {return true;};
+        bool setGain(double gain) { return true; };
 
-        bool setFPS(double fps){return true;};
+        bool setFPS(double fps) { return true; };
 
-        bool setPixelFormat(CamPixFmt format){return true;};
+        bool setPixelFormat(CamPixFmt format) { return true; };
 
-        bool setSize(int startx, int starty, int width, int height, bool customSize) {return true;};
+        bool setSize(int startx, int starty, int width, int height, bool customSize) { return true; };
 
         bool getCameraName();
 
-};
+    };
 
+}

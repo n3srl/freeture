@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 EImgFormat.h
 
@@ -25,12 +26,12 @@
 *
 *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-#pragma once
+namespace freeture
+{
+    enum ImgFormat {
 
-enum ImgFormat{
+        JPEG,
+        FITS
 
-    JPEG,
-    FITS
-
-};
-
+    };
+}

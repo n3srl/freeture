@@ -37,7 +37,8 @@
 
 #include "CameraGigeTis.h"
 
-#ifdef WINDOWS
+#ifdef TISCAMERA
+using namespace freeture;
 
     boost::log::sources::severity_logger< LogSeverityLevel >  CameraGigeTis::logger;
 

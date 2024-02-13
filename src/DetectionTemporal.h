@@ -1,3 +1,4 @@
+#pragma once
 /*
                             DetectionTemporal.h
 
@@ -33,97 +34,92 @@
 * \brief   Detection method by temporal analysis.
 */
 
-#pragma once
+#include "Commons.h"
 
-#include "config.h"
+#include <string>
+#include <vector>
 
-#ifdef LINUX
-    #define BOOST_LOG_DYN_LINK 1
-#endif
+#include <opencv2/opencv.hpp>
 
-#include <boost/circular_buffer.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/video/tracking.hpp>
-#include <boost/tokenizer.hpp>
-#include <boost/log/common.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/attributes/named_scope.hpp>
-#include <boost/log/attributes.hpp>
-#include <boost/log/sinks.hpp>
-#include <boost/log/sources/logger.hpp>
-#include <boost/log/core.hpp>
-#include "ELogSeverityLevel.h"
-#include "TimeDate.h"
-#include "Fits2D.h"
-#include "Fits.h"
-#include "Frame.h"
-#include "ImgProcessing.h"
-#include "EStackMeth.h"
-#include "ECamPixFmt.h"
+#include "Detection.h"
 #include "GlobalEvent.h"
 #include "LocalEvent.h"
-#include "Detection.h"
-#include "EParser.h"
-#include "SaveImg.h"
-#include <vector>
-#include <utility>
-#include <iterator>
-#include <algorithm>
-#include <boost/filesystem.hpp>
-#include "Mask.h"
+#include "SParam.h"
+#include "TimeDate.h"
 
-using namespace boost::filesystem;
-namespace logging = boost::log;
-namespace sinks = boost::log::sinks;
-namespace attrs = boost::log::attributes;
-namespace src = boost::log::sources;
-namespace expr = boost::log::expressions;
-namespace keywords = boost::log::keywords;
+// 
+// 
+// #ifdef LINUX
+//     #define BOOST_LOG_DYN_LINK 1
+// #endif
+// 
+// #include <boost/circular_buffer.hpp>
+// #include <boost/tokenizer.hpp>
+// #include <boost/log/common.hpp>
+// #include <boost/log/expressions.hpp>
+// #include <boost/log/utility/setup/file.hpp>
+// #include <boost/log/utility/setup/console.hpp>
+// #include <boost/log/utility/setup/common_attributes.hpp>
+// #include <boost/log/attributes/named_scope.hpp>
+// #include <boost/log/attributes.hpp>
+// #include <boost/log/sinks.hpp>
+// #include <boost/log/sources/logger.hpp>
+// #include <boost/log/core.hpp>
+// #include "ELogSeverityLevel.h"
+// #include "TimeDate.h"
+// #include "Fits2D.h"
+// #include "Fits.h"
+// #include "Frame.h"
+// #include "ImgProcessing.h"
+// #include "EStackMeth.h"
+// #include "ECamPixFmt.h"
+// #include "GlobalEvent.h"
+// #include "LocalEvent.h"
+// #include "Detection.h"
+// #include "EParser.h"
+// #include "SaveImg.h"
+// #include <vector>
+// #include <utility>
+// #include <iterator>
+// #include <algorithm>
+// #include <boost/filesystem.hpp>
+// #include "Mask.h"
+// 
+// using namespace boost::filesystem;
+// namespace logging = boost::log;
+// namespace sinks = boost::log::sinks;
+// namespace attrs = boost::log::attributes;
+// namespace src = boost::log::sources;
+// namespace expr = boost::log::expressions;
+// namespace keywords = boost::log::keywords;
 
-using namespace cv;
+namespace freeture
+{
+    class Mask;
 
-class DetectionTemporal : public Detection {
+    class DetectionTemporal : public Detection {
 
-    private :
-
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
-
-        static class Init {
-
-            public :
-
-                Init() {
-
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("DetectionTemporal"));
-
-                }
-
-        }initializer;
-
+    private:
         std::vector<GlobalEvent>             mListGlobalEvents;      // List of global events (Events spread on several frames).
-        std::vector<Point>                   mSubdivisionPos;        // Position (origin in top left) of 64 subdivisions.
-        std::vector<Scalar>                  mListColors;            // One color per local event.
-        Mat                             mLocalMask;             // Mask used to remove isolated white pixels.
+        std::vector<cv::Point>                   mSubdivisionPos;        // Position (origin in top left) of 64 subdivisions.
+        std::vector<cv::Scalar>                  mListColors;            // One color per local event.
+        cv::Mat                             mLocalMask;             // Mask used to remove isolated white pixels.
         bool                            mSubdivisionStatus;     // If subdivisions positions have been computed.
-        Mat                             mPrevThresholdedMap;
+        cv::Mat                             mPrevThresholdedMap;
         std::vector<GlobalEvent>::iterator   mGeToSave;              // Global event to save.
         int                             mRoiSize[2];
         int                             mImgNum;                // Current frame number.
-        Mat                             mPrevFrame;             // Previous frame.
-        Mat                             mStaticMask;
+        cv::Mat                             mPrevFrame;             // Previous frame.
+        cv::Mat                             mStaticMask;
         std::string                          mDebugCurrentPath;
         int                             mDataSetCounter;
         bool                            mDebugUpdateMask;
-        Mask                            *mMaskManager;
+        Mask* mMaskManager;
         std::vector<std::string>                  debugFiles;
         detectionParam                  mdtp;
-        VideoWriter                     mVideoDebugAutoMask;
+        cv::VideoWriter                     mVideoDebugAutoMask;
 
-    public :
+    public:
 
         DetectionTemporal(detectionParam dp, CamPixFmt fmt);
 
@@ -131,7 +127,7 @@ class DetectionTemporal : public Detection {
 
         void initMethod(std::string cfgPath);
 
-        bool runDetection(Frame &c);
+        bool runDetection(Frame& c);
 
         void saveDetectionInfos(std::string p, int nbFramesAround);
 
@@ -139,39 +135,39 @@ class DetectionTemporal : public Detection {
 
         void resetMask();
 
-        int getEventFirstFrameNb() {return (*mGeToSave).getNumFirstFrame();};
+        int getEventFirstFrameNb() { return (*mGeToSave).getNumFirstFrame(); };
 
-        TimeDate::Date getEventDate() {return (*mGeToSave).getDate();};
+        TimeDate::Date getEventDate() { return (*mGeToSave).getDate(); };
 
-        int getEventLastFrameNb() {return (*mGeToSave).getNumLastFrame();};
+        int getEventLastFrameNb() { return (*mGeToSave).getNumLastFrame(); };
 
         std::vector<std::string> getDebugFiles();
 
-    private :
+    private:
 
         void createDebugDirectories(bool cleanDebugDirectory);
 
-        int selectThreshold(Mat i);
+        int selectThreshold(cv::Mat i);
 
-        std::vector<Scalar> getColorInEventMap(Mat &eventMap, Point roiCenter);
+        std::vector<cv::Scalar> getColorInEventMap(cv::Mat& eventMap, cv::Point roiCenter);
 
-        void colorRoiInBlack(Point p, int h, int w, Mat &region);
+        void colorRoiInBlack(cv::Point p, int h, int w, cv::Mat& region);
 
-        void analyseRegion( Mat &subdivision,
-                            Mat &absDiffBinaryMap,
-                            Mat &eventMap,
-                            Mat &posDiff,
-                            int posDiffThreshold,
-                            Mat &negDiff,
-                            int negDiffThreshold,
-                            std::vector<LocalEvent> &listLE,
-                            Point subdivisionPos,
-                            int maxNbLE,
-                            int numFrame,
-                            std::string &msg,
-                            TimeDate::Date cFrameDate);
+        void analyseRegion(cv::Mat& subdivision,
+            cv::Mat& absDiffBinaryMap,
+            cv::Mat& eventMap,
+            cv::Mat& posDiff,
+            int posDiffThreshold,
+            cv::Mat& negDiff,
+            int negDiffThreshold,
+            std::vector<LocalEvent>& listLE,
+            cv::Point subdivisionPos,
+            int maxNbLE,
+            int numFrame,
+            std::string& msg,
+            TimeDate::Date cFrameDate);
 
 
 
-};
-
+    };
+}

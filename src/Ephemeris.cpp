@@ -35,6 +35,7 @@
 */
 
 #include "Ephemeris.h"
+using namespace freeture;
 
 Ephemeris::Ephemeris(std::string date, double sunElevation, double longitude, double latitude) {
 
@@ -58,7 +59,7 @@ Ephemeris::~Ephemeris() {
 
 }
 
-bool Ephemeris::computeEphemeris(int &sunriseHours, int &sunriseMinutes, int &sunsetHours, int &sunsetMinutes) {
+bool Ephemeris::computeEphemeris( int &sunriseHours, int &sunriseMinutes, int &sunsetHours, int &sunsetMinutes) {
 
     double DJJ = dateToJulianDate();
 

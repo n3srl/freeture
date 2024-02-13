@@ -1,3 +1,5 @@
+#pragma once
+
 /*
                                 TimeDate.h
 
@@ -31,25 +33,18 @@
 * \date    13/06/2014
 * \brief   Time helpers.
 */
-
-#pragma once
+//header refactoring ok
+#include "Commons.h"
+#include "boost/date_time/posix_time/posix_time_types.hpp"
 
 #include <string>
-#include <iostream>
 #include <vector>
-#include <boost/tokenizer.hpp>
-#include <boost/date_time.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/date_time/posix_time/posix_time_io.hpp>
-#include <list>
-#include "Conversion.h"
 
+namespace freeture
+{
+    class TimeDate {
 
-using namespace boost::posix_time;
-
-class TimeDate {
-
-    public :
+    public:
 
         struct Date {
 
@@ -60,7 +55,7 @@ class TimeDate {
             int     minutes;
             double  seconds;
 
-            Date():year(0), month(0), day(0), hours(0), minutes(0), seconds(0) {}
+            Date() :year(0), month(0), day(0), hours(0), minutes(0), seconds(0) {}
 
         };
 
@@ -71,7 +66,7 @@ class TimeDate {
         * @param format "%Y:%m:%d:%H:%M:%S"
         * @return Date time in string.
         */
-        static std::string localDateTime(::boost::posix_time::ptime pt, std::string format);
+        static std::string localDateTime(boost::posix_time::ptime pt, std::string format);
 
         /**
         * Get date in UT
@@ -189,5 +184,6 @@ class TimeDate {
         */
         static int secBetweenTwoDates(Date d1, Date d2);
 
-};
+    };
 
+}

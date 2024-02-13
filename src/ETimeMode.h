@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 ETimeMode.h
 
@@ -25,15 +26,15 @@
 *
 *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-#pragma once
+namespace freeture
+{
+    enum TimeMode {
 
-enum TimeMode{
-
-    DAY,
-    NIGHT,
-    DAYNIGHT,
-    SUNRISE,
-    SUNSET,
-    NONE
-};
-
+        DAY,
+        NIGHT,
+        DAYNIGHT,
+        SUNRISE,
+        SUNSET,
+        NONE
+    };
+}

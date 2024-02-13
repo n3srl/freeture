@@ -1,3 +1,4 @@
+#pragma once
 /*
                                     Mask.h
 
@@ -31,10 +32,8 @@
 * \version 1.0
 * \date    26/11/2014
 */
+#include "Commons.h"
 
-#pragma once
-
-#include "config.h"
 #include <boost/circular_buffer.hpp>
 #include <boost/date_time.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -47,32 +46,32 @@
 
 
 using namespace boost::filesystem;
+namespace freeture
+{
+    class Mask {
 
-class Mask {
+    public:
 
-    public :
+        cv::Mat mCurrentMask;
 
-        Mat mCurrentMask;
+    private:
 
-    private :
-
-        Mat mOriginalMask;
+        cv::Mat mOriginalMask;
         int mUpdateInterval;
         bool mUpdateMask;
         bool mMaskToCreate;
         std::string refDate;
         bool updateStatus;
         int saturatedValue;
-        boost::circular_buffer<Mat> satMap;
+        boost::circular_buffer<cv::Mat> satMap;
 
-    public :
+    public:
 
         Mask(int timeInterval, bool customMask, std::string customMaskPath, bool downsampleMask, CamPixFmt format, bool updateMask);
 
-        bool applyMask(Mat &currFrame);
+        bool applyMask(cv::Mat& currFrame);
 
         void resetMask();
 
-};
-
-
+    };
+}

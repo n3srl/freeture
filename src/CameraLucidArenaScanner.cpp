@@ -1,11 +1,13 @@
+
+#ifdef LINUX
 #include <iostream>
 
 #include "CameraLucidArenaScanner.h"
-
 #include "arv.h"
 #include "arvinterface.h"
 
 using namespace std;
+using namespace freeture;
 
 CameraLucidArenaScanner::CameraLucidArenaScanner(CamSdkType sdk):CameraScanner(sdk)
 {
@@ -72,3 +74,5 @@ CameraLucidArenaScanner::CameraLucidArenaScanner(CamSdkType sdk):CameraScanner(s
                     }
             }
 
+
+#endif

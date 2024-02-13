@@ -1,33 +1,37 @@
 #pragma once
+//header refactoring ok
+#include "Commons.h"
 
 #include <string>
 #include <vector>
 
 #include "ECamSdkType.h"
 
-class CameraDescription
+namespace freeture
 {
+    class CameraDescription
+    {
     public:
-        int Id                      = 0;
-        std::string Description     = "";
-        std::string DeviceId        = "";
-        std::string Address         = "";
-        int Interface               = 0;
-        CamSdkType Sdk              = CamSdkType::UNKNOWN;
-};
+        int Id = 0;
+        std::string Description = "";
+        std::string DeviceId = "";
+        std::string Address = "";
+        int Interface = 0;
+        CamSdkType Sdk = CamSdkType::UNKNOWN;
+    };
 
-/*STRATEGY*/
-class CameraScanner
-{
+    /*STRATEGY*/
+    class CameraScanner
+    {
     protected:
-            virtual void UpdateCameraList()=0;
+        virtual void UpdateCameraList() = 0;
 
     public:
         CamSdkType Sdk;
 
         CameraScanner() = delete;
 
-        CameraScanner(CamSdkType sdk):Sdk(sdk)
+        CameraScanner(CamSdkType sdk) :Sdk(sdk)
         {
         }
 
@@ -44,9 +48,10 @@ class CameraScanner
          */
         static CameraScanner* CreateScanner(CamSdkType sdk);
 
-       /**
-        * Print a list with connected devices.
-        *
-        */
+        /**
+         * Print a list with connected devices.
+         *
+         */
         bool listCameras();
-};
+    };
+}

@@ -35,10 +35,10 @@
 */
 
 #include "SMTPClient.h"
+#include "Socket.h"
+#include "Base64.h"
 
-boost::log::sources::severity_logger< LogSeverityLevel >  SMTPClient::logger;
-
-SMTPClient::Init SMTPClient::initializer;
+using namespace freeture;
 
 bool SMTPClient::checkSMTPAnswer(const std::string & responseWaited, boost::asio::ip::tcp::socket & socket) {
 
@@ -63,7 +63,7 @@ bool SMTPClient::checkSMTPAnswer(const std::string & responseWaited, boost::asio
         }else{
 
             //cout << "code : " <<code <<endl;
-            BOOST_LOG_SEV(logger,notification) << "code :" << code;
+            LOG_INFO << "code :" << code;
 
         }
 
@@ -257,7 +257,8 @@ std::string SMTPClient::buildMessage( std::string msg, std::vector<std::string> 
             std::string img;
             if(!getFileContents(mMailAttachments.at(i).c_str(), img)) {
                 std::cout << "Fail to load image to attach to mail message" << std::endl;
-                BOOST_LOG_SEV(logger,fail) << "Fail to load image to attach to mail message";
+                
+                LOG_ERROR << "Fail to load image to attach to mail message";
                 img = "";
             }
             //  cout << "end getFileContents" << endl;
@@ -296,39 +297,39 @@ void SMTPClient::sendMail(  std::string            server,
                     checkSMTPAnswer("220", *socket.GetSocket());
 
                     // HELO to SMTP server.
-                    BOOST_LOG_SEV(logger,normal) << "HELLO to SMTP server.";
+                    LOG_INFO << "HELLO to SMTP server.";
                     write("HELO " + server + "\r\n", "250", true, *socket.GetSocket());
 
                     // Sender.
-                    BOOST_LOG_SEV(logger,normal) << "Write sender.";
+                    LOG_INFO << "Write sender.";
                     write("MAIL FROM: <" + from + ">\r\n", "250", true, *socket.GetSocket());
 
                     // Recipients.
-                    BOOST_LOG_SEV(logger,normal) << "Write recipients.";
+                    LOG_INFO << "Write recipients.";
                     for(int i = 0; i < to.size(); i++)
                     write("RCPT TO: <" + to.at(i) + ">\r\n", "250", true, *socket.GetSocket());
 
                     // Start to sending data.
-                    BOOST_LOG_SEV(logger,normal) << "Write datas.";
+                    LOG_INFO << "Write datas.";
                     write("DATA\r\n", "354", true, *socket.GetSocket());
 
                     // Build message using MIME.
-                    BOOST_LOG_SEV(logger,normal) << "Build message using MIME.";
+                    LOG_INFO << "Build message using MIME.";
                     std::string data = buildMessage(message, pathAttachments, to, from, subject);
 
                     // Send data.
-                    BOOST_LOG_SEV(logger,normal) << "Send data.";
+                    LOG_INFO << "Send data.";
                     write(data, "", false, *socket.GetSocket());
 
                     // End of sending data.
-                    BOOST_LOG_SEV(logger,normal) << "End of sending data.";
+                    LOG_INFO << "End of sending data.";
                     write("\r\n.\r\n", "250", true, *socket.GetSocket());
 
                     // Deconnection.
-                    BOOST_LOG_SEV(logger,normal) << "Deconnection.";
+                    LOG_INFO << "Deconnection.";
                     write("QUIT\r\n", "221", true, *socket.GetSocket());
 
-                    BOOST_LOG_SEV(logger,notification) << "Mail sent.";
+                    LOG_INFO << "Mail sent.";
 
                 }
 
@@ -342,53 +343,53 @@ void SMTPClient::sendMail(  std::string            server,
 
                     static const std::string newline = "\r\n";
 
-                    BOOST_LOG_SEV(logger,notification) << "Initialize SSL connection.";
+                    LOG_INFO << "Initialize SSL connection.";
                     OpenSSL::StaticInitialize sslInitializer;
 
                     OpenSSL openSSL(socket.GetSocket()->native_handle());
-                    BOOST_LOG_SEV(logger,normal) << openSSL.Read(ReceiveFunctor(220));
+                    LOG_INFO << openSSL.Read(ReceiveFunctor(220));
 
-                    BOOST_LOG_SEV(logger,notification) << std::string("EHLO ") << server;
+                    LOG_INFO << std::string("EHLO ") << server;
                     openSSL.Write(std::string("EHLO ") + server + newline);
-                    BOOST_LOG_SEV(logger,normal) << openSSL.Read(ReceiveFunctor(250));
+                    LOG_INFO << openSSL.Read(ReceiveFunctor(250));
 
-                    BOOST_LOG_SEV(logger,notification) << "AUTH LOGIN";
+                    LOG_INFO << "AUTH LOGIN";
                     openSSL.Write(std::string("AUTH LOGIN") + newline);
-                    BOOST_LOG_SEV(logger,normal) << openSSL.Read(ReceiveFunctor(334));
+                    LOG_INFO << openSSL.Read(ReceiveFunctor(334));
 
-                    BOOST_LOG_SEV(logger,notification) << "Write Login";
+                    LOG_INFO << "Write Login";
                     openSSL.Write(Base64::encodeBase64(login) + newline);
-                    BOOST_LOG_SEV(logger,normal) << openSSL.Read(ReceiveFunctor(334));
+                    LOG_INFO << openSSL.Read(ReceiveFunctor(334));
 
-                    BOOST_LOG_SEV(logger,notification) << "Write password";
+                    LOG_INFO << "Write password";
                     openSSL.Write(password + newline);
-                    BOOST_LOG_SEV(logger,normal) << openSSL.Read(ReceiveFunctor(235));
+                    LOG_INFO << openSSL.Read(ReceiveFunctor(235));
 
-                    BOOST_LOG_SEV(logger,notification) << "MAIL FROM:<" << from << ">";
+                    LOG_INFO << "MAIL FROM:<" << from << ">";
                     openSSL.Write(std::string("MAIL FROM:<") + from + ">" + newline);
-                    BOOST_LOG_SEV(logger,normal) << openSSL.Read(ReceiveFunctor(250));
+                    LOG_INFO << openSSL.Read(ReceiveFunctor(250));
 
                     for(int i = 0; i < to.size(); i++) {
 
-                        BOOST_LOG_SEV(logger,notification) << "RCPT TO:<" << to.at(i) << ">";
+                        LOG_INFO << "RCPT TO:<" << to.at(i) << ">";
                         openSSL.Write(std::string("RCPT TO:<") + to.at(i) + ">" + newline);
-                        BOOST_LOG_SEV(logger,normal) << openSSL.Read(ReceiveFunctor(250));
+                        LOG_INFO << openSSL.Read(ReceiveFunctor(250));
 
                     }
 
-                    BOOST_LOG_SEV(logger,notification) << "DATA";
+                    LOG_INFO << "DATA";
                     openSSL.Write(std::string("DATA") + newline);
-                    BOOST_LOG_SEV(logger,normal) << openSSL.Read(ReceiveFunctor(354));
+                    LOG_INFO << openSSL.Read(ReceiveFunctor(354));
 
-                    BOOST_LOG_SEV(logger,notification) << "Build message";
+                    LOG_INFO << "Build message";
                     std::string m = buildMessage(message, pathAttachments, to, from, subject);
                     openSSL.Write( m + newline + "." + newline);
                     //BOOST_LOG_SEV(logger,normal) << openSSL.Read(ReceiveFunctor(250));
 
-                    BOOST_LOG_SEV(logger,notification) << "QUIT";
+                    LOG_INFO << "QUIT";
                     openSSL.Write(std::string("QUIT: ") + newline);
 
-                    BOOST_LOG_SEV(logger,notification) << "Mail sent.";
+                    LOG_INFO << "Mail sent.";
 
                 }
 
@@ -402,11 +403,11 @@ void SMTPClient::sendMail(  std::string            server,
 
     }catch(std::exception& e){
 
-        BOOST_LOG_SEV(logger, critical) << e.what();
+       LOG_ERROR << e.what();
 
     }catch(const char * msg){
 
-        BOOST_LOG_SEV(logger,fail) << "Fail to send mail : " << msg;
+       LOG_ERROR << "Fail to send mail : " << msg;
 
     }
 }

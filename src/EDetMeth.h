@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 EDetMeth.h
 
@@ -25,16 +26,16 @@
 *
 *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-#pragma once
 
 /**
  * \brief       Meteor detection method.
  */
+namespace freeture
+{
+    enum DetMeth {
 
-enum DetMeth{
+        TEMPORAL_MTHD,   /*!< Detection using lists of globals and locals events.*/
+        TEMPLATE_MTHD
 
-    TEMPORAL_MTHD,   /*!< Detection using lists of globals and locals events.*/
-    TEMPLATE_MTHD
-
-};
-
+    };
+}

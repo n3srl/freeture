@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 CfgLoader.h
 
@@ -32,8 +33,7 @@
 * \date    03/06/2014
 * \brief   Load parameters from a configuration file.
 */
-
-#pragma once
+#include "Commons.h"
 
 #include <fstream>
 #include <string>
@@ -41,14 +41,15 @@
 #include <map>
 #include <stdlib.h>
 
+namespace freeture
+{
+    class CfgLoader {
 
-class CfgLoader{
+    private:
 
-    private :
+        std::map<std::string, std::string> mData; // Container.
 
-        std::map<std::string,std::string> mData; // Container.
-
-    public :
+    public:
 
         /**
          * Constructor.
@@ -123,7 +124,7 @@ class CfgLoader{
          */
         bool Get(const std::string& key, bool& value) const;
 
-    private :
+    private:
 
         /**
          * Remove spaces in configuration file's lines.
@@ -133,5 +134,5 @@ class CfgLoader{
          */
         static std::string Trim(const std::string& str);
 
-};
-
+    };
+}

@@ -35,11 +35,12 @@
 
 #include "Fits3D.h"
 
-boost::log::sources::severity_logger< LogSeverityLevel >  Fits3D::logger;
+#include "Logger.h"
 
-Fits3D::Init Fits3D::initializer;
+using namespace freeture;
+using namespace std;
 
-Fits3D::Fits3D(CamPixFmt depth, int imgHeight, int imgWidth, int numberOfImages, std::string fileName){
+Fits3D::Fits3D(CamPixFmt depth, int imgHeight, int imgWidth, int numberOfImages, string fileName){
 
     fptr = NULL;
     mFileName    = fileName.c_str();
@@ -75,7 +76,7 @@ Fits3D::Fits3D(CamPixFmt depth, int imgHeight, int imgWidth, int numberOfImages,
 
 }
 
-void Fits3D::addImageToFits3D(Mat frame){
+void Fits3D::addImageToFits3D(cv::Mat frame){
 
     if(imgDepth == MONO8){
 
@@ -824,18 +825,18 @@ bool Fits3D::writeFits3D(){
 
 }
 
-void Fits3D::printerror(int status, std::string errorMsg){
+void Fits3D::printerror(int status, string errorMsg){
 
     if(status){
 
         char status_str[200];
         fits_get_errstatus(status, status_str);
 
-        BOOST_LOG_SEV(logger, fail) << errorMsg;
-        std::cout << errorMsg << std::endl;
-        std::string str(status_str);
-        BOOST_LOG_SEV(logger, fail) << "CFITSIO ERROR : " << status << " -> " << str;
-        std::cout << "CFITSIO ERROR : " << status << " -> " << str << std::endl;
+        LOG_ERROR << errorMsg;
+        LOG_DEBUG << errorMsg << endl;
+        string str(status_str);
+        LOG_ERROR << "CFITSIO ERROR : " << status << " -> " << str;
+        LOG_DEBUG << "CFITSIO ERROR : " << status << " -> " << str << endl;
 
     }
 
@@ -847,9 +848,9 @@ void Fits3D::printerror(int status){
 
         char status_str[200];
         fits_get_errstatus(status, status_str);
-        std::string str(status_str);
-        BOOST_LOG_SEV(logger, fail) << "CFITSIO ERROR : " << status << " -> " << str;
-        std::cout << "CFITSIO ERROR : " << status << " -> " << str << std::endl;
+        string str(status_str);
+        LOG_ERROR << "CFITSIO ERROR : " << status << " -> " << str;
+       LOG_DEBUG << "CFITSIO ERROR : " << status << " -> " << str << endl;
 
     }
 }

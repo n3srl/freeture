@@ -1,52 +1,44 @@
-#include <string>
-
-
-#include <boost/log/common.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/attributes/named_scope.hpp>
-#include <boost/log/sources/logger.hpp>
-#include <boost/log/support/date_time.hpp>
-#include <boost/log/attributes.hpp>
-#include <boost/log/sinks.hpp>
-#include <boost/log/sources/logger.hpp>
-#include <boost/log/utility/record_ordering.hpp>
-#include <boost/log/core.hpp>
-#include <boost/filesystem.hpp>
-
-#define BOOST_NO_SCOPED_ENUMS
-
+//header refactoring ok
 #include "Freeture.h"
+
+#include "ECamPixFmt.h"
+#include "EParser.h"
+#include "Device.h"
+#include "CfgParam.h"
+#include "Frame.h"
+
+#include "AcqThread.h"
 #include "DetThread.h"
 #include "StackThread.h"
-#include "AcqThread.h"
-#include "CfgParam.h"
+
 #include "Logger.h"
 
-#include "CameraDeviceManager.h"
+#include <boost/thread/thread.hpp>
+#include <boost/thread/condition_variable.hpp>
+#include <boost/circular_buffer.hpp>
+#include <boost/filesystem.hpp>
 
-namespace po        = boost::program_options;
-namespace logging   = boost::log;
-namespace sinks     = boost::log::sinks;
-namespace attrs     = boost::log::attributes;
-namespace src       = boost::log::sources;
-namespace expr      = boost::log::expressions;
-namespace keywords  = boost::log::keywords;
+#include "Conversion.h"
+#include "ImgProcessing.h"
+#include "SaveImg.h"
+#include "Fits2D.h"
+#include "SMTPClient.h"
 
-
+namespace fs = boost::filesystem;
+namespace po = boost::program_options;
 
 using namespace std;
+using namespace freeture;
 
-
-    void freeture::Freeture::signalHandler( int signum ) {
-        src::severity_logger< LogSeverityLevel > lg;
-        BOOST_LOG_SEV(lg, notification) << "Received signal : "<< signum ;
-        cout << "Received signal : "<< signum << endl;
-        sigTermFlag = true;
-    }
-
+/// <summary>
+/// Signal handling
+/// </summary>
+/// <param name="signum"></param>
+void freeture::Freeture::signalHandler(int signum)
+{
+    LOG_WARNING << "Received signal : " << signum;
+    sigTermFlag = true;
+}
 
 freeture::Freeture::Freeture(int argc, const char ** argv)
 {
@@ -54,77 +46,47 @@ freeture::Freeture::Freeture(int argc, const char ** argv)
     m_Argv=argv;
 }
 
-void freeture::Freeture::initLogger(string path, LogSeverityLevel sev)
-{
-
-    // Create a text file sink
-    // Can't use rotation with text_multifile_backend
-    // http://stackoverflow.com/questions/18228123/text-multifile-backend-how-to-set-rool-file-size
-    typedef sinks::synchronous_sink< sinks::text_multifile_backend > file_sink;
-    boost::shared_ptr< file_sink > sink(new file_sink);
-
-    // Set up how the file names will be generated
-    sink->locked_backend()->set_file_name_composer(
-        sinks::file::as_file_name_composer(expr::stream << path <<expr::attr< std::string >("LogName") << ".log"));
-
-    //sink->locked_backend()->auto_flush(true);
-
-    // Set the log record formatter
-    sink->set_formatter(
-        expr::format("[%1%] <%2%> (%3%) - %4%")
-            % expr::attr< boost::posix_time::ptime >("TimeStamp")
-            % expr::attr< LogSeverityLevel>("Severity")
-            % expr::attr<std::string>("ClassName")
-            % expr::smessage
-    );
-
-    //sink->set_filter(severity >= warning
-     boost::log::core::get()->set_filter(boost::log::expressions::attr< LogSeverityLevel >("Severity") >= sev);
-    // Add it to the core
-    logging::core::get()->add_sink(sink);
-
-    // Add some attributes too
-    logging::add_common_attributes();
-    logging::core::get()->add_global_attribute("TimeStamp", attrs::local_clock());
-}
-
+/// <summary>
+/// Given variable map configure current object state for an operative mode
+/// </summary>
+/// <param name="vm"></param>
 void freeture::Freeture::selectMode( boost::program_options::variables_map& vm)
 {
-    m_CurrentMode = freeture::Mode::UNKNOWN;
+    m_CurrentMode = Mode::UNKNOWN;
 
     switch(mode)
     {
         case 1:
         {
-            m_CurrentMode = freeture::Mode::TEST_CONFIGURATION;
+            m_CurrentMode = Mode::TEST_CONFIGURATION;
         }
         break;
         case 2 :
         {
-            m_CurrentMode = freeture::Mode::CONTINUOUS_ACQUISITION;
+            m_CurrentMode = Mode::CONTINUOUS_ACQUISITION;
         }
         break;
         case 3:
         {
-            m_CurrentMode = freeture::Mode::METEOR_DETECTION;
+            m_CurrentMode = Mode::METEOR_DETECTION;
         }
         break;
         case 4 :
         {
-            m_CurrentMode = freeture::Mode::SINGLE_ACQUISITION;
+            m_CurrentMode = Mode::SINGLE_ACQUISITION;
         }
         break;
         case 5:
         {
-            m_CurrentMode = freeture::Mode::CLEAN_LOGS;
+            m_CurrentMode = Mode::CLEAN_LOGS;
         }
         break;
     }
 
     if (
-         m_CurrentMode == freeture::Mode::METEOR_DETECTION ||
-         m_CurrentMode == freeture::Mode::SINGLE_ACQUISITION ||
-         m_CurrentMode == freeture::Mode::CONTINUOUS_ACQUISITION
+         m_CurrentMode == Mode::METEOR_DETECTION ||
+         m_CurrentMode == Mode::SINGLE_ACQUISITION ||
+         m_CurrentMode == Mode::CONTINUOUS_ACQUISITION
     )
     {
         
@@ -174,16 +136,25 @@ void freeture::Freeture::selectMode( boost::program_options::variables_map& vm)
     }
 }
 
+/// <summary>
+/// Print out version
+/// </summary>
 void freeture::Freeture::printVersion()
 {
-    std::cout << "Current version : " << string(VERSION) << endl;
+    cout << "Current version : " << string(VERSION) << endl;
 }
 
+/// <summary>
+/// Print help
+/// </summary>
 void freeture::Freeture::printHelp()
 {
-    std::cout << *desc;
+    cout << *desc;
 }
 
+/// <summary>
+/// Call Device list devices discovery
+/// </summary>
 void freeture::Freeture::selectListDevices()
 {
    device = new Device();
@@ -191,6 +162,9 @@ void freeture::Freeture::selectListDevices()
    delete device;
 }
 
+/// <summary>
+/// Filter devices by pixel format
+/// </summary>
 void freeture::Freeture::selectListFormats()
 {
     device = new Device();
@@ -204,6 +178,9 @@ void freeture::Freeture::selectListFormats()
     delete device;
 }
 
+/// <summary>
+/// Fetch program options
+/// </summary>
 void freeture::Freeture::fetchProgramOption()
 {
     // Program options.
@@ -281,6 +258,9 @@ void freeture::Freeture::fetchProgramOption()
     po::notify(vm);
 }
 
+/// <summary>
+/// Test the configuration file operative mode
+/// </summary>
 void freeture::Freeture::modeTest()
 {
     device = new Device();
@@ -290,23 +270,26 @@ void freeture::Freeture::modeTest()
     ///%%%%%%%%%%%% MODE 1 : TEST/CHECK CONFIGURATION FILE %%%%%%%%%%%%%%%%%%%
     ///%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    std::cout << "================================================" << endl;
-    std::cout << "====== FREETURE - Test/Check configuration =====" << endl;
-    std::cout << "================================================" << endl << endl;
+    cout << "================================================" << endl;
+    cout << "====== FREETURE - Test/Check configuration =====" << endl;
+    cout << "================================================" << endl << endl;
     cfg.showErrors = true;
     cfg.allParamAreCorrect();
     delete device;
 }
 
+/// <summary>
+/// Continue acquisition mode
+/// </summary>
 void freeture::Freeture::modeContinuousAcquisition()
 {
     ///%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     ///%%%%%%%%%%%%%%%% MODE 2 : CONTINUOUS ACQUISITION %%%%%%%%%%%%%%%%%%%%%%
     ///%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    std::cout << "================================================" << endl;
-    std::cout << "========== FREETURE - Continuous mode ==========" << endl;
-    std::cout << "================================================" << endl << endl;
+    cout << "================================================" << endl;
+    cout << "========== FREETURE - Continuous mode ==========" << endl;
+    cout << "================================================" << endl << endl;
 
     EParser<CamPixFmt> fmt;
     string fstring = fmt.getStringEnum(static_cast<CamPixFmt>(acqFormat));
@@ -344,7 +327,7 @@ void freeture::Freeture::modeContinuousAcquisition()
     device->startCamera();
 
     if(display)
-        namedWindow("FreeTure (ESC to stop)", WINDOW_NORMAL);
+        cv::namedWindow("FreeTure (ESC to stop)", cv::WINDOW_NORMAL);
 
 
     char hitKey;
@@ -354,14 +337,14 @@ void freeture::Freeture::modeContinuousAcquisition()
     {
                             Frame frame;
 
-                            double tacq = (double)getTickCount();
+                            double tacq = (double)cv::getTickCount();
                             if(device->runContinuousCapture(frame)){
-                                tacq = (((double)getTickCount() - tacq)/getTickFrequency())*1000;
-                                std::cout << " >> [ TIME ACQ ] : " << tacq << " ms" << endl;
+                                tacq = (((double)cv::getTickCount() - tacq)/ cv::getTickFrequency())*1000;
+                                cout << " >> [ TIME ACQ ] : " << tacq << " ms" << endl;
 
                                 if(display) {
-                                    imshow("FreeTure (ESC to stop)", frame.mImg);
-                                    waitKey(1);
+                                    cv::imshow("FreeTure (ESC to stop)", frame.mImg);
+                                    cv::waitKey(1);
                                 }
                             }
 
@@ -391,9 +374,9 @@ void freeture::Freeture::modeMeteorDetection()
     ///%%%%%%%%%%%%%%%%%%%% MODE 3 : METEOR DETECTION %%%%%%%%%%%%%%%%%%%%%%%%
     ///%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    std::cout << "================================================" << std::endl;
-    std::cout << "======= FREETURE - Meteor detection mode =======" << std::endl;
-    std::cout << "================================================" << std::endl << std::endl;
+    cout << "================================================" << endl;
+    cout << "======= FREETURE - Meteor detection mode =======" << endl;
+    cout << "================================================" << endl << endl;
 
    /// ------------------------------------------------------------------
    /// --------------------- LOAD FREETURE PARAMETERS -------------------
@@ -419,24 +402,23 @@ void freeture::Freeture::modeMeteorDetection()
     /// ------------------------------------------------------------------
     /// -------------------------- MANAGE LOG ----------------------------
     /// ------------------------------------------------------------------
-    path pLog(cfg.getLogParam().LOG_PATH);
-    if(!boost::filesystem::exists(pLog))
+    fs::path pLog(cfg.getLogParam().LOG_PATH);
+    if(!fs::exists(pLog))
     {
 
-                            if(!create_directory(pLog))
+                            if(!fs::create_directory(pLog))
                                 throw "> Failed to create a directory for logs files.";
                             else
                                 cout << "> Log directory created : " << pLog << endl;
     }
 
-    initLogger(cfg.getLogParam().LOG_PATH + "/", cfg.getLogParam().LOG_SEVERITY);
-    src::severity_logger< LogSeverityLevel > slg;
-    slg.add_attribute("ClassName", boost::log::attributes::constant<std::string>("main.cpp"));
+    
     BOOST_LOG_SCOPED_THREAD_TAG("LogName", "MAIN_THREAD");
-    BOOST_LOG_SEV(slg,notification) << "\n";
-    BOOST_LOG_SEV(slg,notification) << "==============================================";
-    BOOST_LOG_SEV(slg,notification) << "====== FREETURE- Meteor detection mode ======";
-    BOOST_LOG_SEV(slg,notification) << "==============================================";
+
+    LOG_INFO << "\n";
+    LOG_INFO << "==============================================";
+    LOG_INFO << "====== FREETURE- Meteor detection mode ======";
+    LOG_INFO << "==============================================";
 
     /// ------------------------------------------------------------------
     /// ------------------------- SHARED RESSOURCES ----------------------
@@ -469,8 +451,8 @@ void freeture::Freeture::modeMeteorDetection()
                             // Create detection thread.
                             if(cfg.getDetParam().DET_ENABLED) {
 
-                                BOOST_LOG_SEV(slg, normal) << "Start to create detection thread.";
-                                std::cout << "Start to create detection thread." << std::endl;
+                                LOG_INFO << "Start to create detection thread.";
+                                cout << "Start to create detection thread." << endl;
 
                                 detThread = new DetThread(  &frameBuffer,
                                                             &frameBuffer_m,
@@ -495,7 +477,7 @@ void freeture::Freeture::modeMeteorDetection()
                             // Create stack thread.
                             if(cfg.getStackParam().STACK_ENABLED) {
 
-                                BOOST_LOG_SEV(slg, normal) << "Start to create stack Thread.";
+                                LOG_INFO << "Start to create stack Thread.";
 
                                 stackThread = new StackThread(  &signalStack,
                                                                 &signalStack_m,
@@ -547,10 +529,10 @@ void freeture::Freeture::modeMeteorDetection()
 
                                 
 
-                                BOOST_LOG_SEV(slg, normal) << "Success to start acquisition Thread.";
+                                LOG_INFO << "Success to start acquisition Thread.";
 
                                 #ifdef LINUX
-                                BOOST_LOG_SEV(slg, notification) << "This is the process : " << (unsigned long)getpid();
+                                LOG_INFO << "This is the process : " << (unsigned long)getpid();
                                 #endif
 
                                 int cptTime = 0;
@@ -565,8 +547,11 @@ void freeture::Freeture::modeMeteorDetection()
                                 while(!sigTermFlag && !interruption) {
 
 
-
+#ifdef WINDOWS
+                                    Sleep(1);
+#else
                                     sleep(1);
+#endif
 
                                     if(interruption !=0) {
                                         hitKey = fgetc(stdin);
@@ -596,14 +581,14 @@ void freeture::Freeture::modeMeteorDetection()
 
                                     if(detThread != NULL){
                                         if(!detThread->getRunStatus()){
-                                            BOOST_LOG_SEV(slg, critical) << "DetThread not running. Stopping the process ...";
+                                            LOG_ERROR << "DetThread not running. Stopping the process ...";
                                             break;
                                         }
                                     }
 
                                     if(stackThread != NULL){
                                         if(!stackThread->getRunStatus()){
-                                            BOOST_LOG_SEV(slg, critical) << "StackThread not running. Stopping the process ...";
+                                            LOG_ERROR << "StackThread not running. Stopping the process ...";
                                             break;
                                         }
                                     }
@@ -613,13 +598,11 @@ void freeture::Freeture::modeMeteorDetection()
 
                         }catch(exception& e) {
                             
-                            cout << e.what() << endl;
-                            BOOST_LOG_SEV(slg, critical) << e.what();
+                            LOG_ERROR << e.what();
 
                         }catch(const char * msg) {
 
-                            cout << msg << endl;
-                            BOOST_LOG_SEV(slg,critical) << msg;
+                            LOG_ERROR << msg;
 
                         }
 
@@ -641,6 +624,9 @@ void freeture::Freeture::modeMeteorDetection()
 
 }
 
+/// <summary>
+/// Run freeture as single acquisition
+/// </summary>
 void freeture::Freeture::modeSingleAcquisition()
 {
     CameraDeviceManager& manager = CameraDeviceManager::Get();
@@ -655,9 +641,9 @@ void freeture::Freeture::modeSingleAcquisition()
 
         device->Setup(cfg.getCamParam(), cfg.getFramesParam(), cfg.getVidParam(), devID);
 
-        std::cout << "================================================" << endl;
-        std::cout << "======== FREETURE - Single acquisition =========" << endl;
-        std::cout << "================================================" << endl << endl;
+        cout << "================================================" << endl;
+        cout << "======== FREETURE - Single acquisition =========" << endl;
+        cout << "================================================" << endl << endl;
 
         EParser<CamPixFmt> fmt;
         string fstring = fmt.getStringEnum(static_cast<CamPixFmt>(acqFormat));
@@ -736,10 +722,10 @@ void freeture::Freeture::modeSingleAcquisition()
                         frame.mHeight = acqHeight != 0 ? acqHeight : devHeight;
                         frame.mWidth = acqWidth != 0 ? acqWidth : devWidth;
 
-                        std::cout << "++++++++++++++++++++++++++ startx " << frame.mStartX << std::endl;
-                        std::cout << "++++++++++++++++++++++++++ starty " << frame.mStartY << std::endl;
-                        std::cout << "++++++++++++++++++++++++++ acqHeight " << frame.mHeight << std::endl;
-                        std::cout << "++++++++++++++++++++++++++ acqWidth " << frame.mWidth << std::endl;
+                        cout << "++++++++++++++++++++++++++ startx " << frame.mStartX << endl;
+                        cout << "++++++++++++++++++++++++++ starty " << frame.mStartY << endl;
+                        cout << "++++++++++++++++++++++++++ acqHeight " << frame.mHeight << endl;
+                        cout << "++++++++++++++++++++++++++ acqWidth " << frame.mWidth << endl;
 
 
                        
@@ -767,12 +753,12 @@ void freeture::Freeture::modeSingleAcquisition()
 
                                 cout << ">> Saving bmp file ..." << endl;
 
-                                Mat temp1, newMat;
+                                cv::Mat temp1, newMat;
                                 frame.mImg.copyTo(temp1);
 
                                 if(frame.mFormat == MONO12){
                                     newMat = ImgProcessing::correctGammaOnMono12(temp1, 2.2);
-                                    Mat temp = Conversion::convertTo8UC1(newMat);
+                                    cv::Mat temp = Conversion::convertTo8UC1(newMat);
                                 }else {
                                     newMat = ImgProcessing::correctGammaOnMono8(temp1, 2.2);
                                 }
@@ -851,30 +837,33 @@ void freeture::Freeture::modeSingleAcquisition()
 
                                 cout << ">> Display single capture." << endl;
 
-                                Mat temp, temp1;
+                                cv::Mat temp, temp1;
                                 frame.mImg.copyTo(temp1);
 
                                 if(frame.mFormat == MONO12) {
-                                    Mat gammaCorrected = ImgProcessing::correctGammaOnMono12(temp1,2.2);
+                                    cv::Mat gammaCorrected = ImgProcessing::correctGammaOnMono12(temp1,2.2);
                                     temp = Conversion::convertTo8UC1(gammaCorrected);
                                 }else{
                                     temp = ImgProcessing::correctGammaOnMono8(temp1,2.2);
                                 }
 
-                                namedWindow("FreeTure (Press a key to close)", WINDOW_NORMAL);
-                                imshow("FreeTure (Press a key to close)", temp);
-                                waitKey(0);
+                                cv::namedWindow("FreeTure (Press a key to close)", cv::WINDOW_NORMAL);
+                                cv::imshow("FreeTure (Press a key to close)", temp);
+                                cv::waitKey(0);
 
                             }
                         }
     }
     catch(exception& ex)
     {
-        freeture::LogError("Freeture::modeSingleAcquisition","Exception", ex.what() );
+        LOG_ERROR << "Freeture::modeSingleAcquisition Exception" << ex.what();
     }
     delete device;
 }
 
+/// <summary>
+/// Run freeture as Clean logs
+/// </summary>
 void freeture::Freeture::modeCleanLogs()
 {
     device = new Device();
@@ -895,6 +884,9 @@ void freeture::Freeture::modeCleanLogs()
     delete device;
 }
 
+/// <summary>
+/// Main freeture routine function, routes program options to the correct operative function
+/// </summary>
 void freeture::Freeture::Run()
 {
     fetchProgramOption();

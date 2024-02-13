@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 GlobalEvent.h
 
@@ -33,94 +34,94 @@
 * \brief   A Detected event occured on different consecutives frames in time.
 */
 
-#pragma once
+#include "Commons.h"
 
 #include <math.h>
 #include <vector>
 #include <iterator>
 #include <algorithm>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/opencv.hpp>
 #include "Frame.h"
 #include "LocalEvent.h"
 #include "SaveImg.h"
 #include "TimeDate.h"
 
-using namespace cv;
+namespace freeture
+{
 
+    class GlobalEvent {
 
-class GlobalEvent {
-
-    private :
+    private:
 
         int     geAge;
         int     geAgeLastLE;
         TimeDate::Date  geDate;
-        Mat     geMap;
+        cv::Mat     geMap;
         int     geFirstFrameNum;
         int     geLastFrameNum;
-        Mat     geDirMap;
+        cv::Mat     geDirMap;
         float   geShifting;
         bool    newLeAdded;
         bool    geLinear;
         int     geBadPoint;
         int     geGoodPoint;
-        Scalar  geColor;
-        Mat     geMapColor;
+        cv::Scalar  geColor;
+        cv::Mat     geMapColor;
 
 
-    public :
+    public:
 
         std::vector<LocalEvent>  LEList;
         std::vector<bool>        ptsValidity;
         std::vector<float>       distBtwPts;
         std::vector<float>       distBtwMainPts;
-        std::vector<Point>       mainPts;
-        std::vector<Point>       pts;
-        Point leDir;
-        Point geDir;
+        std::vector<cv::Point>       mainPts;
+        std::vector<cv::Point>       pts;
+        cv::Point leDir;
+        cv::Point geDir;
 
-        std::vector<Point>       listA;
-        std::vector<Point>       listB;
-        std::vector<Point>       listC;
-        std::vector<Point>       listu;
-        std::vector<Point>       listv;
+        std::vector<cv::Point>       listA;
+        std::vector<cv::Point>       listB;
+        std::vector<cv::Point>       listC;
+        std::vector<cv::Point>       listu;
+        std::vector<cv::Point>       listv;
         std::vector<float>       listAngle;
         std::vector<float>       listRad;
         std::vector<bool>        mainPtsValidity;
         std::vector<bool>         clusterNegPos;
 
 
-        GlobalEvent(TimeDate::Date frameDate, int frameNum, int frameHeight, int frameWidth, Scalar c);
+        GlobalEvent(TimeDate::Date frameDate, int frameNum, int frameHeight, int frameWidth, cv::Scalar c);
 
         ~GlobalEvent();
 
-        Mat getMapEvent() {return geMap;};
-        Mat getDirMap() {return geDirMap;};
-        int getAge() {return geAge;};
-        int getAgeLastElem() {return geAgeLastLE;};
-        TimeDate::Date getDate() {return geDate;};
-        bool getLinearStatus() {return geLinear;};
-        float getVelocity() {return geShifting;};
-        bool getNewLEStatus() {return newLeAdded;};
-        int getBadPos() {return geBadPoint;};
-        int getGoodPos() {return geGoodPoint;};
-        int getNumFirstFrame() {return geFirstFrameNum;};
-        int getNumLastFrame() {return geLastFrameNum;};
-        Mat getGeMapColor() {return geMapColor;};
+        cv::Mat getMapEvent() { return geMap; };
+        cv::Mat getDirMap() { return geDirMap; };
+        int getAge() { return geAge; };
+        int getAgeLastElem() { return geAgeLastLE; };
+        TimeDate::Date getDate() { return geDate; };
+        bool getLinearStatus() { return geLinear; };
+        float getVelocity() { return geShifting; };
+        bool getNewLEStatus() { return newLeAdded; };
+        int getBadPos() { return geBadPoint; };
+        int getGoodPos() { return geGoodPoint; };
+        int getNumFirstFrame() { return geFirstFrameNum; };
+        int getNumLastFrame() { return geLastFrameNum; };
+        cv::Mat getGeMapColor() { return geMapColor; };
 
-        void setAge(int a) {geAge = a;};
-        void setAgeLastElem(int a) {geAgeLastLE = a;};
-        void setMapEvent(Mat m) {m.copyTo(geMap);};
-        void setNewLEStatus(bool s) {newLeAdded = s;};
-        void setNumFirstFrame(int n) {geFirstFrameNum = n;};
-        void setNumLastFrame(int n) {geLastFrameNum = n;};
+        void setAge(int a) { geAge = a; };
+        void setAgeLastElem(int a) { geAgeLastLE = a; };
+        void setMapEvent(cv::Mat m) { m.copyTo(geMap); };
+        void setNewLEStatus(bool s) { newLeAdded = s; };
+        void setNumFirstFrame(int n) { geFirstFrameNum = n; };
+        void setNumLastFrame(int n) { geLastFrameNum = n; };
 
-        bool ratioFramesDist(std::string &msg);
+        bool ratioFramesDist(std::string& msg);
 
         bool addLE(LocalEvent le);
-        bool continuousGoodPos(int n, std::string &msg);
+        bool continuousGoodPos(int n, std::string& msg);
         bool continuousBadPos(int n);
-        bool negPosClusterFilter(std::string &msg);
+        bool negPosClusterFilter(std::string& msg);
 
-};
+    };
+}

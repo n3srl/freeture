@@ -1,3 +1,4 @@
+#pragma once
 /*
                                 DetThread.h
 
@@ -32,57 +33,50 @@
 * \date    03/06/2014
 * \brief   Detection thread.
 */
+//header refactoring ok
+#include "Commons.h"
 
-#pragma once
+#include <string.h>
 
-#include "config.h"
-
-#ifdef LINUX
-    #define BOOST_LOG_DYN_LINK 1
-#endif
-
-#include "SMTPClient.h"
-#include <iterator>
-#include "Fits.h"
-#include "Fits2D.h"
-#include "TimeDate.h"
-#include "Fits3D.h"
-#include "Stack.h"
-#include "Detection.h"
-#include "DetectionTemporal.h"
-#include "DetectionTemplate.h"
-#include "EStackMeth.h"
-#include "EDetMeth.h"
+#include <boost/thread/thread.hpp>
+#include <boost/thread/condition_variable.hpp>
 #include <boost/circular_buffer.hpp>
-#include <boost/filesystem.hpp>
-#include "ESmtpSecurity.h"
+
+#include "Fits.h"
 #include "SParam.h"
+#include "TimeDate.h"
+#include "Frame.h"
 
-using namespace boost::filesystem;
-using namespace cv;
+// #include "SMTPClient.h"
+// #include <iterator>
+// #include "Fits.h"
+// #include "Fits2D.h"
+// #include "TimeDate.h"
+// #include "Fits3D.h"
+// #include "Stack.h"
+// #include "Detection.h"
+// #include "DetectionTemporal.h"
+// #include "DetectionTemplate.h"
+// #include "EDetMeth.h"
+// #include <boost/circular_buffer.hpp>
+// #include <boost/filesystem.hpp>
+// #include "ESmtpSecurity.h"
+// #include "SParam.h"
+// 
+// using namespace boost::filesystem;
+// using namespace boost::posix_time;
 
-using namespace boost::posix_time;
+namespace freeture
+{
+    class Detection;
 
-class DetThread {
+    class DetThread
+    {
 
-    private :
+    private:
 
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
-
-        static class Init{
-
-            public :
-
-                Init() {
-
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("DetThread"));
-
-                }
-
-        }initializer;
-
-        boost::thread                   *pThread;                   // Pointer on detection thread.
-        Detection                       *pDetMthd;                  // Pointer on detection method.
+        boost::thread* pThread;                   // Pointer on detection thread.
+        Detection* pDetMthd;                  // Pointer on detection method.
         bool                            mMustStop;
         boost::mutex                    mMustStopMutex;
         std::string                          mStationName;               // Name of the station              (parameter from configuration file).
@@ -97,14 +91,14 @@ class DetThread {
         int                             mNbDetection;               // Number of detection.
         bool                            mInterruptionStatus;
         boost::mutex                    mInterruptionStatusMutex;
-        boost::circular_buffer<Frame>   *frameBuffer;
-        boost::mutex                    *frameBuffer_mutex;
-        boost::condition_variable       *frameBuffer_condition;
-        bool                            *detSignal;
-        boost::mutex                    *detSignal_mutex;
-        boost::condition_variable       *detSignal_condition;
+        boost::circular_buffer<Frame>* frameBuffer;
+        boost::mutex* frameBuffer_mutex;
+        boost::condition_variable* frameBuffer_condition;
+        bool* detSignal;
+        boost::mutex* detSignal_mutex;
+        boost::condition_variable* detSignal_condition;
         std::string                          mCurrentDataSetLocation;
-        std::vector<std::pair<std::string,int>>        mDetectionResults;
+        std::vector<std::pair<std::string, int>>        mDetectionResults;
         bool                            mForceToReset;
         detectionParam                  mdtp;
         dataParam                       mdp;
@@ -114,20 +108,20 @@ class DetThread {
         int                             mNbFramesAround; // Number of frames to keep around an event.
 
 
-    public :
+    public:
 
-         DetThread(  boost::circular_buffer<Frame>   *fb,
-                            boost::mutex                    *fb_m,
-                            boost::condition_variable       *fb_c,
-                            bool                            *dSignal,
-                            boost::mutex                    *dSignal_m,
-                            boost::condition_variable       *dSignal_c,
-                            detectionParam                  dtp,
-                            dataParam                       dp,
-                            mailParam mp,
-                            stationParam sp,
-                            fitskeysParam fkp,
-                            CamPixFmt pfmt);
+        DetThread(boost::circular_buffer<Frame>* fb,
+            boost::mutex* fb_m,
+            boost::condition_variable* fb_c,
+            bool* dSignal,
+            boost::mutex* dSignal_m,
+            boost::condition_variable* dSignal_c,
+            detectionParam                  dtp,
+            dataParam                       dp,
+            mailParam mp,
+            stationParam sp,
+            fitskeysParam fkp,
+            CamPixFmt pfmt);
 
         ~DetThread();
 
@@ -170,9 +164,9 @@ class DetThread {
 
         void updateDetectionReport() {
 
-            if(mCurrentDataSetLocation != "") {
+            if (mCurrentDataSetLocation != "") {
 
-                mDetectionResults.push_back(std::pair<std::string,int>(mCurrentDataSetLocation, mNbDetection));
+                mDetectionResults.push_back(std::pair<std::string, int>(mCurrentDataSetLocation, mNbDetection));
                 mNbDetection = 0;
 
             }
@@ -184,6 +178,5 @@ class DetThread {
 
         };
 
-};
-
-
+    };
+}
