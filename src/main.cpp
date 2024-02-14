@@ -4,37 +4,36 @@
 * \version 1.0
 * \date    03/22/2023
 */
+#include <memory>
 
 #include "Freeture.h"
-#include "CameraDeviceManager.h"
-
+#include "Logger.h"
 
 using namespace std;
 using namespace freeture;
 
-
-
+unique_ptr<Freeture> freeture_instance;
 
 int main(int argc, const char ** argv)
 {
-    std::cout << "================================================" << endl;
-    std::cout << "======        FREETURE 13 - V1.0.1       =======" << endl;
-    std::cout << "================================================" << endl << endl;
+    Logger& logger = Logger::Get();
+
+    LOG_INFO << "================================================" << endl;
+    LOG_INFO << "======        FREETURE - "<< VERSION <<"           ======= " << endl;
+    LOG_INFO << "================================================" << endl << endl;
+
     try
     {
-        
-        CameraDeviceManager& manager = CameraDeviceManager::Get();
-        Freeture* freeture =new Freeture(argc,argv);
-
-        freeture->Run();
+        freeture_instance = make_unique<Freeture>(argc,argv);
+        freeture_instance->Run();
     }
     catch(exception& e)
     {
-        cout << ">> Error : " << e.what() << endl;
+        LOG_ERROR << "main;" << ">> Error : " << e.what() << endl;
     }
     catch(const char * msg)
     {
-        cout << ">> Error : " << msg << endl;
+        LOG_ERROR << "main;" << ">> Error : " << msg << endl;
     }
 
     return 0 ;

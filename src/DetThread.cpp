@@ -49,6 +49,7 @@
 #include "Fits3D.h"
 #include "Fits2D.h"
 #include "TimeDate.h"
+#include "CfgParam.h"
 
 namespace fs = boost::filesystem;
 namespace pt = boost::posix_time;
@@ -56,19 +57,14 @@ namespace pt = boost::posix_time;
 using namespace freeture;
 using namespace std;
 
-DetThread::DetThread(   boost::circular_buffer<Frame>  *fb,
-                        boost::mutex                   *fb_m,
-                        boost::condition_variable      *fb_c,
-                        bool                           *dSignal,
-                        boost::mutex                   *dSignal_m,
-                        boost::condition_variable      *dSignal_c,
-                        detectionParam                  dtp,
-                        dataParam                       dp,
-                        mailParam mp,
-                        stationParam sp,
-                        fitskeysParam fkp,
-                        CamPixFmt pfmt):
-
+DetThread::DetThread(boost::circular_buffer<Frame>* fb,
+    boost::mutex* fb_m,
+    boost::condition_variable* fb_c,
+    bool* dSignal,
+    boost::mutex* dSignal_m,
+    boost::condition_variable* dSignal_c,
+    std::shared_ptr<CfgParam> cfg
+):
                         pDetMthd(NULL), mForceToReset(false), mMustStop(false),
                         mEventPath(""), mIsRunning(false), mNbDetection(0), mWaitFramesToCompleteEvent(false), mCurrentDataSetLocation(""),
                         mNbWaitFrames(0), mInterruptionStatus(false) {
@@ -80,24 +76,28 @@ DetThread::DetThread(   boost::circular_buffer<Frame>  *fb,
     detSignal_mutex = dSignal_m;
     detSignal_condition = dSignal_c;
     pThread = NULL;
-    mFormat = pfmt;
-    mStationName = sp.STATION_NAME;
-    mdp = dp;
-    mdtp = dtp;
-    mmp = mp;
-    mfkp = fkp;
-    mstp = sp;
+
+    mFormat = cfg->getCamParam().ACQ_FORMAT;
+
+
+    mStationName = cfg->getStationParam().STATION_NAME;
+    mdp = cfg->getDataParam();
+    mdtp = cfg->getDetParam();
+    mmp = cfg->getMailParam();
+    mfkp = cfg->getFitskeysParam();
+    mstp = cfg->getStationParam();
+
     mNbFramesAround = 0;
 
-    mFitsHeader.loadKeys(fkp, sp);
+    mFitsHeader.loadKeys(mfkp, mstp);
 
-    switch(dtp.DET_METHOD){
+    switch(mdtp.DET_METHOD){
 
         case TEMPORAL_MTHD :
 
             {
 
-                pDetMthd = new DetectionTemporal(dtp, pfmt);
+                pDetMthd = new DetectionTemporal(mdtp, mFormat);
 
             }
 
@@ -107,7 +107,7 @@ DetThread::DetThread(   boost::circular_buffer<Frame>  *fb,
 
             {
 
-                pDetMthd = new DetectionTemplate(dtp, pfmt);
+                pDetMthd = new DetectionTemplate(mdtp, mFormat);
 
             }
 

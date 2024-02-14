@@ -117,14 +117,11 @@ namespace freeture
         double         mMaxGain;
         //int         mNbFrame;
 
-
         void Setup(cameraParam cp, framesParam fp, videoParam vp, int cid);
 
         Device();
 
         ~Device();
-
-        InputDeviceType getDeviceType(CamSdkType t);
 
         CamSdkType getDeviceSdk(int id);
 

@@ -68,7 +68,7 @@ using namespace std;
      */
     bool freeture::CameraLucidArena_PHX016S::createDevice(int id)
     {
-        std::cout << "CREO ARENASDK LUCID CAM" << std::endl;
+        LOG_DEBUG << "CREO ARENASDK LUCID CAM" << std::endl;
         try
         {
             if (m_ArenaSDKSystem == nullptr)
@@ -83,7 +83,9 @@ using namespace std;
 
         if(!getDeviceNameById(id, deviceName))
             return false;
-        std::cout << "DEVICE NAME " << deviceName << std::endl;
+
+        LOG_DEBUG<< "DEVICE NAME " << deviceName << std::endl;
+
         vector<Arena::DeviceInfo> deviceInfos = m_ArenaSDKSystem->GetDevices();
         Arena::DeviceInfo& device_info = deviceInfos[id];
         m_Camera = m_ArenaSDKSystem->CreateDevice(device_info);
@@ -899,14 +901,14 @@ using namespace std;
 
 		uint64_t timestampNs = pImage->GetTimestampNs();
 
-		std::cout << " (" << size << " bytes; " << width << "x" << height << "; " << pixFormat << "; timestamp (ns): " << timestampNs << ")";
+		LOG_DEBUG<< " (" << size << " bytes; " << width << "x" << height << "; " << pixFormat << "; timestamp (ns): " << timestampNs << ")";
 
 		// Requeue image buffer
 		//    Requeue an image buffer when access to it is no longer needed.
 		//    Notice that failing to requeue buffers may cause memory to leak and
 		//    may also result in the stream engine being starved due to there
 		//    being no available buffers.
-		std::cout << " and requeue\n";
+		LOG_DEBUG<< " and requeue\n";
 
 		m_Camera->RequeueBuffer(pImage);
 

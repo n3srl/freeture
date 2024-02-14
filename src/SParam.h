@@ -151,7 +151,7 @@ namespace freeture
     // ******************************************************
 
     struct cameraParam {
-        int         ACQ_FPS;
+        double      ACQ_FPS;
         CamPixFmt   ACQ_FORMAT;
         bool        ACQ_RES_CUSTOM_SIZE;
         bool        SHIFT_BITS;
@@ -163,6 +163,7 @@ namespace freeture
         int         ACQ_STARTY;
         int         ACQ_HEIGHT;
         int         ACQ_WIDTH;
+        bool        EXPOSURE_CONTROL_ENABLED;
         int         EXPOSURE_CONTROL_FREQUENCY;
         bool        EXPOSURE_CONTROL_SAVE_IMAGE;
         bool        EXPOSURE_CONTROL_SAVE_INFOS;
@@ -271,7 +272,7 @@ namespace freeture
         std::string STATION_NAME;
         std::string TELESCOP;
         std::string OBSERVER;
-        std::string INSTRUME;
+        std::string INSTRUMENT;
         std::string CAMERA;
         double FOCAL;
         double APERTURE;

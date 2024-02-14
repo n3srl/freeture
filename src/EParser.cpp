@@ -118,6 +118,4 @@ template<> EParser<CamSdkType>::EParser() {
     enumMap["V4L2"]          = CamSdkType::V4L2;
     enumMap["VIDEOINPUT"]    = CamSdkType::VIDEOINPUT;
     enumMap["UNKNOWN"]       = CamSdkType::UNKNOWN;
-
 }
-

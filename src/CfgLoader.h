@@ -34,6 +34,7 @@
 * \brief   Load parameters from a configuration file.
 */
 #include "Commons.h"
+#include "CommonConfig.h"
 
 #include <fstream>
 #include <string>
@@ -123,16 +124,6 @@ namespace freeture
          * @return Success to get value associated with given key.
          */
         bool Get(const std::string& key, bool& value) const;
-
-    private:
-
-        /**
-         * Remove spaces in configuration file's lines.
-         *
-         * @param str Configuration file's line.
-         * @return String without space.
-         */
-        static std::string Trim(const std::string& str);
 
     };
 }

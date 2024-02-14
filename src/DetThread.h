@@ -36,7 +36,8 @@
 //header refactoring ok
 #include "Commons.h"
 
-#include <string.h>
+#include <memory>
+#include <string>
 
 #include <boost/thread/thread.hpp>
 #include <boost/thread/condition_variable.hpp>
@@ -69,6 +70,7 @@
 namespace freeture
 {
     class Detection;
+    class CfgParam;
 
     class DetThread
     {
@@ -100,6 +102,7 @@ namespace freeture
         std::string                          mCurrentDataSetLocation;
         std::vector<std::pair<std::string, int>>        mDetectionResults;
         bool                            mForceToReset;
+
         detectionParam                  mdtp;
         dataParam                       mdp;
         mailParam                       mmp;
@@ -110,18 +113,14 @@ namespace freeture
 
     public:
 
-        DetThread(boost::circular_buffer<Frame>* fb,
-            boost::mutex* fb_m,
-            boost::condition_variable* fb_c,
-            bool* dSignal,
-            boost::mutex* dSignal_m,
-            boost::condition_variable* dSignal_c,
-            detectionParam                  dtp,
-            dataParam                       dp,
-            mailParam mp,
-            stationParam sp,
-            fitskeysParam fkp,
-            CamPixFmt pfmt);
+        DetThread(boost::circular_buffer<Frame>*,
+            boost::mutex*,
+            boost::condition_variable*,
+            bool*,
+            boost::mutex*,
+            boost::condition_variable*,
+            std::shared_ptr<CfgParam>
+           );
 
         ~DetThread();
 

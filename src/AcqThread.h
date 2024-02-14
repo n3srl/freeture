@@ -37,9 +37,10 @@
 //headers refactoring ok
 #include "Commons.h"
 
+#include <memory>
+
 #include "TimeDate.h"
 #include "Frame.h"
-
 
 #include "SParam.h"
 
@@ -54,6 +55,7 @@ namespace freeture
     class StackThread;
     class Device;
     class ExposureControl;
+    class CfgParam;
 
     class AcqThread {
 
@@ -63,12 +65,12 @@ namespace freeture
         boost::mutex        mMustStopMutex;
         boost::thread* mThread;               // Acquisition thread.
         bool                mThreadTerminated;      // Terminated status of the thread.
-        Device* mDevice;               // Device used for acquisition.
+        Device* m_Device;               // Device used for acquisition.
         int                 mDeviceID;              // Index of the device to use.
         scheduleParam       mNextAcq;               // Next scheduled acquisition.
         int                 mNextAcqIndex;
-        DetThread* pDetection;            // Pointer on detection thread in order to stop it or reset it when a regular capture occurs.
-        StackThread* pStack;                // Pointer on stack thread in order to save and reset a stack when a regular capture occurs.
+        std::shared_ptr<DetThread> pDetection;            // Pointer on detection thread in order to stop it or reset it when a regular capture occurs.
+        std::shared_ptr<StackThread> pStack;                // Pointer on stack thread in order to save and reset a stack when a regular capture occurs.
         ExposureControl* pExpCtrl;              // Pointer on exposure time control object while sunrise and sunset.
         std::string              mOutputDataPath;        // Dynamic location where to save data (regular captures etc...).
         std::string              mCurrentDate;
@@ -77,7 +79,7 @@ namespace freeture
         int                 mStartSunsetTime;       // In seconds.
         int                 mStopSunsetTime;        // In seconds.
         int                 mCurrentTime;           // In seconds.
-
+        
         // Parameters from configuration file.
         stackParam          msp;
         stationParam        mstp;
@@ -105,27 +107,19 @@ namespace freeture
 
     public:
 
-        AcqThread(boost::circular_buffer<Frame>* fb,
-            boost::mutex* fb_m,
-            boost::condition_variable* fb_c,
-            bool* sSignal,
-            boost::mutex* sSignal_m,
-            boost::condition_variable* sSignal_c,
-            bool* dSignal,
-            boost::mutex* dSignal_m,
-            boost::condition_variable* dSignal_c,
-            DetThread* detection,
-            StackThread* stack,
-            int                                 cid,
-            dataParam                           dp,
-            stackParam                          sp,
-            stationParam                        stp,
-            detectionParam                      dtp,
-            cameraParam                         acq,
-            framesParam                         fp,
-            videoParam                          vp,
-            fitskeysParam                       fkp,
-            freeture::Device* device);
+        AcqThread(boost::circular_buffer<Frame>*,
+            boost::mutex*,
+            boost::condition_variable*,
+            bool*,
+            boost::mutex*,
+            boost::condition_variable*,
+            bool*,
+            boost::mutex*,
+            boost::condition_variable*,
+            std::shared_ptr <DetThread>,
+            std::shared_ptr <StackThread>,
+            std::shared_ptr<CfgParam>
+            );
 
         ~AcqThread(void);
 

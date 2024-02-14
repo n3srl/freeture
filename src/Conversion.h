@@ -39,6 +39,8 @@
 #include <iostream>
 #include <list>
 #include <string>
+#include "EInputDeviceType.h"
+#include "ECamSdkType.h"
 
 namespace cv {
     class Mat;
@@ -120,6 +122,8 @@ namespace freeture
         static int roundToUpperRange(int n);
 
         static float roundToNearest(float value, float precision);
+
+        InputDeviceType getDeviceType(CamSdkType t);
 
     };
 }

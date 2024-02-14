@@ -9,13 +9,15 @@ namespace Arena {
 
 namespace freeture
 {
-    class CameraLucidArena_PHX016SScanner : public CameraScanner
+    class CameraLucidArena_Scanner : public CameraScanner
     {
     private:
         Arena::ISystem* m_ArenaSDKSystem = nullptr;
 
     public:
-        CameraLucidArena_PHX016SScanner(CamSdkType);
+        CameraLucidArena_Scanner(CamSdkType);
+
+        ~CameraLucidArena_Scanner();
 
         /**
          * Called to get the current reachable cameras.

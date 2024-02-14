@@ -8,6 +8,7 @@
 #include "Commons.h"
 
 #include <fstream>
+#include <string>
 #include <memory>
 
 #include <boost/smart_ptr/shared_ptr.hpp>
@@ -31,6 +32,9 @@
 
 #include <boost/log/attributes/scoped_attribute.hpp>
 
+#include <boost/log/expressions/keyword_fwd.hpp>
+#include <boost/log/expressions/keyword.hpp>
+#include "boost/log/keywords/rotation_size.hpp"
 
 namespace logging = boost::log;
 namespace src = boost::log::sources;
@@ -51,55 +55,41 @@ namespace freeture
     {
         public:
 
-            static class LoggerInstance {
-                Logger* logger;
-
-            public:
-                LoggerInstance() {
-                    logger = Logger::GetInstance();
-                    logger->init();
-                    logger->add_common_attributes();
-                }
-            } log;
-        
-            static Logger* GetInstance() {
-                if (m_Instance == nullptr)
-                    m_Instance = new Logger();
-
-                return m_Instance;
-            }
-
-            ~Logger()
+            static Logger& Get()
             {
-                delete m_Instance;
+                static Logger instance;
+
+                return instance;
             }
 
         private: 
-           static Logger* m_Instance;
 
            Logger()
            {
+               init();
+               add_common_attributes();
            }
-        
+    public:
            void add_common_attributes()
            {
                boost::shared_ptr< logging::core > core = logging::core::get();
-               core->add_global_attribute("LineID", attrs::counter< unsigned int >(1));
                core->add_global_attribute("TimeStamp", attrs::local_clock());
-               core->add_global_attribute("Scope", attrs::named_scope());
            }
 
             void init()
             {
+                std::string log_string = "[%TimeStamp%];<%Severity%>;(%ClassName%); %Message%";
+
                 logging::add_file_log
                 (
-                    keywords::file_name = "sample_%N.log",
+                    keywords::file_name = "freeture_%N.log",
                     keywords::rotation_size = 10 * 1024 * 1024,
                     keywords::time_based_rotation = sinks::file::rotation_at_time_point(0, 0, 0),
-                    keywords::format = "[%TimeStamp%];<Severity>;(%ClassName%); %Message%"
+                    keywords::auto_flush = true,
+                    keywords::format = log_string
                 );
 
-                logging::add_console_log(std::cout, boost::log::keywords::format = "[%TimeStamp%];<Severity>;(%ClassName%); %Message%");
+                logging::add_console_log(std::cout, boost::log::keywords::format = log_string);
             }
     };
 }

@@ -34,10 +34,14 @@
 */
 //header refactoring ok
 #include "AcqThread.h"
+#include <memory>
 
 #include "DetThread.h"
-#include "Detection.h"
 #include "StackThread.h"
+
+#include "CfgParam.h"
+
+#include "Detection.h"
 #include "NodeExporterMetrics.h"
 #include "CameraDeviceManager.h"
 #include "Device.h"
@@ -67,21 +71,14 @@ AcqThread::AcqThread(   boost::circular_buffer<Frame>       *fb,
                         bool                                *dSignal,
                         boost::mutex                        *dSignal_m,
                         boost::condition_variable           *dSignal_c,
-                        DetThread                           *detection,
-                        StackThread                         *stack,
-                        int                                 cid,
-                        dataParam                           dp,
-                        stackParam                          sp,
-                        stationParam                        stp,
-                        detectionParam                      dtp,
-                        cameraParam                         acq,
-                        framesParam                         fp,
-                        videoParam                          vp,
-                        fitskeysParam                       fkp,
-                        Device*                             device )
+                        shared_ptr<DetThread>               detection,
+                        shared_ptr<StackThread>             stack,
+                        std::shared_ptr<CfgParam> cfg
+                        )
 {
-    LOG_DEBUG << "AcqThread::AcqThread"<<endl;
-    CameraDeviceManager& manager = CameraDeviceManager::Get();
+    LOG_DEBUG << "AcqThread::AcqThread";
+    shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
+
     frameBuffer             = fb;
     frameBuffer_mutex       = fb_m;
     frameBuffer_condition   = fb_c;
@@ -95,25 +92,24 @@ AcqThread::AcqThread(   boost::circular_buffer<Frame>       *fb,
     pStack                  = stack;
     mThread                 = NULL;
     mMustStop               = false;
-    mDevice                 = manager.getDevice();
+    m_Device                 = m_CameraDeviceManager->getDevice();
     mThreadTerminated       = false;
     mNextAcqIndex           = 0;
     pExpCtrl                = NULL;
-    mDeviceID               = cid;
-    mdp                     = dp;
-    msp                     = sp;
-    mstp                    = stp;
-    mdtp                    = dtp;
-    mcp                     = acq;
-    mvp                     = vp;
-    mfp                     = fp;
 
+    mdp                     = cfg->getDataParam();
+    msp                     = cfg->getStackParam();
+    mstp                    = cfg->getStationParam();
+    mdtp                    = cfg->getDetParam();
+    mcp                     = cfg->getCamParam();
+    mfp                     = cfg->getFramesParam();
+    mvp                     = cfg->getVidParam();
 }
 
 AcqThread::~AcqThread(void){
     LOG_DEBUG << "AcqThread::~AcqThread"<< endl;
-    if(mDevice != NULL)
-        delete mDevice;
+    if(m_Device != NULL)
+        delete m_Device;
 
     if(mThread != NULL)
         delete mThread;
@@ -138,10 +134,10 @@ void AcqThread::stopThread(){
 bool AcqThread::buildCameraInContinousMode(bool rebuild = false) {
     // CREATE CAMERA
     
-    mDevice->Setup(mcp, mfp, mvp, mDeviceID);
-    if (mDevice->mCam == nullptr) {
+    m_Device->Setup(mcp, mfp, mvp, mDeviceID);
+    if (m_Device->mCam == nullptr) {
             
-        if(!mDevice->createCamera()) {
+        if(!m_Device->createCamera()) {
             LOG_DEBUG << "CREATE CAMERA ERROR" << endl;
             return false;
         }
@@ -243,7 +239,7 @@ void AcqThread::operator()()
         bool exposureControlActive = false;
         
         // If exposure can be set on the input device.
-        if(mDevice->getExposureStatus())
+        if(m_Device->getExposureStatus())
         {
             if (pExpCtrl!=nullptr)
                 delete pExpCtrl;
@@ -263,7 +259,7 @@ void AcqThread::operator()()
             string location = "";
 
             // Load videos file or frames directory if input type is FRAMES or VIDEO
-            if(!mDevice->loadNextCameraDataSet(location))
+            if(!m_Device->loadNextCameraDataSet(location))
                 break;
             
             if(pDetection != NULL)
@@ -285,7 +281,7 @@ void AcqThread::operator()()
                 vector<int> nextSunrise;
 
                 // Grab a frame.
-                if(mDevice->runContinuousCapture(newFrame)) {
+                if(m_Device->runContinuousCapture(newFrame)) {
 
                     if (LOG_FRAME_STATUS)
                     {
@@ -293,7 +289,7 @@ void AcqThread::operator()()
                     }
 
                     // If camera type in input is FRAMES or VIDEO.
-                    if(mDevice->mVideoFramesInput) {
+                    if(m_Device->mVideoFramesInput) {
                         
                         // Push the new frame in the framebuffer.
                         boost::mutex::scoped_lock lock(*frameBuffer_mutex);
@@ -403,7 +399,7 @@ void AcqThread::operator()()
 
                         // Adjust exposure time.
                         if(pExpCtrl != NULL && exposureControlActive)
-                            exposureControlStatus = pExpCtrl->controlExposureTime(mDevice, newFrame.mImg, newFrame.mDate, mdtp.MASK, mDevice->mMinExposureTime, mcp.ACQ_FPS);
+                            exposureControlStatus = pExpCtrl->controlExposureTime(m_Device, newFrame.mImg, newFrame.mDate, mdtp.MASK, m_Device->mMinExposureTime, mcp.ACQ_FPS);
 
                         // Get current date YYYYMMDD.
                         string currentFrameDate =   TimeDate::getYYYYMMDD(newFrame.mDate);
@@ -415,7 +411,7 @@ void AcqThread::operator()()
                             computeSunTimes();
                         }
                         // Acquisition at regular time interval is enabled.
-                        if(mcp.regcap.ACQ_REGULAR_ENABLED && !mDevice->mVideoFramesInput) {
+                        if(mcp.regcap.ACQ_REGULAR_ENABLED && !m_Device->mVideoFramesInput) {
                             
                             cDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
                             string nowDate = cDate.substr(0, cDate.find("."));
@@ -460,7 +456,7 @@ void AcqThread::operator()()
 
                         }
                         // Acquisiton at scheduled time is enabled.
-                        if(mcp.schcap.ACQ_SCHEDULE.size() != 0 && mcp.schcap.ACQ_SCHEDULE_ENABLED && !mDevice->mVideoFramesInput) {
+                        if(mcp.schcap.ACQ_SCHEDULE.size() != 0 && mcp.schcap.ACQ_SCHEDULE_ENABLED && !m_Device->mVideoFramesInput) {
 
                             unsigned long next = (mNextAcq.hours * 3600 + mNextAcq.min * 60 + mNextAcq.sec) - (newFrame.mDate.hours * 3600 + newFrame.mDate.minutes * 60 + newFrame.mDate.seconds);
 
@@ -523,7 +519,7 @@ void AcqThread::operator()()
 
                         // Check sunrise and sunset time.
                         if( (isSunrise(currentTimeInSec) || isSunset(currentTimeInSec)) 
-                                && !mDevice->mVideoFramesInput) {
+                                && !m_Device->mVideoFramesInput) {
                             exposureControlActive = true;
 
                         } else {
@@ -556,20 +552,20 @@ void AcqThread::operator()()
                                 if(isDay(currentTimeInSec)) 
                                 {
 
-                                    LOG_INFO << "Apply day exposure time : " << mDevice->getDayExposureTime();
-                                    mDevice->setCameraDayExposureTime();
-                                    LOG_INFO << "Apply day exposure time : " << mDevice->getDayGain();
-                                    mDevice->setCameraDayGain();
+                                    LOG_INFO << "Apply day exposure time : " << m_Device->getDayExposureTime();
+                                    m_Device->setCameraDayExposureTime();
+                                    LOG_INFO << "Apply day exposure time : " << m_Device->getDayGain();
+                                    m_Device->setCameraDayGain();
 
                                 // In NIGHTTIME : Apply maximum available exposure time.
                                 } 
                                 else if(isNight(currentTimeInSec)) 
                                 {
 
-                                    LOG_INFO << "Apply night exposure time." << mDevice->getNightExposureTime();
-                                    mDevice->setCameraNightExposureTime();
-                                    LOG_INFO << "Apply night exposure time." << mDevice->getNightGain();
-                                    mDevice->setCameraNightGain();
+                                    LOG_INFO << "Apply night exposure time." << m_Device->getNightExposureTime();
+                                    m_Device->setCameraNightExposureTime();
+                                    LOG_INFO << "Apply night exposure time." << m_Device->getNightGain();
+                                    m_Device->setCameraNightGain();
                                 }
                             }
 
@@ -594,7 +590,7 @@ void AcqThread::operator()()
                 NodeExporterMetrics::GetInstance().UpdateMetrics( fps, tacq,&nextSunrise, &nextSunset );
                 NodeExporterMetrics::GetInstance().WriteMetrics();
 
-            } while(stop == false && !mDevice->getCameraStatus());
+            } while(stop == false && !m_Device->getCameraStatus());
 
             // Reset detection process to prepare the analyse of a new data set.
             if(pDetection != NULL) 
@@ -609,7 +605,7 @@ void AcqThread::operator()()
 
             // Clear framebuffer.
             resetFrameBuffer();
-        } while(mDevice->getCameraDataSetStatus() && stop == false);
+        } while(m_Device->getCameraDataSetStatus() && stop == false);
 
     }catch(const boost::thread_interrupted&){
        LOG_WARNING << "AcqThread ended.";
@@ -619,7 +615,7 @@ void AcqThread::operator()()
         LOG_ERROR << msg << endl;
     }
 
-    mDevice->stopCamera();
+    m_Device->stopCamera();
 
     mThreadTerminated = true;
 
@@ -782,7 +778,7 @@ bool AcqThread::buildAcquisitionDirectory(string YYYYMMDD){
 void AcqThread::runImageCapture(int imgNumber, int imgExposure, int imgGain, CamPixFmt imgFormat, ImgFormat imgOutput, string imgPrefix) {
     LOG_DEBUG << "AcqThread::runImageCapture"<<endl;
     // Stop camera
-    mDevice->stopCamera();
+    m_Device->stopCamera();
 
     // Stop stack process.
     if(pStack != NULL){
@@ -840,7 +836,7 @@ void AcqThread::runImageCapture(int imgNumber, int imgExposure, int imgGain, Cam
 
         // Run single capture.
         LOG_INFO << "Run single capture.";
-        if(mDevice->runSingleCapture(frame)) {
+        if(m_Device->runSingleCapture(frame)) {
 
             LOG_INFO << "Single capture succeed !";
             LOG_DEBUG << "Single capture succeed !" << endl;
@@ -1286,16 +1282,16 @@ bool AcqThread::prepareAcquisitionOnDevice()
     LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice" << endl;
     
     // SET SIZE
-    if(!mDevice->setCameraSize())
+    if(!m_Device->setCameraSize())
         return false;
     // SET FORMAT
-    if(!mDevice->setCameraPixelFormat())
+    if(!m_Device->setCameraPixelFormat())
         return false;
 
     // LOAD GET BOUNDS
-    mDevice->getCameraFPSBounds();
-    mDevice->getCameraExposureBounds();
-    mDevice->getCameraGainBounds();
+    m_Device->getCameraFPSBounds();
+    m_Device->getCameraExposureBounds();
+    m_Device->getCameraGainBounds();
 
     // Get Sunrise start/stop, Sunset start/stop. ---
     computeSunTimes();
@@ -1306,13 +1302,13 @@ bool AcqThread::prepareAcquisitionOnDevice()
         LOG_DEBUG << "*************************** SET NIGHT AUTO NO" << endl;
         LOG_INFO << "DAYTIME         :  NO";
         LOG_INFO << "AUTO EXPOSURE   :  NO";
-        LOG_INFO << "EXPOSURE TIME   :  " << mDevice->getNightExposureTime();
-        LOG_INFO << "GAIN            :  " << mDevice->getNightGain();
+        LOG_INFO << "EXPOSURE TIME   :  " << m_Device->getNightExposureTime();
+        LOG_INFO << "GAIN            :  " << m_Device->getNightGain();
 
-        if(!mDevice->setCameraNightExposureTime())
+        if(!m_Device->setCameraNightExposureTime())
             return false;
 
-        if(!mDevice->setCameraNightGain())
+        if(!m_Device->setCameraNightGain())
            return false;
 
     }
@@ -1321,40 +1317,40 @@ bool AcqThread::prepareAcquisitionOnDevice()
             LOG_DEBUG << "*************************** SET DAY AUTO NO" << endl;
             LOG_INFO << "DAYTIME         :  YES";
             LOG_INFO << "AUTO EXPOSURE   :  NO";
-            LOG_INFO << "EXPOSURE TIME   :  " << mDevice->getDayExposureTime();
-            LOG_INFO << "GAIN            :  " << mDevice->getDayGain();
+            LOG_INFO << "EXPOSURE TIME   :  " << m_Device->getDayExposureTime();
+            LOG_INFO << "GAIN            :  " << m_Device->getDayGain();
 
-            if(!mDevice->setCameraDayExposureTime())
+            if(!m_Device->setCameraDayExposureTime())
                 return false;
 
-            if(!mDevice->setCameraDayGain())
+            if(!m_Device->setCameraDayGain())
                 return false;
 
     } else {
 
         LOG_INFO << "DAYTIME         :  NO";
         LOG_INFO << "AUTO EXPOSURE   :  YES";
-        LOG_INFO << "EXPOSURE TIME   :  Minimum (" << mDevice->mMinExposureTime << ")"<< mDevice->getNightExposureTime();
-        LOG_INFO << "GAIN            :  Minimum (" << mDevice->mMinGain << ")";
+        LOG_INFO << "EXPOSURE TIME   :  Minimum (" << m_Device->mMinExposureTime << ")"<< m_Device->getNightExposureTime();
+        LOG_INFO << "GAIN            :  Minimum (" << m_Device->mMinGain << ")";
         LOG_DEBUG << "*************************** SET NIGHT AUTO SI" << endl;
-        if(!mDevice->setCameraExposureTime(mDevice->mMinExposureTime))
+        if(!m_Device->setCameraExposureTime(m_Device->mMinExposureTime))
             return false;
 
-        if(!mDevice->setCameraGain(mDevice->mMinGain))
+        if(!m_Device->setCameraGain(m_Device->mMinGain))
             return false;
 
     }
 
     // SET FPS.
-    if(!mDevice->setCameraFPS())
+    if(!m_Device->setCameraFPS())
         return false;
 
     // INIT CAMERA.
-    if(!mDevice->initializeCamera())
+    if(!m_Device->initializeCamera())
         return false;
 
     // START CAMERA.
-    if(!mDevice->startCamera())
+    if(!m_Device->startCamera())
         return false;
 
     return true;

@@ -35,6 +35,7 @@
 */
 //header refactoring ok
 #include "Commons.h"
+#include <memory>
 
 #include <string.h>
 
@@ -65,6 +66,8 @@
 
 namespace freeture
 {
+    class CfgParam;
+
     class StackThread {
 
     private:
@@ -93,17 +96,14 @@ namespace freeture
 
     public:
 
-        StackThread(bool* sS,
-            boost::mutex* sS_m,
-            boost::condition_variable* sS_c,
-            boost::circular_buffer<Frame>* fb,
-            boost::mutex* fb_m,
-            boost::condition_variable* fb_c,
-            dataParam       dp,
-            stackParam      sp,
-            stationParam    stp,
-            CamPixFmt       pfmt,
-            fitskeysParam   fkp);
+        StackThread(bool*,
+            boost::mutex*,
+            boost::condition_variable*,
+            boost::circular_buffer<Frame>*,
+            boost::mutex*,
+            boost::condition_variable*,
+            std::shared_ptr<CfgParam>
+        );
 
         ~StackThread(void);
 

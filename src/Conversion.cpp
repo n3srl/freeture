@@ -220,3 +220,35 @@ std::string Conversion::numbering(int totalDigit, int n) {
 
     return ch;
 }
+
+InputDeviceType Conversion::getDeviceType(CamSdkType t)
+{
+
+    switch (t) {
+
+    case CamSdkType::VIDEOFILE:
+        return VIDEO;
+        break;
+
+    case CamSdkType::FRAMESDIR:
+        return SINGLE_FITS_FRAME;
+        break;
+
+    case CamSdkType::V4L2:
+    case CamSdkType::VIDEOINPUT:
+    case CamSdkType::ARAVIS:
+    case CamSdkType::LUCID_ARENA:
+    case CamSdkType::LUCID_ARAVIS:
+    case CamSdkType::PYLONGIGE:
+    case CamSdkType::TIS:
+        return CAMERA;
+        break;
+
+    case CamSdkType::UNKNOWN:
+        return UNDEFINED_INPUT_TYPE;
+        break;
+    }
+
+    return UNDEFINED_INPUT_TYPE;
+}
+

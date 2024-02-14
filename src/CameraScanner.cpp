@@ -4,7 +4,7 @@
 
 #include "CameraGigeAravisScanner.h"
 #include "CameraLucidArenaScanner.h"
-#include "CameraLucidArena_PHX016SScanner.h"
+#include "CameraLucidArena_Scanner.h"
 
 #include "Logger.h"
 
@@ -34,9 +34,8 @@ CameraScanner* CameraScanner::CreateScanner(CamSdkType sdk)
         case CamSdkType::LUCID_ARAVIS:
             return new CameraLucidArenaScanner(sdk);
 #endif
-
         case CamSdkType::LUCID_ARENA:
-            return new CameraLucidArena_PHX016SScanner(sdk);
+            return new CameraLucidArena_Scanner(sdk);
 
         case CamSdkType::FRAMESDIR:
         case CamSdkType::PYLONGIGE:

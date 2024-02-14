@@ -5,7 +5,11 @@
  */
 
  //header refactoring ok
+#include <memory>
+
 #include "Commons.h"
+#include "FreetureSettings.h"
+
 
 #include <boost/program_options.hpp>
 
@@ -13,7 +17,11 @@ namespace po        = boost::program_options;
 
 namespace freeture
 {
-    class Device;
+    class CameraDeviceManager;
+    class CfgParam;
+    class AcqThread;
+    class DetThread;
+    class StackThread;
 
     enum class Mode
     {
@@ -32,34 +40,21 @@ namespace freeture
     class Freeture
     {
         private:
+            freeture::Mode m_CurrentRunMode = Mode::UNKNOWN;
+            const char** m_Argv = nullptr;
+            int m_Argc = -1;
+            bool m_SigTermFlag = false;
+            std::string      m_Version = std::string(VERSION);
+
+            FreetureSettings m_FreetureCommandLineSettings;
+
+            std::shared_ptr<CameraDeviceManager> m_CameraDeviceManager;
+            std::shared_ptr<CfgParam> m_FreetureSettings;
+            std::shared_ptr<AcqThread> m_AcquisitionThread;
+            std::shared_ptr<DetThread> m_DetectionThread;
+            std::shared_ptr<StackThread> m_StackThread;
+
             po::options_description* desc = nullptr;
-            bool sigTermFlag        = false;
-            Device *device          = nullptr;
-            int m_Argc              = -1;
-            const char ** m_Argv    = nullptr;
-            bool m_Error            = false;
-
-            freeture::Mode        m_CurrentMode = Mode::UNKNOWN;
-
-            int         mode            = -1;
-            int         executionTime   = 0;
-            std::string      configPath      = std::string(CFG_PATH) + "configuration.cfg";
-            std::string      savePath        = "./";
-            int         acqFormat       = 0;
-            int         acqWidth        = 0;
-            int         acqHeight       = 0;
-            int         startx          = 0;
-            int         starty          = 0;
-            int         gain            = 0;
-            double      exp             = 0;
-            std::string      version         = std::string(VERSION);
-            int         devID           = 0;
-            std::string      fileName        = "snap";
-            bool        listFormats     = false;
-            bool        display         = false;
-            bool        bmp             = false;
-            bool        fits            = false;
-            bool        sendbymail      = false;
 
             void printHelp();
             void printVersion();

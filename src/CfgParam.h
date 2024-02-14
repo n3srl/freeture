@@ -35,56 +35,229 @@
 */
 #include "Commons.h"
 
+#include <memory>
 #include <vector>
 #include <string>
 
-#include "CameraFirstInit.h"
-#include "CameraDeviceManager.h"
+#include "EInputDeviceType.h"
 #include "CfgLoader.h"
+#include "SParam.h"
 
 namespace freeture {
-    class Device;
 
     class CfgParam{
 
         private :
+            /// <summary>
+            /// Configuration file path
+            /// </summary>
             std::string m_CfgFilePath;
 
+            /// <summary>
+            /// Error messages
+            /// </summary>
             std::vector<std::string> m_EMsg;
-
+            
+            /// <summary>
+            /// Configuration loader implementation
+            /// </summary>
             CfgLoader m_Cfg;
-            Device* mDevice;
-            CameraDeviceManager& manager = CameraDeviceManager::Get();
+
+            /// <summary>
+            /// Runtime Freeture parameters
+            /// </summary>
             parameters m_Param;
-            InputDeviceType m_InputType;
 
+            /// <summary>
+            /// Loads CAMERA_ID from configuration
+            /// </summary>
             void loadDeviceID();
-            void loadDeviceID_old();
-            void loadDataParam();
-            void loadLogParam();
-            void loadFramesParam();
-            void loadVidParam();
-            void loadCamParam();
-            void loadDetParam();
-            void loadStackParam();
-            void loadStationParam();
-            void loadFitskeysParam();
-            void loadMailParam();
-            void loadCameraSerial();
-            void loadCameraInit();
 
+            /// <summary>
+            /// loads DATA_PATH and FITS_COMPRESSION from configuration
+            /// </summary>
+            void loadDataParam();
+
+            /// <summary>
+            /// loads LOG_PATH, LOG_ARCHIVE_DAY, LOG_SIZE_LIMIT, LOG_SEVERITY from configuration
+            /// </summary>
+            void loadLogParam();
+
+            /// <summary>
+            /// loads INPUT_TIME_INTERVAL, INPUT_FRAMES_DIRECTORY_PATH from configuration
+            /// </summary>
+            void loadFramesParam();
+
+            /// <summary>
+            /// loads INPUT_TIME_INTERVAL, INPUT_VIDEO_PATH from configuration
+            /// </summary>
+            void loadVidParam();
+
+            /// <summary>
+            /// loads 
+            ///     - DET_ENABLED
+            ///     - ACQ_BUFFER_SIZE
+            ///     - ACQ_MASK_ENABLED
+            ///     if true:
+            ///         - ACQ_MASK_PATH
+            ///     - DET_MODE 
+            ///     - DET_DEBUG
+            ///     if true:
+            ///         - DET_DEBUG_PATH
+            ///     - DET_TIME_AROUND
+            ///     - DET_TIME_MAX
+            ///     - DET_METHOD
+            ///     - DET_SAVE_FITS3D
+            ///     - DET_SAVE_FITS2D
+            ///     - DET_SAVE_SUM
+            ///     - DET_SUM_REDUCTION
+            ///     - DET_SUM_MTHD
+            ///     - DET_SAVE_SUM_WITH_HIST_EQUALIZATION
+            ///     - DET_SAVE_AVI
+            ///     - DET_UPDATE_MASK
+            ///     - DET_UPDATE_MASK_FREQUENCY
+            ///     - DET_DEBUG_UPDATE_MASK
+            ///     - DET_DEBUG_PATH
+            ///     - DET_DOWNSAMPLE_ENABLED
+            ///     - DET_SAVE_GEMAP
+            ///     - DET_SAVE_DIRMAP
+            ///     - DET_SAVE_POS
+            ///     - DET_LE_MAX
+            ///     - DET_GE_MAX
+            /// from configuration file
+            /// </summary>
+            void loadDetParam();
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name=""></param>
+            void loadDetParam(InputDeviceType);
+
+            /// <summary>
+            /// loads 
+            ///     - CAMERA_SERIAL
+            ///     - CAMERA_INIT
+            ///     - CAMERA_INIT_CONFIG
+            ///     - ACQ_FPS
+            ///     - ACQ_FORMAT
+            ///     - ACQ_RES_CUSTOM_SIZE
+            ///     if true:
+            ///         - ACQ_OFFSET
+            ///         - ACQ_RES_SIZE
+            ///     - SHIFT_BITS
+            ///     - ACQ_NIGHT_EXPOSURE
+            ///     - ACQ_NIGHT_GAIN
+            ///     - ACQ_DAY_EXPOSURE
+            ///     - ACQ_DAY_GAIN
+            ///     - EXPOSURE_CONTROL_ENABLED
+            ///     if true:
+            ///         - EXPOSURE_CONTROL_FREQUENCY
+            ///         - EXPOSURE_CONTROL_SAVE_IMAGE
+            ///         - EXPOSURE_CONTROL_SAVE_INFOS
+            ///     - EPHEMERIS_ENABLED
+            ///     if true:
+            ///         - SUNRISE_TIME
+            ///         - SUNSET_TIME
+            ///         - SUNSET_DURATION
+            ///         - SUNRISE_DURATION
+            ///     - SUN_HORIZON_1
+            ///     - SUN_HORIZON_2
+            ///     - ACQ_REGULAR_ENABLED
+            ///     if true:
+            ///         - ACQ_REGULAR_MODE
+            ///         - ACQ_REGULAR_PRFX
+            ///         - ACQ_REGULAR_OUTPUT
+            ///         - ACQ_REGULAR_CFG
+            ///     - ACQ_SCHEDULE_ENABLED
+            ///     if true:
+            ///         - ACQ_SCHEDULE_OUTPUT
+            ///         - ACQ_SCHEDULE
+            /// from configuration file
+            /// </summary>
+            void loadCamParam();
+
+            /// <summary>
+            /// loads 
+            ///     - STACK_ENABLED
+            ///         - STACK_MODE
+            ///         - STACK_TIME
+            ///         - STACK_INTERVAL
+            ///         - STACK_MTHD
+            ///         - STACK_REDUCTION
+            /// from configuration file
+            /// </summary>
+            void loadStackParam();
+
+            /// <summary>
+            /// loads
+            ///     - STATION_NAME
+            ///     - TELESCOP
+            ///     - OBSERVER
+            ///     - INSTRUMENT
+            ///     - CAMERA
+            ///     - FOCAL
+            ///     - APERTURE
+            ///     - SITELONG
+            ///     - SITELAT
+            ///     - SITEELEV
+            /// from configuration file
+            /// </summary>
+            void loadStationParam();
+
+            /// <summary>
+            /// loads 
+            ///     - K1
+            ///     - K2
+            ///     - FILTER
+            ///     - CD1_1
+            ///     - CD1_2
+            ///     - CD2_1
+            ///     - CD2_2
+            ///     - XPIXEL
+            ///     - YPIXEL
+            ///     - COMMENT
+            /// from configuration file
+            /// </summary>
+            void loadFitskeysParam();
+            
+            /// <summary>
+            /// loads 
+            ///     - MAIL_DETECTION_ENABLED
+            ///         - MAIL_RECIPIENT
+            ///         - MAIL_SMTP_SERVER
+            ///         - MAIL_CONNECTION_TYPE
+            ///         - MAIL_SMTP_LOGIN
+            ///         - MAIL_SMTP_PASSWORD
+            /// from configuration file
+            /// </summary>
+            void loadMailParam();
+
+            /// <summary>
+            /// loads CAMERA_SERIAL from configuration file
+            /// </summary>
+            void loadCameraSerial();
+
+            /// <summary>
+            /// loads  CAMERA_INIT and CAMERA_INIT_CONFIG  from configuration file
+            /// if CAMERA_INIT is true 
+            /// </summary>
+            bool loadCameraInit();
+
+            void loadInputParam(InputDeviceType);
 
         public :
+            /// <summary>
+            /// Set to true in order to populate error structures
+            /// </summary>
+            bool enableErrors;
 
-            bool showErrors;
+            /// <summary>
+            /// default Ctor
+            /// </summary>
+            /// <param name="cfgFilePath">configuration file path</param>
+            CfgParam(std::string);
 
-            /**
-             * Constructor.
-             *
-             */
-            CfgParam(Device*,std::string);
-
-            int             getDeviceID();
             dataParam       getDataParam();
             logParam        getLogParam();
             framesParam     getFramesParam();
@@ -97,20 +270,83 @@ namespace freeture {
             mailParam       getMailParam();
             parameters      getAllParam();
             
+            /// <summary>
+            /// Check if device id parameters loaded correctly
+            /// </summary>
+            /// <returns>true if correct, false otherwise</returns>
+            bool checkDeviceID();
+            /// <summary>
+            /// Check if log parameters loaded correctly
+            /// </summary>
+            /// <returns>true if correct, false otherwise</returns>
+            bool checkLogParam();
 
-            bool deviceIdIsCorrect();
-            bool dataParamIsCorrect();
-            bool logParamIsCorrect();
-            bool framesParamIsCorrect();
-            bool vidParamIsCorrect();
-            bool camParamIsCorrect();
-            bool detParamIsCorrect();
-            bool stackParamIsCorrect();
-            bool stationParamIsCorrect();
-            bool fitskeysParamIsCorrect();
-            bool mailParamIsCorrect();
+            /// <summary>
+            /// Check if data parameters loaded correctly
+            /// </summary>
+            /// <returns>true if correct, false otherwise</returns>
+            bool checkDataParam();
+            /// <summary>
+            /// Check if frames parameters loaded correctly
+            /// </summary>
+            /// <returns>true if correct, false otherwise</returns>
+            bool checkFramesParam();
+
+            /// <summary>
+            /// Check if video parameters loaded correctly
+            /// </summary>
+            /// <returns>true if correct, false otherwise</returns>
+            bool checkVidParam();
+
+            /// <summary>
+            /// Check if camera parameters loaded correctly
+            /// </summary>
+            /// <returns>true if correct, false otherwise</returns>
+            bool checkCamParam();
+
+            /// <summary>
+            /// Check if detection parameters loaded correctly
+            /// </summary>
+            /// <returns>true if correct, false otherwise</returns>
+            bool checkDetParam();
+
+            /// <summary>
+            /// Check if stack parameters loaded correctly
+            /// </summary>
+            /// <returns>true if correct, false otherwise</returns>
+            bool checkStackParam();
+
+            /// <summary>
+            /// Check if stack parameters loaded correctly
+            /// </summary>
+            /// <returns>true if correct, false otherwise</returns>
+            bool checkStationParam();
+
+            /// <summary>
+            /// Check if fitskey parameters loaded correctly
+            /// </summary>
+            /// <returns>true if correct, false otherwise</returns>
+            bool checkFitskeysParam();
+
+            /// <summary>
+            /// Check if mail parameters loaded correctly
+            /// </summary>
+            /// <returns>true if correct, false otherwise</returns>
+            bool checkMailParam();
+
+            /// <summary>
+            /// Check is all parameters loaded correctly
+            /// </summary>
+            /// <returns>true if correct, false otherwise</returns>
             bool allParamAreCorrect();
-            bool inputIsCorrect();
+
+            /// <summary>
+            /// Test if input parameter are correct applied to specific device type
+            /// </summary>
+            /// <param name=""></param>
+            /// <returns></returns>
+            bool checkInputParam(InputDeviceType);
+
 
             void setInitRequired(bool);
 

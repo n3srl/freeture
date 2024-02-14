@@ -151,7 +151,7 @@ void Fits::loadKeys(fitskeysParam fkp, stationParam sp) {
     STATION = sp.STATION_NAME;
     kTELESCOP = sp.TELESCOP;
     kOBSERVER = sp.OBSERVER;
-    kINSTRUME = sp.INSTRUME;
+    kINSTRUME = sp.INSTRUMENT;
     kCAMERA = sp.CAMERA;
     kFOCAL = sp.FOCAL;
     kAPERTURE = sp.APERTURE;

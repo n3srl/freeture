@@ -35,6 +35,8 @@
 //header refactoring ok
 #include "StackThread.h"
 
+#include "CfgParam.h"
+
 #include "NodeExporterMetrics.h"
 #include "Stack.h"
 #include "Logger.h"
@@ -51,11 +53,8 @@ StackThread::StackThread(   bool                            *sS,
                             boost::circular_buffer<Frame>   *fb,
                             boost::mutex                    *fb_m,
                             boost::condition_variable       *fb_c,
-                            dataParam dp,
-                            stackParam sp,
-                            stationParam stp,
-                            CamPixFmt pfmt,
-                            fitskeysParam fkp){
+                            std::shared_ptr<CfgParam>       cfg
+                            ){
 
     mThread = NULL;
     mustStop = false;
@@ -68,12 +67,12 @@ StackThread::StackThread(   bool                            *sS,
     completeDataPath = "";
     isRunning = false;
     interruptionStatus = false;
-    mdp = dp;
-    mstp = stp;
-    msp = sp;
-    mfkp = fkp;
-    mPixfmt = pfmt;
 
+    mdp = cfg->getDataParam();
+    mstp = cfg->getStationParam();
+    msp = cfg->getStackParam();
+    mfkp = cfg->getFitskeysParam();
+    mPixfmt = cfg->getCamParam().ACQ_FORMAT;
 }
 
 StackThread::~StackThread(void){

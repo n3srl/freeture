@@ -15,7 +15,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 #Configure CMAKE
 
 #unset this to run cmake find_packages debug
-set(CMAKE_FIND_DEBUG_MODE TRUE) 
+#set(CMAKE_FIND_DEBUG_MODE TRUE) 
 
 # Set the output directory for generated solution files (Visual Studio)
 set(BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build" CACHE PATH "Build directory")
@@ -23,6 +23,7 @@ set(BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build" CACHE PATH "Build directory")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${BUILD_DIR}/bin")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${BUILD_DIR}/lib")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${BUILD_DIR}/lib")
+
 set(CMAKE_BINARY_DIR "${BUILD_DIR}/prj")
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -90,6 +91,10 @@ set(OpenCV_DIR "C:/local/OpenCV/build/")
 							 
 find_package(OpenCV REQUIRED) 
 
+if (OpenCV_FOUND)
+message (STATUS "OpenCV Configuration;Include OpenCV in config" )
+	file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/config.h.in "#define USE_OPENCV true")
+endif()
 
 
 
@@ -128,11 +133,19 @@ set (Lucid_GenICam_LIBARARIES
  #"${Lucid_GenICam_LIBARARY}/XmlParser_MD_VC140_v3_3_LUCID.lib"
 )
 
+set (Arena_FOUND true)
+
 foreach(file  ${Lucid_GenICam_LIBARARIES})
 	if ( NOT EXISTS "${file}")
-		message (ERROR " Lucid Library missing : ${file}" )
+		message (ERROR "Arena SDK Configuration;Lucid Library missing : ${file}" )
+		set (Arena_FOUND false)
 	endif()
 endforeach()
+
+if (Arena_FOUND)
+	message (STATUS "Arena SDK Configuration;Include ARENA SDK in config" )
+	file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/config.h.in "#define USE_ARENA true")
+endif()
 
 set(Lucid_ARENA_LIBRARIES
 "${Lucid_DIR}/lib64/Arena/Arenad_v140.lib"
@@ -229,7 +242,8 @@ set (CFITS_LIBARARIES
 
 
 #adding sources
-configure_file(config.h.in config.h COPYONLY)
+#configure_file(config.h.in config.h COPYONLY)
+configure_file(${CMAKE_CURRENT_BINARY_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set(SOURCES
 	src/AcqSchedule.cpp
@@ -252,14 +266,14 @@ set(SOURCES
 	src/CameraGigePylon.h
 	src/CameraGigeTis.cpp
 	src/CameraGigeTis.h
-	src/CameraLucidArena.cpp
-	src/CameraLucidArena.h
-	src/CameraLucidArenaScanner.cpp
-	src/CameraLucidArenaScanner.h
+	#src/CameraLucidAravis.cpp
+	src/CameraLucidAravis.h
+	#src/CameraLucidAravis_Scanner.cpp
+	src/CameraLucidAravis_Scanner.h
 	src/CameraLucidArena_PHX016S.cpp
 	src/CameraLucidArena_PHX016S.h
-	src/CameraLucidArena_PHX016SScanner.cpp
-	src/CameraLucidArena_PHX016SScanner.h
+	src/CameraLucidArena_Scanner.cpp
+	src/CameraLucidArena_Scanner.h
 	src/CameraScanner.cpp
 	src/CameraScanner.h
 	src/CameraV4l2.cpp
@@ -274,9 +288,11 @@ set(SOURCES
 	src/CfgParam.h
 	src/Circle.h
 	src/Constants.h
+	src/Conversion.h
 	src/Conversion.cpp
 	src/PlatformSwitches.h
 	src/Commons.h
+	src/CommonConfig.h
 	src/Detection.h
 	src/DetectionTemplate.cpp
 	src/DetectionTemplate.h
@@ -298,8 +314,6 @@ set(SOURCES
 	src/EParser.h
 	src/Ephemeris.cpp
 	src/Ephemeris.h
-	src/ErrorManager.cpp
-	src/ErrorManager.h
 	src/ESmtpSecurity.h
 	src/EStackMeth.h
 	src/ETimeMode.h
@@ -328,6 +342,7 @@ set(SOURCES
 	src/LocalEvent.cpp
 	src/LocalEvent.h
 	src/Logger.h
+	src/Logger.cpp
 	src/main.cpp
 	src/Mask.cpp
 	src/Mask.h
@@ -369,7 +384,9 @@ add_definitions(-D_WIN32_WINNT=0x0601)
 set_property(TARGET freeture
     PROPERTY VS_PACKAGE_REFERENCES "openssl-vc142"
 )
-
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/share/configuration.cfg
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+		
 target_link_libraries (freeture  
 	${OpenCV_LIBS} 
 	${Boost_LIBRARIES} 
