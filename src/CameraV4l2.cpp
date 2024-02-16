@@ -800,7 +800,7 @@ using namespace freeture;
 
     }
 
-    bool CameraV4l2::grabSingleImage(Frame &frame, int camID){
+    bool CameraV4l2::grabSingleImage(Frame &frame){
 
         createDevice(camID);
 

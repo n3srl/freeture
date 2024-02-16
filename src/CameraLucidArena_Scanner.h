@@ -1,5 +1,14 @@
 #pragma once
+/*
+    THIS CLASS IMPLEMENTS: 
+        - ABSTRACT FACTORY
+        - FACTORY METHOD
+
+    for lucid cameras using Arena SDK 
+*/
 #include "Commons.h"
+
+#include <memory>
 
 #include "CameraScanner.h"
 
@@ -12,7 +21,7 @@ namespace freeture
     class CameraLucidArena_Scanner : public CameraScanner
     {
     private:
-        Arena::ISystem* m_ArenaSDKSystem = nullptr;
+        std::shared_ptr<Arena::ISystem> m_ArenaSDKSystem;
 
     public:
         CameraLucidArena_Scanner(CamSdkType);

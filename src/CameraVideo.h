@@ -35,11 +35,6 @@
 */
 #include "Commons.h"
 
-
-#ifdef LINUX
-#define BOOST_LOG_DYN_LINK 1
-#endif
-
 #include "Frame.h"
 #include "SaveImg.h"
 #include "TimeDate.h"
@@ -62,8 +57,12 @@
 #include <boost/circular_buffer.hpp>
 
 using namespace boost::filesystem;
+
 namespace freeture
 {
+    class CameraDescription;
+    class cameraParam;
+
     class CameraVideo : public Camera {
 
     private:
@@ -91,11 +90,10 @@ namespace freeture
 
     public:
 
-        CameraVideo(std::vector<std::string> videoList, bool verbose);
+        CameraVideo(CameraDescription, cameraParam , std::vector<std::string> videoList, bool verbose);
 
         ~CameraVideo(void);
 
-        bool createDevice(int id);
 
         bool acqStart() { return true; };
 
@@ -103,7 +101,6 @@ namespace freeture
 
         bool grabImage(Frame& img);
 
-        bool grabInitialization();
 
         bool getStopStatus();
 
@@ -133,5 +130,54 @@ namespace freeture
 
         bool setSize(int x, int y, int width, int height, bool customSize) { return true; };
 
+        //ABSTRACT FACTORY METHODS
+        /// <summary>
+        /// initialize SDK
+        /// </summary>
+        /// <returns></returns>
+        bool initSDK() override;
+
+        /// <summary>
+        /// init once, run configuration once (use configuration file)
+        /// </summary>
+        /// <returns></returns>
+        bool initOnce() override;
+
+        /// <summary>
+        /// init the camera, eg. running functions when created 
+        /// CALL GRAB INITIALIZATION 
+        /// </summary>
+        /// <returns></returns>
+        bool init() override;
+
+        bool createDevice() override;
+
+        /// <summary>
+        /// DEPRECATED USE INIT INSTEAD.
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        bool grabInitialization() override;
+
+        /// <summary>
+        /// retreive main camera boundaries upon configuration: 
+        ///     - fps
+        ///     - gain
+        ///     - exposure time
+        /// </summary>
+        void fetchBounds(parameters&) override;
+
+        /// <summary>
+        /// configure the camera with the given parameters
+        /// </summary>
+        /// <param name=""></param>
+        void configure(parameters&) override;
+
+        /// <summary>
+        /// check if configuration is allowed
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        bool configurationCheck(parameters&) override;
     };
 }

@@ -44,6 +44,8 @@
 #include "Camera.h"
 namespace freeture
 {
+    class CameraDescription;
+
     class CameraWindows : public Camera {
 
     private:
@@ -84,13 +86,13 @@ namespace freeture
 
     public:
 
-        CameraWindows();
+        CameraWindows(CameraDescription, cameraParam);
 
         ~CameraWindows();
 
         vector<pair<int, string>> getCamerasList();
 
-        bool grabSingleImage(Frame& frame, int camID);
+        bool grabSingleImage(Frame& frame);
 
         bool createDevice(int id);
 
@@ -112,8 +114,6 @@ namespace freeture
 
         bool setFpsToLowerValue();
 
-        bool grabInitialization();
-
         bool acqStart();
 
         bool grabImage(Frame& newFrame);
@@ -126,6 +126,53 @@ namespace freeture
 
         double getExposureTime();
 
+        //ABSTRACT FACTORY METHODS
+        /// <summary>
+        /// initialize SDK
+        /// </summary>
+        /// <returns></returns>
+        bool initSDK() override;
+
+        /// <summary>
+        /// init once, run configuration once (use configuration file)
+        /// </summary>
+        /// <returns></returns>
+        bool initOnce() override;
+
+        /// <summary>
+        /// init the camera, eg. running functions when created 
+        /// CALL GRAB INITIALIZATION 
+        /// </summary>
+        /// <returns></returns>
+        bool init() override;
+
+        /// <summary>
+        /// DEPRECATED USE INIT INSTEAD.
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        bool grabInitialization() override;
+
+        /// <summary>
+        /// retreive main camera boundaries upon configuration: 
+        ///     - fps
+        ///     - gain
+        ///     - exposure time
+        /// </summary>
+        void fetchBounds(parameters&) override;
+
+        /// <summary>
+        /// configure the camera with the given parameters
+        /// </summary>
+        /// <param name=""></param>
+        void configure(parameters&) override;
+
+        /// <summary>
+        /// check if configuration is allowed
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        bool configurationCheck(parameters&) override;
     };
 }
 #endif

@@ -2,3 +2,4 @@
 #define LOG_FRAME_STATUS false
 #define VERSION "1.4.0"
 #define CFG_PATH ""
+#define DEFAULT_WAIT_TIME 1000

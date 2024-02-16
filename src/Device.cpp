@@ -59,7 +59,14 @@ using namespace freeture;
 
 namespace fs = boost::filesystem;
 
-void Device::Setup(cameraParam cp, framesParam fp, videoParam vp, int cid)
+/// <summary>
+/// Apply parameters to this device runtime instance - NO APPLY TO DEVICE JUST MEMORY
+/// </summary>
+/// <param name="cp"></param>
+/// <param name="fp"></param>
+/// <param name="vp"></param>
+/// <param name="cid"></param>
+void Device::Setup(cameraParam cp, framesParam fp, videoParam vp)
 {
     LOG_DEBUG << "Device::Setup";
     LOG_DEBUG << "PARAM NIGHT EXP " << cp.ACQ_NIGHT_EXPOSURE << endl;
@@ -75,11 +82,8 @@ void Device::Setup(cameraParam cp, framesParam fp, videoParam vp, int cid)
     mNightGain = cp.ACQ_NIGHT_GAIN;
     mDayExposure = cp.ACQ_DAY_EXPOSURE;
     mDayGain = cp.ACQ_DAY_GAIN;
-    mMinExposureTime = -1;
-    mMaxExposureTime = -1;
-    mMinGain = -1;
-    mMaxGain = -1;
-    mShiftBits = cp.SHIFT_BITS;
+
+    //mShiftBits = cp.SHIFT_BITS;
     mFormat = cp.ACQ_FORMAT;
     mCustomSize = cp.ACQ_RES_CUSTOM_SIZE;
     mStartX = cp.ACQ_STARTX;
@@ -87,10 +91,14 @@ void Device::Setup(cameraParam cp, framesParam fp, videoParam vp, int cid)
     mSizeWidth = cp.ACQ_WIDTH;
     mSizeHeight = cp.ACQ_HEIGHT;
     mDeviceType = UNDEFINED_INPUT_TYPE;
-    mvp = vp;
-    mfp = fp;
+    m_VideoParam = vp;
+    m_FramesParam = fp;
     //mNbFrame = 0;
 
+    minExposureTime = -1;
+    maxExposureTime = -1;
+    minGain = -1;
+    maxGain = -1;
 }
 
 
@@ -102,13 +110,11 @@ Device::Device() {
     mNightGain      = 0;
     mDayExposure    = 0;
     mDayGain        = 0;
-    mMinExposureTime = -1;
-    mMaxExposureTime = -1;
-    mMinGain = -1;
-    mMaxGain = -1;
+    minExposureTime = -1;
+    maxExposureTime = -1;
+    minGain = -1;
+    maxGain = -1;
     mFPS            = 30;
-    mCamID          = 0;
-    mGenCamID       = 0;
     mCustomSize     = false;
     mStartX         = 0;
     mStartY         = 0;
@@ -116,13 +122,12 @@ Device::Device() {
     mSizeHeight     = 1080;
     mCam            = nullptr;
     mVideoFramesInput = false;
-    mShiftBits      = false;
-    mNbDev          = -1;
+    //mShiftBits      = false;
     mVerbose        = true;
     mDeviceType     = UNDEFINED_INPUT_TYPE;
     vector<string> finput, vinput;
-    mvp.INPUT_VIDEO_PATH = vinput;
-    mfp.INPUT_FRAMES_DIRECTORY_PATH = finput;
+    m_VideoParam.INPUT_VIDEO_PATH = vinput;
+    m_FramesParam.INPUT_FRAMES_DIRECTORY_PATH = finput;
     //mNbFrame = 0;
 
 }
@@ -144,507 +149,18 @@ bool Device::firstIinitializeCamera(string m_ConfigurationFilePath)
     LOG_DEBUG << "Device:firstIinitializeCamera(\"" << m_ConfigurationFilePath << "\")" << endl;
     
     shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
-    Device* device = m_CameraDeviceManager->getDevice();
-    if(device != NULL)
+    Device* m_Device = m_CameraDeviceManager->getDevice();
+    if(m_Device != NULL)
     {
-        return device->mCam->FirstInitializeCamera(m_ConfigurationFilePath);
+        return m_Device->mCam->FirstInitializeCamera(m_ConfigurationFilePath);
     }
     return false;
-}
-
-bool Device::createCamera(int id, bool create)
-{
-    LOG_DEBUG << "Device::createCamera";
-    shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
-    
-    Device* device = m_CameraDeviceManager->getDevice();
-    
-    if(id >=0 && id <= m_CameraDeviceManager->deviceCount - 1)
-    {
-        CameraDescription camera = m_CameraDeviceManager->getListDevice().at(id);
-        LOG_DEBUG << "CREATE CAMERA " + camera.Description;
-        // Create Camera object with the correct sdk.
-        if ( !createDevicesWith(camera.Sdk) )
-        {
-            LOG_DEBUG << "Fail to select correct sdk"<< endl;
-            EParser<CamSdkType> parser;
-            LOG_DEBUG << "Fail to select correct sdk : "<<parser.getStringEnum( mDevices.at(id).second.second )<< endl;
-            return false;
-        }
-    
-
-        device->mCamID = camera.Id;
-        if(device->mCam != nullptr)
-        {
-                
-                if(!device->mCam->createDevice(device->mCamID))
-                {
-                    LOG_ERROR << "Fail to create device with ID  : " << id;
-                    device->mCam->grabCleanse();
-                    return false;
-                }
-                LOG_DEBUG <<  "Device::createCamera(int,bool) - created new camera";
-            return true;
-        } else {
-            LOG_DEBUG << "Device::createCamera(int,bool) - camera already exists";
-            return true;
-        }
-        
-    }
-
-    LOG_ERROR << "No device with ID " << id;
-
-    return false;
-
-}
-
-bool Device::createCamera()
-{
-    LOG_DEBUG << "Device::createCamera";
-
-    shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
-    Device* device = m_CameraDeviceManager->getDevice();
-
-    if(mGenCamID >=0 && mGenCamID < m_CameraDeviceManager->deviceCount) {
-
-        // Create Camera object with the correct sdk.
-        
-        try {
-            
-            if(!createDevicesWith(m_CameraDeviceManager->getListDevice().at(mGenCamID).Sdk)) {
-                LOG_ERROR <<  "CREATE CAMERA ERROR " << endl;
-            return false;
-        } 
-        } catch (exception &e) {
-            LOG_DEBUG << "I FOUND EXC" << endl;
-            LOG_DEBUG << e.what() << endl;
-            return false;
-        }   
-            
-        mCamID = m_CameraDeviceManager->getListDevice().at(mGenCamID).Id;
-        
-        if(device->mCam != nullptr)
-        {
-            
-            if(!device->mCam->createDevice(mCamID))
-            {
-                LOG_ERROR << "Device::createCamera;" << "Fail to create device with ID  : " << mGenCamID;
-                device->mCam->grabCleanse();
-                return false;
-            }
-            LOG_DEBUG << "Device::createCamera; Created new camera";
-            return true;
-        }
-        else
-        {
-            LOG_DEBUG << "Device::createCamera; Camera already exists";
-            return true;
-        }
-    }
-
-    LOG_DEBUG << "Device::createCamera;" << "No s with ID " << mGenCamID << "DEVICES " << m_CameraDeviceManager->deviceCount << endl;
-    LOG_ERROR << "Device::createCamera;" << "No device with ID " << mGenCamID;
-
-    return false;
-
-}
-
-bool Device::recreateCamera() {
-    LOG_DEBUG << "Device::recreateCamera";
-    shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
-    if (mGenCamID >= 0 && mGenCamID < m_CameraDeviceManager->deviceCount) {
-
-        mCamID = m_CameraDeviceManager->getListDevice().at(mGenCamID).Id;
-
-        if(mCam != nullptr) {
-            if(!mCam->recreateDevice(mCamID)){
-                LOG_ERROR << "Fail to create device with ID  : " << mGenCamID;
-                mCam->grabCleanse();
-                return false;
-            }
-            LOG_DEBUG << "Device::recreateCamera - created new camera";
-            return true;
-        } else {
-            LOG_DEBUG << "Device::recreateCamera - camera already exists";
-            return true;
-         }
-
-    }
-
-    LOG_ERROR << "No device with ID " << mGenCamID;
-
-    return false;
-
 }
 
 void Device::setVerbose(bool status) {
     LOG_DEBUG << "Device::setVerbose";
     mVerbose = status;
 
-}
-
-
-CamSdkType Device::getDeviceSdk(int id) {
-    shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
-    vector<CameraDescription> devices = m_CameraDeviceManager->getListDevice();
-    
-    if(id >=0 && id <= (m_CameraDeviceManager->deviceCount - 1)) {
-        return devices.at(id).Sdk;
-    }
-    LOG_DEBUG << "ERROR GETTING DEVICE SDK FOR CAMERA ID " << id << " NUM OF DEVICES " << ( m_CameraDeviceManager->deviceCount - 1) << endl;
-}
-
-bool Device::createDevicesWith(CamSdkType sdk) {
-    LOG_DEBUG << "Device::createDevicesWith" ;
-
-    shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
-    Device* device = m_CameraDeviceManager->getDevice();
-    
-    if (device->mCam!=nullptr)
-    {
-        
-        LOG_ERROR << "Device::createDevicesWith;"<< "MEMORY LEAKING";
-        assert (device->mCam != nullptr);
-        free(device->mCam);
-
-        return false;
-    }
-
-
-    switch (sdk)
-    {
-    case CamSdkType::VIDEOFILE:
-    {
-        mVideoFramesInput = true;
-        device->mCam = new CameraVideo(mvp.INPUT_VIDEO_PATH, mVerbose);
-        device->mCam->grabInitialization();
-    }
-
-    break;
-
-    case CamSdkType::FRAMESDIR:
-
-    {
-        mVideoFramesInput = true;
-        // Create camera using pre-recorded fits2D in input.
-        device->mCam = new CameraFrames(mfp.INPUT_FRAMES_DIRECTORY_PATH, 1, mVerbose);
-        if (!device->mCam->grabInitialization())
-            throw "Fail to prepare acquisition on the first frames directory.";
-
-    }
-
-    break;
-
-    case CamSdkType::V4L2:
-
-    {
-        LOG_DEBUG << " Device::createDevicesWith;" << "SDK: V4L2";
-#ifdef LINUX
-        device->mCam = new CameraV4l2();
-#endif
-    }
-
-    break;
-
-    case CamSdkType::VIDEOINPUT:
-
-    {
-        LOG_DEBUG << " Device::createDevicesWith;" << "SDK: VIDEOINPUT";
-#ifdef VIDEOINPUT
-        device->mCam = new CameraWindows();
-#endif
-    }
-
-    break;
-
-    case CamSdkType::ARAVIS:
-
-    {
-        LOG_DEBUG << " Device::createDevicesWith;" << "SDK: ARAVIS";
-#ifdef LINUX
-        device->mCam = new CameraGigeAravis(mShiftBits);
-#endif
-    }
-
-    break;
-
-    case CamSdkType::LUCID_ARAVIS:
-
-    {
-        LOG_DEBUG << " Device::createDevicesWith;" << "SDK: LUCID_ARAVIS";
-#ifdef LINUX
-
-        device->mCam = new CameraLucidArena(mShiftBits);
-
-
-#endif
-    }
-
-    break;
-
-    case CamSdkType::LUCID_ARENA:
-
-    {
-        LOG_DEBUG << " Device::createDevicesWith;" << "SDK: LUCID_ARENA";
-        device->mCam = new CameraLucidArena_PHX016S(mShiftBits);
-
-    }
-
-    break;
-
-    case CamSdkType::PYLONGIGE:
-
-    {
-        LOG_DEBUG << "SDK: PYLONGIGE";
-#ifdef USE_PYLON
-        device = new CameraGigePylon();
-#endif
-    }
-
-    break;
-
-    case CamSdkType::TIS:
-
-    {
-        LOG_DEBUG << "SDK: TIS";
-#ifdef TISCAMERA
-        device = new CameraGigeTis();
-#endif
-    }
-
-    break;
-
-    default:
-
-        LOG_ERROR << "Device::createDevicesWith; Unknown SDK:";
-        return false;
-    }
-
-    if (device->mCam == nullptr) {
-        LOG_ERROR << "Device::createDevicesWith;" << "Failed to create camera";
-        return false;
-    }
-
-    return true;
-
-}
-
-void Device::mergeList( vector<CameraDescription>& Devices )
-{
-        //foreach device found test if already exists. if not add to list
-        for (int i=0;i<Devices.size();i++)
-        {
-            bool add_to_list = true;
-
-            for (int j=0;j<listCams.size();j++)
-                if (listCams[j].Address==Devices[i].Address && listCams[j].Sdk == Devices[i].Sdk) 
-                {
-                    add_to_list = false;
-                    break;
-                }
-
-            if (add_to_list)
-                
-                listCams.push_back(Devices[i]);
-        }
-}
-
-void Device::listDevices(bool printInfos)
-{
-    LOG_DEBUG << "Device::listDevices";
-
-    int nbCam = 0;
-    mNbDev = 0;
-    pair<int, CamSdkType> elem;             // general index to specify camera to use
-    pair<int,pair<int,CamSdkType>> subElem; // index in a specific sdk
-
-// 
-//         // PYLONGIGE
-// #ifdef USE_PYLON
-//         mCam = new CameraGigePylon();
-//         listCams = mCam->getCamerasList();
-//         for(int i = 0; i < listCams.size(); i++) {
-//             elem.first = mNbDev; elem.second = CamSdkType::PYLONGIGE;
-//             subElem.first = listCams.at(i).first; subElem.second = elem;
-//             mDevices.push_back(subElem);
-//             if(printInfos) cout << "[" << mNbDev << "]    " << listCams.at(i).second << endl;
-//             mNbDev++;
-//         }
-//         delete mCam;
-// #endif
-// #ifdef TISCAMERA
-//         // TIS
-// 
-//         mCam = new CameraGigeTis();
-//         listCams = mCam->getCamerasList();
-//         for(int i = 0; i < listCams.size(); i++) {
-//             elem.first = mNbDev; elem.second = CamSdkType::TIS;
-//             subElem.first = listCams.at(i).first; subElem.second = elem;
-//             mDevices.push_back(subElem);
-//             if(printInfos) cout << "[" << mNbDev << "]    " << listCams.at(i).second << endl;
-//             mNbDev++;
-//         }
-//         delete mCam;
-// #endif
-// #ifdef VIDEOINPUT
-//         // WINDOWS
-// 
-//         mCam = new CameraWindows();
-//         listCams = mCam->getCamerasList();
-//         for(int i = 0; i < listCams.size(); i++) {
-// 
-//             // Avoid to list basler
-//             string::size_type pos1 = listCams.at(i).second.find("Basler");
-//             string::size_type pos2 = listCams.at(i).second.find("BASLER");
-//             if((pos1 != string::npos) || (pos2 != string::npos)) {
-//                 //LOG_DEBUG << "found \"words\" at position " << pos1 << endl;
-//             } else {
-//                 elem.first = mNbDev; elem.second = CamSdkType::VIDEOINPUT;
-//                 subElem.first = listCams.at(i).first; subElem.second = elem;
-//                 mDevices.push_back(subElem);
-//                 if(printInfos) cout << "[" << mNbDev << "]    " << listCams.at(i).second << endl;
-//                 mNbDev++;
-//             }
-//         }
-// 
-//         delete mCam;
-// #endif
-// 
-        //PRECEDENTE TO LUCID_ARAVIS
-    shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
-    m_CameraDeviceManager->listDevice(true);
-
-        // V4L
-        //CameraScanner* v4l_scanner = Camera::Scanner->CreateScanner(CamSdkType::V4L2);
-        //assert(v4l_scanner!=nullptr);
-        // v4l_scanner->getCamerasList();
-        //listCams.insert ( listCams.end(), v4l_scanner->Devices.begin(),v4l_scanner->Devices.end());
-
-    // VIDEO
-    /*
-    elem.first = mNbDev; elem.second = VIDEOFILE;
-    subElem.first = 0; subElem.second = elem;
-    mDevices.push_back(subElem);
-    if(printInfos) cout << "[" << mNbDev << "]    VIDEO FILES" << endl;
-    mNbDev++;
-
-    // FRAMES
-
-    elem.first = mNbDev; elem.second = FRAMESDIR;
-    subElem.first = 0; subElem.second = elem;
-    mDevices.push_back(subElem);
-    if(printInfos) cout << "[" << mNbDev << "]    FRAMES DIRECTORY" << endl;
-    mNbDev++;
-    */
-}
-
-
-vector<CameraDescription> Device::getListDevice()
-{
-    LOG_DEBUG << "Device::getListDevice";
-
-    int nbCam = 0;
-    mNbDev = 0;
-    pair<int, CamSdkType> elem;             // general index to specify camera to use
-    pair<int,pair<int,CamSdkType>> subElem; // index in a specific sdk
-
-    #ifdef WINDOWS
-
-        // PYLONGIGE
-#ifdef USE_PYLON
-//         mCam = new CameraGigePylon();
-//         listCams = mCam->getCamerasList();
-//         for(int i = 0; i < listCams.size(); i++) {
-//             elem.first = mNbDev; elem.second = PYLONGIGE;
-//             subElem.first = listCams.at(i).first; subElem.second = elem;
-//             mDevices.push_back(subElem);
-//             if(printInfos) cout << "[" << mNbDev << "]    " << listCams.at(i).second << endl;
-//             mNbDev++;
-//         }
-//         delete mCam;
-#endif
-#ifdef TISCAMERA
-//         // TIS
-// 
-//         mCam = new CameraGigeTis();
-//         listCams = mCam->getCamerasList();
-//         for(int i = 0; i < listCams.size(); i++) {
-//             elem.first = mNbDev; elem.second = TIS;
-//             subElem.first = listCams.at(i).first; subElem.second = elem;
-//             mDevices.push_back(subElem);
-//             if(printInfos) cout << "[" << mNbDev << "]    " << listCams.at(i).second << endl;
-//             mNbDev++;
-//         }
-//         delete mCam;
-#endif
-#ifdef VIDEOINPUT
-//         // WINDOWS
-// 
-//         mCam = new CameraWindows();
-//         listCams = mCam->getCamerasList();
-//         for(int i = 0; i < listCams.size(); i++) {
-// 
-//             // Avoid to list basler
-//             string::size_type pos1 = listCams.at(i).second.find("Basler");
-//             string::size_type pos2 = listCams.at(i).second.find("BASLER");
-//             if((pos1 != string::npos) || (pos2 != string::npos)) {
-//                 //LOG_DEBUG << "found \"words\" at position " << pos1 << endl;
-//             } else {
-//                 elem.first = mNbDev; elem.second = VIDEOINPUT;
-//                 subElem.first = listCams.at(i).first; subElem.second = elem;
-//                 mDevices.push_back(subElem);
-//                 if(printInfos) cout << "[" << mNbDev << "]    " << listCams.at(i).second << endl;
-//                 mNbDev++;
-//             }
-//         }
-// 
-//         delete mCam;
-#endif
-#endif
-   
-#ifdef USE_ARAVIS
-        CameraScanner* lucid_aravis_scanner = Camera::Scanner->CreateScanner(CamSdkType::LUCID_ARAVIS);
-        assert(lucid_aravis_scanner!=nullptr);
-        lucid_aravis_scanner->getCamerasList();
-        listCams.insert ( listCams.end(), lucid_aravis_scanner->Devices.begin(),lucid_aravis_scanner->Devices.end());
-#endif
-
-#ifdef USE_ARENA
-        //ARENA SDK
-        CameraScanner* lucid_arena_scanner = Camera::Scanner->CreateScanner(CamSdkType::LUCID_ARENA);
-        assert(lucid_arena_scanner!=nullptr);
-        lucid_arena_scanner->getCamerasList();
-
-        mergeList(lucid_arena_scanner->Devices);
-#endif
-
-#ifdef USE_ARAVIS
-        // ARAVIS
-        CameraScanner* aravis_scanner = Camera::Scanner->CreateScanner(CamSdkType::ARAVIS);
-        assert(aravis_scanner!=nullptr);
-        aravis_scanner->getCamerasList();
-
-        mergeList(aravis_scanner->Devices);
-#endif
-
-    // VIDEO
-    /*
-    elem.first = mNbDev; elem.second = VIDEOFILE;
-    subElem.first = 0; subElem.second = elem;
-    mDevices.push_back(subElem);
-    if(printInfos) cout << "[" << mNbDev << "]    VIDEO FILES" << endl;
-    mNbDev++;
-
-    // FRAMES
-
-    elem.first = mNbDev; elem.second = FRAMESDIR;
-    subElem.first = 0; subElem.second = elem;
-    mDevices.push_back(subElem);
-    if(printInfos) cout << "[" << mNbDev << "]    FRAMES DIRECTORY" << endl;
-    mNbDev++;
-    */
-
-   return listCams;
 }
 
 bool Device::getDeviceName() {
@@ -692,7 +208,7 @@ bool Device::getCameraExposureBounds(double &min, double &max) {
 void Device::getCameraExposureBounds() {
     LOG_DEBUG << "Device::getCameraExposureBounds";
 
-    mCam->getExposureBounds(mMinExposureTime, mMaxExposureTime);
+    mCam->getExposureBounds(minExposureTime, maxExposureTime);
 
 }
 
@@ -708,7 +224,7 @@ bool Device::getCameraFPSBounds(double &min, double &max) {
 
 void Device::getCameraFPSBounds() {
     LOG_DEBUG << "Device::getCameraFPSBounds";
-    mCam->getFPSBounds(mMinFPS, mMaxFPS);
+    mCam->getFPSBounds(minFPS, maxFPS);
 }
 
 
@@ -723,14 +239,14 @@ bool Device::getCameraGainBounds(double &min, double &max) {
 void Device::getCameraGainBounds() {
     LOG_DEBUG << "Device::getCameraGainBounds";
 
-    mCam->getGainBounds(mMinGain, mMaxGain);
+    mCam->getGainBounds(minGain, maxGain);
 }
 
 bool Device::setCameraNightExposureTime()
 {   
     shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
 
-    Device* device = m_CameraDeviceManager->getDevice();
+    Device* m_Device = m_CameraDeviceManager->getDevice();
     
     if(!mCam->setExposureTime(mNightExposure)) {
         LOG_ERROR << "Fail to set night exposure time to " << mNightExposure;
@@ -904,8 +420,8 @@ bool Device::runContinuousCapture(Frame &img)
 
 bool Device::runSingleCapture(Frame &img) {
     LOG_DEBUG << "Device::runSingleCapture";
-    LOG_INFO << "single capture with cam: " << mCamID << endl;
-    if(mCam->grabSingleImage(img, mCamID))
+
+    if(mCam->grabSingleImage(img))
         return true;
 
     return false;
@@ -915,23 +431,23 @@ bool Device::runSingleCapture(Frame &img) {
 bool Device::getDeviceCameraSizeParams(int& x,int& y,int& height,int& width)
 {
     shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
-    Device* dev = m_CameraDeviceManager->getDevice();
-    x = dev->mStartX;
-    y = dev->mStartY;
-    height = dev->mSizeHeight;
-    width = dev->mSizeWidth;
+    Device* m_Device = m_CameraDeviceManager->getDevice();
+    x = m_Device->mStartX;
+    y = m_Device->mStartY;
+    height = m_Device->mSizeHeight;
+    width = m_Device->mSizeWidth;
     return true;
 }
 
 bool Device::setCameraSize()
 {
     shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
-    Device* device = m_CameraDeviceManager->getDevice();
-    LOG_DEBUG << "Device::setCameraSize; "<< device->mSizeWidth <<"x"<< device->mSizeHeight ;
+    Device* m_Device = m_CameraDeviceManager->getDevice();
+    LOG_DEBUG << "Device::setCameraSize; "<< m_Device->mSizeWidth <<"x"<< m_Device->mSizeHeight ;
     
-    Camera* mCam = device->mCam;
+    Camera* mCam = m_Device->mCam;
     
-    if(!mCam->setSize(device->mStartX, device->mStartY, device->mSizeWidth, device->mSizeHeight, device->mCustomSize)) 
+    if(!mCam->setSize(m_Device->mStartX, m_Device->mStartY, m_Device->mSizeWidth, m_Device->mSizeHeight, m_Device->mCustomSize)) 
     {
         LOG_ERROR << "Device::setCameraSize;" <<"Fail to set camera size.";
         return false;
@@ -987,13 +503,13 @@ bool Device::loadNextCameraDataSet(string &location) {
 bool Device::getExposureStatus() {
     LOG_DEBUG << "Device::getExposureStatus";
 
-    return mCam->mExposureAvailable;
+    return mCam->m_ExposureAvailable;
 }
 
 bool Device::getGainStatus() {
     LOG_DEBUG << "Device::getGainStatus";
 
-    return mCam->mGainAvailable;
+    return mCam->m_GainAvailable;
 }
 
 Camera* Device::getCamera()

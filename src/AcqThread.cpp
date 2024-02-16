@@ -101,9 +101,9 @@ AcqThread::AcqThread(   boost::circular_buffer<Frame>       *fb,
     msp                     = cfg->getStackParam();
     mstp                    = cfg->getStationParam();
     mdtp                    = cfg->getDetParam();
-    mcp                     = cfg->getCamParam();
-    mfp                     = cfg->getFramesParam();
-    mvp                     = cfg->getVidParam();
+    m_CameraParam                     = cfg->getCamParam();
+    m_FramesParam                     = cfg->getFramesParam();
+    m_VideoParam                     = cfg->getVidParam();
 }
 
 AcqThread::~AcqThread(void){
@@ -121,6 +121,7 @@ AcqThread::~AcqThread(void){
 
 void AcqThread::stopThread(){
     LOG_DEBUG << "AcqThread::stopThread"<<endl;
+
     mMustStopMutex.lock();
     mMustStop = true;
     mMustStopMutex.unlock();
@@ -131,20 +132,25 @@ void AcqThread::stopThread(){
 
 }
 
-bool AcqThread::buildCameraInContinousMode(bool rebuild = false) {
-    // CREATE CAMERA
-    
-    m_Device->Setup(mcp, mfp, mvp, mDeviceID);
-    if (m_Device->mCam == nullptr) {
-            
-        if(!m_Device->createCamera()) {
-            LOG_DEBUG << "CREATE CAMERA ERROR" << endl;
-            return false;
-        }
-    } 
+/// <summary>
+/// WHERE IS CONTINUOUS MODE??
+/// </summary>
+/// <param name="rebuild"></param>
+/// <returns></returns>
+bool AcqThread::setCameraInContinousMode(bool rebuild = false)
+{
+    LOG_WARNING << "AcqThread::setCameraInContinousMode" << "rebuild not managed";
 
-    
+    if (m_Device->mCam == nullptr) {
+        LOG_ERROR << "CAMERA IS NULL" << endl;
+        return false;
+    }
+
+    m_Device->Setup(m_CameraParam, m_FramesParam, m_VideoParam);
+
     // Prepare continuous acquisition.
+    LOG_WARNING << "AcqThread::setCameraInContinousMode" << "Prepare continuous acquisition. need to be tested";
+
     if(!prepareAcquisitionOnDevice()) {
         LOG_DEBUG << "FAIL ON PREPARE AQ DEVICE" << endl;
         return false;
@@ -157,7 +163,7 @@ bool AcqThread::startThread() {
     LOG_DEBUG << "AcqThread::startThread(" << endl;
     
     
-    if (!buildCameraInContinousMode()) {
+    if (!setCameraInContinousMode()) {
         return false;
     }
         
@@ -243,9 +249,9 @@ void AcqThread::operator()()
         {
             if (pExpCtrl!=nullptr)
                 delete pExpCtrl;
-            else pExpCtrl = new ExposureControl( mcp.EXPOSURE_CONTROL_FREQUENCY,
-                                            mcp.EXPOSURE_CONTROL_SAVE_IMAGE,
-                                            mcp.EXPOSURE_CONTROL_SAVE_INFOS,
+            else pExpCtrl = new ExposureControl( m_CameraParam.EXPOSURE_CONTROL_FREQUENCY,
+                                            m_CameraParam.EXPOSURE_CONTROL_SAVE_IMAGE,
+                                            m_CameraParam.EXPOSURE_CONTROL_SAVE_INFOS,
                                             mdp.DATA_PATH,
                                             mstp.STATION_NAME);    
         }
@@ -301,10 +307,10 @@ void AcqThread::operator()()
 
                         // Slow down the time in order to give more time to the detection process.
                         int twait = 100;
-                        if(mvp.INPUT_TIME_INTERVAL == 0 && mfp.INPUT_TIME_INTERVAL > 0)
-                            twait = mfp.INPUT_TIME_INTERVAL;
-                        else if(mvp.INPUT_TIME_INTERVAL > 0 && mfp.INPUT_TIME_INTERVAL == 0)
-                            twait = mvp.INPUT_TIME_INTERVAL;
+                        if(m_VideoParam.INPUT_TIME_INTERVAL == 0 && m_FramesParam.INPUT_TIME_INTERVAL > 0)
+                            twait = m_FramesParam.INPUT_TIME_INTERVAL;
+                        else if(m_VideoParam.INPUT_TIME_INTERVAL > 0 && m_FramesParam.INPUT_TIME_INTERVAL == 0)
+                            twait = m_VideoParam.INPUT_TIME_INTERVAL;
                         #ifdef WINDOWS
                             Sleep(twait);
                         #else
@@ -399,7 +405,7 @@ void AcqThread::operator()()
 
                         // Adjust exposure time.
                         if(pExpCtrl != NULL && exposureControlActive)
-                            exposureControlStatus = pExpCtrl->controlExposureTime(m_Device, newFrame.mImg, newFrame.mDate, mdtp.MASK, m_Device->mMinExposureTime, mcp.ACQ_FPS);
+                            exposureControlStatus = pExpCtrl->controlExposureTime(m_Device, newFrame.mImg, newFrame.mDate, mdtp.MASK, m_Device->minExposureTime, m_CameraParam.ACQ_FPS);
 
                         // Get current date YYYYMMDD.
                         string currentFrameDate =   TimeDate::getYYYYMMDD(newFrame.mDate);
@@ -411,7 +417,7 @@ void AcqThread::operator()()
                             computeSunTimes();
                         }
                         // Acquisition at regular time interval is enabled.
-                        if(mcp.regcap.ACQ_REGULAR_ENABLED && !m_Device->mVideoFramesInput) {
+                        if(m_CameraParam.regcap.ACQ_REGULAR_ENABLED && !m_Device->mVideoFramesInput) {
                             
                             cDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
                             string nowDate = cDate.substr(0, cDate.find("."));
@@ -423,28 +429,28 @@ void AcqThread::operator()()
                             long secTime = td.total_seconds();
 
                             if (LOG_FRAME_STATUS)
-                                LOG_DEBUG << "NEXT REGCAP : " << (int)(mcp.regcap.ACQ_REGULAR_CFG.interval - secTime) << "s" <<  endl;
+                                LOG_DEBUG << "NEXT REGCAP : " << (int)(m_CameraParam.regcap.ACQ_REGULAR_CFG.interval - secTime) << "s" <<  endl;
 
                             // Check it's time to run a regular capture.
-                            if(secTime >= mcp.regcap.ACQ_REGULAR_CFG.interval) {
+                            if(secTime >= m_CameraParam.regcap.ACQ_REGULAR_CFG.interval) {
 
                                 // Current time is after the sunset stop and before the sunrise start = NIGHT
-                                if((currentTimeMode == NIGHT) && (mcp.regcap.ACQ_REGULAR_MODE == NIGHT || mcp.regcap.ACQ_REGULAR_MODE == DAYNIGHT)) {
+                                if((currentTimeMode == NIGHT) && (m_CameraParam.regcap.ACQ_REGULAR_MODE == NIGHT || m_CameraParam.regcap.ACQ_REGULAR_MODE == DAYNIGHT)) {
 
                                     LOG_INFO << "Run regular acquisition.";
 
-                                        runImageCapture(    mcp.regcap.ACQ_REGULAR_CFG.rep,
-                                                            mcp.regcap.ACQ_REGULAR_CFG.exp,
-                                                            mcp.regcap.ACQ_REGULAR_CFG.gain,
-                                                            mcp.regcap.ACQ_REGULAR_CFG.fmt,
-                                                            mcp.regcap.ACQ_REGULAR_OUTPUT,
-                                                            mcp.regcap.ACQ_REGULAR_PRFX);
+                                        runImageCapture(    m_CameraParam.regcap.ACQ_REGULAR_CFG.rep,
+                                                            m_CameraParam.regcap.ACQ_REGULAR_CFG.exp,
+                                                            m_CameraParam.regcap.ACQ_REGULAR_CFG.gain,
+                                                            m_CameraParam.regcap.ACQ_REGULAR_CFG.fmt,
+                                                            m_CameraParam.regcap.ACQ_REGULAR_OUTPUT,
+                                                            m_CameraParam.regcap.ACQ_REGULAR_PRFX);
 
                                 // Current time is between sunrise start and sunset stop = DAY
-                                }else if(currentTimeMode == DAY && (mcp.regcap.ACQ_REGULAR_MODE == DAY || mcp.regcap.ACQ_REGULAR_MODE == DAYNIGHT)) {
+                                }else if(currentTimeMode == DAY && (m_CameraParam.regcap.ACQ_REGULAR_MODE == DAY || m_CameraParam.regcap.ACQ_REGULAR_MODE == DAYNIGHT)) {
 
                                     LOG_INFO << "Run regular acquisition.";
-                                    saveImageCaptured(newFrame, 0, mcp.regcap.ACQ_REGULAR_OUTPUT, mcp.regcap.ACQ_REGULAR_PRFX);
+                                    saveImageCaptured(newFrame, 0, m_CameraParam.regcap.ACQ_REGULAR_OUTPUT, m_CameraParam.regcap.ACQ_REGULAR_PRFX);
 
                                 }
 
@@ -456,7 +462,7 @@ void AcqThread::operator()()
 
                         }
                         // Acquisiton at scheduled time is enabled.
-                        if(mcp.schcap.ACQ_SCHEDULE.size() != 0 && mcp.schcap.ACQ_SCHEDULE_ENABLED && !m_Device->mVideoFramesInput) {
+                        if(m_CameraParam.schcap.ACQ_SCHEDULE.size() != 0 && m_CameraParam.schcap.ACQ_SCHEDULE_ENABLED && !m_Device->mVideoFramesInput) {
 
                             unsigned long next = (mNextAcq.hours * 3600 + mNextAcq.min * 60 + mNextAcq.sec) - (newFrame.mDate.hours * 3600 + newFrame.mDate.minutes * 60 + newFrame.mDate.seconds);
 
@@ -482,7 +488,7 @@ void AcqThread::operator()()
                                                     mNextAcq.exp,
                                                     mNextAcq.gain,
                                                     format,
-                                                    mcp.schcap.ACQ_SCHEDULE_OUTPUT,
+                                                    m_CameraParam.schcap.ACQ_SCHEDULE_OUTPUT,
                                                     "");
 
                                 // Update mNextAcq
@@ -626,26 +632,26 @@ void AcqThread::operator()()
 void AcqThread::selectNextAcquisitionSchedule(TimeDate::Date date) {
     LOG_DEBUG << "AcqThread::selectNextAcquisitionSchedule"<<endl;
 
-    if(mcp.schcap.ACQ_SCHEDULE.size() != 0){
+    if(m_CameraParam.schcap.ACQ_SCHEDULE.size() != 0){
 
         // Search next acquisition
-        for(int i = 0; i < mcp.schcap.ACQ_SCHEDULE.size(); i++){
+        for(int i = 0; i < m_CameraParam.schcap.ACQ_SCHEDULE.size(); i++){
 
-            if(date.hours < mcp.schcap.ACQ_SCHEDULE.at(i).hours){
+            if(date.hours < m_CameraParam.schcap.ACQ_SCHEDULE.at(i).hours){
 
                mNextAcqIndex = i;
                break;
 
-            }else if(date.hours == mcp.schcap.ACQ_SCHEDULE.at(i).hours){
+            }else if(date.hours == m_CameraParam.schcap.ACQ_SCHEDULE.at(i).hours){
 
-                if(date.minutes < mcp.schcap.ACQ_SCHEDULE.at(i).min){
+                if(date.minutes < m_CameraParam.schcap.ACQ_SCHEDULE.at(i).min){
 
                     mNextAcqIndex = i;
                     break;
 
-                }else if(date.minutes == mcp.schcap.ACQ_SCHEDULE.at(i).min){
+                }else if(date.minutes == m_CameraParam.schcap.ACQ_SCHEDULE.at(i).min){
 
-                    if(date.seconds < mcp.schcap.ACQ_SCHEDULE.at(i).sec){
+                    if(date.seconds < m_CameraParam.schcap.ACQ_SCHEDULE.at(i).sec){
 
                         mNextAcqIndex = i;
                         break;
@@ -655,7 +661,7 @@ void AcqThread::selectNextAcquisitionSchedule(TimeDate::Date date) {
             }
         }
 
-        mNextAcq = mcp.schcap.ACQ_SCHEDULE.at(mNextAcqIndex);
+        mNextAcq = m_CameraParam.schcap.ACQ_SCHEDULE.at(mNextAcqIndex);
 
     }
 
@@ -826,12 +832,12 @@ void AcqThread::runImageCapture(int imgNumber, int imgExposure, int imgGain, Cam
 
         frame.mFps = 30;
 
-        if(mcp.ACQ_RES_CUSTOM_SIZE) {
-            frame.mHeight = mcp.ACQ_HEIGHT;
-            frame.mWidth = mcp.ACQ_WIDTH;
+        if(m_CameraParam.ACQ_RES_CUSTOM_SIZE) {
+            frame.mHeight = m_CameraParam.ACQ_HEIGHT;
+            frame.mWidth = m_CameraParam.ACQ_WIDTH;
 
-            frame.mStartX = mcp.ACQ_STARTX;
-            frame.mStartY = mcp.ACQ_STARTY;
+            frame.mStartX = m_CameraParam.ACQ_STARTX;
+            frame.mStartY = m_CameraParam.ACQ_STARTY;
         }
 
         // Run single capture.
@@ -861,7 +867,7 @@ void AcqThread::runImageCapture(int imgNumber, int imgExposure, int imgGain, Cam
     LOG_DEBUG << "Restarting camera in continuous mode..." << endl;
     LOG_INFO << "Restarting camera in continuous mode...";
 
-    if (!buildCameraInContinousMode(true)) {
+    if (!setCameraInContinousMode(true)) {
         throw "Restart camera in continuos mode impossible";
     }
 
@@ -1032,9 +1038,9 @@ bool AcqThread::computeSunTimes() {
 
     LOG_DEBUG << "LOCAL DATE      :  " << mCurrentDate << endl;
 
-    if(mcp.ephem.EPHEMERIS_ENABLED) {
+    if(m_CameraParam.ephem.EPHEMERIS_ENABLED) {
 
-        Ephemeris ephem1 = Ephemeris(mCurrentDate, mcp.ephem.SUN_HORIZON_1, mstp.SITELONG, mstp.SITELAT);
+        Ephemeris ephem1 = Ephemeris(mCurrentDate, m_CameraParam.ephem.SUN_HORIZON_1, mstp.SITELONG, mstp.SITELAT);
 
         if(!ephem1.computeEphemeris(sunriseStartH, sunriseStartM,sunsetStopH, sunsetStopM)) {
 
@@ -1042,7 +1048,7 @@ bool AcqThread::computeSunTimes() {
 
         }
 
-        Ephemeris ephem2 = Ephemeris(mCurrentDate, mcp.ephem.SUN_HORIZON_2, mstp.SITELONG, mstp.SITELAT );
+        Ephemeris ephem2 = Ephemeris(mCurrentDate, m_CameraParam.ephem.SUN_HORIZON_2, mstp.SITELONG, mstp.SITELAT );
 
         if(!ephem2.computeEphemeris(sunriseStopH, sunriseStopM,sunsetStartH, sunsetStartM)) {
 
@@ -1052,11 +1058,11 @@ bool AcqThread::computeSunTimes() {
 
     }else {
 
-        sunriseStartH = mcp.ephem.SUNRISE_TIME.at(0);
-        sunriseStartM = mcp.ephem.SUNRISE_TIME.at(1);
+        sunriseStartH = m_CameraParam.ephem.SUNRISE_TIME.at(0);
+        sunriseStartM = m_CameraParam.ephem.SUNRISE_TIME.at(1);
 
         double intpart1 = 0;
-        double fractpart1 = modf((double)mcp.ephem.SUNRISE_DURATION/3600.0 , &intpart1);
+        double fractpart1 = modf((double)m_CameraParam.ephem.SUNRISE_DURATION/3600.0 , &intpart1);
 
         if(intpart1!=0) {
 
@@ -1102,11 +1108,11 @@ bool AcqThread::computeSunTimes() {
 
         }
 
-        sunsetStartH = mcp.ephem.SUNSET_TIME.at(0);
-        sunsetStartM = mcp.ephem.SUNSET_TIME.at(1);
+        sunsetStartH = m_CameraParam.ephem.SUNSET_TIME.at(0);
+        sunsetStartM = m_CameraParam.ephem.SUNSET_TIME.at(1);
 
         double intpart3 = 0;
-        double fractpart3 = modf((double)mcp.ephem.SUNSET_DURATION/3600.0 , &intpart3);
+        double fractpart3 = modf((double)m_CameraParam.ephem.SUNSET_DURATION/3600.0 , &intpart3);
 
         if(intpart3!=0) {
 
@@ -1278,7 +1284,6 @@ TimeMode AcqThread::getCurrentTimeMode()
 
 bool AcqThread::prepareAcquisitionOnDevice() 
 {
-    
     LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice" << endl;
     
     // SET SIZE
@@ -1330,13 +1335,13 @@ bool AcqThread::prepareAcquisitionOnDevice()
 
         LOG_INFO << "DAYTIME         :  NO";
         LOG_INFO << "AUTO EXPOSURE   :  YES";
-        LOG_INFO << "EXPOSURE TIME   :  Minimum (" << m_Device->mMinExposureTime << ")"<< m_Device->getNightExposureTime();
-        LOG_INFO << "GAIN            :  Minimum (" << m_Device->mMinGain << ")";
+        LOG_INFO << "EXPOSURE TIME   :  Minimum (" << m_Device->minExposureTime << ")"<< m_Device->getNightExposureTime();
+        LOG_INFO << "GAIN            :  Minimum (" << m_Device->minGain << ")";
         LOG_DEBUG << "*************************** SET NIGHT AUTO SI" << endl;
-        if(!m_Device->setCameraExposureTime(m_Device->mMinExposureTime))
+        if(!m_Device->setCameraExposureTime(m_Device->minExposureTime))
             return false;
 
-        if(!m_Device->setCameraGain(m_Device->mMinGain))
+        if(!m_Device->setCameraGain(m_Device->minGain))
             return false;
 
     }

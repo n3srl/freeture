@@ -86,7 +86,7 @@ bool CameraWindows::setSize(int startx, int starty, int width, int height, bool 
 
 }
 
- bool  CameraWindows::grabSingleImage(Frame &frame, int camID) {
+ bool  CameraWindows::grabSingleImage(Frame &frame) {
 
     int numDevices = mVideoInput.listDevices(true);
 

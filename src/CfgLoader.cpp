@@ -65,6 +65,7 @@ void CfgLoader::Clear()
 /// <returns></returns>
 bool CfgLoader::Load(const std::string& file) {
     try {
+        LOG_INFO << "Loading configuration file " << file << "...";
         std::ifstream in_file(file.c_str());
 
         if (!in_file.good()) {
@@ -195,9 +196,12 @@ bool CfgLoader::Load(const std::string& file) {
         }
     }
     catch (exception& e) {
-        LOG_ERROR << "CfgLoader::Load;" << e.what();
+        LOG_DEBUG << "CfgLoader::Load;" << e.what();
+        LOG_ERROR << "KO";
         return false;
     }
+
+    LOG_INFO << "OK";
 
     return true;
 }

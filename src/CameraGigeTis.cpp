@@ -748,7 +748,7 @@ using namespace freeture;
 
     }
 
-    bool CameraGigeTis::grabSingleImage(Frame &frame, int camID) {
+    bool CameraGigeTis::grabSingleImage(Frame &frame) {
 
         if(!createDevice(camID))
             return false;

@@ -12,8 +12,9 @@
 
 
 #include <boost/program_options.hpp>
+#include <boost/asio/signal_set.hpp>
 
-namespace po        = boost::program_options;
+namespace po = boost::program_options;
 
 namespace freeture
 {
@@ -22,6 +23,7 @@ namespace freeture
     class AcqThread;
     class DetThread;
     class StackThread;
+    class Device;
 
     enum class Mode
     {
@@ -54,7 +56,11 @@ namespace freeture
             std::shared_ptr<DetThread> m_DetectionThread;
             std::shared_ptr<StackThread> m_StackThread;
 
-            po::options_description* desc = nullptr;
+            Device* m_Device;
+
+            po::options_description* m_OptionsDescription = nullptr;
+
+            void createDeviceManager();
 
             void printHelp();
             void printVersion();
@@ -64,6 +70,7 @@ namespace freeture
             void selectMode( po::variables_map&);
 
             void signalHandler( int signum );
+            void handler( const boost::system::error_code&, int );
 
             void modeTest();
             void modeContinuousAcquisition();
@@ -71,6 +78,7 @@ namespace freeture
             void modeSingleAcquisition();
             void modeCleanLogs();
             void fetchProgramOption();
+
         public:
             Freeture(int , const char** );
 

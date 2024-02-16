@@ -35,7 +35,6 @@
 *          https://wiki.gnome.org/action/show/Projects/Aravis?action=show&redirect=Aravis
 */
 
-#include "ErrorManager.cpp"
 #include "CameraGigeAravis.h"
 #include <iostream>
 
@@ -81,7 +80,7 @@ using namespace freeture;
             return false;
 
         camera = arv_camera_new(deviceName.c_str(),&error);
-        ErrorManager::CheckAravisError(&error);
+        LOG_ERROR  <<  "ERROR";
 
         if(camera == NULL)
         {
@@ -113,10 +112,10 @@ using namespace freeture;
             }
 
             arv_camera_set_region(camera, startx, starty, width, height,&error);
-            ErrorManager::CheckAravisError(&error);
+            LOG_ERROR  <<  "ERROR";
 
             arv_camera_get_region (camera, &mStartX, &mStartY, &mWidth, &mHeight,&error);
-            ErrorManager::CheckAravisError(&error);
+            LOG_ERROR  <<  "ERROR";
 
             BOOST_LOG_SEV(logger, notification) << "Camera region size : " << mWidth << "x" << mHeight;
             if (arv_device_get_feature(arv_camera_get_device(camera), "OffsetX")) {
@@ -132,15 +131,15 @@ using namespace freeture;
             
 
             
-            ErrorManager::CheckAravisError(&error);
+            LOG_ERROR  <<  "ERROR";
 
             BOOST_LOG_SEV(logger, notification) << "Camera sensor size : " << sensor_width << "x" << sensor_height;
 
             arv_camera_set_region(camera, 0, 0,sensor_width,sensor_height,&error);
-            ErrorManager::CheckAravisError(&error);
+            LOG_ERROR  <<  "ERROR";
 
             arv_camera_get_region (camera, NULL, NULL, &mWidth, &mHeight,&error);
-            ErrorManager::CheckAravisError(&error);
+            LOG_ERROR  <<  "ERROR";
         }
 
         return true;
@@ -175,15 +174,15 @@ using namespace freeture;
         frameCounter = 0;
 
         payload = arv_camera_get_payload (camera, &error);
-        ErrorManager::CheckAravisError(&error);
+        LOG_ERROR  <<  "ERROR";
 
         BOOST_LOG_SEV(logger, notification) << "Camera payload : " << payload;
 
         pixFormat = arv_camera_get_pixel_format(camera, &error);
-        ErrorManager::CheckAravisError(&error);
+        LOG_ERROR  <<  "ERROR";
 
         arv_camera_get_exposure_time_bounds (camera, &exposureMin, &exposureMax, &error);
-        ErrorManager::CheckAravisError(&error);
+        LOG_ERROR  <<  "ERROR";
 
         BOOST_LOG_SEV(logger, notification) << "Camera exposure bound min : " << exposureMin;
         BOOST_LOG_SEV(logger, notification) << "Camera exposure bound max : " << exposureMax;
@@ -207,13 +206,13 @@ using namespace freeture;
         std::cout << std::endl;
 
         std::cout << "DEVICE SELECTED : " << arv_camera_get_device_id(camera,&error)    << std::endl;
-        ErrorManager::CheckAravisError(&error);
+        LOG_ERROR  <<  "ERROR";
 
         std::cout << "DEVICE NAME     : " << arv_camera_get_model_name(camera,&error)   << std::endl;
-        ErrorManager::CheckAravisError(&error);
+        LOG_ERROR  <<  "ERROR";
 
         std::cout << "DEVICE VENDOR   : " << arv_camera_get_vendor_name(camera,&error)  << std::endl;
-        ErrorManager::CheckAravisError(&error);
+        LOG_ERROR  <<  "ERROR";
 
         std::cout << "PAYLOAD         : " << payload                             << std::endl;
         std::cout << "Start X         : " << mStartX                             << std::endl
@@ -323,15 +322,15 @@ using namespace freeture;
 
         BOOST_LOG_SEV(logger, notification) << "Set camera to CONTINUOUS MODE";
         arv_camera_set_acquisition_mode(camera, ARV_ACQUISITION_MODE_CONTINUOUS,&error);
-        ErrorManager::CheckAravisError(&error);
+        LOG_ERROR  <<  "ERROR";
 
         BOOST_LOG_SEV(logger, notification) << "Set camera TriggerMode to Off";
         arv_device_set_string_feature_value(arv_camera_get_device (camera), "TriggerMode" , "Off", &error);
-        ErrorManager::CheckAravisError(&error);
+        LOG_ERROR  <<  "ERROR";
 
         BOOST_LOG_SEV(logger, notification) << "Start acquisition on camera";
         arv_camera_start_acquisition(camera, &error);
-        ErrorManager::CheckAravisError(&error);
+        LOG_ERROR  <<  "ERROR";
 
         return true;
     }
@@ -350,7 +349,7 @@ using namespace freeture;
 
         BOOST_LOG_SEV(logger, notification) << "Stopping acquisition...";
         arv_camera_stop_acquisition(camera, &error);
-        ErrorManager::CheckAravisError(&error);
+        LOG_ERROR  <<  "ERROR";
 
         BOOST_LOG_SEV(logger, notification) << "Acquisition stopped.";
 
@@ -497,7 +496,7 @@ using namespace freeture;
     }
 
 
-    bool CameraGigeAravis::grabSingleImage(Frame &frame, int camID)
+    bool CameraGigeAravis::grabSingleImage(Frame &frame)
     {
         GError* error;
 
@@ -965,7 +964,7 @@ using namespace freeture;
         double expMin, expMax;
 
         arv_camera_get_exposure_time_bounds(camera, &expMin, &expMax,&error);
-        ErrorManager::CheckAravisError(&error);
+        LOG_ERROR  <<  "ERROR";
 
 
         if(camera != NULL){
@@ -974,7 +973,7 @@ using namespace freeture;
 
                 exp = val;
                 arv_camera_set_exposure_time(camera, val, &error);
-                ErrorManager::CheckAravisError(&error);
+                LOG_ERROR  <<  "ERROR";
 
             }else{
 
@@ -996,7 +995,7 @@ using namespace freeture;
         double gMin, gMax;
 
         arv_camera_get_gain_bounds (camera, &gMin, &gMax, &error);
-        ErrorManager::CheckAravisError(&error);
+        LOG_ERROR  <<  "ERROR";
 
         if (camera != NULL){
 
@@ -1004,7 +1003,7 @@ using namespace freeture;
 
                 gain = val;
                 arv_camera_set_gain (camera, (double)val,&error);
-                ErrorManager::CheckAravisError(&error);
+                LOG_ERROR  <<  "ERROR";
 
             }else{
 
@@ -1027,10 +1026,10 @@ using namespace freeture;
         if (camera != NULL){
 
             arv_camera_set_frame_rate(camera, fps, &error);
-            ErrorManager::CheckAravisError(&error);
+            LOG_ERROR  <<  "ERROR";
 
             double setfps = arv_camera_get_frame_rate(camera, &error);
-            ErrorManager::CheckAravisError(&error);
+            LOG_ERROR  <<  "ERROR";
 
             if (setfps!=fps) {
                 std::cout << "> Frame rate value (" << fps << ") can't be set! Please check genicam features." << std::endl;
@@ -1054,20 +1053,20 @@ using namespace freeture;
                 case MONO8 :
                     {
                         arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_8,&error);
-                        ErrorManager::CheckAravisError(&error);
+                        LOG_ERROR  <<  "ERROR";
                     }
                     break;
 
                 case MONO12 :
                     {
                         arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_12,&error);
-                        ErrorManager::CheckAravisError(&error);
+                        LOG_ERROR  <<  "ERROR";
                     }
                     break;
                 case MONO16 :
                     {
                         arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_16,&error);
-                        ErrorManager::CheckAravisError(&error);
+                        LOG_ERROR  <<  "ERROR";
                     }
                     break;
             }
@@ -1092,10 +1091,10 @@ using namespace freeture;
                 }
 
                 arv_camera_set_region(camera, startx, starty, width, height,&error);
-                ErrorManager::CheckAravisError(&error);
+                LOG_ERROR  <<  "ERROR";
 
                 arv_camera_get_region (camera, &mStartX, &mStartY, &mWidth, &mHeight,&error);
-                ErrorManager::CheckAravisError(&error);
+                LOG_ERROR  <<  "ERROR";
 
             // Default is maximum size
             } else {
@@ -1103,15 +1102,15 @@ using namespace freeture;
                 int sensor_width, sensor_height;
 
                 arv_camera_get_sensor_size(camera, &sensor_width, &sensor_height, &error);
-                ErrorManager::CheckAravisError(&error);
+                LOG_ERROR  <<  "ERROR";
 
                 BOOST_LOG_SEV(logger, notification) << "Camera sensor size : " << sensor_width << "x" << sensor_height;
 
                 arv_camera_set_region(camera, 0, 0,sensor_width,sensor_height,&error);
-                ErrorManager::CheckAravisError(&error);
+                LOG_ERROR  <<  "ERROR";
 
                 arv_camera_get_region (camera, NULL, NULL, &mWidth, &mHeight,&error);
-                ErrorManager::CheckAravisError(&error);
+                LOG_ERROR  <<  "ERROR";
 
             }
             return true;
@@ -1161,18 +1160,18 @@ using namespace freeture;
                 {
                     bool value = line_data[1] == "true";
                     arv_device_set_boolean_feature_value(arv_device, feature, value, &error);
-                    ErrorManager::CheckAravisError(&error);
+                    LOG_ERROR  <<  "ERROR";
                 } else if(line_data[2] == "string")
                 {
                     const char* value = line_data[1].c_str();
                     arv_device_set_string_feature_value(arv_device, feature, value, &error);
-                    ErrorManager::CheckAravisError(&error);
+                    LOG_ERROR  <<  "ERROR";
                 }
                 else if(line_data[2] == "float")
                 {
                     float value = std::stof(line_data[1]);
                     arv_device_set_float_feature_value(arv_device, feature, value, &error);
-                    ErrorManager::CheckAravisError(&error);
+                    LOG_ERROR  <<  "ERROR";
                 }
                 std::this_thread::sleep_for(std::chrono::milliseconds(1500));
             }

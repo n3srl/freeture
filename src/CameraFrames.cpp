@@ -37,28 +37,32 @@
 
 #include <boost/filesystem.hpp>
 #include <boost/date_time.hpp>
-#include "Logger.h"
+
+#include "CameraScanner.h"
 #include "Conversion.h"
 #include "Fits2D.h"
+#include "Logger.h"
 
 namespace fs = boost::filesystem;
 using namespace std;
 using namespace freeture;
 
-CameraFrames::CameraFrames(vector<string> locationList, int numPos, bool verbose):
-mNumFramePos(numPos), mReadDataStatus(false), mCurrDirId(0),
-mFirstFrameNum(0), mLastFrameNum(0) {
+CameraFrames::CameraFrames( CameraDescription camera_descriptor, cameraParam settings,  std::vector<std::string> locationList, int numPos, bool verbose) :
+    Camera(camera_descriptor, settings),
+    mNumFramePos(numPos),
+    mReadDataStatus(false),
+    mCurrDirId(0),
+    mFirstFrameNum(0),
+    mLastFrameNum(0) {
 
     if(locationList.size()>0)
         mFramesDir = locationList;
     else
         throw "No frames directory in input.";
 
-    mExposureAvailable = false;
-    mGainAvailable = false;
-    mInputDeviceType = SINGLE_FITS_FRAME;
-    mVerbose = verbose;
-
+    m_ExposureAvailable = false;
+    m_GainAvailable = false;
+    m_CameraDescriptor.DeviceType= SINGLE_FITS_FRAME;
 }
 
 CameraFrames::~CameraFrames(void) {
@@ -111,7 +115,7 @@ bool CameraFrames::searchMinMaxFramesNumber(string location) {
 
     if(fs::exists(p)){
 
-        if(mVerbose) LOG_INFO << "Frame's directory exists : " << location;
+        LOG_DEBUG<< "Frame's directory exists : " << location;
 
         int firstFrame = -1, lastFrame = 0;
         string filename = "";
@@ -162,11 +166,9 @@ bool CameraFrames::searchMinMaxFramesNumber(string location) {
 
                         number = atoi(output2.front().c_str());
                         break;
-
                     }
 
                     i++;
-
                 }
 
                 if(firstFrame == -1) {
@@ -188,8 +190,7 @@ bool CameraFrames::searchMinMaxFramesNumber(string location) {
 
         }
 
-        if(mVerbose) LOG_INFO << "First frame number in frame's directory : " << firstFrame;
-        if(mVerbose) LOG_INFO << "Last frame number in frame's directory : " << lastFrame;
+        LOG_DEBUG << "First frame number in frame's directory : " << firstFrame;
 
         mLastFrameNum = lastFrame;
         mFirstFrameNum = firstFrame;
@@ -197,9 +198,7 @@ bool CameraFrames::searchMinMaxFramesNumber(string location) {
         return true;
 
     }else{
-
-        if(mVerbose) LOG_ERROR << "Frame's directory not found.";
-        if(mVerbose) LOG_DEBUG << "Frame's directory not found." << endl;
+        LOG_ERROR << "Frame's directory not found.";
         return false;
 
     }
@@ -338,4 +337,40 @@ bool CameraFrames::grabImage(Frame &img) {
 
     }
 
+}
+
+bool CameraFrames::initSDK()
+{
+
+    return true;
+}
+
+bool CameraFrames::initOnce()
+{
+    return true;
+}
+
+bool CameraFrames::init()
+{
+    return true;
+}
+
+void CameraFrames::fetchBounds(parameters&)
+{
+
+}
+
+void CameraFrames::configure(parameters&)
+{
+
+}
+
+bool CameraFrames::configurationCheck(parameters&)
+{
+    return true;
+}
+
+bool CameraFrames::createDevice()
+{
+    return true;
 }

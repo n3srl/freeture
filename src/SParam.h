@@ -71,6 +71,7 @@
 // ******************************************************
 // ****************** MAIL PARAMETERS *******************
 // ******************************************************
+#define DEFAULT_CANARIN -1
 
 namespace freeture
 {
@@ -137,34 +138,34 @@ namespace freeture
     // ******************************************************
 
     struct scheduleParam {
-        int hours;
-        int min;
-        int sec;
-        int exp;
-        int gain;
-        int rep;
+        int hours = DEFAULT_CANARIN;
+        int min = DEFAULT_CANARIN;
+        int sec = DEFAULT_CANARIN;
+        int exp = DEFAULT_CANARIN;
+        int gain = DEFAULT_CANARIN;
+        int rep = DEFAULT_CANARIN;
         CamPixFmt fmt;
     };
 
     // ******************************************************
     // ************** INPUT CAMERA PARAMETERS ***************
     // ******************************************************
-
+  
     struct cameraParam {
-        double      ACQ_FPS;
+        double      ACQ_FPS = DEFAULT_CANARIN;
         CamPixFmt   ACQ_FORMAT;
         bool        ACQ_RES_CUSTOM_SIZE;
         bool        SHIFT_BITS;
-        int         ACQ_NIGHT_EXPOSURE;
-        int         ACQ_NIGHT_GAIN;
-        int         ACQ_DAY_EXPOSURE;
-        int         ACQ_DAY_GAIN;
-        int         ACQ_STARTX;
-        int         ACQ_STARTY;
-        int         ACQ_HEIGHT;
-        int         ACQ_WIDTH;
+        int         ACQ_NIGHT_EXPOSURE = DEFAULT_CANARIN;
+        int         ACQ_NIGHT_GAIN = DEFAULT_CANARIN;
+        int         ACQ_DAY_EXPOSURE = DEFAULT_CANARIN;
+        int         ACQ_DAY_GAIN = DEFAULT_CANARIN;
+        int         ACQ_STARTX = DEFAULT_CANARIN;
+        int         ACQ_STARTY = DEFAULT_CANARIN;
+        int         ACQ_HEIGHT = DEFAULT_CANARIN;
+        int         ACQ_WIDTH = DEFAULT_CANARIN;
         bool        EXPOSURE_CONTROL_ENABLED;
-        int         EXPOSURE_CONTROL_FREQUENCY;
+        int         EXPOSURE_CONTROL_FREQUENCY = DEFAULT_CANARIN;
         bool        EXPOSURE_CONTROL_SAVE_IMAGE;
         bool        EXPOSURE_CONTROL_SAVE_INFOS;
 
@@ -174,8 +175,8 @@ namespace freeture
             double  SUN_HORIZON_2;
             std::vector<int>  SUNRISE_TIME;
             std::vector<int>  SUNSET_TIME;
-            int     SUNSET_DURATION;
-            int     SUNRISE_DURATION;
+            int     SUNSET_DURATION = DEFAULT_CANARIN;
+            int     SUNRISE_DURATION = DEFAULT_CANARIN;
         };
         ephemeris ephem;
 
@@ -185,10 +186,10 @@ namespace freeture
             std::string      ACQ_REGULAR_PRFX;
             ImgFormat   ACQ_REGULAR_OUTPUT;
             struct regularParam {
-                int interval;
-                int exp;
-                int gain;
-                int rep;
+                int interval = DEFAULT_CANARIN;
+                int exp  = DEFAULT_CANARIN;
+                int gain = DEFAULT_CANARIN;
+                int rep  = DEFAULT_CANARIN;
                 CamPixFmt fmt;
             };
             regularParam ACQ_REGULAR_CFG;

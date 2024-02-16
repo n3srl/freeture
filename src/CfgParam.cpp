@@ -102,10 +102,12 @@ CfgParam::CfgParam( string cfgFilePath)
     m_Param.camInput.ephem.EPHEMERIS_ENABLED = false;
     m_Param.camInput.ephem.SUNRISE_DURATION = 3600;
     vector<int>sunrisetime, sunsettime;
+
     sunrisetime.push_back(7);
     sunrisetime.push_back(0);
     sunsettime.push_back(22);
     sunsettime.push_back(0);
+
     m_Param.camInput.ephem.SUNRISE_TIME = sunrisetime;
     m_Param.camInput.ephem.SUNSET_DURATION = 3600;
     m_Param.camInput.ephem.SUNSET_TIME = sunsettime;
@@ -137,7 +139,6 @@ CfgParam::CfgParam( string cfgFilePath)
     fs::path pcfg(cfgFilePath);
     if(fs::exists(pcfg)) {
         if(m_Cfg.Load(cfgFilePath)) {
-            
             loadDeviceID();
             loadDataParam();
             loadLogParam();
@@ -146,6 +147,10 @@ CfgParam::CfgParam( string cfgFilePath)
             loadStationParam();
             loadFitskeysParam();
             loadMailParam();
+            loadVidParam();
+            loadFramesParam();
+            loadCamParam();
+
         }else{
             m_EMsg.push_back("Fail to load configuration file.");
             LOG_ERROR << "Fail to load configuration file." << endl;
@@ -192,7 +197,7 @@ void CfgParam::setInitRequired(bool init)
 
 bool CfgParam::loadCameraInit()
 {
-    bool error;
+    bool error = false;
 
     std::string defaultCameraConfigFile = "/freeture/cinit.cfg";
     bool cBool = false;
@@ -252,7 +257,7 @@ void CfgParam::loadCameraSerial()
     std::string cString;
 
     bool failStringSerial = false;
-    std::string failmsg = "- CAMERA_SERIAL : ";
+    std::string failmsg = " CAMERA_SERIAL : ";
 
     if(!m_Cfg.Get("CAMERA_SERIAL", cString))
     {
@@ -268,7 +273,7 @@ void CfgParam::loadDeviceID() {
     int cId;
     string cString;
     bool failIntId, failStringId = false;
-    string failmsg = "- CAMERA_ID : ";
+    string failmsg = " CAMERA_ID : ";
 
     if(!m_Cfg.Get("CAMERA_ID", cId)) {
         failIntId = true;
@@ -305,7 +310,7 @@ void CfgParam::loadDataParam() {
     }
 
     if(!m_Cfg.Get("FITS_COMPRESSION", m_Param.data.FITS_COMPRESSION)) {
-        m_Param.data.errormsg.push_back("- FITS_COMPRESSION : Fail to get value.");
+        m_Param.data.errormsg.push_back(" FITS_COMPRESSION : Fail to get value.");
         e = true;
     }else{
 
@@ -313,7 +318,7 @@ void CfgParam::loadDataParam() {
 
         if(m_Param.data.FITS_COMPRESSION) {
             if(!m_Cfg.Get("FITS_COMPRESSION_METHOD", m_Param.data.FITS_COMPRESSION_METHOD)) {
-                m_Param.data.errormsg.push_back("- FITS_COMPRESSION_METHOD : Fail to get value.");
+                m_Param.data.errormsg.push_back(" FITS_COMPRESSION_METHOD : Fail to get value.");
                 e = true;
             }
         }
@@ -327,7 +332,7 @@ void CfgParam::loadLogParam() {
     bool e = false;
 
     if(!m_Cfg.Get("LOG_PATH", m_Param.log.LOG_PATH)) {
-        m_Param.log.errormsg.push_back("- LOG_PATH : Fail to get value.");
+        m_Param.log.errormsg.push_back(" LOG_PATH : Fail to get value.");
         e = true;
     }else{
 
@@ -337,33 +342,33 @@ void CfgParam::loadLogParam() {
             try {
                 fs::create_directory(p);
             } catch (std::exception &ex) {
-                m_Param.log.errormsg.push_back("- LOG_PATH : Can't create Log Path directory.");
+                m_Param.log.errormsg.push_back(" LOG_PATH : Can't create Log Path directory.");
                 e = true;
             }
         }
     }
 
     if(!m_Cfg.Get("LOG_ARCHIVE_DAY", m_Param.log.LOG_ARCHIVE_DAY)) {
-        m_Param.log.errormsg.push_back("- LOG_ARCHIVE_DAY : Fail to get value.");
+        m_Param.log.errormsg.push_back(" LOG_ARCHIVE_DAY : Fail to get value.");
         e = true;
     }
 
     if(!m_Cfg.Get("LOG_SIZE_LIMIT", m_Param.log.LOG_SIZE_LIMIT)) {
-        m_Param.log.errormsg.push_back("- LOG_SIZE_LIMIT : Fail to get value.");
+        m_Param.log.errormsg.push_back(" LOG_SIZE_LIMIT : Fail to get value.");
         e = true;
     }
 
     string log_severity;
     EParser<LogSeverityLevel> log_sev;
     if(!m_Cfg.Get("LOG_SEVERITY", log_severity)) {
-        m_Param.log.errormsg.push_back("- LOG_SEVERITY : Fail to get value.");
+        m_Param.log.errormsg.push_back(" LOG_SEVERITY : Fail to get value.");
         e = true;
     }
 
     try {
         m_Param.log.LOG_SEVERITY = log_sev.parseEnum("LOG_SEVERITY", log_severity);
     }catch (std::exception &ex) {
-        m_Param.log.errormsg.push_back("- LOG_SEVERITY : " + string(ex.what()));
+        m_Param.log.errormsg.push_back(" LOG_SEVERITY : " + string(ex.what()));
         e = true;
     }
 
@@ -375,15 +380,15 @@ void CfgParam::loadFramesParam() {
     bool e = false;
 
     if(!m_Cfg.Get("INPUT_TIME_INTERVAL", m_Param.framesInput.INPUT_TIME_INTERVAL)) {
-        m_Param.framesInput.errormsg.push_back("- INPUT_TIME_INTERVAL : Fail to get value.");
-        //cout << "- INPUT_FRAMES_DIRECTORY_PATH : Fail to get value." << endl;
+        m_Param.framesInput.errormsg.push_back(" INPUT_TIME_INTERVAL : Fail to get value.");
+        //cout << " INPUT_FRAMES_DIRECTORY_PATH : Fail to get value." << endl;
         e = true;
     }
 
     string inputPaths;
     if(!m_Cfg.Get("INPUT_FRAMES_DIRECTORY_PATH", inputPaths)) {
-        m_Param.framesInput.errormsg.push_back("- INPUT_FRAMES_DIRECTORY_PATH : Fail to get value.");
-        //cout << "- INPUT_FRAMES_DIRECTORY_PATH : Fail to get value." << endl;
+        m_Param.framesInput.errormsg.push_back(" INPUT_FRAMES_DIRECTORY_PATH : Fail to get value.");
+        //cout << " INPUT_FRAMES_DIRECTORY_PATH : Fail to get value." << endl;
         e = true;
     }
 
@@ -394,7 +399,7 @@ void CfgParam::loadFramesParam() {
     for(tokenizer::iterator tok_iter = tokens.begin();tok_iter != tokens.end(); ++tok_iter){
         fs::path p_input_frames_dir(*tok_iter);
         if(!boost::filesystem::exists(p_input_frames_dir)) {
-            m_Param.framesInput.errormsg.push_back("- INPUT_FRAMES_DIRECTORY_PATH : " + *tok_iter + " not exists.");
+            m_Param.framesInput.errormsg.push_back(" INPUT_FRAMES_DIRECTORY_PATH : " + *tok_iter + " not exists.");
             e = true;
         }else{
             m_Param.framesInput.INPUT_FRAMES_DIRECTORY_PATH.push_back(*tok_iter);
@@ -409,14 +414,14 @@ void CfgParam::loadVidParam() {
     bool e = false;
 
     if(!m_Cfg.Get("INPUT_TIME_INTERVAL", m_Param.vidInput.INPUT_TIME_INTERVAL)) {
-        m_Param.vidInput.errormsg.push_back("- INPUT_TIME_INTERVAL : Fail to get value.");
-        //cout << "- INPUT_FRAMES_DIRECTORY_PATH : Fail to get value." << endl;
+        m_Param.vidInput.errormsg.push_back(" INPUT_TIME_INTERVAL : Fail to get value.");
+        //cout << " INPUT_FRAMES_DIRECTORY_PATH : Fail to get value." << endl;
         e = true;
     }
 
     string input_video_path;
     if(!m_Cfg.Get("INPUT_VIDEO_PATH", input_video_path)) {
-        m_Param.vidInput.errormsg.push_back("- INPUT_VIDEO_PATH : Fail to get value.");
+        m_Param.vidInput.errormsg.push_back(" INPUT_VIDEO_PATH : Fail to get value.");
         e = true;
     }
 
@@ -427,7 +432,7 @@ void CfgParam::loadVidParam() {
     for(tokenizer::iterator tok_iter = tokens.begin();tok_iter != tokens.end(); ++tok_iter){
        fs::path p_input_video_path(*tok_iter);
         if(!is_regular_file(p_input_video_path)) {
-            m_Param.vidInput.errormsg.push_back("- INPUT_VIDEO_PATH : " + *tok_iter + " not exists.");
+            m_Param.vidInput.errormsg.push_back(" INPUT_VIDEO_PATH : " + *tok_iter + " not exists.");
             e = true;
         }else{
             m_Param.vidInput.INPUT_VIDEO_PATH.push_back(*tok_iter);
@@ -437,13 +442,14 @@ void CfgParam::loadVidParam() {
     if(!e) m_Param.vidInput.status = true;
 }
 
-void CfgParam::loadDetParam() {
+void CfgParam::loadDetParam()
+{
 
     bool error = false;
 
     if (!m_Cfg.Get("DET_ENABLED", m_Param.det.DET_ENABLED)) {
         error = true;
-        m_Param.det.errormsg.push_back("- DET_ENABLED : Fail to load value.");
+        m_Param.det.errormsg.push_back(" DET_ENABLED : Fail to load value.");
     }
 
     //if detections are enabled check other fields
@@ -452,12 +458,12 @@ void CfgParam::loadDetParam() {
 
         if (!m_Cfg.Get("ACQ_BUFFER_SIZE", m_Param.det.ACQ_BUFFER_SIZE)) {
             error = true;
-            m_Param.det.errormsg.push_back("- ACQ_BUFFER_SIZE : Fail to load value.");
+            m_Param.det.errormsg.push_back(" ACQ_BUFFER_SIZE : Fail to load value.");
         }
 
         if (!m_Cfg.Get("ACQ_MASK_ENABLED", m_Param.det.ACQ_MASK_ENABLED)) {
             error = true;
-            m_Param.det.errormsg.push_back("- ACQ_MASK_ENABLED : Fail to load value.");
+            m_Param.det.errormsg.push_back(" ACQ_MASK_ENABLED : Fail to load value.");
         }
         else {
 
@@ -465,14 +471,14 @@ void CfgParam::loadDetParam() {
 
                 if (!m_Cfg.Get("ACQ_MASK_PATH", m_Param.det.ACQ_MASK_PATH)) {
                     error = true;
-                    m_Param.det.errormsg.push_back("- ACQ_MASK_PATH : Fail to load value.");
+                    m_Param.det.errormsg.push_back(" ACQ_MASK_PATH : Fail to load value.");
                 }
                 else {
                     cv::Mat tempmask = cv::imread(m_Param.det.ACQ_MASK_PATH, cv::IMREAD_GRAYSCALE);
 
                     if (!tempmask.data) {
                         error = true;
-                        m_Param.det.errormsg.push_back("- MASK : Fail to load the mask image. No data.");
+                        m_Param.det.errormsg.push_back(" MASK : Fail to load the mask image. No data.");
                         // Add test to compare mask size to a capture from camera or video or frame file
                     }
                     else {
@@ -486,7 +492,7 @@ void CfgParam::loadDetParam() {
         string det_mode;
         if (!m_Cfg.Get("DET_MODE", det_mode)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_MODE : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_MODE : Fail to load value.");
         }
         else {
             try {
@@ -495,13 +501,13 @@ void CfgParam::loadDetParam() {
             }
             catch (std::exception& ex) {
                 error = true;
-                m_Param.det.errormsg.push_back("- DET_MODE : " + string(ex.what()));
+                m_Param.det.errormsg.push_back(" DET_MODE : " + string(ex.what()));
             }
         }
 
         if (!m_Cfg.Get("DET_DEBUG", m_Param.det.DET_DEBUG)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_DEBUG : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_DEBUG : Fail to load value.");
         }
         else {
 
@@ -509,7 +515,7 @@ void CfgParam::loadDetParam() {
 
                 if (!m_Cfg.Get("DET_DEBUG_PATH", m_Param.det.DET_DEBUG_PATH)) {
                     error = true;
-                    m_Param.det.errormsg.push_back("- DET_DEBUG_PATH : Fail to load value.");
+                    m_Param.det.errormsg.push_back(" DET_DEBUG_PATH : Fail to load value.");
                 }
                 else {
 
@@ -518,7 +524,7 @@ void CfgParam::loadDetParam() {
                     if (!fs::exists(p)) {
                         if (!fs::create_directory(p)) {
                             error = true;
-                            m_Param.det.errormsg.push_back("- DET_DEBUG_PATH : Can't create Debug Path.");
+                            m_Param.det.errormsg.push_back(" DET_DEBUG_PATH : Can't create Debug Path.");
                         }
                     }
                 }
@@ -527,18 +533,18 @@ void CfgParam::loadDetParam() {
 
         if (!m_Cfg.Get("DET_TIME_AROUND", m_Param.det.DET_TIME_AROUND)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_TIME_AROUND : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_TIME_AROUND : Fail to load value.");
         }
 
         if (!m_Cfg.Get("DET_TIME_MAX", m_Param.det.DET_TIME_MAX)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_TIME_MAX : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_TIME_MAX : Fail to load value.");
         }
 
         string det_mthd;
         if (!m_Cfg.Get("DET_METHOD", det_mthd)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_METHOD : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_METHOD : Fail to load value.");
         }
         else {
             try {
@@ -547,34 +553,34 @@ void CfgParam::loadDetParam() {
             }
             catch (std::exception& ex) {
                 error = true;
-                m_Param.st.errormsg.push_back("- DET_METHOD : " + string(ex.what()));
+                m_Param.det.errormsg.push_back(" DET_METHOD : " + string(ex.what()));
             }
         }
 
         if (!m_Cfg.Get("DET_SAVE_FITS3D", m_Param.det.DET_SAVE_FITS3D)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_SAVE_FITS3D : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_SAVE_FITS3D : Fail to load value.");
         }
 
         if (!m_Cfg.Get("DET_SAVE_FITS2D", m_Param.det.DET_SAVE_FITS2D)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_SAVE_FITS2D : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_SAVE_FITS2D : Fail to load value.");
         }
 
         if (!m_Cfg.Get("DET_SAVE_SUM", m_Param.det.DET_SAVE_SUM)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_SAVE_SUM : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_SAVE_SUM : Fail to load value.");
         }
 
         if (!m_Cfg.Get("DET_SUM_REDUCTION", m_Param.det.DET_SUM_REDUCTION)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_SUM_REDUCTION : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_SUM_REDUCTION : Fail to load value.");
         }
 
         string det_sum_mthd;
         if (!m_Cfg.Get("DET_SUM_MTHD", det_sum_mthd)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_SUM_MTHD : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_SUM_MTHD : Fail to load value.");
         }
         else {
             try {
@@ -583,33 +589,33 @@ void CfgParam::loadDetParam() {
             }
             catch (std::exception& ex) {
                 error = true;
-                m_Param.det.errormsg.push_back("- DET_SUM_MTHD : " + string(ex.what()));
+                m_Param.det.errormsg.push_back(" DET_SUM_MTHD : " + string(ex.what()));
             }
         }
 
         if (!m_Cfg.Get("DET_SAVE_SUM_WITH_HIST_EQUALIZATION", m_Param.det.DET_SAVE_SUM_WITH_HIST_EQUALIZATION)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_SAVE_SUM_WITH_HIST_EQUALIZATION : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_SAVE_SUM_WITH_HIST_EQUALIZATION : Fail to load value.");
         }
 
         if (!m_Cfg.Get("DET_SAVE_AVI", m_Param.det.DET_SAVE_AVI)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_SAVE_AVI : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_SAVE_AVI : Fail to load value.");
         }
 
         if (!m_Cfg.Get("DET_UPDATE_MASK", m_Param.det.DET_UPDATE_MASK)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_UPDATE_MASK : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_UPDATE_MASK : Fail to load value.");
         }
 
         if (!m_Cfg.Get("DET_UPDATE_MASK_FREQUENCY", m_Param.det.DET_UPDATE_MASK_FREQUENCY)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_UPDATE_MASK_FREQUENCY : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_UPDATE_MASK_FREQUENCY : Fail to load value.");
         }
 
         if (!m_Cfg.Get("DET_DEBUG_UPDATE_MASK", m_Param.det.DET_DEBUG_UPDATE_MASK)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_DEBUG_UPDATE_MASK : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_DEBUG_UPDATE_MASK : Fail to load value.");
         }
         else {
 
@@ -617,7 +623,7 @@ void CfgParam::loadDetParam() {
 
                 if (!m_Cfg.Get("DET_DEBUG_PATH", m_Param.det.DET_DEBUG_PATH)) {
                     error = true;
-                    m_Param.det.errormsg.push_back("- DET_DEBUG_PATH : Fail to load value.");
+                    m_Param.det.errormsg.push_back(" DET_DEBUG_PATH : Fail to load value.");
                 }
                 else {
                     fs::path p(m_Param.det.DET_DEBUG_PATH);
@@ -627,7 +633,7 @@ void CfgParam::loadDetParam() {
                             fs::create_directory(p);
                         }
                         catch (std::exception& ex) {
-                            m_Param.det.errormsg.push_back("- DET_DEBUG_PATH : Can't create Debug Path. Debug Path must exist as DET_DEBUG_UPDATE_MASK is enabled.");
+                            m_Param.det.errormsg.push_back(" DET_DEBUG_PATH : Can't create Debug Path. Debug Path must exist as DET_DEBUG_UPDATE_MASK is enabled.");
                             error = true;
                         }
                     }
@@ -640,34 +646,34 @@ void CfgParam::loadDetParam() {
 
         if (!m_Cfg.Get("DET_DOWNSAMPLE_ENABLED", m_Param.det.DET_DOWNSAMPLE_ENABLED)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_DOWNSAMPLE_ENABLED : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_DOWNSAMPLE_ENABLED : Fail to load value.");
         }
 
         if (!m_Cfg.Get("DET_SAVE_GEMAP", m_Param.det.temporal.DET_SAVE_GEMAP)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_SAVE_GEMAP : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_SAVE_GEMAP : Fail to load value.");
         }
 
         if (!m_Cfg.Get("DET_SAVE_DIRMAP", m_Param.det.temporal.DET_SAVE_DIRMAP)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_SAVE_DIRMAP : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_SAVE_DIRMAP : Fail to load value.");
         }
 
         if (!m_Cfg.Get("DET_SAVE_POS", m_Param.det.temporal.DET_SAVE_POS)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_SAVE_POS : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_SAVE_POS : Fail to load value.");
         }
 
         if (!m_Cfg.Get("DET_LE_MAX", m_Param.det.temporal.DET_LE_MAX)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_LE_MAX : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_LE_MAX : Fail to load value.");
         }
         else {
 
             if (m_Param.det.temporal.DET_LE_MAX < 1 || m_Param.det.temporal.DET_LE_MAX > 10) {
 
                 error = true;
-                m_Param.det.errormsg.push_back("- DET_LE_MAX : Available range is from 1 to 10.");
+                m_Param.det.errormsg.push_back(" DET_LE_MAX : Available range is from 1 to 10.");
 
             }
 
@@ -675,21 +681,21 @@ void CfgParam::loadDetParam() {
 
         if (!m_Cfg.Get("DET_GE_MAX", m_Param.det.temporal.DET_GE_MAX)) {
             error = true;
-            m_Param.det.errormsg.push_back("- DET_GE_MAX : Fail to load value.");
+            m_Param.det.errormsg.push_back(" DET_GE_MAX : Fail to load value.");
         }
         else {
 
             if (m_Param.det.temporal.DET_GE_MAX < 1 || m_Param.det.temporal.DET_GE_MAX > 10) {
 
                 error = true;
-                m_Param.det.errormsg.push_back("- DET_GE_MAX : Available range is from 1 to 10.");
+                m_Param.det.errormsg.push_back(" DET_GE_MAX : Available range is from 1 to 10.");
 
             }
 
         }
-
-        if (!error) m_Param.det.status = true;
     }
+
+    if (!error) m_Param.det.status = true;
 }
 
 
@@ -708,7 +714,7 @@ void CfgParam::loadDetParam(InputDeviceType m_InputType)
         else {
             if (m_Param.det.DET_TIME_MAX <= 0 || m_Param.det.DET_TIME_MAX > 30) {
                 error = true;
-                m_Param.det.errormsg.push_back("- DET_TIME_MAX : Available range is from 1 to 30 seconds.");
+                m_Param.det.errormsg.push_back(" DET_TIME_MAX : Available range is from 1 to 30 seconds.");
             }
         }
     }
@@ -721,7 +727,7 @@ void CfgParam::loadStackParam()
 
     if (!m_Cfg.Get("STACK_ENABLED", m_Param.st.STACK_ENABLED)) {
         error = true;
-        m_Param.st.errormsg.push_back("- STACK_ENABLED : Fail to load value.");
+        m_Param.st.errormsg.push_back(" STACK_ENABLED : Fail to load value.");
     }
 
     if (m_Param.st.STACK_ENABLED)
@@ -729,7 +735,7 @@ void CfgParam::loadStackParam()
         string stack_mode;
         if (!m_Cfg.Get("STACK_MODE", stack_mode)) {
             error = true;
-            m_Param.st.errormsg.push_back("- STACK_MODE : Fail to load value.");
+            m_Param.st.errormsg.push_back(" STACK_MODE : Fail to load value.");
         }
         else {
             try {
@@ -738,24 +744,24 @@ void CfgParam::loadStackParam()
             }
             catch (std::exception& ex) {
                 error = true;
-                m_Param.st.errormsg.push_back("- STACK_MODE : " + string(ex.what()));
+                m_Param.st.errormsg.push_back(" STACK_MODE : " + string(ex.what()));
             }
         }
 
         if (!m_Cfg.Get("STACK_TIME", m_Param.st.STACK_TIME)) {
             error = true;
-            m_Param.st.errormsg.push_back("- STACK_TIME : Fail to load value.");
+            m_Param.st.errormsg.push_back(" STACK_TIME : Fail to load value.");
         }
 
         if (!m_Cfg.Get("STACK_INTERVAL", m_Param.st.STACK_INTERVAL)) {
             error = true;
-            m_Param.st.errormsg.push_back("- STACK_INTERVAL : Fail to load value.");
+            m_Param.st.errormsg.push_back(" STACK_INTERVAL : Fail to load value.");
         }
 
         string stack_mthd;
         if (!m_Cfg.Get("STACK_MTHD", stack_mthd)) {
             error = true;
-            m_Param.st.errormsg.push_back("- STACK_MTHD : Fail to load value.");
+            m_Param.st.errormsg.push_back(" STACK_MTHD : Fail to load value.");
         }
         else {
             try {
@@ -764,17 +770,17 @@ void CfgParam::loadStackParam()
             }
             catch (std::exception& ex) {
                 error = true;
-                m_Param.st.errormsg.push_back("- STACK_MTHD : " + string(ex.what()));
+                m_Param.st.errormsg.push_back(" STACK_MTHD : " + string(ex.what()));
             }
         }
 
         if (!m_Cfg.Get("STACK_REDUCTION", m_Param.st.STACK_REDUCTION)) {
             error = true;
-            m_Param.st.errormsg.push_back("- STACK_REDUCTION : Fail to load value.");
+            m_Param.st.errormsg.push_back(" STACK_REDUCTION : Fail to load value.");
         }
-
-        if (!error) m_Param.st.status = true;
     }
+
+    if (!error) m_Param.st.status = true;
 }
 
 void CfgParam::loadStationParam() {
@@ -783,52 +789,52 @@ void CfgParam::loadStationParam() {
 
     if(!m_Cfg.Get("STATION_NAME", m_Param.station.STATION_NAME)) {
         e = true;
-        m_Param.station.errormsg.push_back("- STATION_NAME : Fail to load value.");
+        m_Param.station.errormsg.push_back(" STATION_NAME : Fail to load value.");
     }
 
     if(!m_Cfg.Get("TELESCOP", m_Param.station.TELESCOP)) {
         e = true;
-        m_Param.station.errormsg.push_back("- TELESCOP : Fail to load value.");
+        m_Param.station.errormsg.push_back(" TELESCOP : Fail to load value.");
     }
 
     if(!m_Cfg.Get("OBSERVER", m_Param.station.OBSERVER)) {
         e = true;
-        m_Param.station.errormsg.push_back("- OBSERVER : Fail to load value.");
+        m_Param.station.errormsg.push_back(" OBSERVER : Fail to load value.");
     }
 
     if(!m_Cfg.Get("INSTRUMENT", m_Param.station.INSTRUMENT)) {
         e = true;
-        m_Param.station.errormsg.push_back("- INSTRUME : Fail to load value.");
+        m_Param.station.errormsg.push_back(" INSTRUME : Fail to load value.");
     }
 
     if(!m_Cfg.Get("CAMERA", m_Param.station.CAMERA)) {
         e = true;
-        m_Param.station.errormsg.push_back("- CAMERA : Fail to load value.");
+        m_Param.station.errormsg.push_back(" CAMERA : Fail to load value.");
     }
 
     if(!m_Cfg.Get("FOCAL", m_Param.station.FOCAL)) {
         e = true;
-        m_Param.station.errormsg.push_back("- FOCAL : Fail to load value.");
+        m_Param.station.errormsg.push_back(" FOCAL : Fail to load value.");
     }
 
     if(!m_Cfg.Get("APERTURE", m_Param.station.APERTURE)) {
         e = true;
-        m_Param.station.errormsg.push_back("- APERTURE : Fail to load value.");
+        m_Param.station.errormsg.push_back(" APERTURE : Fail to load value.");
     }
 
     if(!m_Cfg.Get("SITELONG", m_Param.station.SITELONG)) {
         e = true;
-        m_Param.station.errormsg.push_back("- SITELONG : Fail to load value.");
+        m_Param.station.errormsg.push_back(" SITELONG : Fail to load value.");
     }
 
     if(!m_Cfg.Get("SITELAT", m_Param.station.SITELAT)) {
         e = true;
-        m_Param.station.errormsg.push_back("- SITELAT : Fail to load value.");
+        m_Param.station.errormsg.push_back(" SITELAT : Fail to load value.");
     }
 
     if(!m_Cfg.Get("SITEELEV", m_Param.station.SITEELEV)) {
         e = true;
-        m_Param.station.errormsg.push_back("- SITEELEV : Fail to load value.");
+        m_Param.station.errormsg.push_back(" SITEELEV : Fail to load value.");
     }
 
     if(!e) m_Param.station.status = true;
@@ -840,52 +846,52 @@ void CfgParam::loadFitskeysParam() {
 
     if(!m_Cfg.Get("K1", m_Param.fitskeys.K1)) {
         e = true;
-        m_Param.fitskeys.errormsg.push_back("- K1 : Fail to load value.");
+        m_Param.fitskeys.errormsg.push_back(" K1 : Fail to load value.");
     }
 
     if(!m_Cfg.Get("K2", m_Param.fitskeys.K2)) {
         e = true;
-        m_Param.fitskeys.errormsg.push_back("- K2 : Fail to load value.");
+        m_Param.fitskeys.errormsg.push_back(" K2 : Fail to load value.");
     }
 
     if(!m_Cfg.Get("FILTER", m_Param.fitskeys.FILTER)) {
         e = true;
-        m_Param.fitskeys.errormsg.push_back("- FILTER : Fail to load value.");
+        m_Param.fitskeys.errormsg.push_back(" FILTER : Fail to load value.");
     }
 
     if(!m_Cfg.Get("CD1_1", m_Param.fitskeys.CD1_1)) {
         e = true;
-        m_Param.fitskeys.errormsg.push_back("- CD1_1 : Fail to load value.");
+        m_Param.fitskeys.errormsg.push_back(" CD1_1 : Fail to load value.");
     }
 
     if(!m_Cfg.Get("CD1_2", m_Param.fitskeys.CD1_2)) {
         e = true;
-        m_Param.fitskeys.errormsg.push_back("- CD1_2 : Fail to load value.");
+        m_Param.fitskeys.errormsg.push_back(" CD1_2 : Fail to load value.");
     }
 
     if(!m_Cfg.Get("CD2_1", m_Param.fitskeys.CD2_1)) {
         e = true;
-        m_Param.fitskeys.errormsg.push_back("- CD2_1 : Fail to load value.");
+        m_Param.fitskeys.errormsg.push_back(" CD2_1 : Fail to load value.");
     }
 
     if(!m_Cfg.Get("CD2_2", m_Param.fitskeys.CD2_2)) {
         e = true;
-        m_Param.fitskeys.errormsg.push_back("- CD2_2 : Fail to load value.");
+        m_Param.fitskeys.errormsg.push_back(" CD2_2 : Fail to load value.");
     }
 
     if(!m_Cfg.Get("XPIXEL", m_Param.fitskeys.XPIXEL)) {
         e = true;
-        m_Param.fitskeys.errormsg.push_back("- XPIXEL : Fail to load value.");
+        m_Param.fitskeys.errormsg.push_back(" XPIXEL : Fail to load value.");
     }
 
     if(!m_Cfg.Get("YPIXEL", m_Param.fitskeys.YPIXEL)) {
         e = true;
-        m_Param.fitskeys.errormsg.push_back("- YPIXEL : Fail to load value.");
+        m_Param.fitskeys.errormsg.push_back(" YPIXEL : Fail to load value.");
     }
 
     if(!m_Cfg.Get("COMMENT", m_Param.fitskeys.COMMENT)) {
         e = true;
-        m_Param.fitskeys.errormsg.push_back("- COMMENT : Fail to load value.");
+        m_Param.fitskeys.errormsg.push_back(" COMMENT : Fail to load value.");
     }
 
     if(!e) m_Param.fitskeys.status = true;
@@ -897,7 +903,7 @@ void CfgParam::loadMailParam() {
 
     if(!m_Cfg.Get("MAIL_DETECTION_ENABLED", m_Param.mail.MAIL_DETECTION_ENABLED)) {
         e = true;
-        m_Param.mail.errormsg.push_back("- MAIL_DETECTION_ENABLED : Fail to load value.");
+        m_Param.mail.errormsg.push_back(" MAIL_DETECTION_ENABLED : Fail to load value.");
     }else{
 
         if(m_Param.mail.MAIL_DETECTION_ENABLED) {
@@ -905,7 +911,7 @@ void CfgParam::loadMailParam() {
             string mailRecipients;
             if(!m_Cfg.Get("MAIL_RECIPIENT", mailRecipients)) {
                 e = true;
-                m_Param.mail.errormsg.push_back("- MAIL_RECIPIENT : Fail to load value.");
+                m_Param.mail.errormsg.push_back(" MAIL_RECIPIENT : Fail to load value.");
             }else {
 
                 typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
@@ -919,13 +925,13 @@ void CfgParam::loadMailParam() {
 
             if(!m_Cfg.Get("MAIL_SMTP_SERVER", m_Param.mail.MAIL_SMTP_SERVER)) {
                 e = true;
-                m_Param.mail.errormsg.push_back("- MAIL_SMTP_SERVER : Fail to load value.");
+                m_Param.mail.errormsg.push_back(" MAIL_SMTP_SERVER : Fail to load value.");
             }
 
             string smtp_connection_type;
             if(!m_Cfg.Get("MAIL_CONNECTION_TYPE", smtp_connection_type)) {
                 e = true;
-                m_Param.mail.errormsg.push_back("- MAIL_CONNECTION_TYPE : Fail to load value.");
+                m_Param.mail.errormsg.push_back(" MAIL_CONNECTION_TYPE : Fail to load value.");
             }else {
                 try
                 {
@@ -936,12 +942,12 @@ void CfgParam::loadMailParam() {
 
                         if(!m_Cfg.Get("MAIL_SMTP_LOGIN", m_Param.mail.MAIL_SMTP_LOGIN)) {
                             e = true;
-                            m_Param.mail.errormsg.push_back("- MAIL_SMTP_LOGIN : Fail to load value.");
+                            m_Param.mail.errormsg.push_back(" MAIL_SMTP_LOGIN : Fail to load value.");
                         }
 
                         if(!m_Cfg.Get("MAIL_SMTP_PASSWORD", m_Param.mail.MAIL_SMTP_PASSWORD)) {
                             e = true;
-                            m_Param.mail.errormsg.push_back("- MAIL_SMTP_PASSWORD : Fail to load value.");
+                            m_Param.mail.errormsg.push_back(" MAIL_SMTP_PASSWORD : Fail to load value.");
                         }
                     }else{
                         m_Param.mail.MAIL_SMTP_LOGIN = "";
@@ -950,7 +956,7 @@ void CfgParam::loadMailParam() {
 
                 }catch (std::exception &ex) {
                     e = true;
-                    m_Param.mail.errormsg.push_back("- MAIL_CONNECTION_TYPE : " + string(ex.what()));
+                    m_Param.mail.errormsg.push_back(" MAIL_CONNECTION_TYPE : " + string(ex.what()));
                 }
             }
         }
@@ -1009,7 +1015,7 @@ bool CfgParam::checkDeviceID() {
     if(m_Param.DEVICE_ID == -1)
     {
         if(enableErrors) {
-            LOG_ERROR << "CfgParam::deviceIdIsCorrect;" << "Device not valid" << endl;
+            LOG_ERROR << "CfgParam::checkDeviceID;" << "Device not valid" << endl;
         }
         return false;
     }
@@ -1020,7 +1026,7 @@ bool CfgParam::checkDataParam() {
     if(!m_Param.data.status) {
         if(enableErrors) {
             for(int i = 0; i < m_Param.data.errormsg.size(); i++)
-                LOG_ERROR << "CfgParam::dataParamIsCorrect;" << m_Param.data.errormsg.at(i) << endl;
+                LOG_ERROR << "CfgParam::checkDataParam;" << m_Param.data.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1031,7 +1037,7 @@ bool CfgParam::checkLogParam() {
     if(!m_Param.log.status) {
         if(enableErrors) {
             for(int i = 0; i < m_Param.log.errormsg.size(); i++)
-                LOG_ERROR << "CfgParam::logParamIsCorrect;" << m_Param.log.errormsg.at(i) << endl;
+                LOG_ERROR << "CfgParam::checkLogParam;" << m_Param.log.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1043,7 +1049,7 @@ bool CfgParam::checkFramesParam() {
     if(!m_Param.framesInput.status) {
         if(enableErrors) {
             for(int i = 0; i < m_Param.framesInput.errormsg.size(); i++)
-                LOG_ERROR << "CfgParam::framesParamIsCorrect;" << m_Param.framesInput.errormsg.at(i) << endl;
+                LOG_ERROR << "CfgParam::checkFramesParam;" << m_Param.framesInput.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1054,7 +1060,7 @@ bool CfgParam::checkVidParam() {
     if(!m_Param.vidInput.status) {
         if(enableErrors) {
             for(int i = 0; i < m_Param.vidInput.errormsg.size(); i++)
-                LOG_ERROR << "CfgParam::vidParamIsCorrect;" << m_Param.vidInput.errormsg.at(i) << endl;
+                LOG_ERROR << "CfgParam::checkVidParam;" << m_Param.vidInput.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1065,7 +1071,7 @@ bool CfgParam::checkCamParam() {
     if(!m_Param.camInput.status) {
         if(enableErrors) {
             for(int i = 0; i < m_Param.camInput.errormsg.size(); i++)
-                LOG_ERROR << "CfgParam::camParamIsCorrect;" << m_Param.camInput.errormsg.at(i) << endl;
+                LOG_ERROR << "CfgParam::checkCamParam;" << m_Param.camInput.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1087,7 +1093,7 @@ bool CfgParam::checkStackParam() {
     if(!m_Param.st.status) {
         if(enableErrors) {
             for(int i = 0; i < m_Param.st.errormsg.size(); i++)
-                LOG_ERROR << "CfgParam::stackParamIsCorrect;" << m_Param.st.errormsg.at(i) << endl;
+                LOG_ERROR << "CfgParam::checkStackParam;" << m_Param.st.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1098,7 +1104,7 @@ bool CfgParam::checkStationParam() {
     if(!m_Param.station.status) {
         if(enableErrors) {
             for(int i = 0; i < m_Param.station.errormsg.size(); i++)
-                LOG_ERROR << "CfgParam::stationParamIsCorrect;" << m_Param.station.errormsg.at(i) << endl;
+                LOG_ERROR << "CfgParam::checkStationParam;" << m_Param.station.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1109,7 +1115,7 @@ bool CfgParam::checkFitskeysParam() {
     if(!m_Param.fitskeys.status) {
         if(enableErrors) {
             for(int i = 0; i < m_Param.fitskeys.errormsg.size(); i++)
-                LOG_ERROR << "CfgParam::fitskeysParamIsCorrect;" << m_Param.fitskeys.errormsg.at(i) << endl;
+                LOG_ERROR << "CfgParam::checkFitskeysParam;" << m_Param.fitskeys.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1120,7 +1126,7 @@ bool CfgParam::checkMailParam() {
     if(!m_Param.mail.status) {
         if(enableErrors) {
             for(int i = 0; i < m_Param.mail.errormsg.size(); i++)
-                LOG_ERROR << "CfgParam::mailParamIsCorrect;" << m_Param.mail.errormsg.at(i) << endl;
+                LOG_ERROR << "CfgParam::checkMailParam;" << m_Param.mail.errormsg.at(i) << endl;
         }
         return false;
     }
@@ -1206,13 +1212,12 @@ void CfgParam::loadCamParam()
 
     if (!loadCameraInit()) 
     {
-        m_Param.camInput.errormsg.push_back("- CAMERA_INIT : Fails.");
+        m_Param.camInput.errormsg.push_back(" CAMERA_INIT : Missing parameter in configuration file");
         error = true;
     }
   
-
     if (!m_Cfg.Get("ACQ_FPS", m_Param.camInput.ACQ_FPS)) {
-        m_Param.camInput.errormsg.push_back("- ACQ_FPS : Fail to get value.");
+        m_Param.camInput.errormsg.push_back(" ACQ_FPS : Fail to get value.");
         error = true;
     }
 
@@ -1220,7 +1225,7 @@ void CfgParam::loadCamParam()
 
     string pixfmt;
     if (!m_Cfg.Get("ACQ_FORMAT", pixfmt)) {
-        m_Param.camInput.errormsg.push_back("- ACQ_FORMAT : Fail to get value.");
+        m_Param.camInput.errormsg.push_back(" ACQ_FORMAT : Fail to get value.");
         error = true;
     }
     else {
@@ -1229,7 +1234,7 @@ void CfgParam::loadCamParam()
             m_Param.camInput.ACQ_FORMAT = camPixFmt.parseEnum("ACQ_FORMAT", pixfmt);
         }
         catch (std::exception& ex) {
-            m_Param.camInput.errormsg.push_back("- ACQ_FORMAT : " + string(ex.what()));
+            m_Param.camInput.errormsg.push_back(" ACQ_FORMAT : " + string(ex.what()));
             error = true;
         }
     }
@@ -1237,7 +1242,7 @@ void CfgParam::loadCamParam()
     //-------------------------------------------------------------------
 
     if (!m_Cfg.Get("ACQ_RES_CUSTOM_SIZE", m_Param.camInput.ACQ_RES_CUSTOM_SIZE)) {
-        m_Param.camInput.errormsg.push_back("- ACQ_RES_CUSTOM_SIZE : Fail to get value.");
+        m_Param.camInput.errormsg.push_back(" ACQ_RES_CUSTOM_SIZE : Fail to get value.");
         error = true;
     }
     else {
@@ -1245,7 +1250,7 @@ void CfgParam::loadCamParam()
         if (m_Param.camInput.ACQ_RES_CUSTOM_SIZE) {
             string acq_offset;
             if (!m_Cfg.Get("ACQ_OFFSET", acq_offset)) {
-                m_Param.camInput.errormsg.push_back("- ACQ_OFFSET : Fail to get value.");
+                m_Param.camInput.errormsg.push_back(" ACQ_OFFSET : Fail to get value.");
                 error = true;
             }
             else {
@@ -1258,7 +1263,7 @@ void CfgParam::loadCamParam()
                     int mStartY = atoi(offsety.c_str());
 
                     if (mStartX <= 0) {
-                        m_Param.camInput.errormsg.push_back("- ACQ_OFFSET : X offset value is not correct.");
+                        m_Param.camInput.errormsg.push_back(" ACQ_OFFSET : X offset value is not correct.");
                         error = true;
                     }
                     else {
@@ -1267,7 +1272,7 @@ void CfgParam::loadCamParam()
                     }
 
                     if (mStartY <= 0) {
-                        m_Param.camInput.errormsg.push_back("- ACQ_OFFSET : Y offset value is not correct.");
+                        m_Param.camInput.errormsg.push_back(" ACQ_OFFSET : Y offset value is not correct.");
                         error = true;
                     }
                     else {
@@ -1276,14 +1281,14 @@ void CfgParam::loadCamParam()
 
                 }
                 else {
-                    m_Param.camInput.errormsg.push_back("- ACQ_OFFSET : Format is not correct. It must be : X,Y.");
+                    m_Param.camInput.errormsg.push_back(" ACQ_OFFSET : Format is not correct. It must be : X,Y.");
                     error = true;
                 }
             }
 
             string acq_res_custome_size;
             if (!m_Cfg.Get("ACQ_RES_SIZE", acq_res_custome_size)) {
-                m_Param.camInput.errormsg.push_back("- ACQ_RES_SIZE : Fail to get value.");
+                m_Param.camInput.errormsg.push_back(" ACQ_RES_SIZE : Fail to get value.");
                 error = true;
             }
             else {
@@ -1296,7 +1301,7 @@ void CfgParam::loadCamParam()
                     int mSizeHeight = atoi(height.c_str());
 
                     if (mSizeHeight <= 0) {
-                        m_Param.camInput.errormsg.push_back("- ACQ_RES_SIZE : Height value is not correct.");
+                        m_Param.camInput.errormsg.push_back(" ACQ_RES_SIZE : Height value is not correct.");
                         error = true;
                     }
                     else {
@@ -1305,7 +1310,7 @@ void CfgParam::loadCamParam()
                     }
 
                     if (mSizeWidth <= 0) {
-                        m_Param.camInput.errormsg.push_back("- ACQ_RES_SIZE : Width value is not correct.");
+                        m_Param.camInput.errormsg.push_back(" ACQ_RES_SIZE : Width value is not correct.");
                         error = true;
                     }
                     else {
@@ -1314,7 +1319,7 @@ void CfgParam::loadCamParam()
 
                 }
                 else {
-                    m_Param.camInput.errormsg.push_back("- ACQ_RES_SIZE : Format is not correct. It must be : WxH.");
+                    m_Param.camInput.errormsg.push_back(" ACQ_RES_SIZE : Format is not correct. It must be : WxH.");
                     error = true;
                 }
             }
@@ -1331,7 +1336,7 @@ void CfgParam::loadCamParam()
     //-------------------------------------------------------------------
 
     if (!m_Cfg.Get("SHIFT_BITS", m_Param.camInput.SHIFT_BITS)) {
-        m_Param.camInput.errormsg.push_back("- SHIFT_BITS : Fail to get value.");
+        m_Param.camInput.errormsg.push_back(" SHIFT_BITS : Fail to get value.");
         error = true;
     }
 
@@ -1347,14 +1352,14 @@ void CfgParam::loadCamParam()
     //-------------------------------------------------------------------
 
     if (!m_Cfg.Get("ACQ_NIGHT_EXPOSURE", m_Param.camInput.ACQ_NIGHT_EXPOSURE)) {
-        m_Param.camInput.errormsg.push_back("- ACQ_NIGHT_EXPOSURE : Fail to get value.");
+        m_Param.camInput.errormsg.push_back(" ACQ_NIGHT_EXPOSURE : Fail to get value.");
         error = true;
     }
 //     else {
 // 
 //         if (mine != -1 && maxe != -1) {
 //             if (m_Param.camInput.ACQ_NIGHT_EXPOSURE < mine || m_Param.camInput.ACQ_NIGHT_EXPOSURE > maxe) {
-//                 m_Param.camInput.errormsg.push_back("- ACQ_NIGHT_EXPOSURE : Value <" +
+//                 m_Param.camInput.errormsg.push_back(" ACQ_NIGHT_EXPOSURE : Value <" +
 //                     Conversion::intToString(m_Param.camInput.ACQ_NIGHT_EXPOSURE) +
 //                     "> is not correct. \nAvailable range is from " +
 //                     Conversion::intToString(mine) + " to " +
@@ -1369,14 +1374,14 @@ void CfgParam::loadCamParam()
     //-------------------------------------------------------------------
 
     if (!m_Cfg.Get("ACQ_NIGHT_GAIN", m_Param.camInput.ACQ_NIGHT_GAIN)) {
-        m_Param.camInput.errormsg.push_back("- ACQ_NIGHT_GAIN : Fail to get value.");
+        m_Param.camInput.errormsg.push_back(" ACQ_NIGHT_GAIN : Fail to get value.");
         error = true;
     }
 //     else {
 // 
 //         if (ming != -1 && maxg != -1) {
 //             if (m_Param.camInput.ACQ_NIGHT_GAIN < ming || m_Param.camInput.ACQ_NIGHT_GAIN > maxg) {
-//                 m_Param.camInput.errormsg.push_back("- ACQ_NIGHT_GAIN : Value <" +
+//                 m_Param.camInput.errormsg.push_back(" ACQ_NIGHT_GAIN : Value <" +
 //                     Conversion::intToString(m_Param.camInput.ACQ_NIGHT_GAIN) +
 //                     "> is not correct. \nAvailable range is from " +
 //                     Conversion::intToString(ming) + " to " +
@@ -1389,14 +1394,14 @@ void CfgParam::loadCamParam()
     //-------------------------------------------------------------------
 
     if (!m_Cfg.Get("ACQ_DAY_EXPOSURE", m_Param.camInput.ACQ_DAY_EXPOSURE)) {
-        m_Param.camInput.errormsg.push_back("- ACQ_DAY_EXPOSURE : Fail to get value.");
+        m_Param.camInput.errormsg.push_back(" ACQ_DAY_EXPOSURE : Fail to get value.");
         error = true;
     }
 //     else {
 // 
 //         if (mine != -1 && maxe != -1) {
 //             if (m_Param.camInput.ACQ_DAY_EXPOSURE < mine || m_Param.camInput.ACQ_DAY_EXPOSURE > maxe) {
-//                 m_Param.camInput.errormsg.push_back("- ACQ_DAY_EXPOSURE : Value <" +
+//                 m_Param.camInput.errormsg.push_back(" ACQ_DAY_EXPOSURE : Value <" +
 //                     Conversion::intToString(m_Param.camInput.ACQ_DAY_EXPOSURE) +
 //                     "> is not correct. \nAvailable range is from " +
 //                     Conversion::intToString(mine) + " to " +
@@ -1409,14 +1414,14 @@ void CfgParam::loadCamParam()
     //-------------------------------------------------------------------
 
     if (!m_Cfg.Get("ACQ_DAY_GAIN", m_Param.camInput.ACQ_DAY_GAIN)) {
-        m_Param.camInput.errormsg.push_back("- ACQ_DAY_GAIN : Fail to get value.");
+        m_Param.camInput.errormsg.push_back(" ACQ_DAY_GAIN : Fail to get value.");
         error = true;
     }
 //     else {
 // 
 //         if (ming != -1 && maxg != -1) {
 //             if (m_Param.camInput.ACQ_DAY_GAIN < ming || m_Param.camInput.ACQ_DAY_GAIN > maxg) {
-//                 m_Param.camInput.errormsg.push_back("- ACQ_DAY_GAIN : Value <" +
+//                 m_Param.camInput.errormsg.push_back(" ACQ_DAY_GAIN : Value <" +
 //                     Conversion::intToString(m_Param.camInput.ACQ_DAY_GAIN) +
 //                     "> is not correct. \nAvailable range is from " +
 //                     Conversion::intToString(ming) + " to " +
@@ -1428,7 +1433,7 @@ void CfgParam::loadCamParam()
 
     //-------------------------------------------------------------------
     if (!m_Cfg.Get("EXPOSURE_CONTROL_ENABLED", m_Param.camInput.EXPOSURE_CONTROL_ENABLED)) {
-        m_Param.camInput.errormsg.push_back("- EXPOSURE_CONTROL_ENABLED : Fail to get value.");
+        m_Param.camInput.errormsg.push_back(" EXPOSURE_CONTROL_ENABLED : Fail to get value.");
         error = true;
     }
     else {
@@ -1436,21 +1441,21 @@ void CfgParam::loadCamParam()
 
 
             if (!m_Cfg.Get("EXPOSURE_CONTROL_FREQUENCY", m_Param.camInput.EXPOSURE_CONTROL_FREQUENCY)) {
-                m_Param.camInput.errormsg.push_back("- EXPOSURE_CONTROL_FREQUENCY : Fail to get value.");
+                m_Param.camInput.errormsg.push_back(" EXPOSURE_CONTROL_FREQUENCY : Fail to get value.");
                 error = true;
             }
 
             //-------------------------------------------------------------------
 
             if (!m_Cfg.Get("EXPOSURE_CONTROL_SAVE_IMAGE", m_Param.camInput.EXPOSURE_CONTROL_SAVE_IMAGE)) {
-                m_Param.camInput.errormsg.push_back("- EXPOSURE_CONTROL_SAVE_IMAGE : Fail to get value.");
+                m_Param.camInput.errormsg.push_back(" EXPOSURE_CONTROL_SAVE_IMAGE : Fail to get value.");
                 error = true;
             }
 
             //-------------------------------------------------------------------
 
             if (!m_Cfg.Get("EXPOSURE_CONTROL_SAVE_INFOS", m_Param.camInput.EXPOSURE_CONTROL_SAVE_INFOS)) {
-                m_Param.camInput.errormsg.push_back("- EXPOSURE_CONTROL_SAVE_INFOS : Fail to get value.");
+                m_Param.camInput.errormsg.push_back(" EXPOSURE_CONTROL_SAVE_INFOS : Fail to get value.");
                 error = true;
             }
         }
@@ -1459,21 +1464,21 @@ void CfgParam::loadCamParam()
     //-------------------------------------------------------------------
 
     if (!m_Cfg.Get("EPHEMERIS_ENABLED", m_Param.camInput.ephem.EPHEMERIS_ENABLED)) {
-        m_Param.camInput.errormsg.push_back("- EPHEMERIS_ENABLED : Fail to get value.");
+        m_Param.camInput.errormsg.push_back(" EPHEMERIS_ENABLED : Fail to get value.");
         error = true;
     }
 
     //-------------------------------------------------------------------
     if (m_Param.camInput.ephem.EPHEMERIS_ENABLED) {
         if (!m_Cfg.Get("SUN_HORIZON_1", m_Param.camInput.ephem.SUN_HORIZON_1)) {
-            m_Param.camInput.errormsg.push_back("- SUN_HORIZON_1 : Fail to get value.");
+            m_Param.camInput.errormsg.push_back(" SUN_HORIZON_1 : Fail to get value.");
             error = true;
         }
 
         //-------------------------------------------------------------------
 
         if (!m_Cfg.Get("SUN_HORIZON_2", m_Param.camInput.ephem.SUN_HORIZON_2)) {
-            m_Param.camInput.errormsg.push_back("- SUN_HORIZON_2 : Fail to get value.");
+            m_Param.camInput.errormsg.push_back(" SUN_HORIZON_2 : Fail to get value.");
             error = true;
         }
     }
@@ -1484,7 +1489,7 @@ void CfgParam::loadCamParam()
 
         string sunrise_time;
         if (!m_Cfg.Get("SUNRISE_TIME", sunrise_time)) {
-            m_Param.camInput.errormsg.push_back("- SUNRISE_TIME : Fail to get value.");
+            m_Param.camInput.errormsg.push_back(" SUNRISE_TIME : Fail to get value.");
             error = true;
         }
         else {
@@ -1502,19 +1507,19 @@ void CfgParam::loadCamParam()
 
                 if (m_Param.camInput.ephem.SUNRISE_TIME.size() == 2) {
                     if (m_Param.camInput.ephem.SUNRISE_TIME.at(0) < 0 || m_Param.camInput.ephem.SUNRISE_TIME.at(0) >= 24) {
-                        m_Param.camInput.errormsg.push_back("- SUNRISE_TIME : Hours value must be between 0 - 23");
+                        m_Param.camInput.errormsg.push_back(" SUNRISE_TIME : Hours value must be between 0 - 23");
                         error = true;
                     }
 
                     if (m_Param.camInput.ephem.SUNRISE_TIME.at(1) < 0 || m_Param.camInput.ephem.SUNRISE_TIME.at(0) >= 60) {
-                        m_Param.camInput.errormsg.push_back("- SUNRISE_TIME : Minutes value must be between 0 - 59");
+                        m_Param.camInput.errormsg.push_back(" SUNRISE_TIME : Minutes value must be between 0 - 59");
                         error = true;
                     }
                 }
 
             }
             else {
-                m_Param.camInput.errormsg.push_back("- SUNRISE_TIME : Format is not correct. It must be : HH:MM");
+                m_Param.camInput.errormsg.push_back(" SUNRISE_TIME : Format is not correct. It must be : HH:MM");
                 error = true;
             }
         }
@@ -1523,7 +1528,7 @@ void CfgParam::loadCamParam()
 
         string sunset_time;
         if (!m_Cfg.Get("SUNSET_TIME", sunset_time)) {
-            m_Param.camInput.errormsg.push_back("- SUNSET_TIME : Fail to get value.");
+            m_Param.camInput.errormsg.push_back(" SUNSET_TIME : Fail to get value.");
             error = true;
         }
         else {
@@ -1540,19 +1545,19 @@ void CfgParam::loadCamParam()
 
                 if (m_Param.camInput.ephem.SUNSET_TIME.size() == 2) {
                     if (m_Param.camInput.ephem.SUNSET_TIME.at(0) < 0 || m_Param.camInput.ephem.SUNSET_TIME.at(0) >= 24) {
-                        m_Param.camInput.errormsg.push_back("- SUNSET_TIME : Hours value must be between 0 - 23");
+                        m_Param.camInput.errormsg.push_back(" SUNSET_TIME : Hours value must be between 0 - 23");
                         error = true;
                     }
 
                     if (m_Param.camInput.ephem.SUNSET_TIME.at(1) < 0 || m_Param.camInput.ephem.SUNSET_TIME.at(0) >= 60) {
-                        m_Param.camInput.errormsg.push_back("- SUNSET_TIME : Minutes value must be between 0 - 59");
+                        m_Param.camInput.errormsg.push_back(" SUNSET_TIME : Minutes value must be between 0 - 59");
                         error = true;
                     }
                 }
 
             }
             else {
-                m_Param.camInput.errormsg.push_back("- SUNSET_TIME : Format is not correct. It must be : HH:MM");
+                m_Param.camInput.errormsg.push_back(" SUNSET_TIME : Format is not correct. It must be : HH:MM");
                 error = true;
             }
         }
@@ -1560,14 +1565,14 @@ void CfgParam::loadCamParam()
         //-------------------------------------------------------------------
 
         if (!m_Cfg.Get("SUNSET_DURATION", m_Param.camInput.ephem.SUNSET_DURATION)) {
-            m_Param.camInput.errormsg.push_back("- SUNSET_DURATION : Fail to get value.");
+            m_Param.camInput.errormsg.push_back(" SUNSET_DURATION : Fail to get value.");
             error = true;
         }
 
         //-------------------------------------------------------------------
 
         if (!m_Cfg.Get("SUNRISE_DURATION", m_Param.camInput.ephem.SUNRISE_DURATION)) {
-            m_Param.camInput.errormsg.push_back("- SUNRISE_DURATION : Fail to get value.");
+            m_Param.camInput.errormsg.push_back(" SUNRISE_DURATION : Fail to get value.");
             error = true;
         }
     }
@@ -1575,7 +1580,7 @@ void CfgParam::loadCamParam()
     //-------------------------------------------------------------------
 
     if (!m_Cfg.Get("ACQ_REGULAR_ENABLED", m_Param.camInput.regcap.ACQ_REGULAR_ENABLED)) {
-        m_Param.camInput.errormsg.push_back("- ACQ_REGULAR_ENABLED : Fail to get value.");
+        m_Param.camInput.errormsg.push_back(" ACQ_REGULAR_ENABLED : Fail to get value.");
         error = true;
     }
     else {
@@ -1585,7 +1590,7 @@ void CfgParam::loadCamParam()
             string reg_mode;
             if (!m_Cfg.Get("ACQ_REGULAR_MODE", reg_mode)) {
                 error = true;
-                m_Param.camInput.errormsg.push_back("- ACQ_REGULAR_MODE : Fail to load value.");
+                m_Param.camInput.errormsg.push_back(" ACQ_REGULAR_MODE : Fail to load value.");
             }
             else {
                 try {
@@ -1594,7 +1599,7 @@ void CfgParam::loadCamParam()
                 }
                 catch (std::exception& ex) {
                     error = true;
-                    m_Param.camInput.errormsg.push_back("- ACQ_REGULAR_MODE : " + string(ex.what()));
+                    m_Param.camInput.errormsg.push_back(" ACQ_REGULAR_MODE : " + string(ex.what()));
                 }
             }
 
@@ -1605,7 +1610,7 @@ void CfgParam::loadCamParam()
                 string img_prefix;
                 if (!m_Cfg.Get("ACQ_REGULAR_PRFX", img_prefix)) {
                     error = true;
-                    m_Param.camInput.errormsg.push_back("- ACQ_REGULAR_PRFX : Fail to load value.");
+                    m_Param.camInput.errormsg.push_back(" ACQ_REGULAR_PRFX : Fail to load value.");
                 }
                 else {
                     m_Param.camInput.regcap.ACQ_REGULAR_PRFX = img_prefix;
@@ -1613,13 +1618,12 @@ void CfgParam::loadCamParam()
             }
 
             //-------------------------------------------------------------------
-
             {
 
                 string img_output;
                 if (!m_Cfg.Get("ACQ_REGULAR_OUTPUT", img_output)) {
                     error = true;
-                    m_Param.camInput.errormsg.push_back("- ACQ_REGULAR_OUTPUT : Fail to load value.");
+                    m_Param.camInput.errormsg.push_back(" ACQ_REGULAR_OUTPUT : Fail to load value.");
                 }
                 else {
                     try {
@@ -1628,7 +1632,7 @@ void CfgParam::loadCamParam()
                     }
                     catch (std::exception& ex) {
                         error = true;
-                        m_Param.camInput.errormsg.push_back("- ACQ_REGULAR_OUTPUT : " + string(ex.what()));
+                        m_Param.camInput.errormsg.push_back(" ACQ_REGULAR_OUTPUT : " + string(ex.what()));
                     }
                 }
             }
@@ -1638,7 +1642,7 @@ void CfgParam::loadCamParam()
             string regAcqParam;
             if (!m_Cfg.Get("ACQ_REGULAR_CFG", regAcqParam)) {
                 error = true;
-                m_Param.camInput.errormsg.push_back("- ACQ_REGULAR_CFG : Fail to load value.");
+                m_Param.camInput.errormsg.push_back(" ACQ_REGULAR_CFG : Fail to load value.");
             }
             else {
                 std::transform(regAcqParam.begin(), regAcqParam.end(), regAcqParam.begin(), ::toupper);
@@ -1656,17 +1660,17 @@ void CfgParam::loadCamParam()
                     // Get regular acquisition time interval.
                     if (atoi(res1.at(0).c_str()) < 0 || atoi(res1.at(0).c_str()) >= 24) {
                         error = true;
-                        m_Param.camInput.errormsg.push_back("- ACQ_REGULAR_CFG : Hours can't have the value <" + res1.at(0) + ">.\nAvailable range is from 0 to 23.");
+                        m_Param.camInput.errormsg.push_back(" ACQ_REGULAR_CFG : Hours can't have the value <" + res1.at(0) + ">.\nAvailable range is from 0 to 23.");
                     }
 
                     if (atoi(res1.at(1).c_str()) < 0 || atoi(res1.at(1).c_str()) >= 60) {
                         error = true;
-                        m_Param.camInput.errormsg.push_back("- ACQ_REGULAR_CFG : Minutes can't have the value <" + res1.at(1) + ">.\nAvailable range is from 0 to 23.");
+                        m_Param.camInput.errormsg.push_back(" ACQ_REGULAR_CFG : Minutes can't have the value <" + res1.at(1) + ">.\nAvailable range is from 0 to 23.");
                     }
 
                     if (atoi(res1.at(2).c_str()) < 0 || atoi(res1.at(2).c_str()) >= 60) {
                         error = true;
-                        m_Param.camInput.errormsg.push_back("- ACQ_REGULAR_CFG : Seconds can't have the value <" + res1.at(2) + ">.\nAvailable range is from 0 to 23.");
+                        m_Param.camInput.errormsg.push_back(" ACQ_REGULAR_CFG : Seconds can't have the value <" + res1.at(2) + ">.\nAvailable range is from 0 to 23.");
                     }
 
                     m_Param.camInput.regcap.ACQ_REGULAR_CFG.interval = atoi(res1.at(0).c_str()) * 3600 + atoi(res1.at(1).c_str()) * 60 + atoi(res1.at(2).c_str());
@@ -1676,7 +1680,7 @@ void CfgParam::loadCamParam()
 
 //                     if (mine != -1 && maxe != -1) {
 //                         if (m_Param.camInput.regcap.ACQ_REGULAR_CFG.exp < mine || m_Param.camInput.regcap.ACQ_REGULAR_CFG.exp > maxe) {
-//                             m_Param.camInput.errormsg.push_back("- ACQ_REGULAR_CFG : Exposure value <" +
+//                             m_Param.camInput.errormsg.push_back(" ACQ_REGULAR_CFG : Exposure value <" +
 //                                 Conversion::intToString(m_Param.camInput.regcap.ACQ_REGULAR_CFG.exp) +
 //                                 "> is not correct. \nAvailable range is from " +
 //                                 Conversion::intToString(mine) + " to " +
@@ -1690,7 +1694,7 @@ void CfgParam::loadCamParam()
 // 
 //                     if (ming != -1 && maxg != -1) {
 //                         if (m_Param.camInput.regcap.ACQ_REGULAR_CFG.gain < ming || m_Param.camInput.regcap.ACQ_REGULAR_CFG.gain > maxg) {
-//                             m_Param.camInput.errormsg.push_back("- ACQ_REGULAR_CFG : Gain value <" +
+//                             m_Param.camInput.errormsg.push_back(" ACQ_REGULAR_CFG : Gain value <" +
 //                                 Conversion::intToString(m_Param.camInput.regcap.ACQ_REGULAR_CFG.gain) +
 //                                 "> is not correct. \nAvailable range is from " +
 //                                 Conversion::intToString(ming) + " to " +
@@ -1707,7 +1711,7 @@ void CfgParam::loadCamParam()
                     EParser<CamPixFmt> fmt;
                     if (fmt.getStringEnum(m_Param.camInput.regcap.ACQ_REGULAR_CFG.fmt) == "") {
                         error = true;
-                        m_Param.camInput.errormsg.push_back("- ACQ_REGULAR_CFG : Fail to extract pixel format on " + regAcqParam + ". Check if index <" + res1.at(5) + "> exits.");
+                        m_Param.camInput.errormsg.push_back(" ACQ_REGULAR_CFG : Fail to extract pixel format on " + regAcqParam + ". Check if index <" + res1.at(5) + "> exits.");
                     }
                 }
             }
@@ -1717,7 +1721,7 @@ void CfgParam::loadCamParam()
     //-------------------------------------------------------------------
 
     if (!m_Cfg.Get("ACQ_SCHEDULE_ENABLED", m_Param.camInput.schcap.ACQ_SCHEDULE_ENABLED)) {
-        m_Param.camInput.errormsg.push_back("- ACQ_SCHEDULE_ENABLED : Fail to get value.");
+        m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE_ENABLED : Fail to get value.");
         error = true;
     }
     else {
@@ -1731,7 +1735,7 @@ void CfgParam::loadCamParam()
                     string img_output;
                     if (!m_Cfg.Get("ACQ_SCHEDULE_OUTPUT", img_output)) {
                         error = true;
-                        m_Param.camInput.errormsg.push_back("- ACQ_SCHEDULE_OUTPUT : Fail to load value.");
+                        m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE_OUTPUT : Fail to load value.");
                     }
                     else {
                         try {
@@ -1740,7 +1744,7 @@ void CfgParam::loadCamParam()
                         }
                         catch (std::exception& ex) {
                             error = true;
-                            m_Param.camInput.errormsg.push_back("- ACQ_SCHEDULE_OUTPUT : " + string(ex.what()));
+                            m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE_OUTPUT : " + string(ex.what()));
                         }
                     }
                 }
@@ -1751,7 +1755,7 @@ void CfgParam::loadCamParam()
                     string sACQ_SCHEDULE;
                     if (!m_Cfg.Get("ACQ_SCHEDULE", sACQ_SCHEDULE)) {
                         error = true;
-                        m_Param.camInput.errormsg.push_back("- ACQ_SCHEDULE : Fail to load value.");
+                        m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE : Fail to load value.");
                     }
                     else {
 
@@ -1786,25 +1790,25 @@ void CfgParam::loadCamParam()
                                 if (spa.hours < 0 || spa.hours >= 24) {
                                     error = true;
                                     status = false;
-                                    m_Param.camInput.errormsg.push_back("- ACQ_SCHEDULE : In " + sch1.at(i) + ". Hours can't have the value <" + Conversion::intToString(spa.hours) + ">.\nAvailable range is from 0 to 23.");
+                                    m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE : In " + sch1.at(i) + ". Hours can't have the value <" + Conversion::intToString(spa.hours) + ">.\nAvailable range is from 0 to 23.");
                                 }
                                 spa.min = atoi(sp.at(1).c_str());
                                 if (spa.min < 0 || spa.min >= 60) {
                                     error = true;
                                     status = false;
-                                    m_Param.camInput.errormsg.push_back("- ACQ_SCHEDULE : In " + sch1.at(i) + ". Minutes can't have the value <" + Conversion::intToString(spa.min) + ">.\nAvailable range is from 0 to 59.");
+                                    m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE : In " + sch1.at(i) + ". Minutes can't have the value <" + Conversion::intToString(spa.min) + ">.\nAvailable range is from 0 to 59.");
                                 }
                                 spa.sec = atoi(sp.at(2).c_str());
                                 if (spa.sec < 0 || spa.sec >= 60) {
                                     error = true;
                                     status = false;
-                                    m_Param.camInput.errormsg.push_back("- ACQ_SCHEDULE : In " + sch1.at(i) + ". Seconds can't have the value <" + Conversion::intToString(spa.sec) + ">.\nAvailable range is from 0 to 59.");
+                                    m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE : In " + sch1.at(i) + ". Seconds can't have the value <" + Conversion::intToString(spa.sec) + ">.\nAvailable range is from 0 to 59.");
                                 }
                                 spa.exp = atoi(sp.at(3).c_str());
 
 //                                 if (mine != -1 && maxe != -1) {
 //                                     if (spa.exp < mine || spa.exp > maxe) {
-//                                         m_Param.camInput.errormsg.push_back("- ACQ_SCHEDULE : In " + sch1.at(i) + ". Exposure value <" +
+//                                         m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE : In " + sch1.at(i) + ". Exposure value <" +
 //                                             Conversion::intToString(spa.exp) +
 //                                             "> is not correct. \nAvailable range is from " +
 //                                             Conversion::intToString(mine) + " to " +
@@ -1818,7 +1822,7 @@ void CfgParam::loadCamParam()
 
 //                                 if (ming != -1 && maxg != -1) {
 //                                     if (spa.gain < ming || spa.gain > maxg) {
-//                                         m_Param.camInput.errormsg.push_back("- ACQ_SCHEDULE : In " + sch1.at(i) + ". Gain value <" +
+//                                         m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE : In " + sch1.at(i) + ". Gain value <" +
 //                                             Conversion::intToString(spa.gain) +
 //                                             "> is not correct. \nAvailable range is from " +
 //                                             Conversion::intToString(ming) + " to " +
@@ -1832,14 +1836,14 @@ void CfgParam::loadCamParam()
                                 if (spa.rep < 0 || spa.rep >= 60) {
                                     error = true;
                                     status = false;
-                                    m_Param.camInput.errormsg.push_back("- ACQ_SCHEDULE : One repetition must be defined at least.");
+                                    m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE : One repetition must be defined at least.");
                                 }
                                 spa.fmt = static_cast<CamPixFmt>(atoi(sp.at(5).c_str()));
                                 EParser<CamPixFmt> fmt;
                                 if (fmt.getStringEnum(spa.fmt) == "") {
                                     error = true;
                                     status = false;
-                                    m_Param.camInput.errormsg.push_back("- ACQ_SCHEDULE : Fail to extract pixel format for :  " + sch1.at(i) + ". Index <" + sp.at(5) + "> not exist.");
+                                    m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE : Fail to extract pixel format for :  " + sch1.at(i) + ". Index <" + sp.at(5) + "> not exist.");
                                 }
 
                                 if (status)
@@ -1915,7 +1919,7 @@ void CfgParam::loadCamParam()
                                 if (init) {
 
                                     tempSchedule.push_back((*it_select));
-                                    //cout << "-> " << (*it_select).hours << "H " << (*it_select).min << "M " << (*it_select).sec << "S " << endl;
+                                    //cout << "> " << (*it_select).hours << "H " << (*it_select).min << "M " << (*it_select).sec << "S " << endl;
                                     m_Param.camInput.schcap.ACQ_SCHEDULE.erase(it_select);
 
                                 }
@@ -1931,7 +1935,7 @@ void CfgParam::loadCamParam()
             }
             else {
                 error = true;
-                m_Param.camInput.errormsg.push_back("- ACQ_SCHEDULE : Disable ACQ_REGULAR_ENABLED to use ACQ_SCHEDULE.");
+                m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE : Disable ACQ_REGULAR_ENABLED to use ACQ_SCHEDULE.");
             }
         }
     }
@@ -1939,10 +1943,8 @@ void CfgParam::loadCamParam()
     if (!error) m_Param.camInput.status = true;
 }
 
-
 bool CfgParam::checkInputParam(InputDeviceType m_InputType) 
 {
-
     switch (m_InputType) {
 
     case VIDEO:
@@ -1965,8 +1967,6 @@ bool CfgParam::checkInputParam(InputDeviceType m_InputType)
 
 void CfgParam::loadInputParam(InputDeviceType m_InputType)
 {
-
-
     switch (m_InputType)
     {
 

@@ -34,15 +34,18 @@
 */
 
 #include "CameraVideo.h"
+#include "Logger.h"
 #include <boost/date_time.hpp>
 
 using namespace freeture;
 
-boost::log::sources::severity_logger< LogSeverityLevel >  CameraVideo::logger;
-
-CameraVideo::Init CameraVideo::initializer;
-
-CameraVideo::CameraVideo(std::vector<std::string> videoList, bool verbose):mVideoID(0), mFrameWidth(0), mFrameHeight(0), mReadDataStatus(false){
+CameraVideo::CameraVideo(CameraDescription camera_descriptor, cameraParam settings , std::vector<std::string> videoList, bool verbose) :
+    Camera(camera_descriptor, settings),
+    mVideoID(0),
+    mFrameWidth(0),
+    mFrameHeight(0),
+    mReadDataStatus(false)
+{
 
     mVideoList = videoList;
 
@@ -52,11 +55,10 @@ CameraVideo::CameraVideo(std::vector<std::string> videoList, bool verbose):mVide
     else
         throw "No video path in input.";
 
-    mExposureAvailable = false;
-    mGainAvailable = false;
-    mInputDeviceType = VIDEO;
-    mVerbose = verbose;
+    m_ExposureAvailable = false;
+    m_GainAvailable = false;
 
+    m_CameraDescriptor.DeviceType = VIDEO;
 }
 
 CameraVideo::~CameraVideo(void){
@@ -66,9 +68,7 @@ CameraVideo::~CameraVideo(void){
 bool CameraVideo::grabInitialization(){
 
     if(!mCap.isOpened()) {
-
-         if(mVerbose) BOOST_LOG_SEV(logger,fail) << "Cannot open the video file";
-         if(mVerbose) std::cout << "Cannot open the video file" << std::endl;
+         LOG_ERROR << "Cannot open the video file";
          return false;
     }
 
@@ -94,18 +94,18 @@ bool CameraVideo::loadNextDataSet(std::string &location){
 
     if(mVideoID != 0){
 
-        std::cout << "Change video : " << mVideoID << " - Path : " << mVideoList.at(mVideoID) << std::endl;
+       LOG_INFO << "Change video : " << mVideoID << " - Path : " << mVideoList.at(mVideoID) << std::endl;
 
         mCap = cv::VideoCapture(mVideoList.at(mVideoID));
 
         if(!mCap.isOpened()){
 
-             std::cout << "Cannot open the video file" << std::endl;
+            LOG_ERROR << std::endl;
              return false;
 
         }else{
 
-            std::cout << "Success to open the video file" << std::endl;
+            LOG_INFO << std::endl;
 
         }
 
@@ -121,7 +121,8 @@ bool CameraVideo::loadNextDataSet(std::string &location){
 
 }
 
-bool CameraVideo::createDevice(int id) {
+bool CameraVideo::createDevice()
+{
     return true;
 }
 
@@ -155,4 +156,33 @@ bool CameraVideo::grabImage(Frame &img){
     return false;
 }
 
+bool CameraVideo::initSDK()
+{
+    return true;
+}
+
+bool CameraVideo::initOnce()
+{
+    return true;
+}
+
+bool CameraVideo::init()
+{
+    return true;
+}
+
+void CameraVideo::fetchBounds(parameters&)
+{
+
+}
+
+void CameraVideo::configure(parameters&)
+{
+
+}
+
+bool CameraVideo::configurationCheck(parameters&)
+{
+    return true;
+}
 

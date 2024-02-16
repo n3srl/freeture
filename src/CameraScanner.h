@@ -1,11 +1,19 @@
 #pragma once
+/*
+    THIS CLASS IMPLEMENTS:
+        - ABSTRACT FACTORY
+        - FACTORY METHOD
+*/
+
 //header refactoring ok
 #include "Commons.h"
 
 #include <string>
 #include <vector>
 
+#include "EInputDeviceType.h"
 #include "ECamSdkType.h"
+#include "ECamModel.h"
 
 namespace freeture
 {
@@ -13,11 +21,16 @@ namespace freeture
     {
     public:
         int Id = 0;
+        int Interface = 0;
+
         std::string Description = "";
         std::string DeviceId = "";
         std::string Address = "";
-        int Interface = 0;
+        std::string Serial = "";
+
+        InputDeviceType DeviceType = InputDeviceType::UNDEFINED_INPUT_TYPE;
         CamSdkType Sdk = CamSdkType::UNKNOWN;
+        CamModel Model = CamModel::NONE;
     };
 
     /*STRATEGY*/
@@ -29,14 +42,13 @@ namespace freeture
     public:
         CamSdkType Sdk;
 
+        std::vector<CameraDescription> Devices;
+
         CameraScanner() = delete;
 
         CameraScanner(CamSdkType sdk) :Sdk(sdk)
         {
         }
-
-        std::vector<CameraDescription> Devices;
-
 
         /**
             Update the List of camera descriptions and return back the vector

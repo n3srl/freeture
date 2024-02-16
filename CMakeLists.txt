@@ -364,6 +364,10 @@ set(SOURCES
 	src/StackThread.h
 	src/TimeDate.cpp
 	src/TimeDate.h
+	src/CameraFactory.cpp
+	src/CameraFactory.h
+	src/ICameraFab.h
+	src/ArenaSDKManager.h
 )
 
 

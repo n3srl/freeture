@@ -43,25 +43,13 @@
 
 namespace freeture
 {
-  
+    class CameraDescription;
+    class cameraParam;
+
     class CameraLucidAravis : public Camera
     {
 
     private:
-
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
-
-        static class Init {
-
-        public:
-
-            Init() {
-
-                logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CameraLucidArena"));
-
-            }
-
-        }initializer;
 
         GError* error = nullptr;        // ARAVIS API Error
         ArvCamera* camera;                // Camera to control.
@@ -93,7 +81,7 @@ namespace freeture
     public:
 
 
-        CameraLucidArena(bool shift);
+        CameraLucidArena(CameraDescription, cameraParam );
 
         CameraLucidArena();
 
@@ -101,8 +89,6 @@ namespace freeture
 
         bool createDevice(int id);
         bool recreateDevice(int);
-
-        bool grabInitialization();
 
         void grabCleanse();
 
@@ -112,7 +98,7 @@ namespace freeture
 
         bool grabImage(Frame& newFrame);
 
-        bool grabSingleImage(Frame& frame, int camID);
+        bool grabSingleImage(Frame& frame);
 
         bool getDeviceNameById(int id, std::string& device);
 
@@ -149,6 +135,55 @@ namespace freeture
         bool setSize(int startx, int starty, int width, int height, bool customSize);
 
         void getAvailablePixelFormats();
+
+
+        //ABSTRACT FACTORY METHODS
+        /// <summary>
+        /// initialize SDK
+        /// </summary>
+        /// <returns></returns>
+        bool initSDK() override;
+
+        /// <summary>
+        /// init once, run configuration once (use configuration file)
+        /// </summary>
+        /// <returns></returns>
+        bool initOnce() override;
+
+        /// <summary>
+        /// init the camera, eg. running functions when created 
+        /// CALL GRAB INITIALIZATION 
+        /// </summary>
+        /// <returns></returns>
+        bool init() override;
+
+        /// <summary>
+        /// DEPRECATED USE INIT INSTEAD.
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        bool grabInitialization() override;
+
+        /// <summary>
+        /// retreive main camera boundaries upon configuration: 
+        ///     - fps
+        ///     - gain
+        ///     - exposure time
+        /// </summary>
+        void fetchBounds(parameters&) override;
+
+        /// <summary>
+        /// configure the camera with the given parameters
+        /// </summary>
+        /// <param name=""></param>
+        void configure(parameters&) override;
+
+        /// <summary>
+        /// check if configuration is allowed
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        bool configurationCheck(parameters&) override;
 
     };
 }

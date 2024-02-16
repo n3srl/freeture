@@ -69,8 +69,6 @@ namespace freeture
     class Camera;
     class Frame;
 
-#define ARENA_SDK false    //Set this to true to use Arena SDK instead of aravis for LUCID cameras
-
     class Device {
 
     public:
@@ -78,9 +76,7 @@ namespace freeture
         bool mVideoFramesInput; // TRUE if input is a video file or frames directories.
 
     private:
-        std::vector<CameraDescription> listCams;
-
-        std::vector<std::pair<int, std::pair<int, CamSdkType>>> mDevices;
+//        std::vector<std::pair<int, std::pair<int, CamSdkType>>> mDevices;
 
         bool        mCustomSize;
         int         mStartX;
@@ -91,49 +87,33 @@ namespace freeture
         int         mNightGain;
         int         mDayExposure;
         int         mDayGain;
-        int         mFPS;
-
-
-
-        bool        mShiftBits;
+        int         mFPS; // NEED TO BE DOUBLE
         bool        mVerbose;
-        framesParam mfp;
-        videoParam  mvp;
 
-        void mergeList(std::vector<CameraDescription>&);
+        framesParam m_FramesParam;
+        videoParam  m_VideoParam;
+
     public:
-        int         mCamID;         // ID in a specific sdk.
-        int         mGenCamID;      // General ID.
-        Camera* mCam;
-        int         mNbDev;
-        CamPixFmt   mFormat;
-        std::string      mCfgPath;
-        InputDeviceType mDeviceType;
-        double      mMinExposureTime;
-        double      mMaxExposureTime;
-        double      mMinFPS;
-        double      mMaxFPS;
-        double         mMinGain;
-        double         mMaxGain;
-        //int         mNbFrame;
+        double      minExposureTime = 0.0;
+        double      maxExposureTime = 0.0;
+        double      minFPS = 0.0;
+        double      maxFPS = 0.0;
+        double      minGain = 0.0;
+        double      maxGain = 0.0;
 
-        void Setup(cameraParam cp, framesParam fp, videoParam vp, int cid);
+
+    public:
+        //int         mCamID;         // ID in a specific sdk.
+        Camera*         mCam = nullptr;
+        CamPixFmt       mFormat;
+        InputDeviceType mDeviceType;
+        std::string     mCfgPath;
+
+        void Setup(cameraParam cp, framesParam fp, videoParam vp);
 
         Device();
 
         ~Device();
-
-        CamSdkType getDeviceSdk(int id);
-
-        void listDevices(bool printInfos);
-
-        std::vector<CameraDescription> getListDevice();
-
-        bool createCamera(int id, bool create);
-
-        bool createCamera();
-
-        bool initializeCamera();
 
         bool runContinuousCapture(Frame& img);
 
@@ -159,7 +139,6 @@ namespace freeture
 
         bool getDeviceName();
 
-        bool recreateCamera();
 
         InputDeviceType getDeviceType();
 
@@ -208,11 +187,12 @@ namespace freeture
         void setVerbose(bool status);
 
         Camera* getCamera();
+
         bool firstIinitializeCamera(std::string);
+        bool initializeCamera();
 
     private:
-
-        bool createDevicesWith(CamSdkType sdk);
+      
 
     };
 }

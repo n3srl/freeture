@@ -7,39 +7,37 @@
 #include <memory>
 #include <mutex>
 
-
+#include "ECamSdkType.h"
 #include "SParam.h"
-#include "CfgParam.h"
-
-#include "CameraScanner.h"
-#include "Device.h"
 
 namespace freeture
 {
+    class Device;
+    class Camera;
+    class CameraDescription;
+
     class CameraDeviceManager
     {
     public:
           CameraDeviceManager();
-// 
-
-//          CameraDeviceManager& operator=(const CameraDeviceManager&) = delete;
-//          CameraDeviceManager(CameraDeviceManager&&) = delete;
-//          CameraDeviceManager& operator=(CameraDeviceManager&&) = delete;
 
     private:
-      //  InputDeviceType m_InputType;
-
         static std::shared_ptr<CameraDeviceManager> m_Instance;
         static std::mutex m_Mutex;
 
-        std::vector<CameraDescription> deviceList;
-        Device dev;
+        std::vector<CameraDescription> m_DevicesList;
+        Device* m_Device;
+        Camera* m_Camera;
 
-        unsigned short m_SelectedDevice = 0;
+        parameters m_SelectedRuntimeConfiguration;
+        unsigned short m_SelectedDeviceID = 0;
+        CamSdkType m_SelectedSdk;
+
         bool m_Selected = false;
+        int m_DeviceCount;
+
     public:
         CameraDeviceManager(const CameraDeviceManager&) = default;
-        int deviceCount;
         virtual ~CameraDeviceManager() = default;
 
         static std::shared_ptr<CameraDeviceManager> Get()
@@ -52,15 +50,32 @@ namespace freeture
             return m_Instance;
         }
 
-        bool selectDevice(unsigned short);
-
-        // Getters
-        std::vector<CameraDescription> getListDevice();
+        bool selectDevice(parameters);
         Device* getDevice();
-        void listDevice(bool);
+
+        void printDevicesList();
+
+      private:
         int getCameraDeviceBySerial(std::string);
 
-        bool connect();
+        std::vector<CameraDescription> getListDevice();
+
+        /// <summary>
+        /// Create the camera for the selected device
+        /// </summary>
+        /// <returns></returns>
+        bool createCamera();
+
+        /// <summary>
+        /// Create the device with the camera
+        /// </summary>
+        /// <returns></returns>
+        bool createDevice();
+
+        //da rimuovere
+        CamSdkType getDeviceSdk(int id);
+
+        void mergeList(std::vector<CameraDescription>&);
 
     };
 }

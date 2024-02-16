@@ -60,35 +60,11 @@ namespace freeture
     class AcqThread {
 
     private:
-
+        //COMMON THREADS ATTRIBUTES
         bool                mMustStop;              // Signal to stop thread.
         boost::mutex        mMustStopMutex;
-        boost::thread* mThread;               // Acquisition thread.
+        boost::thread* mThread;                     // Acquisition thread.
         bool                mThreadTerminated;      // Terminated status of the thread.
-        Device* m_Device;               // Device used for acquisition.
-        int                 mDeviceID;              // Index of the device to use.
-        scheduleParam       mNextAcq;               // Next scheduled acquisition.
-        int                 mNextAcqIndex;
-        std::shared_ptr<DetThread> pDetection;            // Pointer on detection thread in order to stop it or reset it when a regular capture occurs.
-        std::shared_ptr<StackThread> pStack;                // Pointer on stack thread in order to save and reset a stack when a regular capture occurs.
-        ExposureControl* pExpCtrl;              // Pointer on exposure time control object while sunrise and sunset.
-        std::string              mOutputDataPath;        // Dynamic location where to save data (regular captures etc...).
-        std::string              mCurrentDate;
-        int                 mStartSunriseTime;      // In seconds.
-        int                 mStopSunriseTime;       // In seconds.
-        int                 mStartSunsetTime;       // In seconds.
-        int                 mStopSunsetTime;        // In seconds.
-        int                 mCurrentTime;           // In seconds.
-        
-        // Parameters from configuration file.
-        stackParam          msp;
-        stationParam        mstp;
-        detectionParam      mdtp;
-        cameraParam         mcp;
-        dataParam           mdp;
-        fitskeysParam       mfkp;
-        framesParam         mfp;
-        videoParam          mvp;
 
         // Communication with the shared framebuffer.
         boost::condition_variable* frameBuffer_condition;
@@ -104,6 +80,33 @@ namespace freeture
         bool* detSignal;
         boost::mutex* detSignal_mutex;
         boost::condition_variable* detSignal_condition;
+
+        // ACQ THREAD ATTRIBUTES
+        Device* m_Device;                           // Device used for acquisition.
+        int                 mDeviceID;              // Index of the device to use.
+        scheduleParam       mNextAcq;               // Next scheduled acquisition.
+        int                 mNextAcqIndex;
+        std::shared_ptr<DetThread> pDetection;      // Pointer on detection thread in order to stop it or reset it when a regular capture occurs.
+        std::shared_ptr<StackThread> pStack;        // Pointer on stack thread in order to save and reset a stack when a regular capture occurs.
+        ExposureControl* pExpCtrl;                  // Pointer on exposure time control object while sunrise and sunset.
+        std::string              mOutputDataPath;   // Dynamic location where to save data (regular captures etc...).
+        std::string              mCurrentDate;
+        int                 mStartSunriseTime;      // In seconds.
+        int                 mStopSunriseTime;       // In seconds.
+        int                 mStartSunsetTime;       // In seconds.
+        int                 mStopSunsetTime;        // In seconds.
+        int                 mCurrentTime;           // In seconds.
+        
+        // Parameters from configuration file.
+        stackParam          msp;
+        stationParam        mstp;
+        detectionParam      mdtp;
+        dataParam           mdp;
+        fitskeysParam       mfkp;
+
+        cameraParam         m_CameraParam;
+        framesParam         m_FramesParam;
+        videoParam          m_VideoParam;
 
     public:
 
@@ -123,7 +126,15 @@ namespace freeture
 
         ~AcqThread(void);
 
+
+        //COMMON THREAD METHODS
         void operator()();
+        bool startThread();
+        void stopThread();
+        // Return activity status.
+        bool getThreadStatus();
+
+
 
         bool isNight(int);
         bool isDay(int);
@@ -133,30 +144,26 @@ namespace freeture
         bool isDay();
         bool isSunset();
         bool isSunrise();
+
         TimeMode getCurrentTimeMode();
         TimeMode getTimeMode(int);
+
         int getNowInSeconds();
         int getTimeInSeconds(boost::posix_time::ptime);
-        void stopThread();
-
-        bool startThread();
-
+    
         void stopDetectionThread();
         void stopStackThread();
+
         void resetFrameBuffer();
 
         void notifyDetectionThread();
 
-        // Return activity status.
-        bool getThreadStatus();
-
 
         // Added
-        bool buildCameraInContinousMode(bool);
+        bool setCameraInContinousMode(bool);
 
     private:
         bool cleanStatus = false;
-
 
         // Compute in seconds the sunrise start/stop times and the sunset start/stop times.
         bool computeSunTimes();

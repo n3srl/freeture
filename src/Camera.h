@@ -45,41 +45,39 @@
 #include "ECamSdkType.h"
 #include "CameraScanner.h"
 #include "Frame.h"
+#include "ICameraFab.h"
 
 namespace freeture
 {
-    class Camera {
+    class Camera: public ICameraFab {
+
+    protected:
+        CameraDescription m_CameraDescriptor;
+        cameraParam m_CameraSettings;
 
     public:
         static CameraScanner* Scanner;
 
-        bool                mExposureAvailable;
-        bool                mGainAvailable;
+        bool                m_ExposureAvailable;
+        bool                m_GainAvailable;
+
         bool                mCamSizeToMax;
         int                 mCamStartX;
         int                 mCamStartY;
         int                 mCamSizeWidth;
         int                 mCamSizeHeight;
-        InputDeviceType     mInputDeviceType;
 
-        bool                mVerbose;
-
-        std::string         mCamDescription;
-        std::string         mCamSerial;
+        //InputDeviceType     mInputDeviceType;
+        //std::string         mCamDescription;
+        //std::string         mCamSerial;
 
     public:
 
-        Camera() {
-
-            mInputDeviceType = UNDEFINED_INPUT_TYPE;
-            mVerbose = true;
-
-        }
+        Camera(CameraDescription camera_descriptor, cameraParam settings):m_CameraDescriptor (camera_descriptor), m_CameraSettings(settings) {}
 
         virtual ~Camera() {};
 
         virtual void getAvailablePixelFormats() {};
-
 
         /**
         * Get informations about a specific device.
@@ -87,26 +85,9 @@ namespace freeture
         */
         virtual bool getInfos() { return false; };
 
-        /**
-        * Open/create a device.
-        *
-        * @param id Identification number of the camera to create.
-        */
-        virtual bool createDevice(int id) { return false; };
-        virtual bool recreateDevice(int id) { return false; };
-
-        /**
-        * Get camera name from its ID.
-        *
-        * @param id Identification number of the camera from which the name is required.
-        * @param device The camera's name found.
-        * @return Success status to find camera's name.
-        */
-        virtual bool getDeviceNameById(int id, std::string& deviceName) { return false; };
-
         virtual bool getCameraName() { return false; };
 
-        InputDeviceType getDeviceType() { return mInputDeviceType; };
+        InputDeviceType getDeviceType() { return m_CameraDescriptor.DeviceType; };
 
         /**
         * Get device's grabbing status.
@@ -152,10 +133,9 @@ namespace freeture
         * Get a frame from single acquisition.
         *
         * @param newFrame Frame's container object.
-        * @param camID Device's identification number from which the single acquisition will be performed.
         * @return Success status to grab a frame.
         */
-        virtual bool grabSingleImage(Frame& frame, int camID) { return false; };
+        virtual bool grabSingleImage(Frame& frame) { return false; };
 
         /**
         * Get device's exposure time bounds.
