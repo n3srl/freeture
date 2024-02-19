@@ -35,35 +35,73 @@
 */
 
 #include "Frame.h"
-
 #include "ECamPixFmt.h"
+#include "Logger.h"
 
 using namespace freeture;
 
 Frame::Frame(cv::Mat capImg, int g, double e, std::string acquisitionDate):
 mExposure(e), mGain(g), mFileName("noFileName"), mFrameRemaining(0),
-mFrameNumber(0), mFps(30), mFormat(MONO8), mSaturatedValue(255) {
-
-    capImg.copyTo(mImg);
+mFrameNumber(0), mFps(30), mFormat(CamPixFmt::MONO8), mSaturatedValue(255), mDataBuffer(nullptr)
+{
+    capImg.copyTo(mImage);
     mDate = TimeDate::splitIsoExtendedDate(acquisitionDate);
     mStartX = 0;
     mStartY = 0;
     mWidth = 0;
     mHeight = 0;
-
 }
 
 Frame::Frame():
 mExposure(0), mGain(0), mFileName("noFileName"), mFrameRemaining(0),
-mFrameNumber(0), mFps(30), mFormat(MONO8), mSaturatedValue(255) {
+mFrameNumber(0), mFps(30), mFormat(CamPixFmt::MONO8), mSaturatedValue(255), mDataBuffer(nullptr) {
 
    mWidth = 0;
    mHeight = 0;
    mStartX = 0;
    mStartY = 0;
-
 }
 
-Frame::~Frame(void){
+Frame::~Frame(void)
+{
+//     if (mDataBuffer)
+//         delete[] mDataBuffer;
+// 
+//     mDataBuffer = nullptr;
+}
 
+void Frame::SetImage(const uint8_t* buffer, size_t size)
+{
+    if (mDataBuffer != nullptr)
+        throw "deallocate first";
+
+    if (buffer == nullptr)
+        return;
+
+    if (size<=0)
+        return;
+
+    size_t expected_buffer_size = mWidth * mHeight;
+
+    switch (mFormat) {
+    case CamPixFmt::MONO8: {
+
+        break;
+    }
+    case CamPixFmt::MONO12:
+    case CamPixFmt::MONO16: {
+        expected_buffer_size *= 2;
+        break;
+    }
+    };
+
+    if (expected_buffer_size != size) 
+    {
+        if (LOG_SPAM_FRAME_STATUS)
+            LOG_WARNING << "Frame::SetImage; Expected buffer size is different from frame size.";
+    }
+
+    mDataBuffer = new uint8_t[expected_buffer_size];
+    memset(mDataBuffer,0xCD, expected_buffer_size);
+    memcpy(mDataBuffer, buffer, size);
 }

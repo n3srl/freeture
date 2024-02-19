@@ -225,6 +225,9 @@
             /// <param name=""></param>
             /// <returns></returns>
             bool configurationCheck(parameters&) override;
+
+            double getMinExposureTime() override;
+
         private:
 
             bool convertImage(unsigned char* buffer, Mat& image);

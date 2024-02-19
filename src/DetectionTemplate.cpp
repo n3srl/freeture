@@ -62,9 +62,9 @@ bool DetectionTemplate::runDetection(Frame &c) {
     cv::Mat currImg;
 
     if(mdtp.DET_DOWNSAMPLE_ENABLED)
-        pyrDown(c.mImg, currImg, cv::Size(c.mImg.cols / 2, c.mImg.rows / 2));
+        pyrDown(c.mImage, currImg, cv::Size(c.mImage.cols / 2, c.mImage.rows / 2));
     else
-        c.mImg.copyTo(currImg);
+        c.mImage.copyTo(currImg);
 
     // --------------------------------
     //          OPERATIONS

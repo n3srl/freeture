@@ -29,7 +29,6 @@
 namespace freeture
 {
     enum InputDeviceType {
-
         SINGLE_FITS_FRAME,
         VIDEO,
         CAMERA,

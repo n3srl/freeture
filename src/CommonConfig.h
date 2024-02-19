@@ -15,6 +15,7 @@
 #define DEFAULT_ACQ_OFFSET "364,106"
 #define DEFAULT_ACQ_RES_SIZE "1324x1324"
 #define DEFAULT_SHIFT_BITS "true"
+#define DEFAULT_ACQ_AUTOEXPOSURE_ENABLED "false"
 #define DEFAULT_ACQ_MASK_ENABLED "false"
 #define DEFAULT_ACQ_MASK_PATH "/freeture/default.bmp"
 #define DEFAULT_ACQ_BUFFER_SIZE "15"

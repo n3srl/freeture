@@ -59,7 +59,7 @@ using namespace boost::posix_time;
 namespace freeture
 {
     class CameraDescription;
-    class cameraParam;
+    struct cameraParam;
 
     class CameraFrames : public Camera {
 
@@ -157,7 +157,9 @@ namespace freeture
         /// <returns></returns>
         bool configurationCheck(parameters&) override;
 
-
+        double getMinExposureTime() override;
+        
+        bool destroyDevice() override;
     };
 
 }

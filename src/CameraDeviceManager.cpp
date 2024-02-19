@@ -16,21 +16,19 @@ using namespace std;
 shared_ptr<CameraDeviceManager> CameraDeviceManager::m_Instance = nullptr;
 mutex CameraDeviceManager::m_Mutex;
 
-CameraDeviceManager::CameraDeviceManager() {
-    LOG_DEBUG << "CameraDeviceManager::CameraDeviceManager";
+CameraDeviceManager::CameraDeviceManager() 
+{
+    LOG_DEBUG << "CameraDeviceManager::CameraDeviceManager;" <<"Initialize available scanners...";
 
-    LOG_INFO << "Retrieve devices list...";
+    initScanners();
+
+    LOG_DEBUG << "CameraDeviceManager::CameraDeviceManager;" << "Retrieve devices list...";
 
     m_DeviceCount = -1;
 
     m_DevicesList = getListDevice();
 
     m_DeviceCount = m_DevicesList.size();
-
-    if (m_DeviceCount!=1)
-        LOG_INFO << "Found "<< m_DeviceCount << " devices!";
-    else
-        LOG_INFO << "Found " << m_DeviceCount << " device!";
 }
 
 bool CameraDeviceManager::createDevice()
@@ -39,7 +37,7 @@ bool CameraDeviceManager::createDevice()
     m_Device = new Device();
 
     //assign camera
-    m_Device->mCam = m_Camera;
+    m_Device->setCamera( m_Camera );
     
     //Setup with runtime values
     m_Device->Setup(m_SelectedRuntimeConfiguration.camInput, m_SelectedRuntimeConfiguration.framesInput, m_SelectedRuntimeConfiguration.vidInput);
@@ -102,7 +100,8 @@ int CameraDeviceManager::getCameraDeviceBySerial(string serial)
 
 bool CameraDeviceManager::selectDevice(parameters runtime_configuration)
 {
-    if (m_Selected) {
+    if (m_Selected)
+    {
         if (runtime_configuration.DEVICE_ID == m_SelectedDeviceID)
             return true;
         else
@@ -138,9 +137,6 @@ bool CameraDeviceManager::selectDevice(parameters runtime_configuration)
         return false;
     }
 
-
-
-
     return true;
 }
 
@@ -152,114 +148,22 @@ CamSdkType CameraDeviceManager::getDeviceSdk(int id) {
         return devices.at(id).Sdk;
     }
     LOG_DEBUG << "ERROR GETTING DEVICE SDK FOR CAMERA ID " << id << " NUM OF DEVICES " << (m_CameraDeviceManager->m_DeviceCount - 1) ;
+
+    return CamSdkType::UNKNOWN;
 }
 
 vector<CameraDescription> CameraDeviceManager::getListDevice()
 {
     LOG_DEBUG << "CameraDeviceManager::getListDevice";
 
-#ifdef WINDOWS
-
-    // PYLONGIGE
-#ifdef USE_PYLON
-//         mCam = new CameraGigePylon();
-//         listCams = mCam->getCamerasList();
-//         for(int i = 0; i < listCams.size(); i++) {
-//             elem.first = mNbDev; elem.second = PYLONGIGE;
-//             subElem.first = listCams.at(i).first; subElem.second = elem;
-//             mDevices.push_back(subElem);
-//             if(printInfos) cout << "[" << mNbDev << "]    " << listCams.at(i).second ;
-//             mNbDev++;
-//         }
-//         delete mCam;
-#endif
-#ifdef TISCAMERA
-//         // TIS
-// 
-//         mCam = new CameraGigeTis();
-//         listCams = mCam->getCamerasList();
-//         for(int i = 0; i < listCams.size(); i++) {
-//             elem.first = mNbDev; elem.second = TIS;
-//             subElem.first = listCams.at(i).first; subElem.second = elem;
-//             mDevices.push_back(subElem);
-//             if(printInfos) cout << "[" << mNbDev << "]    " << listCams.at(i).second ;
-//             mNbDev++;
-//         }
-//         delete mCam;
-#endif
-#ifdef VIDEOINPUT
-//         // WINDOWS
-// 
-//         mCam = new CameraWindows();
-//         listCams = mCam->getCamerasList();
-//         for(int i = 0; i < listCams.size(); i++) {
-// 
-//             // Avoid to list basler
-//             string::size_type pos1 = listCams.at(i).second.find("Basler");
-//             string::size_type pos2 = listCams.at(i).second.find("BASLER");
-//             if((pos1 != string::npos) || (pos2 != string::npos)) {
-//                 //LOG_DEBUG << "found \"words\" at position " << pos1 ;
-//             } else {
-//                 elem.first = mNbDev; elem.second = VIDEOINPUT;
-//                 subElem.first = listCams.at(i).first; subElem.second = elem;
-//                 mDevices.push_back(subElem);
-//                 if(printInfos) cout << "[" << mNbDev << "]    " << listCams.at(i).second ;
-//                 mNbDev++;
-//             }
-//         }
-// 
-//         delete mCam;
-#endif
-#endif
-
-
-#ifdef USE_ARAVIS
-    CameraScanner* lucid_aravis_scanner = Camera::Scanner->CreateScanner(CamSdkType::LUCID_ARAVIS);
-    assert(lucid_aravis_scanner != nullptr);
-    lucid_aravis_scanner->getCamerasList();
-    listCams.insert(listCams.end(), lucid_aravis_scanner->Devices.begin(), lucid_aravis_scanner->Devices.end());
-#endif
-
-#ifdef USE_ARENA
-    //ARENA SDK
-    CameraScanner* lucid_arena_scanner = Camera::Scanner->CreateScanner(CamSdkType::LUCID_ARENA);
-
-    assert(lucid_arena_scanner != nullptr);
-   
-    mergeList(lucid_arena_scanner->getCamerasList());
-#endif
-
-#ifdef USE_ARAVIS
-    // ARAVIS
-    CameraScanner* aravis_scanner = Camera::Scanner->CreateScanner(CamSdkType::ARAVIS);
-    assert(aravis_scanner != nullptr);
-    aravis_scanner->getCamerasList();
-
-    mergeList(aravis_scanner->Devices);
-#endif
-
-    // VIDEO
-    /*
-    elem.first = mNbDev; elem.second = VIDEOFILE;
-    subElem.first = 0; subElem.second = elem;
-    mDevices.push_back(subElem);
-    if(printInfos) cout << "[" << mNbDev << "]    VIDEO FILES" ;
-    mNbDev++;
-
-    // FRAMES
-
-    elem.first = mNbDev; elem.second = FRAMESDIR;
-    subElem.first = 0; subElem.second = elem;
-    mDevices.push_back(subElem);
-    if(printInfos) cout << "[" << mNbDev << "]    FRAMES DIRECTORY" ;
-    mNbDev++;
-    */
-    
+    for (scanner_type scanner : m_AvailableScanners) 
+    {
+        mergeList(scanner->getCamerasList());
+    }
 
     //enumerate devices
-    for (int i = 0; i < m_DevicesList.size(); i++)
-        m_DevicesList[i].Id = i;
-
+    for (int id = 0; id < m_DevicesList.size(); id++)
+        m_DevicesList[id].Id = id;
 
     return m_DevicesList;
 }
@@ -294,4 +198,70 @@ void CameraDeviceManager::printDevicesList()
         CameraDescription cam = m_DevicesList[i];
         LOG_INFO << "[" << cam.Id << "] - " << cam.Address << "  " << cam.Description;
     }
+}
+
+void CameraDeviceManager::initScanners()
+{
+    LOG_DEBUG << "CameraDeviceManager::initScanners";
+
+    scanner_type ptr;
+
+    // PYLONGIGE
+#ifdef USE_PYLON
+    LOG_INFO << "PYLON SCANNER AVAILABLE";
+    ptr = CameraScanner::CreateScanner(CamSdkType::PYLONGIGE);
+    assert(ptr != nullptr);
+    m_AvailableScanners.push_back(ptr);
+#endif
+
+#ifdef TISCAMERA
+    LOG_INFO << "TIS CAMERA SCANNER AVAILABLE";
+    ptr = CameraScanner::CreateScanner(CamSdkType::TIS);
+    assert(ptr != nullptr);
+    m_AvailableScanners.push_back(ptr);
+#endif
+
+#ifdef VIDEOINPUT
+    LOG_INFO << "VIDEO INPUT SCANNER AVAILABLE";
+    ptr = CameraScanner::CreateScanner(CamSdkType::VIDEOINPUT);
+    assert(ptr != nullptr);
+    m_AvailableScanners.push_back(ptr);
+#endif
+
+#ifdef USE_ARAVIS
+    LOG_INFO << "LUCID ARAVIS SCANNER AVAILABLE";
+    ptr = CameraScanner::CreateScanner(CamSdkType::LUCID_ARAVIS);
+    assert(ptr != nullptr);
+    m_AvailableScanners.push_back(ptr);
+#endif
+
+#ifdef USE_ARENA
+    LOG_INFO << "LUCID ARENA SCANNER AVAILABLE";
+    ptr =  CameraScanner::CreateScanner(CamSdkType::LUCID_ARENA);
+    assert(ptr != nullptr);
+    m_AvailableScanners.push_back(ptr);
+#endif
+
+#ifdef USE_ARAVIS
+    // ARAVIS
+    LOG_INFO << "ARAVIS SCANNER AVAILABLE";
+    ptr = CameraScanner::CreateScanner(CamSdkType::ARAVIS);
+    assert(ptr != nullptr);
+    m_AvailableScanners.push_back(ptr);
+#endif
+
+/*
+* DA SVILUPPARE!
+* 
+ LOG_INFO << "VIDEO FILE SCANNER AVAILABLE";
+ptr = CameraScanner::CreateScanner(CamSdkType::VIDEOFILE);
+assert(ptr != nullptr);
+m_AvailableScanners.push_back(ptr);
+*/
+}
+
+size_t CameraDeviceManager::getDeviceCount()
+{
+    return m_DeviceCount;
+
 }

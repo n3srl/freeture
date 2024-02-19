@@ -186,3 +186,13 @@ bool CameraVideo::configurationCheck(parameters&)
     return true;
 }
 
+double CameraVideo::getMinExposureTime()
+{
+    return 0.0;
+}
+
+bool CameraVideo::destroyDevice()
+{
+    return false;
+}
+

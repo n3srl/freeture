@@ -39,7 +39,6 @@
 
 #include "NodeExporterMetrics.h"
 #include "Stack.h"
-#include "Logger.h"
 
 #include <boost/date_time.hpp>
 
@@ -242,6 +241,10 @@ bool StackThread::getRunStatus(){
 }
 
 void StackThread::operator()(){
+    m_ThreadID = std::this_thread::get_id();
+
+    Logger::GetLogger()->setLogThread(LogThread::STACK_THREAD, m_ThreadID, true);
+
     bool stop = false;
     isRunning = true;
 
@@ -300,7 +303,7 @@ void StackThread::operator()(){
                         frameStack.addFrame(newFrame);
 
                         t = (((double)cv::getTickCount() - t)/ cv::getTickFrequency())*1000;
-                        if (LOG_FRAME_STATUS){
+                        if (LOG_SPAM_FRAME_STATUS){
                             LOG_INFO << "[ TIME STACK ] : " << setprecision(5) << fixed << t << " ms" ;
                         }
 
@@ -325,7 +328,7 @@ void StackThread::operator()(){
                     boost::posix_time::ptime t2(boost::posix_time::time_from_string(nowDate));
                     boost::posix_time::time_duration td = t2 - t1;
                     secTime = td.total_seconds();
-                    if (LOG_FRAME_STATUS)
+                    if (LOG_SPAM_FRAME_STATUS)
                         LOG_DEBUG << "NEXT STACK : " << (int)(msp.STACK_TIME - secTime) << "s" <<  endl;
 
                 } while(secTime <= msp.STACK_TIME);

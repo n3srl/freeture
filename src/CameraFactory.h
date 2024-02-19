@@ -4,7 +4,7 @@
 namespace freeture {
     class Camera;
     class CameraDescription;
-    class parameters;
+    struct parameters;
 
     class CameraFactory
     {

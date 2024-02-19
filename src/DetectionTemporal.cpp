@@ -271,8 +271,8 @@ bool DetectionTemporal::runDetection(Frame &c) {
         //LOG_DEBUG << "DetThread run DetectionTemporal !mSubDivisionStatus" << endl;
         mSubdivisionPos.clear();
 
-        int h = c.mImg.rows;
-        int w = c.mImg.cols;
+        int h = c.mImage.rows;
+        int w = c.mImage.cols;
 
         if(mdtp.DET_DOWNSAMPLE_ENABLED) {
             h /= 2;
@@ -324,12 +324,12 @@ bool DetectionTemporal::runDetection(Frame &c) {
         if(mdtp.DET_DOWNSAMPLE_ENABLED) {
 
             tDownsample = (double)cv::getTickCount();
-            pyrDown(c.mImg, currImg, cv::Size(c.mImg.cols / 2, c.mImg.rows / 2));
+            pyrDown(c.mImage, currImg, cv::Size(c.mImage.cols / 2, c.mImage.rows / 2));
             tDownsample = ((double)cv::getTickCount() - tDownsample);
 
         }else {
 
-            c.mImg.copyTo(currImg);
+            c.mImage.copyTo(currImg);
 
         }
 

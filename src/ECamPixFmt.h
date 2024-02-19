@@ -28,7 +28,7 @@
 *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 namespace freeture
 {
-    enum CamPixFmt {
+    enum class CamPixFmt {
 
         MONO8,  // = Y800 = GREY
         MONO12, // Msb aligned : XXXXnnnnnnnnnnnn (X = unused)
@@ -39,7 +39,7 @@ namespace freeture
         RGB565,
         MONO16,
         BGR3,
-        RGB3
-
+        RGB3,
+        UNDEFINED
     };
 }

@@ -34,20 +34,34 @@
 */
 
 #include "EParser.h"
+
+#include "EDetMeth.h"
+#include "EStackMeth.h"
+#include "ELogSeverityLevel.h"
+#include "ESmtpSecurity.h"
+#include "ETimeMode.h"
+#include "EImgFormat.h"
+#include "ECamPixFmt.h"
+#include "EInputDeviceType.h"
+#include "ECamSdkType.h"
+#include "EFreetureMode.h"
+
 using namespace freeture;
 
-template<> EParser<CamPixFmt>::EParser() {
+template<> EParser<CamPixFmt>::EParser() 
+{
 
-    enumMap["MONO8"]   = MONO8;
-    enumMap["GREY"]    = GREY;
-    enumMap["Y800"]    = Y800;
-    enumMap["MONO12"]  = MONO12;
-    enumMap["YUYV"]    = YUYV;
-    enumMap["UYVY"]    = UYVY;
-    enumMap["RGB565"]  = RGB565;
-    enumMap["BGR3"]    = BGR3;
-    enumMap["RGB3"]    = RGB3;
-    enumMap["MONO16"]  = MONO16;
+    enumMap["MONO8"]   = CamPixFmt::MONO8;
+    enumMap["GREY"]    = CamPixFmt::GREY;
+    enumMap["Y800"]    = CamPixFmt::Y800;
+    enumMap["MONO12"]  = CamPixFmt::MONO12;
+    enumMap["YUYV"]    = CamPixFmt::YUYV;
+    enumMap["UYVY"]    = CamPixFmt::UYVY;
+    enumMap["RGB565"]  = CamPixFmt::RGB565;
+    enumMap["BGR3"]    = CamPixFmt::BGR3;
+    enumMap["RGB3"]    = CamPixFmt::RGB3;
+    enumMap["MONO16"]  = CamPixFmt::MONO16;
+    enumMap["*** NOT DEFINED ***"] = CamPixFmt::UNDEFINED;
 
 }
 
@@ -84,11 +98,11 @@ template<> EParser<DetMeth>::EParser() {
 
 template<> EParser<LogSeverityLevel>::EParser() {
 
-    enumMap["normal"]           = normal;
-    enumMap["notification"]     = notification;
-    enumMap["fail"]             = fail;
-    enumMap["warning"]          = warning;
-    enumMap["critical"]         = critical;
+    enumMap["normal"]           = LogSeverityLevel::normal;
+    enumMap["notification"]     = LogSeverityLevel::notification;
+    enumMap["fail"]             = LogSeverityLevel::fail;
+    enumMap["warning"]          = LogSeverityLevel::warning;
+    enumMap["critical"]         = LogSeverityLevel::critical;
 
 }
 
@@ -118,4 +132,18 @@ template<> EParser<CamSdkType>::EParser() {
     enumMap["V4L2"]          = CamSdkType::V4L2;
     enumMap["VIDEOINPUT"]    = CamSdkType::VIDEOINPUT;
     enumMap["UNKNOWN"]       = CamSdkType::UNKNOWN;
+}
+
+
+template<> EParser<FreetureMode>::EParser() {
+    enumMap["Test configuration"] = FreetureMode::TEST_CONFIGURATION;
+    enumMap["Print help"] = FreetureMode::PRINT_HELP;
+    enumMap["Print version"] = FreetureMode::PRINT_VERSION;
+    enumMap["Continuous acquisition"] = FreetureMode::CONTINUOUS_ACQUISITION;
+    enumMap["Meteor detection"] = FreetureMode::METEOR_DETECTION;
+    enumMap["Single acquisition"] = FreetureMode::SINGLE_ACQUISITION;
+    enumMap["Clean logs"] = FreetureMode::CLEAN_LOGS;
+    enumMap["List devices"] = FreetureMode::LIST_DEVICES;
+    enumMap["List available formats"] = FreetureMode::LIST_FORMATS;
+    enumMap["Unknown mode"] = FreetureMode::UNKNOWN;
 }

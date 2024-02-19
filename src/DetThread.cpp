@@ -42,7 +42,6 @@
 
 #include "NodeExporterMetrics.h"
 #include "DetectionTemporal.h"
-#include "Logger.h"
 #include "DetectionTemplate.h"
 #include "SMTPClient.h"
 #include "Stack.h"
@@ -50,6 +49,7 @@
 #include "Fits2D.h"
 #include "TimeDate.h"
 #include "CfgParam.h"
+#include "EParser.h"
 
 namespace fs = boost::filesystem;
 namespace pt = boost::posix_time;
@@ -144,7 +144,7 @@ bool DetThread::startThread(){
 
 void DetThread::stopThread(){
 
-    LOG_INFO<< "Stopping detThread...";
+    LOG_DEBUG << "DetThread::stopThread";
 
     // Signal the thread to stop (thread-safe)
     mMustStopMutex.lock();
@@ -154,9 +154,8 @@ void DetThread::stopThread(){
     // Wait for the thread to finish.
     while(pThread->timed_join(pt::seconds(2)) == false){
 
-        LOG_INFO<< "Interrupting detThread...";
+        LOG_INFO << "Interrupting detThread...";
         pThread->interrupt();
-
     }
 }
 
@@ -174,9 +173,14 @@ void DetThread::interruptThread(){
 
 }
 
-void DetThread::operator ()(){
-    bool stopThread = false;
+void DetThread::operator ()()
+{
+    m_ThreadID = std::this_thread::get_id();
+    Logger::GetLogger()->setLogThread(LogThread::DETECTION_THRED, m_ThreadID,true);
+
     mIsRunning = true;
+    bool stopThread = false;
+   
     // Flag to indicate that an event must be complete with more frames.
     bool eventToComplete = false;
     // Reference date to count time to complete an event.
@@ -219,7 +223,7 @@ void DetThread::operator ()(){
 
                     t = (double)cv::getTickCount();
 
-                    if(lastFrame.mImg.data) {
+                    if(lastFrame.mImage.data) {
                         mFormat = lastFrame.mFormat;
 
                         
@@ -292,7 +296,7 @@ void DetThread::operator ()(){
                     }
 
                     t = (((double)cv::getTickCount() - t)/ cv::getTickFrequency())*1000;
-                    if (LOG_FRAME_STATUS)
+                    if (LOG_SPAM_FRAME_STATUS)
                     {
                         LOG_DEBUG << " [ TIME DET ] : " << setprecision(3) << fixed << t << " ms " << endl;
                     }
@@ -362,20 +366,22 @@ void DetThread::operator ()(){
 
     }catch(const char * msg){
         LOG_ERROR << msg;
-    }catch(exception& e){
+    }
+    catch (exception& e) {
         LOG_ERROR << e.what();
+    }
+    catch (...) {
+        LOG_ERROR << "Generic error occured";
     }
 
     mIsRunning = false;
 
     LOG_INFO << "DetThread ended.";
-
 }
 
-bool DetThread::getRunStatus(){
-
+bool DetThread::getRunStatus()
+{
     return mIsRunning;
-
 }
 
 bool DetThread::buildEventDataDirectory(){
@@ -585,7 +591,7 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
     cv::VideoWriter *video = NULL;
 
     if(mdtp.DET_SAVE_AVI) {
-        video = new cv::VideoWriter(mEventPath + "video.avi", cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 5, cv::Size(static_cast<int>(frameBuffer->front().mImg.cols), static_cast<int>(frameBuffer->front().mImg.rows)), false);
+        video = new cv::VideoWriter(mEventPath + "video.avi", cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 5, cv::Size(static_cast<int>(frameBuffer->front().mImage.cols), static_cast<int>(frameBuffer->front().mImage.rows)), false);
     }
 
     // Init fits 3D.
@@ -593,7 +599,7 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
 
     if(mdtp.DET_SAVE_FITS3D) {
 
-        fits3d = Fits3D(mFormat, frameBuffer->front().mImg.rows, frameBuffer->front().mImg.cols, (numLastFrameToSave - numFirstFrameToSave +1), mEventPath + "fits3D");
+        fits3d = Fits3D(mFormat, frameBuffer->front().mImage.rows, frameBuffer->front().mImage.cols, (numLastFrameToSave - numFirstFrameToSave +1), mEventPath + "fits3D");
         pt::ptime time = pt::microsec_clock::universal_time();
         fits3d.kDATE = pt::to_iso_extended_string(time);
 
@@ -695,16 +701,16 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
 
                 switch(mFormat) {
 
-                    case MONO12 :
+                    case CamPixFmt::MONO12 :
                         {
-                            newFits.writeFits((*it).mImg, S16, fits2DName, mdp.FITS_COMPRESSION_METHOD);
+                            newFits.writeFits((*it).mImage, S16, fits2DName, mdp.FITS_COMPRESSION_METHOD);
                         }
                         break;
 
                     default :
 
                         {
-                            newFits.writeFits((*it).mImg, UC8, fits2DName, mdp.FITS_COMPRESSION_METHOD);
+                            newFits.writeFits((*it).mImage, UC8, fits2DName, mdp.FITS_COMPRESSION_METHOD);
                         }
 
                 }
@@ -712,7 +718,7 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
             }
 
             if(mdtp.DET_SAVE_AVI) {
-                cv::Mat iv = Conversion::convertTo8UC1((*it).mImg);
+                cv::Mat iv = Conversion::convertTo8UC1((*it).mImage);
                 if(video->isOpened()) {
                     video->write(iv);
                 }
@@ -725,7 +731,7 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
                     varExpTime = true;
 
                 sumExpTime += (*it).mExposure;
-                fits3d.addImageToFits3D((*it).mImg);
+                fits3d.addImageToFits3D((*it).mImage);
 
             }
 
@@ -781,8 +787,12 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
         float bzero  = 0.0;
         float bscale = 1.0;
         s = stack.reductionByFactorDivision(bzero,bscale);
-        cout << "mFormat : " << mFormat << endl;
-        if(mFormat != MONO8)
+        EParser<CamPixFmt> fmt;
+
+        string value = fmt.getStringEnum(mFormat);
+
+        cout << "mFormat : " << value << endl;
+        if(mFormat != CamPixFmt::MONO8)
             Conversion::convertTo8UC1(s).copyTo(s);
 
         equalizeHist(s, eqHist);

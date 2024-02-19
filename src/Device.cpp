@@ -59,6 +59,48 @@ using namespace freeture;
 
 namespace fs = boost::filesystem;
 
+void printValues(cameraParam cp, string log) {
+    EParser<CamPixFmt> fmt;
+    string val = fmt.getStringEnum(cp.ACQ_FORMAT);
+
+    LOG_DEBUG << log << "ACQ_FPS=" << cp.ACQ_FPS;
+    LOG_DEBUG << log << "ACQ_DAY_GAIN=" << cp.ACQ_DAY_GAIN;
+    LOG_DEBUG << log << "ACQ_DAY_EXPOSURE=" << cp.ACQ_DAY_EXPOSURE;
+
+    LOG_DEBUG << log << "ACQ_NIGHT_GAIN=" << cp.ACQ_NIGHT_GAIN;
+    LOG_DEBUG << log << "ACQ_NIGHT_EXPOSURE=" << cp.ACQ_NIGHT_EXPOSURE;
+
+    LOG_DEBUG << log << "ACQ_FORMAT= " << val;
+
+    LOG_DEBUG << log << "ACQ_RES_CUSTOM_SIZE=" << cp.ACQ_RES_CUSTOM_SIZE;
+
+    LOG_DEBUG << log << "ACQ_WIDTH=" << cp.ACQ_WIDTH;
+    LOG_DEBUG << log << "ACQ_HEIGHT=" << cp.ACQ_HEIGHT;
+
+    LOG_DEBUG << log << "ACQ_STARTX=" << cp.ACQ_STARTX;
+    LOG_DEBUG << log << "ACQ_STARTY=" << cp.ACQ_STARTY;
+}
+
+void printValues(CameraSettings cp, string log)
+{
+    EParser<CamPixFmt> fmt;
+    string val = fmt.getStringEnum(cp.PixelFormat);
+
+    LOG_DEBUG << log << "PixelFormat= " << val;
+    LOG_DEBUG << log << "Gain=" << cp.Gain;
+    LOG_DEBUG << log << "FPS=" << cp.FPS;
+    LOG_DEBUG << log << "Exposure=" << cp.Exposure;
+    LOG_DEBUG << log << "CustomSize=" << cp.CustomSize;
+    LOG_DEBUG << log << "SizeWidth=" << cp.SizeWidth;
+    LOG_DEBUG << log << "SizeHeight=" << cp.SizeHeight;
+    LOG_DEBUG << log << "StartX=" << cp.StartX;
+    LOG_DEBUG << log << "StartY=" << cp.StartY;
+}
+
+
+
+
+
 /// <summary>
 /// Apply parameters to this device runtime instance - NO APPLY TO DEVICE JUST MEMORY
 /// </summary>
@@ -68,78 +110,53 @@ namespace fs = boost::filesystem;
 /// <param name="cid"></param>
 void Device::Setup(cameraParam cp, framesParam fp, videoParam vp)
 {
-    LOG_DEBUG << "Device::Setup";
-    LOG_DEBUG << "PARAM NIGHT EXP " << cp.ACQ_NIGHT_EXPOSURE << endl;
 
-    /* mCam        = NULL;
-    mCamID      = 0;
-    mVerbose    = true;
-    mNbDev      = -1;
-    mVideoFramesInput = false;
-    mGenCamID = cid; */
-    mFPS = cp.ACQ_FPS;
-    mNightExposure = cp.ACQ_NIGHT_EXPOSURE;
-    mNightGain = cp.ACQ_NIGHT_GAIN;
-    mDayExposure = cp.ACQ_DAY_EXPOSURE;
-    mDayGain = cp.ACQ_DAY_GAIN;
+    printValues(cp, "Device::Setup;\t\t\t");
 
-    //mShiftBits = cp.SHIFT_BITS;
-    mFormat = cp.ACQ_FORMAT;
-    mCustomSize = cp.ACQ_RES_CUSTOM_SIZE;
-    mStartX = cp.ACQ_STARTX;
-    mStartY = cp.ACQ_STARTY;
-    mSizeWidth = cp.ACQ_WIDTH;
-    mSizeHeight = cp.ACQ_HEIGHT;
-    mDeviceType = UNDEFINED_INPUT_TYPE;
+    CameraSetting.FPS = cp.ACQ_FPS;
+    CameraSetting.PixelFormat = cp.ACQ_FORMAT;
+    CameraSetting.CustomSize = cp.ACQ_RES_CUSTOM_SIZE;
+    CameraSetting.StartX = cp.ACQ_STARTX;
+    CameraSetting.StartY = cp.ACQ_STARTY;
+    CameraSetting.SizeWidth = cp.ACQ_WIDTH;
+    CameraSetting.SizeHeight = cp.ACQ_HEIGHT;
+
     m_VideoParam = vp;
     m_FramesParam = fp;
-    //mNbFrame = 0;
-
-    minExposureTime = -1;
-    maxExposureTime = -1;
-    minGain = -1;
-    maxGain = -1;
 }
+
 
 
 Device::Device() {
     LOG_DEBUG << "Device::Device";
+    
+    CameraSetting.PixelFormat   = CamPixFmt::MONO8;
+    CameraSetting.FPS           = 30;
+    CameraSetting.CustomSize    = false;
+    CameraSetting.StartX        = 0;
+    CameraSetting.StartY        = 0;
+    CameraSetting.SizeWidth     = 1440;
+    CameraSetting.SizeHeight    = 1080;
+    
+    printValues(CameraSetting, "Device::Setup;\t\t\t");
 
-    mFormat         = MONO8;
-    mNightExposure  = 0;
-    mNightGain      = 0;
-    mDayExposure    = 0;
-    mDayGain        = 0;
-    minExposureTime = -1;
-    maxExposureTime = -1;
-    minGain = -1;
-    maxGain = -1;
-    mFPS            = 30;
-    mCustomSize     = false;
-    mStartX         = 0;
-    mStartY         = 0;
-    mSizeWidth      = 1440;
-    mSizeHeight     = 1080;
-    mCam            = nullptr;
+    m_Camera            = nullptr;
     mVideoFramesInput = false;
-    //mShiftBits      = false;
-    mVerbose        = true;
-    mDeviceType     = UNDEFINED_INPUT_TYPE;
+    
     vector<string> finput, vinput;
+
     m_VideoParam.INPUT_VIDEO_PATH = vinput;
     m_FramesParam.INPUT_FRAMES_DIRECTORY_PATH = finput;
-    //mNbFrame = 0;
-
 }
 
 Device::~Device()
 {
     LOG_DEBUG <<  "Device::~Device";
 
-    if(mCam != nullptr)
+    if(m_Camera != nullptr)
     {
         LOG_DEBUG <<  "Device::~Device: deallocating camera";
-        delete mCam;
+        delete m_Camera;
     }
 
 }
@@ -152,171 +169,79 @@ bool Device::firstIinitializeCamera(string m_ConfigurationFilePath)
     Device* m_Device = m_CameraDeviceManager->getDevice();
     if(m_Device != NULL)
     {
-        return m_Device->mCam->FirstInitializeCamera(m_ConfigurationFilePath);
+        return m_Device->m_Camera->FirstInitializeCamera(m_ConfigurationFilePath);
     }
     return false;
 }
 
-void Device::setVerbose(bool status) {
-    LOG_DEBUG << "Device::setVerbose";
-    mVerbose = status;
-
-}
 
 bool Device::getDeviceName() {
     LOG_DEBUG << "Device::getDeviceName";
 
-    return mCam->getCameraName();
+    return m_Camera->getCameraName();
 
 }
 
 bool Device::setCameraPixelFormat() {
     LOG_DEBUG << "Device::setCameraPixelFormat";
-    if(!mCam->setPixelFormat(mFormat)){
-        mCam->grabCleanse();
+
+    if(!m_Camera->setPixelFormat())
+    {
+        m_Camera->grabCleanse();
         
-        LOG_ERROR << "Fail to set camera format.";
+        LOG_ERROR << "Device::setCameraPixelFormat;" << "Fail to set camera format.";
         return false;
     }
 
     return true;
 }
 
-bool Device::getSupportedPixelFormats() {
+bool Device::getSupportedPixelFormats()
+{
     LOG_DEBUG << "Device::getSupportedPixelFormats";
-
-
-    mCam->getAvailablePixelFormats();
+    m_Camera->getAvailablePixelFormats();
     return true;
-
 }
 
 InputDeviceType Device::getDeviceType() {
-    LOG_DEBUG << "Device::getDeviceType";
-
-    return mCam->getDeviceType();
-
-}
-
-bool Device::getCameraExposureBounds(double &min, double &max) {
-    LOG_DEBUG << "Device::getCameraExposureBounds(double,double)";
-
-    mCam->getExposureBounds(min, max);
-    return true;
-}
-
-void Device::getCameraExposureBounds() {
-    LOG_DEBUG << "Device::getCameraExposureBounds";
-
-    mCam->getExposureBounds(minExposureTime, maxExposureTime);
-
-}
-
-bool Device::getCameraFPSBounds(double &min, double &max) {
-    LOG_DEBUG << "Device::getCameraFPSBounds(double,double)";
-    shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
-
-    m_CameraDeviceManager->getDevice()->mCam->getFPSBounds(min, max);
-    
-
-    return true;
-}
-
-void Device::getCameraFPSBounds() {
-    LOG_DEBUG << "Device::getCameraFPSBounds";
-    mCam->getFPSBounds(minFPS, maxFPS);
-}
-
-
-bool Device::getCameraGainBounds(double &min, double &max) {
-    LOG_DEBUG << "Device::getCameraGainBounds(double,double)";
-
-
-    mCam->getGainBounds(min, max);
-    return true;
-}
-
-void Device::getCameraGainBounds() {
-    LOG_DEBUG << "Device::getCameraGainBounds";
-
-    mCam->getGainBounds(minGain, maxGain);
-}
-
-bool Device::setCameraNightExposureTime()
-{   
-    shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
-
-    Device* m_Device = m_CameraDeviceManager->getDevice();
-    
-    if(!mCam->setExposureTime(mNightExposure)) {
-        LOG_ERROR << "Fail to set night exposure time to " << mNightExposure;
-        mCam->grabCleanse();
-        return false;
-    }
-
-    getCameraFPSBounds();
-
-    return true;
-}
-
-bool Device::setCameraDayExposureTime() {
-    LOG_DEBUG << "Device::setCameraDayExposureTime";
-
-    if(!mCam->setExposureTime(mDayExposure)) {
-    
-        LOG_ERROR << "Fail to set day exposure time to " << mDayExposure;
-        mCam->grabCleanse();
-        return false;
-    }
-
-    getCameraFPSBounds();
-
-    return true;
-}
-
-bool Device::setCameraNightGain() {
-    LOG_DEBUG << "Device::setCameraNightGain "<<mNightGain;
-
-    if(!mCam->setGain(mNightGain)) {
-        LOG_ERROR << "Fail to set night gain to " << mNightGain;
-        mCam->grabCleanse();
-        return false;
-    }
-
-    return true;
-}
-
-bool Device::setCameraDayGain() {
-    LOG_DEBUG <<  "Device::setCameraDayGain";
-
-    if(!mCam->setGain(mDayGain)) {
-        LOG_ERROR << "Fail to set day gain to " << mDayGain;
-        mCam->grabCleanse();
-        return false;
-    }
-
-    return true;
+    if (LOG_SPAM_FRAME_STATUS)
+        LOG_DEBUG << "Device::getDeviceType";
+    return m_Camera->getDeviceType();
 }
 
 bool Device::setCameraFPS(double value) {
-    LOG_DEBUG << "Device::setCameraFPS ["<< value << "]";
+    LOG_DEBUG << "Device::setCameraFPS("<< value << ")";
 
-    if(!mCam->setFPS(value)) {
-        LOG_ERROR << "Fail to set fps to " << value;
-        mCam->grabCleanse();
+    if(!m_Camera->setFPS(value)) {
+        LOG_ERROR << "Device::setCameraFPS;" << "Fail to set fps to " << value;
+        m_Camera->grabCleanse();
         return false;
     }
 
     return true;
 }
 
+
+
+bool Device::setCameraExposureTime() {
+    LOG_DEBUG << "Device::setCameraExposureTime";
+
+    if (!m_Camera->setExposureTime(CameraSetting.Exposure)) 
+    {
+        LOG_ERROR << "Fail to set Exposure to " << CameraSetting.Exposure;
+        m_Camera->grabCleanse();
+        return false;
+    }
+
+    return true;
+}
 
 bool Device::setCameraExposureTime(double value) {
     LOG_DEBUG << "Device::setCameraExposureTime";
 
-    if(!mCam->setExposureTime(value)) {
+    if(!m_Camera->setExposureTime(value)) {
         LOG_ERROR << "Fail to set exposure time to " << value;
-        mCam->grabCleanse();
+        m_Camera->grabCleanse();
         return false;
     }
 
@@ -326,22 +251,22 @@ bool Device::setCameraExposureTime(double value) {
 bool Device::setCameraGain(double value) {
     LOG_DEBUG <<  "Device::setCameraGain";
 
-    if(!mCam->setGain(value)) {
+    if(!m_Camera->setGain(value)) {
         LOG_ERROR << "Fail to set gain to " << value;
-        mCam->grabCleanse();
+        m_Camera->grabCleanse();
         return false;
     }
 
     return true;
 }
 
-bool Device::setCameraAutoExposure(bool value)
-{
-    LOG_DEBUG << "Device::setCameraAutoExposure";
-    //arv_camera_set_exposure_time_auto(camera, &error)
-    if(!mCam->setAutoExposure(value)) {
-        LOG_ERROR << "Fail to set gain to " << value;
-        mCam->grabCleanse();
+bool Device::setCameraGain() {
+    LOG_DEBUG << "Device::setCameraGain";
+
+    if (!m_Camera->setGain(CameraSetting.Gain)) 
+    {
+        LOG_ERROR << "Fail to set Gain to " << CameraSetting.Gain;
+        m_Camera->grabCleanse();
         return false;
     }
 
@@ -351,34 +276,63 @@ bool Device::setCameraAutoExposure(bool value)
 bool Device::setCameraFPS() {
     LOG_DEBUG << "Device::setCameraFPS";
 
-    if(!mCam->setFPS(mFPS)) {
-        LOG_ERROR << "Fail to set FPS to " << mFPS;
-        mCam->grabCleanse();
+    if(!m_Camera->setFPS(CameraSetting.FPS)) {
+        LOG_ERROR << "Fail to set FPS to " << CameraSetting.FPS;
+        m_Camera->grabCleanse();
         return false;
     }
 
     return true;
 }
 
+//apply current configuration to the camera
 bool Device::initializeCamera() {
+
     LOG_DEBUG << "Device::initializeCamera";
 
-    if(!mCam->grabInitialization()){
+    printValues(CameraSetting, "Device::initializeCamera;");
+
+    //Apply configuration to camera
+    // SET FPS.
+    if (!setCameraFPS())
+        return false;
+
+    // SET FPS.
+    if (!setCameraGain())
+        return false;
+
+    // SET FPS.
+    if (!setCameraExposureTime())
+        return false;
+
+    //apply streaming rules
+    if(!m_Camera->grabInitialization())
+    {
         LOG_ERROR << "Fail to initialize camera.";
-        mCam->grabCleanse();
+        m_Camera->grabCleanse();
         return false;
     }
 
     return true;
 }
 
-bool Device::startCamera() {
+
+bool Device::startCamera(EAcquisitionMode mode) {
     LOG_DEBUG << "Device::startCamera";
 
-    LOG_INFO << "Starting camera...";
-    if(!mCam->acqStart())
-        return false;
-
+    LOG_INFO << "Device::startCamera;" <<"Starting camera...";
+    switch (mode) {
+    case EAcquisitionMode::CONTINUOUS:{
+            if (!m_Camera->acqStart())
+            return false;
+            break;
+    }
+    case EAcquisitionMode::SCHEDULED:
+    case EAcquisitionMode::REGULAR: {
+        if (!m_Camera->acqStart(false))
+            return false;
+    }
+    }
     return true;
 }
 
@@ -386,8 +340,8 @@ bool Device::stopCamera()
 {
     LOG_DEBUG << "Device::stopCamera" ;
     LOG_INFO << "Stopping camera...";
-    mCam->acqStop();
-    mCam->grabCleanse();
+    m_Camera->acqStop();
+    m_Camera->grabCleanse();
 
     return true;
 }
@@ -397,22 +351,21 @@ bool Device::stopCamera()
  */
 bool Device::runContinuousCapture(Frame &img)
 {
-    //cout << "Device::runContinuousCapture" << endl;
+    if (LOG_SPAM_FRAME_STATUS)
+        LOG_DEBUG << "Device::runContinuousCapture";
 
     try
     {
-        if(mCam == nullptr) 
-            LOG_ERROR << "MCAM IS NULL" << endl;
-        
-        if(mCam->grabImage(img)) {
-            //img.mFrameNumber = mNbFrame;
-            //mNbFrame++;
+        if(m_Camera->grabImage(img))
             return true;
-        }
     }
     catch (exception& ex)
     {
         LOG_ERROR << "Exception grabImage..." << ex.what();
+    }
+    catch(...)
+    {
+        LOG_ERROR << "Exception";
     }
     
     return false;
@@ -421,38 +374,22 @@ bool Device::runContinuousCapture(Frame &img)
 bool Device::runSingleCapture(Frame &img) {
     LOG_DEBUG << "Device::runSingleCapture";
 
-    if(mCam->grabSingleImage(img))
+    if(m_Camera->grabSingleImage(img))
         return true;
 
     return false;
 
 }
 
-bool Device::getDeviceCameraSizeParams(int& x,int& y,int& height,int& width)
-{
-    shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
-    Device* m_Device = m_CameraDeviceManager->getDevice();
-    x = m_Device->mStartX;
-    y = m_Device->mStartY;
-    height = m_Device->mSizeHeight;
-    width = m_Device->mSizeWidth;
-    return true;
-}
-
 bool Device::setCameraSize()
 {
-    shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
-    Device* m_Device = m_CameraDeviceManager->getDevice();
-    LOG_DEBUG << "Device::setCameraSize; "<< m_Device->mSizeWidth <<"x"<< m_Device->mSizeHeight ;
+    LOG_DEBUG << "Device::setCameraSize; "<< CameraSetting.SizeWidth <<"x"<< CameraSetting.SizeHeight ;
     
-    Camera* mCam = m_Device->mCam;
-    
-    if(!mCam->setSize(m_Device->mStartX, m_Device->mStartY, m_Device->mSizeWidth, m_Device->mSizeHeight, m_Device->mCustomSize)) 
+    if(!m_Camera->setSize(CameraSetting.StartX, CameraSetting.StartY, CameraSetting.SizeWidth, CameraSetting.SizeHeight, CameraSetting.CustomSize))
     {
         LOG_ERROR << "Device::setCameraSize;" <<"Fail to set camera size.";
         return false;
     }
-
 
     return true;
 }
@@ -460,19 +397,8 @@ bool Device::setCameraSize()
 bool Device::setCameraSize(int x, int y, int w, int h) {
     LOG_DEBUG << "Device::setCameraSize;"<<w<<"x"<<h;
 
-    if(!mCam->setSize(x, y, w, h, true)) {
+    if(!m_Camera->setSize(x, y, w, h, true)) {
        LOG_ERROR << "Device::setCameraSize;" << "Fail to set camera size.";
-        return false;
-    }
-
-    return true;
-}
-
-bool Device::getCameraFPS(double &fps) {
-    LOG_DEBUG << "Device::getCameraFPS" ;
-
-    if(!mCam->getFPS(fps)) {
-        //BOOST_LOG_SEV(logger, fail) << "Fail to get fps value from camera.";
         return false;
     }
 
@@ -485,34 +411,50 @@ bool Device::getCameraFPS(double &fps) {
 bool Device::getCameraStatus() {
     //cout << "Device::getCameraStatus" << endl;
 
-    return mCam->getStopStatus();
+    return m_Camera->getStopStatus();
 }
 
 bool Device::getCameraDataSetStatus() {
     LOG_DEBUG << "Device::getCameraDataSetStatus";
 
-    return mCam->getDataSetStatus();
+    return m_Camera->getDataSetStatus();
 }
 
 bool Device::loadNextCameraDataSet(string &location) {
     LOG_DEBUG << "Device::loadNextCameraDataSet";
 
-    return mCam->loadNextDataSet(location);
+    return m_Camera->loadNextDataSet(location);
 }
 
 bool Device::getExposureStatus() {
     LOG_DEBUG << "Device::getExposureStatus";
 
-    return mCam->m_ExposureAvailable;
+    return m_Camera->isExposureAvailable();
 }
 
 bool Device::getGainStatus() {
     LOG_DEBUG << "Device::getGainStatus";
 
-    return mCam->m_GainAvailable;
+    return m_Camera->isGainAvailable();
 }
 
 Camera* Device::getCamera()
 {
-    return mCam;
+    return m_Camera;
+}
+
+void Device::setCamera(Camera* camera)
+{
+    m_Camera = camera;
+}
+
+bool Device::isStreaming()
+{
+    return m_Camera->isStreaming();
+
+} 
+
+double Device::getMinExposureTime()
+{
+    return m_Camera->getMinExposureTime();
 }

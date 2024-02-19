@@ -16,24 +16,14 @@ unique_ptr<Freeture> freeture_instance;
 
 int main(int argc, const char ** argv)
 {
-    Logger& logger = Logger::Get();
-
-    LOG_INFO << "================================================" << endl;
-    LOG_INFO << "======        FREETURE - "<< VERSION <<"           ======= " << endl;
-    LOG_INFO << "================================================" << endl << endl;
-
     try
     {
         freeture_instance = make_unique<Freeture>(argc,argv);
         freeture_instance->Run();
     }
-    catch(exception& e)
+    catch(...)
     {
-        LOG_ERROR << "main;" << ">> Error : " << e.what() << endl;
-    }
-    catch(const char * msg)
-    {
-        LOG_ERROR << "main;" << ">> Error : " << msg << endl;
+        cout << "main;" << ">> Generic Error"  << endl;
     }
 
     return 0 ;

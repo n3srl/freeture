@@ -40,12 +40,14 @@
 
 #include <string>
 
+#include "ICameraFab.h"
 #include "ECamPixFmt.h"
 #include "EInputDeviceType.h"
 #include "ECamSdkType.h"
+
 #include "CameraScanner.h"
 #include "Frame.h"
-#include "ICameraFab.h"
+#include "Logger.h"
 
 namespace freeture
 {
@@ -55,25 +57,52 @@ namespace freeture
         CameraDescription m_CameraDescriptor;
         cameraParam m_CameraSettings;
 
+        /**
+         * FEATURES
+         */
+        bool                m_ExposureAvailable;    // must be set to true if device can set exposure values
+        bool                m_GainAvailable;        // must be set to true if device can set gain values
+        
+       /**
+         * RUNTIME
+         */
+        int                 m_StartX = 0;                           // Crop starting X.
+        int                 m_StartY = 0;                           // Crop starting Y.
+        int                 m_Width = 0;                            // Camera region's width.
+        int                 m_Height = 0;                           // Camera region's height.
+        double              m_FPS = 0;                              // Camera acquisition frequency.
+        double              m_MinGain = 0;                          // Camera minimum gain.
+        double              m_MaxGain = 0;                          // Camera maximum gain.
+        double              m_MinExposure = 0;                      // Camera's minimum exposure time.
+        double              m_MaxExposure = 0;                      // Camera's maximum exposure time.
+        double              m_MinFPS = 0;                           // Camera's minimum frame rate.
+        double              m_MaxFPS = 0;                           // Camera's maximum frame rate.
+        int                 m_Gain = 0;                             // Camera's gain.
+        double              m_ExposureTime = 0;                     // Camera's exposure time.
+        double              m_LastTemperature = 0.0;
+        CamPixFmt           m_PixelFormat = CamPixFmt::UNDEFINED;   // Image format.
+        bool                m_Streaming = false;                    //true if camera is streaming
+        bool                m_ShiftBitsImage;                       // For example : bits are shifted for dmk's frames.
+
+        /**
+         * METRICS
+         */
+        int64_t             m_MissingPacketCount;   //number of missing packets
+        
     public:
-        static CameraScanner* Scanner;
 
-        bool                m_ExposureAvailable;
-        bool                m_GainAvailable;
-
-        bool                mCamSizeToMax;
-        int                 mCamStartX;
-        int                 mCamStartY;
-        int                 mCamSizeWidth;
-        int                 mCamSizeHeight;
-
-        //InputDeviceType     mInputDeviceType;
-        //std::string         mCamDescription;
-        //std::string         mCamSerial;
-
-    public:
-
-        Camera(CameraDescription camera_descriptor, cameraParam settings):m_CameraDescriptor (camera_descriptor), m_CameraSettings(settings) {}
+        Camera(CameraDescription camera_descriptor, cameraParam settings):
+            m_CameraDescriptor (camera_descriptor),
+            m_CameraSettings(settings),
+            m_StartX(settings.ACQ_STARTX),
+            m_StartY(settings.ACQ_STARTY),
+            m_Width(settings.ACQ_WIDTH),
+            m_Height(settings.ACQ_HEIGHT),
+            m_FPS(settings.ACQ_FPS),
+            m_ShiftBitsImage(settings.SHIFT_BITS),
+            m_Gain(settings.ACQ_DAY_GAIN),
+            m_ExposureTime(settings.ACQ_DAY_EXPOSURE)
+        {}
 
         virtual ~Camera() {};
 
@@ -104,10 +133,15 @@ namespace freeture
         virtual bool grabInitialization() { return false; };
 
         /**
-        * Run acquisition.
+        * Run acquisition in continuous mode.
         *
         */
         virtual bool acqStart() { return false; };
+
+        /**
+        * Run acquisition choose if continuous or single
+        */
+        virtual bool acqStart(bool) { return false; };
 
         /**
         * Stop acquisition.
@@ -119,7 +153,7 @@ namespace freeture
         * Close a device and clean resources.
         *
         */
-        virtual void grabCleanse() {};
+        virtual void grabCleanse() { destroyDevice(); };
 
         /**
         * Get a frame from continuous acquisition.
@@ -247,7 +281,7 @@ namespace freeture
         * @param format New format.
         * @return Success status to set format.
         */
-        virtual bool setPixelFormat(CamPixFmt format) { return false; };
+        virtual bool setPixelFormat() { return false; };
 
         /**
         * Get data status if a set of directories or videos are used in input.
@@ -256,6 +290,8 @@ namespace freeture
         */
         virtual bool getDataSetStatus() { return false; };
 
+        virtual double getMinExposureTime() = 0;
+
         /**
         * Load next data set of frames.
         *
@@ -263,12 +299,28 @@ namespace freeture
         */
         virtual bool loadNextDataSet(std::string& location) { location = ""; return true; };
 
-        virtual void test() { std::cout << " in camera.h" << std::endl; };
+        virtual void test() { LOG_DEBUG << "Camera::test"; };
 
         virtual bool FirstInitializeCamera(std::string) {
-            std::cout << "Inizialize camera done" << std::endl;
+            LOG_DEBUG << "Camera::FirstInitializeCamera; Inizialize camera done";
             return true;
         };
+
+        virtual bool isStreaming()
+        {
+            LOG_DEBUG << "Camera::IsStreaming";
+            return m_Streaming;
+        }
+
+        bool isExposureAvailable() {
+            LOG_DEBUG << "Camera::isExposureAvailable";
+            return m_ExposureAvailable;
+        }
+
+        bool isGainAvailable() {
+            LOG_DEBUG << "Camera::isGainAvailable";
+            return m_GainAvailable;
+        }
 
     };
 }

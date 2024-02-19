@@ -47,7 +47,7 @@ using namespace std;
 Stack::Stack(string fitsCompression, fitskeysParam fkp, stationParam stp):
 mFitsCompressionMethod(fitsCompression),
 curFrames(0), varExpTime(false),
-sumExpTime(0.0), gainFirstFrame(0), expFirstFrame(0), fps(0), format(MONO8){
+sumExpTime(0.0), gainFirstFrame(0), expFirstFrame(0), fps(0), format(CamPixFmt::MONO8){
     mfkp = fkp;
     mstp = stp;
 }
@@ -62,7 +62,7 @@ void Stack::addFrame(Frame &i){
 
             if(curFrames == 0){
 
-                stack = cv::Mat::zeros(i.mImg.rows, i.mImg.cols, CV_32FC1);
+                stack = cv::Mat::zeros(i.mImage.rows, i.mImage.cols, CV_32FC1);
                 gainFirstFrame = i.mGain;
                 expFirstFrame = i.mExposure;
                 mDateFirstFrame = i.mDate;
@@ -76,9 +76,9 @@ void Stack::addFrame(Frame &i){
 
             sumExpTime+=i.mExposure;
 
-            cv::Mat curr = cv::Mat::zeros(i.mImg.rows, i.mImg.cols, CV_32FC1);
+            cv::Mat curr = cv::Mat::zeros(i.mImage.rows, i.mImage.cols, CV_32FC1);
 
-            i.mImg.convertTo(curr, CV_32FC1);
+            i.mImage.convertTo(curr, CV_32FC1);
 
             accumulate(curr, stack);
             curFrames++;
@@ -161,7 +161,7 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
 
                 switch(format){
 
-                    case MONO12 :
+                    case CamPixFmt::MONO12 :
 
                         {
                         LOG_INFO << "Mono12 format";
@@ -250,7 +250,7 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
                 newFits.kOBSMODE = "SUM";
 
 
-                if(format == MONO12){
+                if(format == CamPixFmt::MONO12){
                     LOG_INFO << "Setting fits SATURATE key : 4095 * curFrames";
                     newFits.kSATURATE = 4095 * curFrames;
                 }
@@ -278,7 +278,7 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
 
                     switch(format){
 
-                        case MONO12 :
+                        case CamPixFmt::MONO12 :
 
                             {
                             LOG_INFO << "Writting Fits signed short.";
@@ -320,7 +320,7 @@ cv::Mat Stack::reductionByFactorDivision(float &bzero, float &bscale){
 
     switch(format){
 
-        case MONO12 :
+    case CamPixFmt::MONO12 :
 
             {
 

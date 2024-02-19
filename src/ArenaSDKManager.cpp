@@ -10,13 +10,16 @@ Arena::ISystem* ArenaSDKManager::m_ArenaSDKSystem = nullptr;
 
 ArenaSDKManager::ArenaSDKManager()
 {
-    m_ArenaSDKSystem = Arena::OpenSystem();
+    if (m_ArenaSDKSystem == nullptr)
+        m_ArenaSDKSystem = Arena::OpenSystem();
 }
 
 ArenaSDKManager::~ArenaSDKManager()
 {
-    Arena::CloseSystem(m_ArenaSDKSystem);
-    m_ArenaSDKSystem = nullptr;
+    if (m_ArenaSDKSystem != nullptr)
+        Arena::CloseSystem(m_ArenaSDKSystem);
+     
+    //m_ArenaSDKSystem = nullptr;
 }
 
 std::shared_ptr<Arena::ISystem> ArenaSDKManager::Get()

@@ -79,7 +79,7 @@ CfgParam::CfgParam( string cfgFilePath)
 
     m_Param.log.LOG_ARCHIVE_DAY = 5;
     m_Param.log.LOG_PATH = "./";
-    m_Param.log.LOG_SEVERITY = notification;
+    m_Param.log.LOG_SEVERITY = LogSeverityLevel::notification;
     m_Param.log.LOG_SIZE_LIMIT = 50;
 
     vector<string> finput, vinput;
@@ -90,7 +90,7 @@ CfgParam::CfgParam( string cfgFilePath)
 
     m_Param.camInput.ACQ_DAY_EXPOSURE = 0;
     m_Param.camInput.ACQ_DAY_GAIN = 0;
-    m_Param.camInput.ACQ_FORMAT = MONO8;
+    m_Param.camInput.ACQ_FORMAT = CamPixFmt::MONO8;
     m_Param.camInput.ACQ_FPS = 30;
     m_Param.camInput.ACQ_HEIGHT = 1080;
     m_Param.camInput.ACQ_NIGHT_EXPOSURE = 0;
@@ -120,6 +120,7 @@ CfgParam::CfgParam( string cfgFilePath)
 
     m_Param.det.ACQ_BUFFER_SIZE = 15;
     m_Param.det.ACQ_MASK_ENABLED = false;
+    m_Param.det.ACQ_AUTOEXPOSURE_ENABLED = false;
     m_Param.det.DET_DEBUG = false;
     m_Param.det.DET_DEBUG_UPDATE_MASK = false;
     m_Param.det.DET_DOWNSAMPLE_ENABLED = true;
@@ -459,6 +460,10 @@ void CfgParam::loadDetParam()
         if (!m_Cfg.Get("ACQ_BUFFER_SIZE", m_Param.det.ACQ_BUFFER_SIZE)) {
             error = true;
             m_Param.det.errormsg.push_back(" ACQ_BUFFER_SIZE : Fail to load value.");
+        }
+        
+        if (!m_Cfg.Get("ACQ_AUTOEXPOSURE_ENABLED", m_Param.det.ACQ_AUTOEXPOSURE_ENABLED)) {
+            m_Param.det.ACQ_AUTOEXPOSURE_ENABLED = false;
         }
 
         if (!m_Cfg.Get("ACQ_MASK_ENABLED", m_Param.det.ACQ_MASK_ENABLED)) {

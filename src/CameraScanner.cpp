@@ -21,7 +21,7 @@ vector<CameraDescription>& CameraScanner::getCamerasList()
 }
 
 /**
-  * Scanneer factory method
+  * Scanner factory method
   */
 CameraScanner* CameraScanner::CreateScanner(CamSdkType sdk)
 {

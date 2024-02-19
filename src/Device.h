@@ -47,22 +47,9 @@
 
 #include "SParam.h"
 
-// #include "ELogSeverityLevel.h"
-// #include "EImgBitDepth.h"
-// #include "ECamPixFmt.h"
-// #include "EParser.h"
-// #include "Conversion.h"
-// #include "Camera.h"
-// #include "CameraGigeAravis.h"
-// #include "CameraGigePylon.h"
-// #include "CameraGigeTis.h"
-// #include "CameraVideo.h"
-// #include "CameraV4l2.h"
-// #include "CameraFrames.h"
-// #include "CameraWindows.h"
-// #include "EInputDeviceType.h"
-// #include "ECamSdkType.h"
-// #include "SParam.h"
+#include "CameraSettings.h"
+#include "EAcquisitionMode.h"
+
 
 namespace freeture
 {
@@ -70,129 +57,86 @@ namespace freeture
     class Frame;
 
     class Device {
-
-    public:
-
-        bool mVideoFramesInput; // TRUE if input is a video file or frames directories.
-
     private:
-//        std::vector<std::pair<int, std::pair<int, CamSdkType>>> mDevices;
-
-        bool        mCustomSize;
-        int         mStartX;
-        int         mStartY;
-        int         mSizeWidth;
-        int         mSizeHeight;
-        int         mNightExposure;
-        int         mNightGain;
-        int         mDayExposure;
-        int         mDayGain;
-        int         mFPS; // NEED TO BE DOUBLE
-        bool        mVerbose;
-
         framesParam m_FramesParam;
         videoParam  m_VideoParam;
+        Camera* m_Camera = nullptr;
+
+
+    private:
+        bool setCameraExposureTime();
+        bool setCameraGain();
+        bool setCameraFPS();
+        bool setCameraSize();
+        bool setCameraPixelFormat();
+        Camera* getCamera();
 
     public:
-        double      minExposureTime = 0.0;
-        double      maxExposureTime = 0.0;
-        double      minFPS = 0.0;
-        double      maxFPS = 0.0;
-        double      minGain = 0.0;
-        double      maxGain = 0.0;
+        bool mVideoFramesInput; // TRUE if input is a video file or frames directories.
 
+        /// <summary>
+        /// This is the current camera settings, used to run single or continuous shot.
+        /// Need to be configured according to sun time from acquisition thread.
+        /// </summary>
+        CameraSettings CameraSetting;
 
-    public:
-        //int         mCamID;         // ID in a specific sdk.
-        Camera*         mCam = nullptr;
-        CamPixFmt       mFormat;
-        InputDeviceType mDeviceType;
-        std::string     mCfgPath;
+        Device();
+        ~Device();
 
         void Setup(cameraParam cp, framesParam fp, videoParam vp);
 
-        Device();
-
-        ~Device();
-
         bool runContinuousCapture(Frame& img);
-
         bool runSingleCapture(Frame& img);
 
-        bool startCamera();
+        /// <summary>
+        /// Call camera acqStart. 
+        /// Start camera streaming
+        /// </summary>
+        /// <returns></returns>
+        bool startCamera(EAcquisitionMode);
 
+        /// <summary>
+        /// Call camera acqStop
+        /// Stop camera streaming.
+        /// </summary>
+        /// <returns></returns>
         bool stopCamera();
 
-        bool setCameraPixelFormat();
-
-        bool getCameraGainBounds(double& min, double& max);
-
-        void getCameraGainBounds();
-
-        bool getCameraExposureBounds(double& min, double& max);
-
-        void getCameraExposureBounds();
-
-        bool getCameraFPSBounds(double& min, double& max);
-
-        void getCameraFPSBounds();
-
         bool getDeviceName();
-
-
         InputDeviceType getDeviceType();
-
-        bool setCameraAutoExposure(bool);
-
-        bool setCameraNightExposureTime();
-
-        bool setCameraDayExposureTime();
-
-        bool setCameraNightGain();
-
-        bool setCameraDayGain();
-
+ 
         bool setCameraExposureTime(double value);
-
         bool setCameraGain(double value);
-
         bool setCameraFPS(double value);
-
-        bool setCameraFPS();
-
-        bool setCameraSize();
-
-        bool getCameraFPS(double& fps);
+        bool setCameraSize(int x, int y, int w, int h);
 
         bool getCameraStatus();
-
         bool getCameraDataSetStatus();
-
         bool getSupportedPixelFormats();
-
         bool loadNextCameraDataSet(std::string& location);
-
         bool getExposureStatus();
-
         bool getGainStatus();
 
-        bool setCameraSize(int x, int y, int w, int h);
-        bool getDeviceCameraSizeParams(int& x, int& y, int& height, int& width);
-
-        int getNightExposureTime() { return mNightExposure; };
-        int getNightGain() { return mNightGain; };
-        int getDayExposureTime() { return mDayExposure; };
-        int getDayGain() { return mDayGain; };
-
-        void setVerbose(bool status);
-
-        Camera* getCamera();
-
         bool firstIinitializeCamera(std::string);
+
+        /// <summary>
+        /// Call grabInitialization on camera
+        ///     - set fps
+        ///     - set gain
+        ///     - set exposure time
+        ///     - initialize stream parameters
+        /// </summary>
+        /// <returns></returns>
         bool initializeCamera();
 
-    private:
-      
+        /// <summary>
+        /// Used by factory to set camera instance to this device control
+        /// </summary>
+        /// <param name=""></param>
+        void setCamera(Camera*);
 
+        bool isStreaming();
+        
+        double getMinExposureTime();
     };
 }

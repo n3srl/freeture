@@ -70,7 +70,7 @@ mUpdateInterval(timeInterval), mUpdateMask(updateMask) {
     // Estimate saturated value.
     switch(format) {
 
-        case MONO12 :
+        case CamPixFmt::MONO12 :
 
                 saturatedValue = 4092;
 
@@ -144,7 +144,7 @@ bool Mask::applyMask(cv::Mat &currFrame) {
 
         }
 
-        if (LOG_FRAME_STATUS)
+        if (LOG_SPAM_FRAME_STATUS)
             std::cout << "NEXT MASK : " << (mUpdateInterval - (int)diffTime) << "s" << std::endl;
 
     }

@@ -47,6 +47,8 @@
 #include "SParam.h"
 #include "TimeDate.h"
 #include "Frame.h"
+#include "Logger.h"
+
 // 
 // #ifdef LINUX
 //     #define BOOST_LOG_DYN_LINK 1
@@ -71,6 +73,7 @@ namespace freeture
     class StackThread {
 
     private:
+        std::thread::id  m_ThreadID;
 
         boost::thread* mThread;
         bool            mustStop;

@@ -47,6 +47,7 @@
 #include "SParam.h"
 #include "TimeDate.h"
 #include "Frame.h"
+#include "Logger.h"
 
 // #include "SMTPClient.h"
 // #include <iterator>
@@ -76,6 +77,7 @@ namespace freeture
     {
 
     private:
+        std::thread::id m_ThreadID;
 
         boost::thread* pThread;                   // Pointer on detection thread.
         Detection* pDetMthd;                  // Pointer on detection method.

@@ -89,6 +89,7 @@ bool CfgLoader::Load(const std::string& file) {
             ("ACQ_OFFSET", po::value<std::string>()->default_value(DEFAULT_ACQ_OFFSET), "Specify camera x,y offset. Format: (x),(y).")
             ("ACQ_RES_SIZE", po::value<std::string>()->default_value(DEFAULT_ACQ_RES_SIZE), "Specify camera resolution. Format: (width)x(height).")
             ("SHIFT_BITS", po::value<std::string>()->default_value(DEFAULT_SHIFT_BITS), "DMK Gige Cameras use last 12 bits in MONO12. This parameter shifts bits in order to use the first 12 bits.")
+            ("ACQ_AUTOEXPOSURE_ENABLED", po::value<std::string>()->default_value(DEFAULT_ACQ_AUTOEXPOSURE_ENABLED), "Enable auto-exposure controls on sunrise and sunset.")
             ("ACQ_MASK_ENABLED", po::value<std::string>()->default_value(DEFAULT_ACQ_MASK_ENABLED), "Enable to use a mask.")
             ("ACQ_MASK_PATH", po::value<std::string>()->default_value(DEFAULT_ACQ_MASK_PATH), "Location of the mask.")
             ("ACQ_BUFFER_SIZE", po::value<std::string>()->default_value(DEFAULT_ACQ_BUFFER_SIZE), "Size of the frame buffer (in seconds).")

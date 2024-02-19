@@ -201,7 +201,7 @@ namespace freeture
             ImgFormat   ACQ_SCHEDULE_OUTPUT;
             std::vector<scheduleParam> ACQ_SCHEDULE;
         };
-        scheduledCaptures schcap;
+        scheduledCaptures schcap;   
 
         bool status;
         std::vector<std::string> errormsg;
@@ -214,12 +214,13 @@ namespace freeture
     struct detectionParam {
         int         ACQ_BUFFER_SIZE;
         bool        ACQ_MASK_ENABLED;
-        std::string      ACQ_MASK_PATH;
-        cv::Mat         MASK;
+        bool        ACQ_AUTOEXPOSURE_ENABLED;
+        std::string ACQ_MASK_PATH;
+        cv::Mat     MASK;
         bool        DET_ENABLED;
         TimeMode    DET_MODE;
         bool        DET_DEBUG;
-        std::string      DET_DEBUG_PATH;
+        std::string DET_DEBUG_PATH;
         int         DET_TIME_AROUND;
         int         DET_TIME_MAX;
         DetMeth     DET_METHOD;

@@ -33,11 +33,8 @@
 */
 
 #include "OpenSSL.h"
+
 using namespace freeture;
-
-boost::log::sources::severity_logger< LogSeverityLevel >  OpenSSL::logger;
-
-OpenSSL::Init OpenSSL::initializer;
 
 OpenSSL::OpenSSL(int socket): ctx_(nullptr, SSL_CTX_free), ssl_(nullptr, SSL_free) {
 
@@ -45,32 +42,32 @@ OpenSSL::OpenSSL(int socket): ctx_(nullptr, SSL_CTX_free), ssl_(nullptr, SSL_fre
 
     ctx_ = decltype(ctx_ ) (SSL_CTX_new(SSLv23_client_method()), SSL_CTX_free);
     if(nullptr == ctx_) {
-        BOOST_LOG_SEV(logger,fail) << "SSL_CTX_new failed : " << ERR_error_string(ERR_get_error(), errorBuf);
+        LOG_ERROR << "SSL_CTX_new failed : " << ERR_error_string(ERR_get_error(), errorBuf);
         throw "SSL_CTX_new failed.";
         //throw runtime_error(ERR_error_string(ERR_get_error(), errorBuf));
     }
 
     ssl_ = decltype(ssl_ ) (SSL_new(ctx_.get()), SSL_free);
     if(nullptr == ssl_) {
-        BOOST_LOG_SEV(logger,fail) << "SSL_new failed : " << ERR_error_string(ERR_get_error(), errorBuf);
+        LOG_ERROR << "SSL_new failed : " << ERR_error_string(ERR_get_error(), errorBuf);
         throw "SSL_new failed.";
         //throw runtime_error(ERR_error_string(ERR_get_error(), errorBuf));
     }
 
     const int rstSetFd = SSL_set_fd(ssl_.get(), socket);
     if(0 == rstSetFd) {
-        BOOST_LOG_SEV(logger,fail) << "SSL_set_fd failed : " << ERR_error_string(ERR_get_error(), errorBuf);
+        LOG_ERROR << "SSL_set_fd failed : " << ERR_error_string(ERR_get_error(), errorBuf);
         throw "SSL_set_fd failed.";
         //throw runtime_error(ERR_error_string(ERR_get_error(), errorBuf));
     }
 
     const int rstConnect = SSL_connect(ssl_.get());
     if(0 == rstConnect) {
-        BOOST_LOG_SEV(logger,fail)  << "Handshake failed. ";
+        LOG_ERROR  << "Handshake failed. ";
         throw "Handshake failed. ";
         //throw runtime_error("handshake failed.");
     }else if(0> rstConnect) {
-        BOOST_LOG_SEV(logger,fail) << "Handshake and shutdown failed. ";
+        LOG_ERROR << "Handshake and shutdown failed. ";
         throw "Handshake and shutdown failed. ";
         //throw runtime_error("handshake and shutdown failed.");
     }
@@ -82,7 +79,7 @@ OpenSSL::~OpenSSL() {
     if(0==rstShutdown)
         rstShutdown = SSL_shutdown(ssl_.get());
     else if(-1 == rstShutdown && SSL_RECEIVED_SHUTDOWN != SSL_get_shutdown(ssl_.get())) {
-        BOOST_LOG_SEV(logger,fail) << "Shutdown failed.";
+        LOG_ERROR << "Shutdown failed.";
         //throw "Shutdown failed.";
         //throw runtime_error("shutdown failed.");
     }
@@ -93,11 +90,11 @@ void OpenSSL::Write(const std::string &msg) {
 
     const int rstWrite = SSL_write(ssl_.get(), msg.c_str(), msg.length());
     if(0 == rstWrite) {
-        BOOST_LOG_SEV(logger,fail) << "Socket write failed due to lose connection.";
+        LOG_ERROR << "Socket write failed due to lose connection.";
         throw "Socket write failed due to lose connection.";
         //throw runtime_error("socket write failed due to lose connection.");
     }else if(0> rstWrite) {
-        BOOST_LOG_SEV(logger,fail) << "Socket write failed due to unknown reason.";
+        LOG_ERROR << "Socket write failed due to unknown reason.";
         throw "Socket write failed due to unknown reason.";
         //throw runtime_error("socket write failed due to unknown reason.");
     }

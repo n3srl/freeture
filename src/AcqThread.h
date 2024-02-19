@@ -39,15 +39,16 @@
 
 #include <memory>
 
-#include "TimeDate.h"
-#include "Frame.h"
-
-#include "SParam.h"
-
 #include <boost/thread/thread.hpp>
 #include <boost/thread/condition_variable.hpp>
 #include <boost/circular_buffer.hpp>
 
+#include "SParam.h"
+#include "CameraSettings.h"
+#include "TimeDate.h"
+#include "Frame.h"
+#include "EAcquisitionMode.h"
+#include "Logger.h"
 
 namespace freeture
 {
@@ -57,19 +58,23 @@ namespace freeture
     class ExposureControl;
     class CfgParam;
 
-    class AcqThread {
+
+    class AcqThread
+    {
 
     private:
+        std::thread::id m_ThreadID;
+
         //COMMON THREADS ATTRIBUTES
-        bool                mMustStop;              // Signal to stop thread.
         boost::mutex        mMustStopMutex;
-        boost::thread* mThread;                     // Acquisition thread.
+        boost::thread*      mThread;                     // Acquisition thread.
+        bool                mMustStop;              // Signal to stop thread.
         bool                mThreadTerminated;      // Terminated status of the thread.
 
         // Communication with the shared framebuffer.
-        boost::condition_variable* frameBuffer_condition;
-        boost::mutex* frameBuffer_mutex;
-        boost::circular_buffer<Frame>* frameBuffer;
+        boost::condition_variable*      frameBuffer_condition;
+        boost::mutex*                   frameBuffer_mutex;
+        boost::circular_buffer<Frame>*  frameBuffer;
 
         // Communication with DetThread.
         bool* stackSignal;
@@ -82,31 +87,39 @@ namespace freeture
         boost::condition_variable* detSignal_condition;
 
         // ACQ THREAD ATTRIBUTES
-        Device* m_Device;                           // Device used for acquisition.
-        int                 mDeviceID;              // Index of the device to use.
-        scheduleParam       mNextAcq;               // Next scheduled acquisition.
-        int                 mNextAcqIndex;
-        std::shared_ptr<DetThread> pDetection;      // Pointer on detection thread in order to stop it or reset it when a regular capture occurs.
-        std::shared_ptr<StackThread> pStack;        // Pointer on stack thread in order to save and reset a stack when a regular capture occurs.
-        ExposureControl* pExpCtrl;                  // Pointer on exposure time control object while sunrise and sunset.
-        std::string              mOutputDataPath;   // Dynamic location where to save data (regular captures etc...).
-        std::string              mCurrentDate;
-        int                 mStartSunriseTime;      // In seconds.
-        int                 mStopSunriseTime;       // In seconds.
-        int                 mStartSunsetTime;       // In seconds.
-        int                 mStopSunsetTime;        // In seconds.
-        int                 mCurrentTime;           // In seconds.
-        
+        Device*                         m_Device;               // Device used for acquisition.
+        ExposureControl*                pExpCtrl;               // Pointer on exposure time control object while sunrise and sunset.
+        std::shared_ptr<DetThread>      pDetection;             // Pointer on detection thread in order to stop it or reset it when a regular capture occurs.
+        std::shared_ptr<StackThread>    pStack;                 // Pointer on stack thread in order to save and reset a stack when a regular capture occurs.
+        std::string                     mOutputDataPath;        // Dynamic location where to save data (regular captures etc...).
+        std::string                     mCurrentDate;
+        std::string                     cDate;
+        std::string                     refDate;
+        int                             mDeviceID;              // Index of the device to use.
+        int                             mNextAcqIndex;
+        int                             mStartSunriseTime;      // In seconds.
+        int                             mStopSunriseTime;       // In seconds.
+        int                             mStartSunsetTime;       // In seconds.
+        int                             mStopSunsetTime;        // In seconds.
+        int                             mCurrentTime;           // In seconds.
+        unsigned long long              mFrameNumber;           // frame #
+        bool                            cleanStatus = false;
+      
+
         // Parameters from configuration file.
-        stackParam          msp;
-        stationParam        mstp;
-        detectionParam      mdtp;
-        dataParam           mdp;
+        scheduleParam       mNextAcq;               // Next scheduled acquisition.
+        stackParam          m_StackParam;
+        stationParam        m_StationParam;
+        detectionParam      m_DetectionParam;
+        dataParam           m_DataParam;
         fitskeysParam       mfkp;
 
         cameraParam         m_CameraParam;
         framesParam         m_FramesParam;
         videoParam          m_VideoParam;
+
+        CameraSettings m_CurrentCameraSettings;
+        EAcquisitionMode m_CurrentAcquisitionMode;
 
     public:
 
@@ -122,48 +135,66 @@ namespace freeture
             std::shared_ptr <DetThread>,
             std::shared_ptr <StackThread>,
             std::shared_ptr<CfgParam>
-            );
+        );
 
         ~AcqThread(void);
 
-
         //COMMON THREAD METHODS
         void operator()();
+
         bool startThread();
+
         void stopThread();
+
         // Return activity status.
         bool getThreadStatus();
 
-
-
         bool isNight(int);
+
         bool isDay(int);
+
         bool isSunset(int);
+
         bool isSunrise(int);
+
         bool isNight();
+
         bool isDay();
+
         bool isSunset();
+
         bool isSunrise();
 
         TimeMode getCurrentTimeMode();
+
         TimeMode getTimeMode(int);
 
         int getNowInSeconds();
+
         int getTimeInSeconds(boost::posix_time::ptime);
-    
+
+        void startDetectionThread();
+
         void stopDetectionThread();
+
         void stopStackThread();
+
+        void startStackThread();
 
         void resetFrameBuffer();
 
         void notifyDetectionThread();
 
+        //internal device management
+        bool setCameraInContinousMode();
 
-        // Added
-        bool setCameraInContinousMode(bool);
+        bool setCameraSingleFrameMode(EAcquisitionMode mode);
 
     private:
-        bool cleanStatus = false;
+        
+        void runScheduledAcquisition(Frame&);
+      
+        void runRegularAcquisition(Frame&);
 
         // Compute in seconds the sunrise start/stop times and the sunset start/stop times.
         bool computeSunTimes();
@@ -178,9 +209,28 @@ namespace freeture
         void saveImageCaptured(Frame& img, int imgNum, ImgFormat outputType, std::string imgPrefix);
 
         // Run a regular or scheduled acquisition.
-        void runImageCapture(int imgNumber, int imgExposure, int imgGain, CamPixFmt imgFormat, ImgFormat imgOutput, std::string imgPrefix);
+        void runImageCapture(EAcquisitionMode mode, int imgNumber, ImgFormat imgOutput, std::string imgPrefix);
 
-        // Prepare the device for a continuous acquisition.
-        bool prepareAcquisitionOnDevice();
+        /// <summary>
+        /// Prepare the device for a continuous or single-frame acquisition.
+        /// 
+        /// Compute sun times.
+        /// 
+        /// set exposure time (according to sun time)
+        /// set gain (according to sun time)
+        /// set fps (according to sun time AND acquisition mode)
+        /// 
+        /// initialize camera
+        ///  - grabInitialization
+        ///  - grabCleanse
+        /// 
+        /// start camera
+        /// 
+        /// </summary>
+        /// <param name="mode"></param>
+        /// <returns></returns>
+        bool prepareAcquisitionOnDevice(EAcquisitionMode mode);
+
+        void ApplyCameraSettingsToFrame(Frame&);
     };
 }

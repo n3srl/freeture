@@ -15,6 +15,9 @@ namespace freeture
     class Device;
     class Camera;
     class CameraDescription;
+    class CameraScanner;
+
+    using scanner_type = CameraScanner*;
 
     class CameraDeviceManager
     {
@@ -29,12 +32,15 @@ namespace freeture
         Device* m_Device;
         Camera* m_Camera;
 
+        std::vector<scanner_type> m_AvailableScanners;
+
         parameters m_SelectedRuntimeConfiguration;
         unsigned short m_SelectedDeviceID = 0;
         CamSdkType m_SelectedSdk;
 
         bool m_Selected = false;
-        int m_DeviceCount;
+        size_t m_DeviceCount;
+
 
     public:
         CameraDeviceManager(const CameraDeviceManager&) = default;
@@ -54,6 +60,8 @@ namespace freeture
         Device* getDevice();
 
         void printDevicesList();
+
+        size_t getDeviceCount();
 
       private:
         int getCameraDeviceBySerial(std::string);
@@ -77,5 +85,6 @@ namespace freeture
 
         void mergeList(std::vector<CameraDescription>&);
 
+        void initScanners();
     };
 }

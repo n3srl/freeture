@@ -9,6 +9,7 @@
 
 #include "Commons.h"
 #include "FreetureSettings.h"
+#include "EFreetureMode.h"
 
 
 #include <boost/program_options.hpp>
@@ -24,25 +25,15 @@ namespace freeture
     class DetThread;
     class StackThread;
     class Device;
-
-    enum class Mode
-    {
-        TEST_CONFIGURATION,
-        PRINT_HELP,
-        PRINT_VERSION,
-        CONTINUOUS_ACQUISITION,
-        METEOR_DETECTION,
-        SINGLE_ACQUISITION,
-        CLEAN_LOGS,
-        LIST_DEVICES,
-        LIST_FORMATS,
-        UNKNOWN
-    };
-
+    class Logger;
+    
     class Freeture
     {
         private:
-            freeture::Mode m_CurrentRunMode = Mode::UNKNOWN;
+            std::thread::id m_ThreadID;
+            std::shared_ptr<Logger> m_Logger;
+
+            freeture::FreetureMode m_CurrentRunMode = FreetureMode::UNKNOWN;
             const char** m_Argv = nullptr;
             int m_Argc = -1;
             bool m_SigTermFlag = false;

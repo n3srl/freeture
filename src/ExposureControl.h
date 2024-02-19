@@ -112,7 +112,7 @@ namespace freeture
 
         float computeMSV();
 
-        bool controlExposureTime(freeture::Device* camera, cv::Mat image, TimeDate::Date imageDate, cv::Mat mask, double minExposureTime, double fps);
+        bool controlExposureTime(freeture::Device* camera, cv::Mat image, TimeDate::Date imageDate, cv::Mat mask, double fps);
 
         bool checkDataLocation(TimeDate::Date date);
 

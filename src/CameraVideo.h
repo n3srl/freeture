@@ -61,25 +61,11 @@ using namespace boost::filesystem;
 namespace freeture
 {
     class CameraDescription;
-    class cameraParam;
+    struct cameraParam;
 
     class CameraVideo : public Camera {
 
     private:
-
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
-
-        static class Init {
-
-        public:
-
-            Init() {
-
-                logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CameraVideo"));
-
-            }
-
-        }initializer;
 
         int                 mFrameWidth;
         int                 mFrameHeight;
@@ -173,11 +159,15 @@ namespace freeture
         /// <param name=""></param>
         void configure(parameters&) override;
 
+        double getMinExposureTime() override;
+
         /// <summary>
         /// check if configuration is allowed
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
         bool configurationCheck(parameters&) override;
+
+        bool destroyDevice() override;
     };
 }

@@ -31,7 +31,7 @@ CameraLucidArena_Scanner::~CameraLucidArena_Scanner()
 void CameraLucidArena_Scanner::UpdateCameraList()
 {
     LOG_DEBUG << "CameraLucidArena_Scanner::UpdateCameraList";
-
+    Devices.clear();
     try
     {
 
@@ -43,8 +43,6 @@ void CameraLucidArena_Scanner::UpdateCameraList()
 
         LOG_INFO  << "CameraLucidArena_Scanner::UpdateCameraList; Arena SDK Version: " << Arena::GetVersion().c_str();
         LOG_DEBUG << "CameraLucidArena_Scanner::UpdateCameraList; UpdateDevices";
-
-        //arv_update_device_list();
 
         m_ArenaSDKSystem->UpdateDevices(DEFAULT_WAIT_TIME);
 
@@ -74,9 +72,6 @@ void CameraLucidArena_Scanner::UpdateCameraList()
 
                 CameraDescription c;
 
-                //const char* str = arv_get_device_id(i);
-                //std::cout << "FIND " + s_name << std::endl;
-                c.Id = i;
                 c.Description = "NAME[" + s_name + "] SDK[ARENASDK] IP: " + s_addr;
                 c.DeviceId = s_name;
                 c.Address = s_addr;

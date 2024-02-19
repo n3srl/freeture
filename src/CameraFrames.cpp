@@ -299,20 +299,20 @@ bool CameraFrames::grabImage(Frame &img) {
         /// Read the frame.
 
         cv::Mat resMat;
-        CamPixFmt frameFormat = MONO8;
+        CamPixFmt frameFormat = CamPixFmt::MONO8;
 
         switch(bitpix){
 
             case 8 :
 
-                frameFormat = MONO8;
+                frameFormat = CamPixFmt::MONO8;
                 newFits.readFits8UC(resMat);
 
                 break;
 
             case 16 :
 
-                frameFormat = MONO12;
+                frameFormat = CamPixFmt::MONO12;
                 newFits.readFits16S(resMat);
 
                 break;
@@ -373,4 +373,15 @@ bool CameraFrames::configurationCheck(parameters&)
 bool CameraFrames::createDevice()
 {
     return true;
+}
+
+double CameraFrames::getMinExposureTime()
+{
+    return 0.0;
+}
+
+
+bool CameraFrames::destroyDevice()
+{
+    return false;
 }

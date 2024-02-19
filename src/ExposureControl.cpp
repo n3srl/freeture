@@ -40,6 +40,7 @@
 #include "Conversion.h"
 #include "SaveImg.h"
 #include "Device.h"
+#include "Camera.h"
 
 #include <boost/date_time.hpp>
 #include <boost/filesystem.hpp>
@@ -225,7 +226,7 @@ float ExposureControl::computeMSV(){
 
 }
 
-bool ExposureControl::controlExposureTime(freeture::Device *camera, cv::Mat image, TimeDate::Date imageDate, cv::Mat mask, double minExposureTime, double fps){
+bool ExposureControl::controlExposureTime(freeture::Device *camera, cv::Mat image, TimeDate::Date imageDate, cv::Mat mask, double fps){
 
     try {
 
@@ -293,7 +294,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, cv::Mat imag
                         }
 
                         // Get minimum exposure time.
-                        minCameraExposureValue = minExposureTime;
+                        minCameraExposureValue = camera->getMinExposureTime();
                         LOG_INFO << "Min EXP : " << minCameraExposureValue;
 
                         // Set maximum exposure time (us) according fps value.

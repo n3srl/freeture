@@ -39,17 +39,6 @@
 #include <iostream>
 #include <map>
 #include <stdexcept>
-#include "EDetMeth.h"
-#include "EStackMeth.h"
-#include "ELogSeverityLevel.h"
-#include "ESmtpSecurity.h"
-#include "ETimeMode.h"
-#include "EImgFormat.h"
-#include "ECamPixFmt.h"
-#include "EInputDeviceType.h"
-#include "ECamSdkType.h"
-
-
 
 //http://stackoverflow.com/questions/726664/string-to-enum-in-c
 namespace freeture

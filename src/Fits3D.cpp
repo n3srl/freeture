@@ -59,11 +59,11 @@ Fits3D::Fits3D(CamPixFmt depth, int imgHeight, int imgWidth, int numberOfImages,
     array3D_MONO_8 = NULL;
     array3D_MONO_12 = NULL;
 
-    if(depth == MONO8){
+    if(depth == CamPixFmt::MONO8){
 
         array3D_MONO_8 = (unsigned char *)malloc(size3d * sizeof(unsigned char));
 
-    }else if(depth == MONO12){
+    }else if(depth == CamPixFmt::MONO12){
 
         array3D_MONO_12 = (unsigned short *)malloc(size3d * sizeof(unsigned short));
 
@@ -78,7 +78,7 @@ Fits3D::Fits3D(CamPixFmt depth, int imgHeight, int imgWidth, int numberOfImages,
 
 void Fits3D::addImageToFits3D(cv::Mat frame){
 
-    if(imgDepth == MONO8){
+    if(imgDepth == CamPixFmt::MONO8){
 
         for (int j = 0 ; j < naxes[1] ; j++){ // cols
 
@@ -91,7 +91,7 @@ void Fits3D::addImageToFits3D(cv::Mat frame){
             }
         }
 
-    }else if(imgDepth == MONO12){
+    }else if(imgDepth == CamPixFmt::MONO12){
 
         for (int j = 0 ; j < naxes[1] ; j++){ // cols
 
@@ -763,7 +763,7 @@ bool Fits3D::writeFits3D(){
 
     }
 
-    if(imgDepth == MONO8){
+    if(imgDepth == CamPixFmt::MONO8){
 
         if(fits_create_img(fptr, BYTE_IMG, naxis, naxes, &status)){
 
@@ -780,7 +780,7 @@ bool Fits3D::writeFits3D(){
 
         free(array3D_MONO_8);
 
-    }else if(imgDepth == MONO12){
+    }else if(imgDepth == CamPixFmt::MONO12){
 
         // Set bzero and bscale for print unsigned short value in soft visualization.
         kBZERO = 32768;

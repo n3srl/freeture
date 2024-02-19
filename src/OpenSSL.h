@@ -51,40 +51,16 @@
 #include <ostream>
 #include <fstream>
 #include <sstream>
-#include <boost/archive/iterators/ostream_iterator.hpp>
 #include <iterator>
 #include <algorithm>
-#include <boost/log/common.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/attributes/named_scope.hpp>
-#include <boost/log/attributes.hpp>
-#include <boost/log/sinks.hpp>
-#include <boost/log/sources/logger.hpp>
-#include <boost/log/core.hpp>
+
 #include "ELogSeverityLevel.h"
+#include "Logger.h"
+
 namespace freeture
 {
 
     class OpenSSL {
-
-    private:
-
-        static boost::log::sources::severity_logger< LogSeverityLevel > logger;
-
-        static class Init {
-
-        public:
-
-            Init() {
-
-                logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("OpenSSL"));
-
-            }
-
-        }initializer;
 
     public:
 
@@ -124,7 +100,7 @@ namespace freeture
 
                 const int rstRead = SSL_read(ssl_.get(), buf, readBufSize);
                 if (0 == rstRead) {
-                    BOOST_LOG_SEV(logger, fail) << "Connection lost while read.";
+                    LOG_ERROR << "Connection lost while read.";
                     throw "Connection lost while read.";
                     //throw runtime_error("Connection lost while read.");
                 }

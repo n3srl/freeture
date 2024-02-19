@@ -185,6 +185,8 @@ namespace freeture
         /// <returns></returns>
         bool configurationCheck(parameters&) override;
 
+        double getMinExposureTime() override;
+
     };
 }
 #endif

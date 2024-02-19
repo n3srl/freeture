@@ -7,7 +7,7 @@
 *
 */
 #include "CameraLucidArena_PHX016S.h"
-
+#include <cstring>
 #include <time.h>
 #include <algorithm>
 #include <iostream>
@@ -33,80 +33,99 @@ using namespace std;
      * CTor.
      */
     CameraLucidArena_PHX016S::CameraLucidArena_PHX016S(CameraDescription camera_descriptor, cameraParam settings):
-        Camera(camera_descriptor, settings),
-        m_StartX(settings.ACQ_STARTX), m_StartY(settings.ACQ_STARTY), m_Width(settings.ACQ_WIDTH), m_Height(settings.ACQ_HEIGHT), 
-        m_FPS(settings.ACQ_FPS), m_MinFPS(MIN_FPS), m_MaxFPS(MAX_FPS),
-        m_Gain(settings.ACQ_DAY_GAIN), m_MinGain(MIN_GAIN), m_MaxGain(MAX_GAIN), 
-        m_ExposureTime(settings.ACQ_DAY_EXPOSURE), m_MinExposure(MIN_US_NORMAL), m_MaxExposure(MAX_US_NORMAL),
-        payload(0), frameCounter(0), shiftBitsImage(settings.SHIFT_BITS)
+        Camera(camera_descriptor, settings)
     {
         m_ExposureAvailable = true;
         m_GainAvailable = true;
+
+        m_MinFPS = MIN_FPS;
+        m_MaxFPS = MAX_FPS;
+        m_MinGain = MIN_GAIN;
+        m_MaxGain = MAX_GAIN;
+        m_MinExposure = MIN_US_NORMAL;
+        m_MaxExposure = MAX_US_NORMAL;
+        m_PixelFormat = PIXEL_FORMAT;
     }
 
     /**
-     * Create a Lucid camera using serial number
+     * DTor.
      */
-    bool CameraLucidArena_PHX016S::createDevice()
-    {
-        LOG_DEBUG << "CameraLucidArena_PHX016S::createDevice";
-
-        Arena::DeviceInfo target_device_info;
-
-        if (!getDeviceInfoBySerial(m_CameraDescriptor.Serial, target_device_info)) {
-            LOG_ERROR << "Camera not found";
-            return false;
-        }
-
-        LOG_DEBUG << "CameraLucidArena_PHX016S::createDevice; "<< "DEVICE NAME " << target_device_info.ModelName() << std::endl;
-
-        m_ArenaDevice = m_ArenaSDKSystem->CreateDevice(target_device_info);
-
-        if(m_ArenaDevice == nullptr)
-        {
-            LOG_ERROR << "Fail to connect the camera.";
-            return false;
-        }
-
-        return true;
-    }
-
-    void CameraLucidArena_PHX016S::getFPSBounds(double &fMin, double &fMax)
-    {
-        if (m_ArenaDevice == nullptr)
-        {
-           LOG_ERROR  << "Camera is nullptr";
-            return;
-        }
-
-       double fpsMin = 0.0;
-       double fpsMax = 0.0;
-
-       GenApi::CFloatPtr pAcquisitionFrameRate = m_ArenaDevice->GetNodeMap()->GetNode("AcquisitionFrameRate");
-
-       if (!pAcquisitionFrameRate)
-       {
-           LOG_ERROR  << "AcquisitionFrameRateEnable node not found";
-            return;
-       }
-
-       fpsMax = pAcquisitionFrameRate->GetMax();
-       fpsMin = pAcquisitionFrameRate->GetMin();
-
-       fMin = fpsMin;
-       fMax = fpsMax;
-    }
-
-    bool CameraLucidArena_PHX016S::setFPS(double fps)
+    CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S()
     {
         try {
-            if (m_ArenaDevice == nullptr)
+            LOG_DEBUG << "CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S";
+            destroyDevice();
+        }
+        catch (GenICam::GenericException& e) {
+            LOG_ERROR << "CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S; " << e.what();
+        }
+        catch (std::exception& ex)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S; " << "Standard exception thrown: " << ex.what();
+        }
+        catch (...)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S;" << "Unexpected exception thrown";
+        }
+    }
+
+
+    /**
+     * FPS
+     */
+    void CameraLucidArena_PHX016S::getFPSBounds(double &fMin, double &fMax)
+    {
+        try {
+            LOG_DEBUG << "CameraLucidArena_PHX016S::getFPSBounds";
+
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
+            double fpsMin = 0.0;
+            double fpsMax = 0.0;
+
+            GenApi::CFloatPtr pAcquisitionFrameRate = m_ArenaDevice->GetNodeMap()->GetNode("AcquisitionFrameRate");
+
+            if (!pAcquisitionFrameRate)
             {
-               LOG_ERROR << "CameraLucidArena_PHX016S::setFPS" << "Camera is nullptr";
-                return false;
+                LOG_ERROR <<"CameraLucidArena_PHX016S::getFPSBounds;" << "AcquisitionFrameRateEnable node not found";
+                return;
             }
 
+            fpsMax = pAcquisitionFrameRate->GetMax();
+            fpsMin = pAcquisitionFrameRate->GetMin();
 
+            fMin = fpsMin;
+            fMax = fpsMax;
+        }
+        catch (GenICam::GenericException& e) {
+            LOG_ERROR << "CameraLucidArena_PHX016S::getFPSBounds;" << e.what();
+        }
+        catch (std::exception& ex)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::getFPSBounds;" << "Standard exception thrown: " << ex.what();
+        }
+        catch (...)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::getFPSBounds;" << "Unexpected exception thrown";
+        }
+    }
+
+    bool CameraLucidArena_PHX016S::setFPS(double val)
+    {
+        try {
+            LOG_DEBUG << "CameraLucidArena_PHX016S::setFPS"<< "(" << val <<")";
+
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
+            if (val < MIN_FPS)
+                val = MIN_FPS;
+
+            if (val > MAX_FPS)
+                val = MAX_FPS;
+
+            
             bool pAcquisitionFrameRateEnable = m_ArenaDevice->GetNodeMap()->GetNode("AcquisitionFrameRateEnable");
 
             if (!pAcquisitionFrameRateEnable)
@@ -115,34 +134,75 @@ using namespace std;
                 return false;
             }
 
-            Arena::SetNodeValue<double>(m_ArenaDevice->GetNodeMap(), "AcquisitionFrameRate", fps);
+            Arena::SetNodeValue<double>(m_ArenaDevice->GetNodeMap(), "AcquisitionFrameRate", val);
 
             return true;
         }
         catch (GenICam::GenericException& e) {
-            LOG_ERROR << "CameraLucidArena_PHX016S::setFPS" << e.what();
+            LOG_ERROR << "CameraLucidArena_PHX016S::setFPS;" << e.what();
         }
         catch (std::exception& ex)
         {
-            LOG_ERROR << "CameraLucidArena_PHX016S::setFPS" << "Standard exception thrown: " << ex.what() ;
+            LOG_ERROR << "CameraLucidArena_PHX016S::setFPS;" << "Standard exception thrown: " << ex.what() ;
         }
         catch (...)
         {
-            LOG_ERROR << "CameraLucidArena_PHX016S::setFPS" << "Unexpected exception thrown";
+            LOG_ERROR << "CameraLucidArena_PHX016S::setFPS;" << "Unexpected exception thrown";
         }
 
         return false;
     }
 
+    bool CameraLucidArena_PHX016S::getFPS(double& value)
+    {
+        try {
+            LOG_DEBUG << "CameraLucidArena_PHX016S::getFPS";
 
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
+            GenApi::CFloatPtr pAcquisitionFrameRate = m_ArenaDevice->GetNodeMap()->GetNode("AcquisitionFrameRate");
+
+            if (!pAcquisitionFrameRate)
+            {
+                LOG_ERROR << "CameraLucidArena_PHX016S::getFPS;" << "AcquisitionFrameRate node not found";
+                return false;
+            }
+
+            value = pAcquisitionFrameRate->GetValue();
+
+            return true;
+        }
+        catch (GenICam::GenericException& e) {
+            LOG_ERROR << "CameraLucidArena_PHX016S::getFPS" << e.what();
+        }
+        catch (std::exception& ex)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::getFPS" << "Standard exception thrown: " << ex.what();
+        }
+        catch (...)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::getFPS" << "Unexpected exception thrown";
+        }
+
+        return false;
+    }
+
+    /**
+     * INFOS
+     */
     bool CameraLucidArena_PHX016S::getDeviceInfoBySerial(string serial, Arena::DeviceInfo& device_info)
     {
         try {
             LOG_DEBUG << "CameraLucidArena_PHX016S::getDeviceInfoBySerial";
+          
+            if (!checkSDK())
+                throw exception("SDK not initialized");
+
             m_ArenaSDKSystem->UpdateDevices(100);
 
             vector<Arena::DeviceInfo> deviceInfos = m_ArenaSDKSystem->GetDevices();
-            int n_devices = deviceInfos.size();
+            size_t n_devices = deviceInfos.size();
 
             for (int i = 0; i < n_devices; i++) {
 
@@ -168,27 +228,49 @@ using namespace std;
         return false;
     }
 
-
     string CameraLucidArena_PHX016S::getModelName()
     {
-        Arena::DeviceInfo device_info;
+        try {
+            LOG_DEBUG << "CameraLucidArena_PHX016S::getModelName";
 
-        if (!getDeviceInfoBySerial(m_CameraDescriptor.Serial, device_info)) {
-            LOG_ERROR << "CameraLucidArena_PHX016S::getModelName" << "Camera not found";
-            return false;
+            if (!checkSDK())
+                throw exception("SDK not initialized");
+
+            Arena::DeviceInfo device_info;
+
+            if (!getDeviceInfoBySerial(m_CameraDescriptor.Serial, device_info)) {
+                LOG_ERROR << "CameraLucidArena_PHX016S::getModelName" << "Camera not found";
+                return false;
+            }
+
+            return device_info.ModelName().c_str();
+        }
+        catch (GenICam::GenericException& e) {
+            LOG_ERROR << "CameraLucidArena_PHX016S::getModelName;" << e.what();
+        }
+        catch (std::exception& ex)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::getModelName;" << "Standard exception thrown: " << ex.what();
+        }
+        catch (...)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::getModelName;" << "Unexpected exception thrown";
         }
 
-        return device_info.ModelName().c_str();
+        return string();
     }
 
+
+    /**
+     * EXPOSURE
+     */
     void CameraLucidArena_PHX016S::getExposureBounds(double& eMin, double& eMax)
     {
         try {
-            if (m_ArenaDevice == nullptr)
-            {
-               LOG_ERROR << "CameraLucidArena_PHX016S::getModelName" << "Camera is nullptr";
-                return;
-            }
+            LOG_DEBUG << "CameraLucidArena_PHX016S::getModelName";
+
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
 
             double exposureMin = 0.0;
             double exposureMax = 0.0;
@@ -200,8 +282,6 @@ using namespace std;
                LOG_ERROR << "CameraLucidArena_PHX016S::getModelName" << "ExposureTime node not found";
                 return;
             }
-
-
 
             exposureMax = pExposureTime->GetMax();
             exposureMin = pExposureTime->GetMin();
@@ -226,11 +306,10 @@ using namespace std;
     double CameraLucidArena_PHX016S::getExposureTime()
     {
         try {
-            if (m_ArenaDevice == nullptr)
-            {
-               LOG_ERROR  <<"CameraLucidArena_PHX016S::getExposureTime" << "Camera is nullptr";
-                return -1.0;
-            }
+            LOG_DEBUG << "CameraLucidArena_PHX016S::getExposureTime";
+
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
 
             GenApi::CFloatPtr pExposureTime = m_ArenaDevice->GetNodeMap()->GetNode("ExposureTime");
 
@@ -262,11 +341,11 @@ using namespace std;
     bool CameraLucidArena_PHX016S::setExposureTime(double val)
     {
         try {
-            if (m_ArenaDevice == nullptr)
-            {
-                LOG_ERROR << "CameraLucidArena_PHX016S::setExposureTime; m_ArenaDevice is null";
-                return false;
-            }
+            LOG_DEBUG << "CameraLucidArena_PHX016S::setExposureTime (" << val <<")";
+
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
 
             double expMin, expMax;
 
@@ -289,7 +368,7 @@ using namespace std;
             }
             else
             {
-               LOG_DEBUG << "CameraLucidArena_PHX016S::setExposureTime; " << "> Exposure value (" << val << ") is not in range [ " << expMin << " - " << expMax << " ]";
+                LOG_DEBUG << "CameraLucidArena_PHX016S::setExposureTime; " << "> Exposure value (" << val << ") is not in range [ " << expMin << " - " << expMax << " ]";
                 return false;
             }
 
@@ -310,14 +389,25 @@ using namespace std;
         return false;
     }
 
+    double CameraLucidArena_PHX016S::getMinExposureTime()
+    {
+        LOG_DEBUG << "CameraLucidArena_PHX016S::getMinExposureTime";
+
+        return MIN_US_NORMAL;
+    }
+
+
+    /**
+     * GAIN
+     */
     bool CameraLucidArena_PHX016S::setGain(double val)
     {
         try {
-            if (m_ArenaDevice == nullptr)
-            {
-                LOG_ERROR << "CameraLucidArena_PHX016S::setExposureTime;m_ArenaDevice is null";
-                return false;
-            }
+            LOG_DEBUG << "CameraLucidArena_PHX016S::setGain" << "(" << val <<")";;
+
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
 
             double gMin, gMax;
 
@@ -366,13 +456,11 @@ using namespace std;
     double CameraLucidArena_PHX016S::getGain()
     {
         try {
-            LOG_DEBUG << "CameraLucidArena_PHX016S::getGain";
+            LOG_DEBUG << "CameraLucidArena_PHX016S::setGain";
 
-            if (m_ArenaDevice == nullptr)
-            {
-                LOG_ERROR << "CameraLucidArena_PHX016S::getGain;" << "Gain node not found";
-                return false;
-            }
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
 
             GenApi::CFloatPtr pGain = m_ArenaDevice->GetNodeMap()->GetNode("Gain");
 
@@ -398,17 +486,13 @@ using namespace std;
         return -1;
     }
 
-
     void CameraLucidArena_PHX016S::getGainBounds(double& gMin, double& gMax)
     {
-        LOG_DEBUG << "CameraLucidArena_PHX016S::getGainBounds";
-        try {
+         try {
+             LOG_DEBUG << "CameraLucidArena_PHX016S::getGainBounds";
 
-            if (m_ArenaDevice == nullptr)
-            {
-                LOG_ERROR << "CameraLucidArena_PHX016S::getGainBounds;" << "Camera is nullptr";
-                return;
-            }
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
 
             double gainMin = 0.0;
             double gainMax = 0.0;
@@ -440,52 +524,18 @@ using namespace std;
         }
     }
 
-    bool CameraLucidArena_PHX016S::getFPS(double& value)
-    {
-        LOG_DEBUG << "CameraLucidArena_PHX016S::getFPS";
-        try {
-            if (m_ArenaDevice == nullptr)
-            {
-                LOG_ERROR << "CameraLucidArena_PHX016S::getFPS;" << "Camera is nullptr";
-                return false;
-            }
 
-            GenApi::CFloatPtr pAcquisitionFrameRate = m_ArenaDevice->GetNodeMap()->GetNode("AcquisitionFrameRate");
-
-            if (!pAcquisitionFrameRate)
-            {
-                LOG_ERROR << "CameraLucidArena_PHX016S::getFPS;" << "AcquisitionFrameRate node not found";
-                return false;
-            }
-
-            value = pAcquisitionFrameRate->GetValue();
-
-            return true;
-        }
-        catch (GenICam::GenericException& e) {
-            LOG_ERROR << "CameraLucidArena_PHX016S::getFPS" << e.what();
-        }
-        catch (std::exception& ex)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::getFPS" << "Standard exception thrown: " << ex.what();
-        }
-        catch (...)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::getFPS" << "Unexpected exception thrown";
-        }
-
-        return false;
-    }
-
+    /**
+     * FRAME SIZE
+     */
     bool CameraLucidArena_PHX016S::getFrameSize(int& x, int& y, int& w, int& h)
     {
-        LOG_DEBUG << "CameraLucidArena_PHX016S::getFrameSize";
         try {
-            if (m_ArenaDevice == nullptr)
-            {
-                LOG_ERROR << "CameraLucidArena_PHX016S::getFrameSize;" << "Camera is nullptr";
-                return false;
-            }
+            LOG_DEBUG << "CameraLucidArena_PHX016S::getFrameSize";
+
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
 
             int64_t ww = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Width");
             int64_t hh = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Height");
@@ -514,71 +564,26 @@ using namespace std;
         return false;
     }
 
-    bool CameraLucidArena_PHX016S::setCustomFrameSize(int startx, int starty, int width, int height)
-    {
-        LOG_DEBUG << "CameraLucidArena_PHX016S::setCustomFrameSize";
-        try {
-            int64_t xx = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "OffsetX");
-
-            if (xx > 0)
-            {
-                LOG_INFO << "Starting from : " << m_StartX << "," << m_StartY;
-            }
-            else
-            {
-                LOG_WARNING << "OffsetX, OffsetY are not available: cannot set offset.";
-                return false;
-            }
-
-            Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "OffsetX", startx);
-            Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "OffsetY", starty);
-            Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Width", width);
-            Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Height", height);
-
-
-            m_StartX = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "OffsetX");
-            m_StartY = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "OffsetY");
-            m_Width = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Width");
-            m_Height = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Height");
-
-
-            LOG_INFO << "Camera region size : " << m_Width << "x" << m_Height;
-
-            return true;
-        }
-        catch (GenICam::GenericException& e) {
-            LOG_ERROR << "CameraLucidArena_PHX016S::setCustomFrameSize" << e.what();
-        }
-        catch (std::exception& ex)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::setCustomFrameSize" << "Standard exception thrown: " << ex.what();
-        }
-        catch (...)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::getFsetCustomFrameSizePS" << "Unexpected exception thrown";
-        }
-        return false;
-    }
-
     bool CameraLucidArena_PHX016S::setDefaultFrameSize()
     {
-
         try {
             LOG_DEBUG << "CameraLucidArena_PHX016S::setDefaultFrameSize";
+            
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
 
-            int64_t sensor_width = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "SensorWidth");
-            int64_t sensor_height = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "SensorHeigth");
-
-            LOG_INFO << "Camera sensor size : " << sensor_width << "x" << sensor_height;
+            LOG_DEBUG << "CameraLucidArena_PHX016S::setDefaultFrameSize;"<<"Camera sensor size : " << MAX_WIDTH << "x" << MAX_HEIGHT;
 
             Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "OffsetX", 0);
             Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "OffsetY", 0);
 
-            Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Width", sensor_width);
-            Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Height", sensor_height);
+            Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Width", MAX_WIDTH);
+            Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Height", MAX_HEIGHT);
 
             m_Width = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Width");
             m_Height = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Height");
+            m_StartX = 0;
+            m_StartY = 0;
 
             return true;
         }
@@ -596,68 +601,72 @@ using namespace std;
 
         return false;
     }
-
-    bool CameraLucidArena_PHX016S::setSize(int startx, int starty, int width, int height, bool customSize)
+    
+    bool CameraLucidArena_PHX016S::setFrameSize()
     {
         try {
-            LOG_DEBUG << "CameraLucidArena_PHX016S::setSize";
+            LOG_DEBUG << "CameraLucidArena_PHX016S::setFrameSize";
 
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
 
-            if (m_ArenaDevice == nullptr)
-            {
-                LOG_ERROR << "CameraLucidArena_PHX016S::setSize;" << "Camera is nullptr";
-                return false;
-            }
+            if (m_StartX % 2 != 0)
+                throw exception("X Offset must be multiple of 2");
 
-            if (customSize)
-            {
-                return setCustomFrameSize(startx, starty, width, height);
-            }
-            else
-            {
-                return setDefaultFrameSize();
-            }
+            Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Width", m_Width);
+            Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Height", m_Height);
+
+            Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "OffsetX", m_StartX);
+            Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "OffsetY", m_StartY);
+
+            m_StartX = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "OffsetX");
+            m_StartY = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "OffsetY");
+            m_Width = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Width");
+            m_Height = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Height");
+
+            LOG_DEBUG << "CameraLucidArena_PHX016S::setFrameSize;" << "Camera region size : " << m_Width << "x" << m_Height << "("<< m_StartX<<","<< m_StartY<<")";
 
             return true;
         }
         catch (GenICam::GenericException& e) {
-            LOG_ERROR << "CameraLucidArena_PHX016S::setSize" << e.what();
+            LOG_ERROR << "CameraLucidArena_PHX016S::setFrameSize;" << e.what();
         }
         catch (std::exception& ex)
         {
-            LOG_ERROR << "CameraLucidArena_PHX016S::setSize" << "Standard exception thrown: " << ex.what();
+            LOG_ERROR << "CameraLucidArena_PHX016S::setFrameSize;" << "Standard exception thrown: " << ex.what();
         }
         catch (...)
         {
-            LOG_ERROR << "CameraLucidArena_PHX016S::setSize" << "Unexpected exception thrown";
+            LOG_ERROR << "CameraLucidArena_PHX016S::setFrameSize;" << "Unexpected exception thrown";
         }
-
         return false;
     }
 
+
+    /**
+     * PIXEL FORMAT
+     */
     bool CameraLucidArena_PHX016S::getPixelFormat(CamPixFmt& format)
     {
         try {
             LOG_DEBUG << "CameraLucidArena_PHX016S::getPixelFormat";
+          
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
 
-            if (m_ArenaDevice == nullptr)
-            {
-                LOG_ERROR << "CameraLucidArena_PHX016S::getPixelFormat;" << "Camera is nullptr";
-                return false;
-            }
 
             GenICam::gcstring _pixFormat = Arena::GetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "PixelFormat");
 
             string pixFormat(_pixFormat.c_str());
 
             if (pixFormat == "Mono8")
-                format = MONO8;
+                format = CamPixFmt::MONO8;
             else
                 if (pixFormat == "Mono12")
-                    format = MONO12;
+                    format = CamPixFmt::MONO12;
                 else
                     if (pixFormat == "Mono16")
-                        format = MONO16;
+                        format = CamPixFmt::MONO16;
                     else
                         return false;
 
@@ -679,33 +688,29 @@ using namespace std;
         return false;
     }
 
-    bool CameraLucidArena_PHX016S::setPixelFormat(CamPixFmt depth)
+    bool CameraLucidArena_PHX016S::setPixelFormat()
     {
         try {
             LOG_DEBUG << "CameraLucidArena_PHX016S::setPixelFormat";
+           
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
 
-            if (m_ArenaDevice == nullptr)
-            {
-                LOG_ERROR << "CameraLucidArena_PHX016S::setPixelFormat;" << "Camera is nullptr";
-                return false;
-            }
-
-
-            switch (depth)
+            switch (m_PixelFormat)
             {
 
-            case MONO8:
+            case CamPixFmt::MONO8:
             {
                 Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "PixelFormat", "Mono8");
             }
             break;
 
-            case MONO12:
+            case CamPixFmt::MONO12:
             {
                 Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "PixelFormat", "Mono12");
             }
             break;
-            case MONO16:
+            case  CamPixFmt::MONO16:
             {
                 Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "PixelFormat", "Mono16");
             }
@@ -730,163 +735,132 @@ using namespace std;
         return false;
     }
 
-    bool CameraLucidArena_PHX016S::initOnce()
-    {
-        LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce";
-
-        return true;
-    }
-
-    bool CameraLucidArena_PHX016S::initSDK()
-    {
-        try
-        {
-            LOG_DEBUG << "CameraLucidArena_PHX016S::initSDK;" << "Retrieve Arena SDK instance";
-            m_ArenaSDKSystem = ArenaSDKManager::Get();
-        }
-        catch (GenICam::GenericException& e) {
-            LOG_ERROR << "CameraLucidArena_PHX016S::initSDK" << e.what();
-        }
-        catch (std::exception& ex)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::initSDK" << "Standard exception thrown: " << ex.what();
-        }
-        catch (...)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::initSDK" << "Unexpected exception thrown";
-        }
-
-        return true;
-    }
-
     void CameraLucidArena_PHX016S::getAvailablePixelFormats()
     {
         LOG_DEBUG << "CameraLucidArena_PHX016S::getAvailablePixelFormats";
 
-                LOG_INFO << ">> Device pixel formats (firmware ver: 1.65.0 - 01/2023  :";
-                LOG_INFO<< "- Mono8";
-                LOG_INFO<< "- Mono10";
-                LOG_INFO<< "- Mono10p";
-                LOG_INFO<< "- Mono10Packed";
-                LOG_INFO<< "- Mono12";
-                LOG_INFO<< "- Mono12p";
-                LOG_INFO<< "- Mono12Packed";
-                LOG_INFO<< "- Mono16";
-                LOG_INFO<< "- Mono24";
-                LOG_INFO<< "- PolarizeMono8";
-                LOG_INFO<< "- PolarizeMono12";
-                LOG_INFO<< "- PolarizeMono12p";
-                LOG_INFO<< "- PolarizeMono12Packed";
-                LOG_INFO<< "- PolarizeMono16";
-                LOG_INFO<< "- BayerGR8";
-                LOG_INFO<< "- BayerRG8";
-                LOG_INFO<< "- BayerGB8";
-                LOG_INFO<< "- BayerBG8";
-                LOG_INFO<< "- BayerGR10";
-                LOG_INFO<< "- BayerRG10";
-                LOG_INFO<< "- BayerGB10";
-                LOG_INFO<< "- BayerBG10";
-                LOG_INFO<< "- BayerGR10p";
-                LOG_INFO<< "- BayerRG10p";
-                LOG_INFO<< "- BayerGB10p";
-                LOG_INFO<< "- BayerBG10p";
-                LOG_INFO<< "- BayerGR10Packed";
-                LOG_INFO<< "- BayerRG10Packed";
-                LOG_INFO<< "- BayerGB10Packed";
-                LOG_INFO<< "- BayerBG10Packed";
-                LOG_INFO<< "- BayerGR12";
-                LOG_INFO<< "- BayerRG12";
-                LOG_INFO<< "- BayerGB12";
-                LOG_INFO<< "- BayerBG12";
-                LOG_INFO<< "- BayerGR12p";
-                LOG_INFO<< "- BayerRG12p";
-                LOG_INFO<< "- BayerGB12p";
-                LOG_INFO<< "- BayerBG12p";
-                LOG_INFO<< "- BayerGR12Packed";
-                LOG_INFO<< "- BayerRG12Packed";
-                LOG_INFO<< "- BayerGB12Packed";
-                LOG_INFO<< "- BayerBG12Packed";
-                LOG_INFO<< "- BayerGR16";
-                LOG_INFO<< "- BayerRG16";
-                LOG_INFO<< "- BayerGB16";
-                LOG_INFO<< "- BayerBG16";
-                LOG_INFO<< "- BayerGR24";
-                LOG_INFO<< "- BayerRG24";
-                LOG_INFO<< "- BayerGB24";
-                LOG_INFO<< "- BayerBG24";
-                LOG_INFO<< "- RGB8";
-                LOG_INFO<< "- RGB12p";
-                LOG_INFO<< "- RGB16";
-                LOG_INFO<< "- RGB24";
-                LOG_INFO<< "- BGR8";
-                LOG_INFO<< "- BGR12p";
-                LOG_INFO<< "- BGR16";
-                LOG_INFO<< "- BGR24";
-                LOG_INFO<< "- YCbCr8";
-                LOG_INFO<< "- YCbCr8_CbYCr";
-                LOG_INFO<< "- YUV422_8";
-                LOG_INFO<< "- YUV422_8_UYVY";
-                LOG_INFO<< "- YCbCr411_8";
-                LOG_INFO<< "- YUV411_8_UYYVYY";
-                LOG_INFO<< "- PolarizedAngles_0d_45d_90d_135d_Mono8";
-                LOG_INFO<< "- PolarizedAngles_0d_45d_90d_135d_Mono12p";
-                LOG_INFO<< "- PolarizedAngles_0d_45d_90d_135d_Mono16";
-                LOG_INFO<< "- PolarizedStokes_S0_S1_S2_Mono8";
-                LOG_INFO<< "- PolarizedStokes_S0_S1_S2_Mono12p";
-                LOG_INFO<< "- PolarizedStokes_S0_S1_S2_Mono16";
-                LOG_INFO<< "- PolarizedStokes_S0_S1_S2_S3_Mono8";
-                LOG_INFO<< "- PolarizedStokes_S0_S1_S2_S3_Mono12p";
-                LOG_INFO<< "- PolarizedStokes_S0_S1_S2_S3_Mono16";
-                LOG_INFO<< "- PolarizedDolpAolp_Mono8";
-                LOG_INFO<< "- PolarizedDolpAolp_Mono12p";
-                LOG_INFO<< "- PolarizedDolp_Mono8";
-                LOG_INFO<< "- PolarizedDolp_Mono12p";
-                LOG_INFO<< "- PolarizedAolp_Mono8";
-                LOG_INFO<< "- PolarizedAolp_Mono12p";
-                LOG_INFO<< "- PolarizedAngles_0d_45d_90d_135d_BayerRG8";
-                LOG_INFO<< "- PolarizedAngles_0d_45d_90d_135d_BayerRG12p";
-                LOG_INFO<< "- PolarizedAngles_0d_45d_90d_135d_BayerRG16";
-                LOG_INFO<< "- PolarizedStokes_S0_S1_S2_BayerRG8";
-                LOG_INFO<< "- PolarizedStokes_S0_S1_S2_BayerRG12p";
-                LOG_INFO<< "- PolarizedStokes_S0_S1_S2_BayerRG16";
-                LOG_INFO<< "- PolarizedStokes_S0_S1_S2_S3_BayerRG8";
-                LOG_INFO<< "- PolarizedStokes_S0_S1_S2_S3_BayerRG12p";
-                LOG_INFO<< "- PolarizedStokes_S0_S1_S2_S3_BayerRG16";
-                LOG_INFO<< "- PolarizedDolpAolp_BayerRG8";
-                LOG_INFO<< "- PolarizedDolpAolp_BayerRG12p";
-                LOG_INFO<< "- PolarizedDolp_BayerRG8";
-                LOG_INFO<< "- PolarizedDolp_BayerRG12p";
-                LOG_INFO<< "- PolarizedAolp_BayerRG8";
-                LOG_INFO<< "- PolarizedAolp_BayerRG12p";
-                LOG_INFO<< "- Raw24";
-                LOG_INFO<< "- Raw16";
-                LOG_INFO<< "- YCbCr422_8_CbYCrY";
-                LOG_INFO<< "- YCbCr422_16_CbYCrY";
-                LOG_INFO<< "- YCbCr422_24_CbYCrY";
-                LOG_INFO<< "- YCbCr411_8_CbYYCrYY";
-                LOG_INFO<< "- YCbCr411_16_CbYYCrYY";
-                LOG_INFO<< "- YCbCr411_24_CbYYCrYY";
-                LOG_INFO<< "- PolarizedDolpAngle_Mono8";
-                LOG_INFO<< "- PolarizedDolpAngle_Mono12p";
-                LOG_INFO<< "- PolarizedDolpAngle_Mono16";
-                LOG_INFO<< "- PolarizedDolpAngle_BayerRG8";
-                LOG_INFO<< "- PolarizedDolpAngle_BayerRG12p";
-                LOG_INFO<< "- PolarizedDolpAngle_BayerRG16";
+        LOG_INFO << ">> Device pixel formats (firmware ver: 1.65.0 - 01/2023  :";
+        LOG_INFO << "- Mono8";
+        LOG_INFO << "- Mono10";
+        LOG_INFO << "- Mono10p";
+        LOG_INFO << "- Mono10Packed";
+        LOG_INFO << "- Mono12";
+        LOG_INFO << "- Mono12p";
+        LOG_INFO << "- Mono12Packed";
+        LOG_INFO << "- Mono16";
+        LOG_INFO << "- Mono24";
+        LOG_INFO << "- PolarizeMono8";
+        LOG_INFO << "- PolarizeMono12";
+        LOG_INFO << "- PolarizeMono12p";
+        LOG_INFO << "- PolarizeMono12Packed";
+        LOG_INFO << "- PolarizeMono16";
+        LOG_INFO << "- BayerGR8";
+        LOG_INFO << "- BayerRG8";
+        LOG_INFO << "- BayerGB8";
+        LOG_INFO << "- BayerBG8";
+        LOG_INFO << "- BayerGR10";
+        LOG_INFO << "- BayerRG10";
+        LOG_INFO << "- BayerGB10";
+        LOG_INFO << "- BayerBG10";
+        LOG_INFO << "- BayerGR10p";
+        LOG_INFO << "- BayerRG10p";
+        LOG_INFO << "- BayerGB10p";
+        LOG_INFO << "- BayerBG10p";
+        LOG_INFO << "- BayerGR10Packed";
+        LOG_INFO << "- BayerRG10Packed";
+        LOG_INFO << "- BayerGB10Packed";
+        LOG_INFO << "- BayerBG10Packed";
+        LOG_INFO << "- BayerGR12";
+        LOG_INFO << "- BayerRG12";
+        LOG_INFO << "- BayerGB12";
+        LOG_INFO << "- BayerBG12";
+        LOG_INFO << "- BayerGR12p";
+        LOG_INFO << "- BayerRG12p";
+        LOG_INFO << "- BayerGB12p";
+        LOG_INFO << "- BayerBG12p";
+        LOG_INFO << "- BayerGR12Packed";
+        LOG_INFO << "- BayerRG12Packed";
+        LOG_INFO << "- BayerGB12Packed";
+        LOG_INFO << "- BayerBG12Packed";
+        LOG_INFO << "- BayerGR16";
+        LOG_INFO << "- BayerRG16";
+        LOG_INFO << "- BayerGB16";
+        LOG_INFO << "- BayerBG16";
+        LOG_INFO << "- BayerGR24";
+        LOG_INFO << "- BayerRG24";
+        LOG_INFO << "- BayerGB24";
+        LOG_INFO << "- BayerBG24";
+        LOG_INFO << "- RGB8";
+        LOG_INFO << "- RGB12p";
+        LOG_INFO << "- RGB16";
+        LOG_INFO << "- RGB24";
+        LOG_INFO << "- BGR8";
+        LOG_INFO << "- BGR12p";
+        LOG_INFO << "- BGR16";
+        LOG_INFO << "- BGR24";
+        LOG_INFO << "- YCbCr8";
+        LOG_INFO << "- YCbCr8_CbYCr";
+        LOG_INFO << "- YUV422_8";
+        LOG_INFO << "- YUV422_8_UYVY";
+        LOG_INFO << "- YCbCr411_8";
+        LOG_INFO << "- YUV411_8_UYYVYY";
+        LOG_INFO << "- PolarizedAngles_0d_45d_90d_135d_Mono8";
+        LOG_INFO << "- PolarizedAngles_0d_45d_90d_135d_Mono12p";
+        LOG_INFO << "- PolarizedAngles_0d_45d_90d_135d_Mono16";
+        LOG_INFO << "- PolarizedStokes_S0_S1_S2_Mono8";
+        LOG_INFO << "- PolarizedStokes_S0_S1_S2_Mono12p";
+        LOG_INFO << "- PolarizedStokes_S0_S1_S2_Mono16";
+        LOG_INFO << "- PolarizedStokes_S0_S1_S2_S3_Mono8";
+        LOG_INFO << "- PolarizedStokes_S0_S1_S2_S3_Mono12p";
+        LOG_INFO << "- PolarizedStokes_S0_S1_S2_S3_Mono16";
+        LOG_INFO << "- PolarizedDolpAolp_Mono8";
+        LOG_INFO << "- PolarizedDolpAolp_Mono12p";
+        LOG_INFO << "- PolarizedDolp_Mono8";
+        LOG_INFO << "- PolarizedDolp_Mono12p";
+        LOG_INFO << "- PolarizedAolp_Mono8";
+        LOG_INFO << "- PolarizedAolp_Mono12p";
+        LOG_INFO << "- PolarizedAngles_0d_45d_90d_135d_BayerRG8";
+        LOG_INFO << "- PolarizedAngles_0d_45d_90d_135d_BayerRG12p";
+        LOG_INFO << "- PolarizedAngles_0d_45d_90d_135d_BayerRG16";
+        LOG_INFO << "- PolarizedStokes_S0_S1_S2_BayerRG8";
+        LOG_INFO << "- PolarizedStokes_S0_S1_S2_BayerRG12p";
+        LOG_INFO << "- PolarizedStokes_S0_S1_S2_BayerRG16";
+        LOG_INFO << "- PolarizedStokes_S0_S1_S2_S3_BayerRG8";
+        LOG_INFO << "- PolarizedStokes_S0_S1_S2_S3_BayerRG12p";
+        LOG_INFO << "- PolarizedStokes_S0_S1_S2_S3_BayerRG16";
+        LOG_INFO << "- PolarizedDolpAolp_BayerRG8";
+        LOG_INFO << "- PolarizedDolpAolp_BayerRG12p";
+        LOG_INFO << "- PolarizedDolp_BayerRG8";
+        LOG_INFO << "- PolarizedDolp_BayerRG12p";
+        LOG_INFO << "- PolarizedAolp_BayerRG8";
+        LOG_INFO << "- PolarizedAolp_BayerRG12p";
+        LOG_INFO << "- Raw24";
+        LOG_INFO << "- Raw16";
+        LOG_INFO << "- YCbCr422_8_CbYCrY";
+        LOG_INFO << "- YCbCr422_16_CbYCrY";
+        LOG_INFO << "- YCbCr422_24_CbYCrY";
+        LOG_INFO << "- YCbCr411_8_CbYYCrYY";
+        LOG_INFO << "- YCbCr411_16_CbYYCrYY";
+        LOG_INFO << "- YCbCr411_24_CbYYCrYY";
+        LOG_INFO << "- PolarizedDolpAngle_Mono8";
+        LOG_INFO << "- PolarizedDolpAngle_Mono12p";
+        LOG_INFO << "- PolarizedDolpAngle_Mono16";
+        LOG_INFO << "- PolarizedDolpAngle_BayerRG8";
+        LOG_INFO << "- PolarizedDolpAngle_BayerRG12p";
+        LOG_INFO << "- PolarizedDolpAngle_BayerRG16";
 
-                // Compare found pixel formats to currently formats supported by freeture
+        // Compare found pixel formats to currently formats supported by freeture
 
-                LOG_INFO<< endl <<  ">> Available pixel formats :";
-                LOG_INFO<< "- MONO8 available --> ID : Mono8 "<< endl;
-                LOG_INFO<< "- MONO12 available --> ID : Mono12 ";
-                LOG_INFO<< "- MONO16 available --> ID : Mono16";
+        LOG_INFO << endl << ">> Available pixel formats :";
+        LOG_INFO << "- MONO8 available --> ID : Mono8 " << endl;
+        LOG_INFO << "- MONO12 available --> ID : Mono12 ";
+        LOG_INFO << "- MONO16 available --> ID : Mono16";
 
     }
 
-    void CameraLucidArena_PHX016S::grabCleanse()
-    {
-        LOG_DEBUG << "CameraLucidArena_PHX016S::grabCleanse; *** DO NOTHING ***";
-    }
-
+    /**
+     * MODE
+     */
     void CameraLucidArena_PHX016S::acqStop()
     {
         try {
@@ -911,7 +885,9 @@ using namespace std;
             LOG_INFO << "Stopping acquisition...";
 
             m_ArenaDevice->StopStream();
+
             m_Streaming = false;
+
             LOG_INFO << "Acquisition stopped.";
         }
         catch (GenICam::GenericException& e) {
@@ -926,6 +902,238 @@ using namespace std;
             LOG_ERROR << "CameraLucidArena_PHX016S::acqStop" << "Unexpected exception thrown";
         }
     }
+
+    void CameraLucidArena_PHX016S::grabCleanse()
+    {
+        LOG_DEBUG << "CameraLucidArena_PHX016S::grabCleanse; *** DO NOTHING ***";
+    }
+
+    bool CameraLucidArena_PHX016S::grabImage(Frame& newFrame)
+    {
+        try
+        {
+            if (LOG_SPAM_FRAME_STATUS)
+                LOG_DEBUG << "CameraLucidArena_PHX016S::grabImage";
+
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
+            Arena::IImage* pImage = m_ArenaDevice->GetImage(IMAGE_TIMEOUT);
+
+            if (!pImage->HasImageData()) {
+                LOG_ERROR << "Image has not image data";
+            }
+
+            if (pImage->HasChunkData()) {
+                LOG_ERROR << "Image has data chunk";
+            }
+            size_t payload_size = pImage->GetPayloadSize();
+            size_t size = pImage->GetSizeFilled();
+            size_t width = pImage->GetWidth();
+            size_t height = pImage->GetHeight();
+            size_t size_of_buffer = pImage->GetSizeOfBuffer();
+
+            if (pImage->IsIncomplete()) {
+                LOG_ERROR << "Image is incomplete: " << " size_filled=" << size << "<= payload size= " << payload_size << "<= size_of_buffer" << size_of_buffer;
+                LOG_ERROR << "this is likely due to missed packets or a small buffer";
+                getStreamMissedPacketCount();
+            }
+
+
+            string m_PixelFormat = GetPixelFormatName(static_cast<PfncFormat>(pImage->GetPixelFormat()));
+
+            uint64_t timestampNs = pImage->GetTimestampNs();
+
+            if (LOG_SPAM_FRAME_STATUS)
+                LOG_DEBUG << " (" << " Gain " << m_Gain << "; FPS " << m_FPS << "; Exposure " << m_ExposureTime << "; " << size << " bytes; " << width << "x" << height << "; " << m_PixelFormat << "; timestamp (ns): " << timestampNs << ")";
+
+            const uint8_t* u_buffer_data = pImage->GetData();
+
+            size_t buffer_size = pImage->GetSizeFilled();
+
+            CopyFrame(newFrame, u_buffer_data, buffer_size);
+
+            m_ArenaDevice->RequeueBuffer(pImage);
+
+            return true;
+        }
+        catch (GenICam::GenericException& e) {
+            LOG_ERROR << "CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S;" << e.what();
+        }
+        catch (std::exception& ex)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S;" << "Standard exception thrown: " << ex.what();
+        }
+        catch (...)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S;" << "Unexpected exception thrown";
+        }
+        return false;
+    }
+
+    bool CameraLucidArena_PHX016S::acqStart()
+    {
+        LOG_DEBUG << "CameraLucidArena_PHX016S::acqStart";
+
+        return acqStart(true);
+    }
+
+    bool CameraLucidArena_PHX016S::acqStart(bool continuous)
+    {
+        try {
+            LOG_DEBUG << "CameraLucidArena_PHX016S::acqStart";
+
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
+            if (continuous) {
+                // Set acquisition mode
+                //    Set acquisition mode before starting the stream. Starting the stream
+                //    requires the acquisition mode to be set beforehand. The acquisition
+                //    mode controls the number of images a device acquires once the stream
+                //    has been started. Setting the acquisition mode to 'Continuous' keeps
+                //    the stream from stopping. This example returns the camera to its
+                //    initial acquisition mode near the end of the example.
+                LOG_INFO << "CameraLucidArena_PHX016S::acqStart;" << "Set camera to CONTINUOUS MODE";
+                Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "AcquisitionMode", "Continuous");
+            }
+            else {
+                LOG_INFO << "CameraLucidArena_PHX016S::acqStart;" << "Set camera to SINGLEFRAME";
+                Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "AcquisitionMode", "SingleFrame");
+            }
+
+            // Start stream
+            //    Start the stream before grabbing any images. Starting the stream
+            //    allocates buffers, which can be passed in as an argument (default: 10),
+            //    and begins filling them with data. Starting the stream blocks write
+            //    access to many features such as width, height, and pixel format, as
+            //    well as acquisition and buffer handling modes, among others. The stream
+            //    needs to be stopped later.
+            LOG_INFO << "CameraLucidArena_PHX016S::acqStart;" << "Start acquisition on camera";
+            m_ArenaDevice->StartStream();
+           
+            m_Streaming = true;
+
+            return true;
+        }
+        catch (GenICam::GenericException& e) {
+            LOG_ERROR << "CameraLucidArena_PHX016S::acqStart;" << e.what();
+        }
+        catch (std::exception& ex)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::acqStart;" << "Standard exception thrown: " << ex.what();
+        }
+        catch (...)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::acqStart;" << "Unexpected exception thrown";
+        }
+
+        return false;
+    }
+
+    bool CameraLucidArena_PHX016S::grabSingleImage(Frame& frame)
+    {
+        bool res = true;
+
+        try {
+            LOG_DEBUG << "CameraLucidArena_PHX016S::grabSingleImage";
+
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
+            if (!setNightRegular())
+                return false;
+
+            m_FPS = MIN_FPS;
+            m_PixelFormat = frame.mFormat;
+            m_ExposureTime = frame.mExposure;
+            m_Gain = frame.mGain;
+
+            if (!grabInitialization())
+                throw exception("FAILED TO grabInitialization");
+
+            if (!acqStart(false))
+                throw exception("FAILED TO acqStart");
+
+            if (!m_ArenaDevice)
+                throw exception("DEVICE DIED");
+
+            Arena::IImage* pImage = m_ArenaDevice->GetImage(IMAGE_TIMEOUT);
+
+            if (pImage->HasImageData()) {
+                LOG_ERROR << "Image has data";
+            }
+
+            if (pImage->HasChunkData()) {
+                LOG_ERROR << "Image has data chunk";
+            }
+
+            if (pImage->IsIncomplete()) {
+                LOG_ERROR << "Image is incomplete";
+                return false;
+            }
+
+            size_t size = pImage->GetSizeFilled();
+            size_t width = pImage->GetWidth();
+            size_t height = pImage->GetHeight();
+            string format = GetPixelFormatName(static_cast<PfncFormat>(pImage->GetPixelFormat()));
+            uint64_t timestampNs = pImage->GetTimestampNs();
+
+            LOG_DEBUG << " (" << " Gain " << m_Gain << "; FPS " << m_FPS << "; Exposure " << m_ExposureTime << "; " << size << " bytes; " << width << "x" << height << "; " << format << "; timestamp (ns): " << timestampNs << ")";
+
+            const uint8_t* u_buffer_data = pImage->GetData();
+            size_t buffer_size = pImage->GetSizeFilled();
+
+            CopyFrame(frame, u_buffer_data, buffer_size);
+
+            //    Requeue image buffer
+            //    Requeue an image buffer when access to it is no longer needed.
+            //    Notice that failing to requeue buffers may cause memory to leak and
+            //    may also result in the stream engine being starved due to there
+            //    being no available buffers.
+            m_ArenaDevice->RequeueBuffer(pImage);
+        }
+        catch (GenICam::GenericException& e) {
+            res = false;
+            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << e.what();
+        }
+        catch (std::exception& ex)
+        {
+            res = false;
+            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << "Standard exception thrown: " << ex.what();
+        }
+        catch (...)
+        {
+            res = false;
+            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << "Unexpected exception thrown";
+        }
+
+        try
+        {
+
+            LOG_DEBUG << "CameraLucidArena_PHX016S::grabSingleImage" << "Stop Stream";
+            m_ArenaDevice->StopStream();
+            return res;
+        }
+        catch (GenICam::GenericException& e) {
+            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << e.what();
+        }
+        catch (std::exception& ex)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << "Standard exception thrown: " << ex.what();
+        }
+        catch (...)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << "Unexpected exception thrown";
+        }
+
+        return false;
+    }
+
+
+    /**
+     * INTERNALS
+     */
 
     /// <summary>
     /// Set continuous mode ans set FPS to current rate
@@ -959,8 +1167,11 @@ using namespace std;
         try {
             LOG_DEBUG << "CameraLucidArena_PHX016S::setSingleShotMode";
 
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
             Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "AcquisitionMode", "SingleFrame");
-            
+
             if (!setFPS(MIN_FPS))
                 return false;
 
@@ -980,11 +1191,13 @@ using namespace std;
         return false;
     }
 
-
     bool  CameraLucidArena_PHX016S::setDayContinuous()
     {
         try {
             LOG_DEBUG << "CameraLucidArena_PHX016S::setDayContinuous";
+
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
 
             setContinuousMode();
             setGain(m_CameraSettings.ACQ_DAY_GAIN);
@@ -1010,6 +1223,9 @@ using namespace std;
         try {
             LOG_DEBUG << "CameraLucidArena_PHX016S::setNightContinuous";
 
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
             setContinuousMode();
             setGain(m_CameraSettings.ACQ_NIGHT_GAIN);
             setExposureTime(m_CameraSettings.ACQ_NIGHT_EXPOSURE);
@@ -1033,6 +1249,9 @@ using namespace std;
     bool CameraLucidArena_PHX016S::setDayRegular() {
         try {
             LOG_DEBUG << "CameraLucidArena_PHX016S::setDayRegular";
+
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
 
             setSingleShotMode();
             setGain(m_CameraSettings.ACQ_DAY_GAIN);
@@ -1058,6 +1277,9 @@ using namespace std;
         try {
             LOG_DEBUG << "CameraLucidArena_PHX016S::setNightRegular";
 
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
             setSingleShotMode();
             setGain(m_CameraSettings.regcap.ACQ_REGULAR_CFG.gain);
             setExposureTime(m_CameraSettings.regcap.ACQ_REGULAR_CFG.exp);
@@ -1078,330 +1300,25 @@ using namespace std;
         return false;
     }
 
-    bool CameraLucidArena_PHX016S::acqStart()
+    void CameraLucidArena_PHX016S::getStreamMissedPacketCount()
     {
-        return acqStart(true);
-    }
+        try
+        {
+            LOG_DEBUG << "CameraLucidArena_PHX016S::getStreamMissedPacketCount";
 
-    bool CameraLucidArena_PHX016S::acqStart(bool continuous)
-    {
-        try {
-            LOG_DEBUG << "CameraLucidArena_PHX016S::acqStart";
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
 
-            if (m_ArenaDevice == nullptr)
+            GenApi::INode* pNode = m_ArenaDevice->GetTLStreamNodeMap()->GetNode("StreamMissedPacketCount");
+            if (pNode)
             {
-                LOG_ERROR << "CameraLucidArena_PHX016S::acqStart;" << "Camera is nullptr";
-                return false;
+                GenApi::CIntegerPtr val = pNode;
+                m_MissingPacketCount = val->GetValue();
+                if (m_PreviousMissingPacketCount != m_MissingPacketCount) {
+                    LOG_WARNING << "Missing packet count was " << m_PreviousMissingPacketCount << " now is " << m_MissingPacketCount;
+                    m_PreviousMissingPacketCount = m_MissingPacketCount;
+                }
             }
-
-            if (continuous) {
-                // Set acquisition mode
-                //    Set acquisition mode before starting the stream. Starting the stream
-                //    requires the acquisition mode to be set beforehand. The acquisition
-                //    mode controls the number of images a device acquires once the stream
-                //    has been started. Setting the acquisition mode to 'Continuous' keeps
-                //    the stream from stopping. This example returns the camera to its
-                //    initial acquisition mode near the end of the example.
-                LOG_INFO << "Set camera to CONTINUOUS MODE";
-                Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "AcquisitionMode", "Continuous");
-            }
-            else {
-                LOG_INFO << "Set camera to SINGLEFRAME";
-                Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "AcquisitionMode", "SingleFrame");
-            }
-            // Set buffer handling mode
-            //    Set buffer handling mode before starting the stream. Starting the
-            //    stream requires the buffer handling mode to be set beforehand. The
-            //    buffer handling mode determines the order and behavior of buffers in
-            //    the underlying stream engine. Setting the buffer handling mode to
-            // 
-            //    'NewestOnly' ensures the most recent image is delivered, even if it
-            //    means skipping frames.
-            LOG_INFO << "Set buffer handling mode to 'NewestOnly'";
-            Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamBufferHandlingMode", "NewestOnly");
-
-            // Enable stream auto negotiate packet size
-            //    Setting the stream packet size is done before starting the stream.
-            //    Setting the stream to automatically negotiate packet size instructs
-            //    the camera to receive the largest packet size that the system will
-            //    allow. This generally increases frame rate and results in fewer
-            //    interrupts per image, thereby reducing CPU load on the host system.
-            //    Ethernet settings may also be manually changed to allow for a
-            //    larger packet size.
-            LOG_INFO << "Enable stream to auto negotiate packet size";
-
-            // Disable stream packet resend
-            //    Enable stream packet resend before starting the stream. Images are
-            //    sent from the camera to the host in packets using UDP protocol,
-            //    which includes a header image number, packet number, and timestamp
-            //    information. If a packet is missed while receiving an image, a
-            //    packet resend is requested and this information is used to retrieve
-            //    and redeliver the missing packet in the correct order.
-            LOG_INFO << "Disable stream packet resend";
-            Arena::SetNodeValue<bool>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamPacketResendEnable", false);
-
-
-            Arena::SetNodeValue<bool>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamAutoNegotiatePacketSize", true);
-
-            LOG_INFO << "Set camera TriggerMode to Off";
-            Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "TriggerMode", "Off");
-
-            // Start stream
-            //    Start the stream before grabbing any images. Starting the stream
-            //    allocates buffers, which can be passed in as an argument (default: 10),
-            //    and begins filling them with data. Starting the stream blocks write
-            //    access to many features such as width, height, and pixel format, as
-            //    well as acquisition and buffer handling modes, among others. The stream
-            //    needs to be stopped later.
-            LOG_INFO << "Start acquisition on camera";
-            m_ArenaDevice->StartStream();
-            m_Streaming = false;
-
-            return true;
-        }
-        catch (GenICam::GenericException& e) {
-            LOG_ERROR << "CameraLucidArena_PHX016S::acqStart" << e.what();
-        }
-        catch (std::exception& ex)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::acqStart" << "Standard exception thrown: " << ex.what();
-        }
-        catch (...)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::acqStart" << "Unexpected exception thrown";
-        }
-
-        return false;
-    }
-
-    bool CameraLucidArena_PHX016S::init()
-    {
-        LOG_DEBUG << "CameraLucidArena_PHX016S::init";
-        getTemperature("Sensor");
-        return true;
-    }
-
-    bool CameraLucidArena_PHX016S::grabInitialization()
-    {
-        try {
-            LOG_DEBUG << "CameraLucidArena_PHX016S::grabInitialization";
-
-            frameCounter = 0;
-
-            LOG_INFO << "Camera payload (NOT USED): " << payload;
-
-            LOG_INFO << "DEVICE SELECTED : " << m_CameraDescriptor.Id;
-            LOG_INFO << "DEVICE DESCRIPTION: " << m_CameraDescriptor.Description;
-            LOG_INFO << "DEVICE VENDOR   : " << "Lucid";
-
-            LOG_INFO << "PAYLOAD         : " << payload;
-            LOG_INFO << "Start X         : " << m_StartX;
-            LOG_INFO << "Start Y         : " << m_StartY;
-            LOG_INFO << "Width           : " << m_Width;
-            LOG_INFO << "Height          : " << m_Height;
-            LOG_INFO << "Exp Range       : [" << m_MinExposure << " - " << m_MaxExposure << "]";
-            LOG_INFO << "Exp             : " << m_ExposureTime;
-            LOG_INFO << "Gain Range      : [" << m_MinGain << " - " << m_MaxGain << "]";
-            LOG_INFO << "Gain            : " << m_Gain;
-            LOG_INFO << "Fps             : " << m_FPS;
-            LOG_INFO << "Type            : " << m_PixelFormat;
-
-            setGain(m_Gain);
-            setFPS(m_FPS);
-            setExposureTime(m_ExposureTime);
-
-            // Set buffer handling mode
-            //    Set buffer handling mode before starting the stream. Starting the
-            //    stream requires the buffer handling mode to be set beforehand. The
-            //    buffer handling mode determines the order and behavior of buffers in
-            //    the underlying stream engine. Setting the buffer handling mode to
-            //    'NewestOnly' ensures the most recent image is delivered, even if it
-            //    means skipping frames.
-
-            LOG_INFO << "Set buffer handling mode to 'NewestOnly'";
-            Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamBufferHandlingMode", "NewestOnly");
-
-            // Enable stream auto negotiate packet size
-            //    Setting the stream packet size is done before starting the stream.
-            //    Setting the stream to automatically negotiate packet size instructs
-            //    the camera to receive the largest packet size that the system will
-            //    allow. This generally increases frame rate and results in fewer
-            //    interrupts per image, thereby reducing CPU load on the host system.
-            //    Ethernet settings may also be manually changed to allow for a
-            //    larger packet size.
-
-            LOG_INFO << "Enable stream to auto negotiate packet size";
-            Arena::SetNodeValue<bool>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamAutoNegotiatePacketSize", true);
-
-            // Disable stream packet resend
-            //    Enable stream packet resend before starting the stream. Images are
-            //    sent from the camera to the host in packets using UDP protocol,
-            //    which includes a header image number, packet number, and timestamp
-            //    information. If a packet is missed while receiving an image, a
-            //    packet resend is requested and this information is used to retrieve
-            //    and redeliver the missing packet in the correct order.
-
-            LOG_INFO << "Disable stream packet resend";
-            Arena::SetNodeValue<bool>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamPacketResendEnable", false);
-
-            return true;
-        }
-        catch (GenICam::GenericException& e) {
-            LOG_ERROR << "CameraLucidArena_PHX016S::grabInitialization" << e.what();
-        }
-        catch (std::exception& ex)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::grabInitialization" << "Standard exception thrown: " << ex.what();
-        }
-        catch (...)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::grabInitialization" << "Unexpected exception thrown";
-        }
-        return false;
-    }
-
-
-    bool CameraLucidArena_PHX016S::grabSingleImage(Frame& frame)
-    {
-        bool res = true;
-
-        try {
-            LOG_DEBUG << "CameraLucidArena_PHX016S::grabSingleImage";
-
-            if (!setNightRegular())
-                return false;
-            
-            m_FPS = MIN_FPS;
-            m_PixelFormat = frame.mFormat;
-            m_ExposureTime = frame.mExposure;
-            m_Gain = frame.mGain;
-
-            if (!grabInitialization())
-                throw "FAILED TO grabInitialization";
-            
-            if (!acqStart(false))
-                throw "FAILED TO acqStart";
-
-            if (!m_ArenaDevice)
-                throw "DEVICE DIED";
-
-            Arena::IImage* pImage = m_ArenaDevice->GetImage(IMAGE_TIMEOUT);
-            size_t size = pImage->GetSizeFilled();
-            size_t width = pImage->GetWidth();
-            size_t height = pImage->GetHeight();
-            m_PixelFormat = GetPixelFormatName(static_cast<PfncFormat>(pImage->GetPixelFormat()));
-            uint64_t timestampNs = pImage->GetTimestampNs();
-           
-            LOG_DEBUG << " (" << " Gain " << m_Gain << "; FPS " << m_FPS << "; Exposure " << m_ExposureTime << "; " << size << " bytes; " << width << "x" << height << "; " << m_PixelFormat << "; timestamp (ns): " << timestampNs << ")";
-
-            const uint8_t* u_buffer_data = pImage->GetData();
-
-            char* buffer_data = to_char_ptr(u_buffer_data);
-
-            size_t buffer_size = pImage->GetSizeFilled();
-
-            CopyFrame(frame, buffer_data);
-          
-            // Requeue image buffer
-            //    Requeue an image buffer when access to it is no longer needed.
-            //    Notice that failing to requeue buffers may cause memory to leak and
-            //    may also result in the stream engine being starved due to there
-            //    being no available buffers.
-            m_ArenaDevice->RequeueBuffer(pImage);
-        }
-        catch (GenICam::GenericException& e) {
-            res = false;
-            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << e.what();
-        }
-        catch (std::exception& ex)
-        {
-            res = false;
-            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << "Standard exception thrown: " << ex.what();
-        }
-        catch (...)
-        {
-            res = false;
-            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << "Unexpected exception thrown";
-        }
-
-        try
-        {
-          
-            LOG_DEBUG << "CameraLucidArena_PHX016S::grabSingleImage" << "Stop Stream";
-            m_ArenaDevice->StopStream();
-            return res;
-        }
-        catch (GenICam::GenericException& e) {
-            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << e.what();
-        }
-        catch (std::exception& ex)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << "Standard exception thrown: " << ex.what();
-        }
-        catch (...)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << "Unexpected exception thrown";
-        }
-
-        return false;
-    }
-
-    /**
-     * DTor.
-     */
-    CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S()
-    {
-        try {
-
-            if (m_Streaming)
-                acqStop();
-
-            m_ArenaSDKSystem->DestroyDevice(m_ArenaDevice);
-        }
-        catch (GenICam::GenericException& e) {
-            LOG_ERROR << "CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S; " << e.what();
-        }
-        catch (std::exception& ex)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S; " << "Standard exception thrown: " << ex.what();
-        }
-        catch (...)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S;" << "Unexpected exception thrown";
-        }
-    }
-
-    bool CameraLucidArena_PHX016S::grabImage(Frame& newFrame)
-    {
-        try
-        {
-            // LOG_DEBUG << "CameraLucidArena_PHX016S::grabImage"; // !!!! LOG SPAM !!!!
-
-            Arena::IImage* pImage = m_ArenaDevice->GetImage(IMAGE_TIMEOUT);
-
-            size_t size = pImage->GetSizeFilled();
-            size_t width = pImage->GetWidth();
-            size_t height = pImage->GetHeight();
-
-            m_PixelFormat = GetPixelFormatName(static_cast<PfncFormat>(pImage->GetPixelFormat()));
-
-            uint64_t timestampNs = pImage->GetTimestampNs();
-
-            LOG_DEBUG << " ("<<" Gain " << m_Gain << "; FPS " << m_FPS << "; Exposure " << m_ExposureTime << "; " << size << " bytes; " << width << "x" << height << "; " << m_PixelFormat << "; timestamp (ns): " << timestampNs << ")";
-
-            const uint8_t* u_buffer_data = pImage->GetData();
-
-            char* buffer_data = to_char_ptr(u_buffer_data);
-
-            size_t buffer_size = pImage->GetSizeFilled();
-           
-            CopyFrame(newFrame, buffer_data);
-
-            newFrame.mFrameNumber = frameCounter++;
-
-            m_ArenaDevice->RequeueBuffer(pImage);
-
-            return true;
         }
         catch (GenICam::GenericException& e) {
             LOG_ERROR << "CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S;" << e.what();
@@ -1414,112 +1331,6 @@ using namespace std;
         {
             LOG_ERROR << "CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S;" << "Unexpected exception thrown";
         }
-        return false;
-    }
-
-    bool CameraLucidArena_PHX016S::setFrameSize(unsigned int width, unsigned int height, unsigned int startx, unsigned int starty)
-    {
-        try {
-            LOG_DEBUG << "CameraLucidArena_PHX016S::setFrameSize";
-
-            if (startx % 2 != 0)
-            {
-                LOG_ERROR << "CameraLucidArena_PHX016S::setFrameSize" << "X Offset need to be odd";
-                return false;
-            }
-
-
-            Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "OffsetX", startx);
-            Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "OffsetY", starty);
-            Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Width", width);
-            Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Height", height);
-
-            return true;
-        }
-        catch (GenICam::GenericException& e) {
-            LOG_ERROR << "CameraLucidArena_PHX016S::setFrameSize" << e.what();
-        }
-        catch (std::exception& ex)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::setFrameSize" << "Standard exception thrown: " << ex.what();
-        }
-        catch (...)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::setFrameSize" << "Unexpected exception thrown";
-        }
-
-        return false;
-    }
-
-
-    bool CameraLucidArena_PHX016S::configurationCheck(parameters&)
-    {
-        try {
-            LOG_DEBUG << "CameraLucidArena_PHX016S::configurationCheck";
-            //SET CONTINUOUS MODE 
-            if (!setDayContinuous()) {
-                LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck" << "Set DAY CONTINUOUS configuration failed";
-                return false;
-            }
-
-
-            if (!setNightContinuous()) {
-                LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck" << "Set NIGHT REGULAR configuration failed";
-                return false;
-
-            }
-
-            //SET SINGLESHOT MODE
-            if (!setDayRegular()) {
-                LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck" << "Set DAY REGULAR configuration failed";
-                return false;
-            }
-
-            if (!setNightRegular()) {
-                LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck" << "Set NIGHT REGULAR configuration failed";
-                return false;
-
-            }
-
-            return true;
-        }
-        catch (GenICam::GenericException& e) {
-            LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck" << e.what();
-        }
-        catch (std::exception& ex)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck" << "Standard exception thrown: " << ex.what();
-        }
-        catch (...)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck" << "Unexpected exception thrown";
-        }
-
-        return false;
-    }
-
-    void CameraLucidArena_PHX016S::configure(parameters&)
-    {
-        LOG_DEBUG << "CameraLucidArena_PHX016S::configure";
-    }
-
-    void CameraLucidArena_PHX016S::fetchBounds(parameters&)
-    {
-        LOG_DEBUG << "CameraLucidArena_PHX016S::fetchBounds";
-        //set pixel format
-        setPixelFormat(m_CameraSettings.ACQ_FORMAT);
-        
-        //set frame size
-        setFrameSize(m_Width, m_Height, m_StartX, m_StartY);
-
-        //fetch gain bounds
-        getGainBounds(m_MinGain,m_MaxGain);
-
-        //fetch fps bounds
-        getFPSBounds(m_MinFPS,m_MaxFPS);
-
-        //fetch exposure bounds
-        getExposureBounds(m_MinExposure,m_MaxExposure);
     }
 
     /// <summary>
@@ -1535,6 +1346,12 @@ using namespace std;
     {
         try
         {
+            LOG_DEBUG << "CameraLucidArena_PHX016S::getTemperature";
+
+
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
             GenICam::gcstring value = GenICam::gcstring(selector.c_str());
 
             Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "AcquisitionMode", "Continuous");
@@ -1549,73 +1366,432 @@ using namespace std;
 
             double temperature = t->GetValue();
             LOG_INFO << "CameraLucidArena_PHX016S::getTemperature;" << currentEntrySymbolic << "=" << temperature << "°C";
-
-
-
+            m_LastTemperature = temperature;
+            return true;
         }
         catch (GenICam::GenericException& e) {
-            LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck" << e.what();
+            LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck;" << e.what();
         }
         catch (std::exception& ex)
         {
-            LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck" << "Standard exception thrown: " << ex.what();
+            LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck;" << "Standard exception thrown: " << ex.what();
         }
         catch (...)
         {
-            LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck" << "Unexpected exception thrown";
+            LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck;" << "Unexpected exception thrown";
         }
 
         return false;
     }
 
-    void CameraLucidArena_PHX016S::CopyFrame(Frame& newFrame, char* buffer_data)
+    void CameraLucidArena_PHX016S::CopyFrame(Frame& frame, const uint8_t* u_buffer_data, size_t buffer_size)
     {
-        boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
-        string acquisitionDate = to_iso_extended_string(time);
-
-        cv::Mat image;
-        CamPixFmt imgDepth = MONO8;
-        int saturateVal = 0;
-
-        if (m_PixelFormat == "Mono8")
+        try
         {
-            //BOOST_LOG_SEV(logger, normal) << "Creating Mat 8 bits ...";
-            image = cv::Mat(m_Height, m_Width, CV_8UC1, buffer_data);
-            imgDepth = MONO8;
-            saturateVal = 255;
+            LOG_DEBUG << "CameraLucidArena_PHX016S::CopyFrame";
 
-        }
-        else if (m_PixelFormat == "Mono12")
-        {
+            frame.SetImage(u_buffer_data, buffer_size);
 
-            //BOOST_LOG_SEV(logger, normal) << "Creating Mat 16 bits ...";
-            image = cv::Mat(m_Height, m_Width, CV_16UC1, buffer_data);
-            imgDepth = MONO12;
-            saturateVal = 4095;
 
-            if (shiftBitsImage) {
+            cv::Mat image;
+            int saturateVal = 0;
 
-                unsigned short* p;
+            switch (m_PixelFormat)
+            {
+            case CamPixFmt::MONO8:
+                {
+                    //BOOST_LOG_SEV(logger, normal) << "Creating Mat 8 bits ...";
+                    image = cv::Mat(m_Height, m_Width, CV_8UC1, frame.mDataBuffer);
+                    saturateVal = 255;
+                    break;
+                }
+            case CamPixFmt::MONO12:
+                {
 
-                for (int i = 0; i < image.rows; i++) {
-                    p = image.ptr<unsigned short>(i);
-                    for (int j = 0; j < image.cols; j++)
-                        p[j] = p[j] >> 4;
+                    //BOOST_LOG_SEV(logger, normal) << "Creating Mat 16 bits ...";
+                    image = cv::Mat(m_Height, m_Width, CV_16UC1, frame.mDataBuffer);
+                    saturateVal = 4095;
+
+                    if (m_ShiftBitsImage) {
+
+                        unsigned short* p;
+
+                        for (int i = 0; i < image.rows; i++) {
+                            p = image.ptr<unsigned short>(i);
+                            for (int j = 0; j < image.cols; j++)
+                                p[j] = p[j] >> 4;
+                        }
+                    }
+                    break;
+                }
+                case CamPixFmt::MONO16:
+                {
+                    image = cv::Mat(m_Height, m_Width, CV_16UC1, frame.mDataBuffer);
+                    saturateVal = 65535;
                 }
             }
+
+            frame.mImage = image;
+            frame.mFps = m_FPS;
+            frame.mFormat = m_PixelFormat;
+            frame.mDate = TimeDate::splitIsoExtendedDate(to_iso_extended_string(boost::posix_time::microsec_clock::universal_time()));
+            frame.mSaturatedValue = saturateVal;
+
+            //frame.mFrameNumber = m_FrameCounter; //set from outside
         }
-        else if (m_PixelFormat == "Mono16")
+        catch (std::exception& ex)
         {
-            image = cv::Mat(m_Height, m_Width, CV_16UC1, buffer_data);
-            imgDepth = MONO16;
-            saturateVal = 65535;
+            LOG_ERROR << "CameraLucidArena_PHX016S::CopyFrame;" << "Standard exception thrown: " << ex.what();
+        }
+        catch (...)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::CopyFrame;" << "Unexpected exception thrown";
+        }
+    }
+
+    bool CameraLucidArena_PHX016S::checkSDKDevice()
+    {
+        if (!checkSDK())
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::checkSDKDevice;" << "SDK not initialized";
+            return false;
         }
 
-        newFrame = Frame(image, m_Gain, m_ExposureTime, acquisitionDate);
+        if (m_ArenaDevice == nullptr)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::checkSDKDevice;" << "Device not created";
+            return false;
+        }
 
-        newFrame.mFps = m_FPS;
-        newFrame.mFormat = imgDepth;
-        newFrame.mSaturatedValue = saturateVal;
-        newFrame.mFrameNumber = frameCounter;
-        newFrame.mDate = TimeDate::splitIsoExtendedDate(to_iso_extended_string(time));
+//         if (! m_ArenaDevice->IsConnected() ) {
+//             LOG_ERROR << "CameraLucidArena_PHX016S::checkSDKDevice;" << "Camera is not connected";
+//             return false;
+//         }
+
+        return true;
     }
+
+    bool  CameraLucidArena_PHX016S::checkSDK()
+    {
+
+        if (m_ArenaSDKSystem == nullptr)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+
+
+
+
+    /*
+     *   FAB METHODS
+     */
+     /**
+  * Create a Lucid camera using serial number
+  */
+    bool CameraLucidArena_PHX016S::createDevice()
+    {
+        try {
+            LOG_DEBUG << "CameraLucidArena_PHX016S::createDevice";
+
+            if (!checkSDK())
+                throw exception("SDK not initialized");
+
+            Arena::DeviceInfo target_device_info;
+
+            if (!getDeviceInfoBySerial(m_CameraDescriptor.Serial, target_device_info)) {
+                LOG_ERROR << "Camera not found";
+                return false;
+            }
+
+            LOG_DEBUG << "CameraLucidArena_PHX016S::createDevice; " << "DEVICE NAME " << target_device_info.ModelName() << std::endl;
+
+            m_ArenaDevice = m_ArenaSDKSystem->CreateDevice(target_device_info);
+
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
+            return true;
+        }
+        catch (GenICam::GenericException& e) {
+            LOG_ERROR << "CameraLucidArena_PHX016S::createDevice;" << e.what();
+        }
+        catch (std::exception& ex)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::createDevice;" << "Standard exception thrown: " << ex.what();
+        }
+        catch (...)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::createDevice;" << "Unexpected exception thrown";
+        }
+        return false;
+    }
+
+    bool CameraLucidArena_PHX016S::initSDK()
+    {
+        try
+        {
+            LOG_DEBUG << "CameraLucidArena_PHX016S::initSDK;" << "Retrieve Arena SDK instance";
+            m_ArenaSDKSystem = ArenaSDKManager::Get();
+
+            if (!checkSDK())
+                return false;
+
+            return true;
+
+        }
+        catch (GenICam::GenericException& e) {
+            LOG_ERROR << "CameraLucidArena_PHX016S::initSDK" << e.what();
+        }
+        catch (std::exception& ex)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::initSDK" << "Standard exception thrown: " << ex.what();
+        }
+        catch (...)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::initSDK" << "Unexpected exception thrown";
+        }
+        return false;
+    }
+
+    bool CameraLucidArena_PHX016S::initOnce()
+    {
+        LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce";
+
+        return true;
+    }
+
+    bool CameraLucidArena_PHX016S::init()
+    {
+        try {
+            LOG_DEBUG <<"CameraLucidArena_PHX016S::init;" << "CameraLucidArena_PHX016S::init";
+
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
+            //get temperature
+            if (!getTemperature("Sensor"))
+                throw exception("Error getting camera sensor temperature");
+            LOG_INFO << "CameraLucidArena_PHX016S::init;" << "TEMPERATURE\t:" << m_LastTemperature << "[C]";
+
+
+            //set pixel format
+            EParser<CamPixFmt> px_fmt_parser;
+            string fstring = px_fmt_parser.getStringEnum(static_cast<CamPixFmt>(m_PixelFormat));
+            if (!setPixelFormat())
+                throw exception("Error setting pixel format");
+            LOG_INFO << "CameraLucidArena_PHX016S::init;" << "PIXEL FORMAT\t\t:" << fstring;
+
+
+            //set frame size
+            if (!setFrameSize())
+                throw exception("Error setting frame size");
+            LOG_INFO << "CameraLucidArena_PHX016S::init;" << "FRAME SIZE \t\t:" << m_Width<<"x"<<m_Height<<" ("<<m_StartX<<","<<m_StartY<<")";
+
+
+            //set fps
+            if (!setFPS(MIN_FPS))
+                throw exception("Error setting minimum FPS value");
+            LOG_INFO << "CameraLucidArena_PHX016S::init;" << "FPS\t\t:" << m_FPS;
+
+
+            //set exposure time
+            if (!setExposureTime(MIN_US_NORMAL))
+                throw exception("Error setting minimum exposure time value");
+            LOG_INFO << "CameraLucidArena_PHX016S::init;" << "EXPOSURE\t:" << m_ExposureTime;
+
+
+            //set gain
+            if (!setGain(MIN_GAIN))
+                throw exception("Error setting minimum gain value");
+            LOG_INFO << "CameraLucidArena_PHX016S::init;" << "GAIN\t\t:" << m_Gain;
+
+
+            try {
+            
+              
+                // Set buffer handling mode
+                //    Set buffer handling mode before starting the stream. Starting the
+                //    stream requires the buffer handling mode to be set beforehand. The
+                //    buffer handling mode determines the order and behavior of buffers in
+                //    the underlying stream engine. Setting the buffer handling mode to
+                //    'NewestOnly' ensures the most recent image is delivered, even if it
+                //    means skipping frames.
+
+                LOG_DEBUG << "CameraLucidArena_PHX016S::grabInitialization;" << "Set buffer handling mode to 'NewestOnly'";
+                Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamBufferHandlingMode", "NewestOnly");
+
+                // Enable stream auto negotiate packet size
+                //    Setting the stream packet size is done before starting the stream.
+                //    Setting the stream to automatically negotiate packet size instructs
+                //    the camera to receive the largest packet size that the system will
+                //    allow. This generally increases frame rate and results in fewer
+                //    interrupts per image, thereby reducing CPU load on the host system.
+                //    Ethernet settings may also be manually changed to allow for a
+                //    larger packet size.
+
+                LOG_INFO << "CameraLucidArena_PHX016S::grabInitialization;" << "Enable stream to auto negotiate packet size";
+                Arena::SetNodeValue<bool>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamAutoNegotiatePacketSize", true);
+
+                // Disable stream packet resend
+                //    Enable stream packet resend before starting the stream. Images are
+                //    sent from the camera to the host in packets using UDP protocol,
+                //    which includes a header image number, packet number, and timestamp
+                //    information. If a packet is missed while receiving an image, a
+                //    packet resend is requested and this information is used to retrieve
+                //    and redeliver the missing packet in the correct order.
+
+                LOG_INFO << "CameraLucidArena_PHX016S::grabInitialization;" << "Disable stream packet resend";
+                Arena::SetNodeValue<bool>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamPacketResendEnable", false);
+
+                LOG_DEBUG << "CameraLucidArena_PHX016S::grabInitialization;" << "Set camera TriggerMode to Off";
+                Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "TriggerMode", "On");
+
+                return true;
+            }
+            catch (GenICam::GenericException& e) {
+                LOG_ERROR << "CameraLucidArena_PHX016S::grabInitialization;" << e.what();
+            }
+            catch (std::exception& ex)
+            {
+                LOG_ERROR << "CameraLucidArena_PHX016S::grabInitialization;" << "Standard exception thrown: " << ex.what();
+            }
+            catch (...)
+            {
+                LOG_ERROR << "CameraLucidArena_PHX016S::grabInitialization;" << "Unexpected exception thrown";
+            }
+            
+
+        }
+        catch (GenICam::GenericException& e) {
+            LOG_ERROR << "CameraLucidArena_PHX016S::init; " << e.what();
+        }
+        catch (std::exception& ex)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::init; " << "Standard exception thrown: " << ex.what();
+        }
+        catch (...)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::init; " << "Unexpected exception thrown";
+        }
+
+        return false;
+    }
+
+    bool CameraLucidArena_PHX016S::grabInitialization()
+    {
+        return true;
+    }
+
+    bool CameraLucidArena_PHX016S::configurationCheck(parameters&)
+    {
+
+        try {
+            LOG_DEBUG << "CameraLucidArena_PHX016S::configurationCheck";
+
+            if (!checkSDKDevice())
+                throw exception("SDK not initialized");
+
+            //SET CONTINUOUS MODE 
+            if (!setDayContinuous()) {
+                LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck;" << "Set DAY CONTINUOUS configuration failed";
+                return false;
+            }
+
+
+            if (!setNightContinuous()) {
+                LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck;" << "Set NIGHT REGULAR configuration failed";
+                return false;
+
+            }
+
+            //SET SINGLESHOT MODE
+            if (!setDayRegular()) {
+                LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck;" << "Set DAY REGULAR configuration failed";
+                return false;
+            }
+
+            if (!setNightRegular()) {
+                LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck;" << "Set NIGHT REGULAR configuration failed";
+                return false;
+
+            }
+
+            return true;
+        }
+        catch (GenICam::GenericException& e) {
+            LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck;" << e.what();
+        }
+        catch (std::exception& ex)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck;" << "Standard exception thrown: " << ex.what();
+        }
+        catch (...)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::configurationCheck;" << "Unexpected exception thrown";
+        }
+
+        return false;
+    }
+
+    void CameraLucidArena_PHX016S::configure(parameters&)
+    {
+        LOG_DEBUG << "CameraLucidArena_PHX016S::configure";
+    }
+
+    void CameraLucidArena_PHX016S::fetchBounds(parameters&)
+    {
+        try{
+        LOG_DEBUG << "CameraLucidArena_PHX016S::fetchBounds";
+
+        if (!checkSDKDevice())
+            throw exception("SDK not initialized");
+
+        //fetch gain bounds
+        getGainBounds(m_MinGain,m_MaxGain);
+
+        //fetch fps bounds
+        getFPSBounds(m_MinFPS,m_MaxFPS);
+
+        //fetch exposure bounds
+        getExposureBounds(m_MinExposure,m_MaxExposure);
+
+        }
+        catch (GenICam::GenericException& e) {
+            LOG_ERROR << "CameraLucidArena_PHX016S::fetchBounds;" << e.what();
+        }
+        catch (std::exception& ex)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::fetchBounds;" << "Standard exception thrown: " << ex.what();
+        }
+        catch (...)
+        {
+            LOG_ERROR << "CameraLucidArena_PHX016S::fetchBounds;" << "Unexpected exception thrown";
+        }
+
+    }
+
+    bool CameraLucidArena_PHX016S::destroyDevice()
+    {
+        LOG_DEBUG << "CameraLucidArena_PHX016S::destroyDevice";
+
+        if (!checkSDK())
+            throw exception("SDK not initialized");
+
+        if (m_ArenaDevice != nullptr)
+        {
+            
+            if (m_Streaming)
+                acqStop();
+
+            m_ArenaSDKSystem->DestroyDevice(m_ArenaDevice);
+        }
+
+        return true;
+    }
+
