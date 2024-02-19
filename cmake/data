@@ -1,0 +1,418 @@
+Category    : 'Root'
+    Category    : 'AnalogControls'
+        Enumeration : 'GainAuto' = 'Off'
+        Enumeration : 'GainSelector' = 'All'
+              * GainRaw
+        Integer     : 'GainRaw' = 4
+        Enumeration : 'BlackLevelSelector' = 'All'
+              * BlackLevelRaw
+        Integer     : 'BlackLevelRaw' = 0
+        Boolean     : 'GammaEnable' = false
+        Enumeration : 'GammaSelector' = 'User'
+        Float       : 'Gamma' = 1
+        Integer     : 'DigitalShift' = 0
+    Category    : 'ImageFormat'
+        Enumeration : 'PixelFormat' = 'Mono12'
+        Enumeration : 'PixelSize' = 'Bpp16'
+        Enumeration : 'PixelColorFilter' = 'None'
+        Integer     : 'PixelDynamicRangeMin' = 0
+        Integer     : 'PixelDynamicRangeMax' = 4095
+        Boolean     : 'ReverseX' = false
+        Boolean     : 'ReverseY' = false
+        Enumeration : 'TestImageSelector' = 'Off'
+        Boolean     : 'TestImageResetAndHold' = false
+    Category    : 'AOI'
+        Integer     : 'Width' = 1456
+        Integer     : 'Height' = 1088
+        Integer     : 'OffsetX' = 0
+        Integer     : 'OffsetY' = 0
+        Boolean     : 'CenterX' = false
+        Boolean     : 'CenterY' = false
+        Enumeration : 'BinningModeHorizontal' = 'Summing'
+        Enumeration : 'BinningHorizontalMode' = 'Sum'
+        Integer     : 'BinningHorizontal' = 1
+        Enumeration : 'BinningModeVertical' = 'Summing'
+        Enumeration : 'BinningVerticalMode' = 'Sum'
+        Integer     : 'BinningVertical' = 1
+        Enumeration : 'ROIZoneSelector' = 'Zone0'
+              * ROIZoneMode
+              * ROIZoneSize
+              * ROIZoneOffset
+        Enumeration : 'ROIZoneMode' = 'Off'
+        Integer     : 'ROIZoneSize' = 4
+        Integer     : 'ROIZoneOffset' = 0
+    Category    : 'ImageQualityControl'
+        Category    : 'PGIControl'
+            Enumeration : 'PgiMode' = 'Off'
+            Float       : 'NoiseReductionAbs' = -inf
+            Float       : 'SharpnessEnhancementAbs' = 0
+        Category    : 'VignettingCorrectionControl'
+        Float       : 'BalanceRatioAbs' = 0
+        Enumeration : 'ColorTransformationValueSelector' = 'Gain00'
+              * ColorTransformationValue
+              * ColorTransformationValueRaw
+        Float       : 'ColorTransformationMatrixFactor' = 0
+        Integer     : 'ColorTransformationMatrixFactorRaw' = 0
+        Float       : 'ColorAdjustmentHue' = 0
+        Float       : 'ColorAdjustmentSaturation' = 0
+        Float       : 'BslHue' = 0
+        Integer     : 'BslHueRaw' = 0
+        Float       : 'BslSaturation' = 0
+        Integer     : 'BslSaturationRaw' = 0
+        Float       : 'BslBrightness' = 0
+        Integer     : 'BslBrightnessRaw' = 0
+        Float       : 'BslContrast' = 0
+        Integer     : 'BslContrastRaw' = 0
+    Category    : 'AcquisitionTrigger'
+        Enumeration : 'AcquisitionMode' = 'Continuous'
+              * AcquisitionStart
+              * AcquisitionStop
+        Command     : 'AcquisitionStart'
+        Command     : 'AcquisitionStop'
+        Integer     : 'AcquisitionFrameCount' = 1
+        Enumeration : 'TriggerSelector' = 'FrameStart'
+              * TriggerMode
+              * TriggerSoftware
+              * TriggerSource
+              * TriggerActivation
+              * TriggerDelayAbs
+        Enumeration : 'TriggerMode' = 'Off'
+        Command     : 'TriggerSoftware'
+        Enumeration : 'TriggerSource' = 'Line1'
+        Enumeration : 'TriggerActivation' = 'RisingEdge'
+        Float       : 'TriggerDelayAbs' = 0 us
+        Enumeration : 'ExposureMode' = 'Timed'
+        Enumeration : 'ExposureAuto' = 'Off'
+        Enumeration : 'ExposureTimeMode' = 'Standard'
+        Float       : 'ExposureTimeAbs' = 100 us
+        Integer     : 'ExposureTimeRaw' = 100
+        Float       : 'ReadoutTimeAbs' = 13268 us
+        Float       : 'ExposureOverlapTimeMaxAbs' = 0 us
+        Enumeration : 'ShutterMode' = 'Global'
+        Boolean     : 'AcquisitionFrameRateEnable' = true
+        Float       : 'AcquisitionFrameRateAbs' = 30.0003 Hz
+        Float       : 'ResultingFramePeriodAbs' = 33334 us
+        Float       : 'ResultingFrameRateAbs' = 29.9994 Hz
+        Enumeration : 'AcquisitionStatusSelector' = 'FrameTriggerWait'
+              * AcquisitionStatus
+        Boolean     : 'AcquisitionStatus' = false
+        Boolean     : 'SyncFreeRunTimerEnable' = false
+        Integer     : 'SyncFreeRunTimerStartTimeLow' = 0
+        Integer     : 'SyncFreeRunTimerStartTimeHigh' = 0
+        Float       : 'SyncFreeRunTimerTriggerRateAbs' = 10 Hz
+        Command     : 'SyncFreeRunTimerUpdate'
+    Category    : 'DigitalIO'
+        Enumeration : 'LineSelector' = 'Line1'
+              * LineMode
+              * LineDebouncerTimeAbs
+              * LineDebouncerTimeRaw
+              * LineInverter
+              * LineTermination
+              * LineStatus
+              * LineSource
+              * LineFormat
+              * MinOutPulseWidthAbs
+              * MinOutPulseWidthRaw
+        Enumeration : 'LineMode' = 'Input'
+        Enumeration : 'LineLogic' = 'Positive'
+        Enumeration : 'LineFormat' = 'OptoCoupled'
+        Boolean     : 'LineInverter' = false
+        Float       : 'LineDebouncerTimeAbs' = 0 us
+        Integer     : 'LineDebouncerTimeRaw' = 0
+        Boolean     : 'LineStatus' = false
+        Integer     : 'LineStatusAll' = 6
+        Enumeration : 'UserOutputSelector' = 'UserOutput1'
+              * UserOutputValue
+        Boolean     : 'UserOutputValue' = false
+        Integer     : 'UserOutputValueAll' = 0
+        Enumeration : 'SyncUserOutputSelector' = 'SyncUserOutput1'
+              * SyncUserOutputValue
+        Boolean     : 'SyncUserOutputValue' = false
+        Integer     : 'SyncUserOutputValueAll' = 0
+    Category    : 'ActionControl'
+        Integer     : 'NumberOfActionSignals' = 1
+        Integer     : 'ActionCommandCount' = 1
+        Integer     : 'ActionSelector' = 1
+              * ActionGroupKey
+              * ActionGroupMask
+        Integer     : 'ActionGroupKey' = 0
+        Integer     : 'ActionGroupMask' = 0
+    Category    : 'SequenceControl'
+        Boolean     : 'SequenceEnable' = false
+        Enumeration : 'SequenceConfigurationMode' = 'Off'
+        Category    : 'SequenceControlConfiguration'
+            Enumeration : 'SequenceAdvanceMode' = 'Auto'
+        Integer     : 'SequenceSetTotalNumber' = 2
+        Integer     : 'SequenceSetIndex' = 0
+        Command     : 'SequenceSetStore'
+        Command     : 'SequenceSetLoad'
+        Integer     : 'SequenceSetExecutions' = 1
+    Category    : 'TimerControls'
+        Float       : 'TimerDelayTimebaseAbs' = 1 us
+        Float       : 'TimerDurationTimebaseAbs' = 1 us
+        Enumeration : 'TimerSelector' = 'Timer1'
+              * TimerDurationAbs
+              * TimerDurationRaw
+              * TimerDelayAbs
+              * TimerDelayRaw
+              * TimerTriggerSource
+              * TimerTriggerActivation
+        Float       : 'TimerDelayAbs' = 0
+        Integer     : 'TimerDelayRaw' = 0
+        Float       : 'TimerDurationAbs' = 10
+        Integer     : 'TimerDurationRaw' = 10
+        Enumeration : 'TimerTriggerSource' = 'ExposureStart'
+        Enumeration : 'TimerTriggerActivation' = 'RisingEdge'
+        Enumeration : 'CounterSelector' = 'Counter1'
+              * CounterEventSource
+              * CounterReset
+              * CounterResetSource
+        Enumeration : 'CounterEventSource' = 'FrameTrigger'
+        Enumeration : 'CounterResetSource' = 'Off'
+    Category    : 'BslLightControl'
+        Enumeration : 'BslLightControlMode' = 'Off'
+        Enumeration : 'BslLightControlSource' = 'Off'
+        Command     : 'BslLightControlEnumerateDevices'
+        Enumeration : 'BslLightControlStatus' = 'Off'
+        Enumeration : 'BslLightControlErrorStatus' = 'NoError'
+        Enumeration : 'BslLightControlTriggerMode' = 'ExposureActive'
+        Float       : 'BslLightDeviceMaxCurrent' = 0 mA
+        Float       : 'BslLightDeviceBrightness' = 0 %
+        Float       : 'BslLightDeviceStrobeDuration' = 0 us
+        Float       : 'BslLightDeviceOverdriveLimit' = 0 %
+    Category    : 'LUTControls'
+        Enumeration : 'LUTSelector' = 'Luminance'
+              * LUTEnable
+              * LUTIndex
+              * LUTValue
+              * LUTValueAll
+        Boolean     : 'LUTEnable' = false
+        Integer     : 'LUTIndex' = 0
+              * LUTValue
+        Integer     : 'LUTValue' = 0
+        Register    : 'LUTValueAll'
+    Category    : 'UserDefinedValues'
+        Enumeration : 'UserDefinedValueSelector' = 'Value1'
+              * UserDefinedValue
+        Integer     : 'UserDefinedValue' = 0
+    Category    : 'DeviceInformation'
+        StringReg   : 'DeviceVendorName' = 'Basler'
+        StringReg   : 'DeviceModelName' = 'acA1440-73gm'
+        StringReg   : 'DeviceManufacturerInfo' = 'none'
+        StringReg   : 'DeviceVersion' = '107647-16'
+        StringReg   : 'DeviceFirmwareVersion' = '107647-16;U;acA1440_73g;V2.1-0;0'
+        StringReg   : 'DeviceID' = '40309464'
+        StringReg   : 'DeviceUserID' = ''
+        Enumeration : 'DeviceScanType' = 'Areascan'
+        Command     : 'DeviceReset'
+        Integer     : 'SensorWidth' = 1456
+        Integer     : 'SensorHeight' = 1088
+        Integer     : 'WidthMax' = 1456
+        Integer     : 'HeightMax' = 1088
+        Enumeration : 'TemperatureSelector' = 'Coreboard'
+              * TemperatureAbs
+        Float       : 'TemperatureAbs' = 50
+        Enumeration : 'TemperatureState' = 'Ok'
+        Boolean     : 'CriticalTemperature' = false
+        Boolean     : 'OverTemperature' = false
+        Enumeration : 'LastError' = 'InvalidParameter'
+        Command     : 'ClearLastError'
+    Category    : 'ChunkDataStreams'
+        Boolean     : 'ChunkModeActive' = false
+    Category    : 'DeviceControl'
+        Command     : 'DeviceRegistersStreamingStart'
+        Command     : 'DeviceRegistersStreamingEnd'
+        Integer     : 'DeviceSFNCVersionMajor' = 1
+        Integer     : 'DeviceSFNCVersionMinor' = 0
+        Integer     : 'DeviceSFNCVersionSubMinor' = 1
+    Category    : 'ChunkData'
+        Integer     : 'ChunkInputStatusAtLineTriggerIndex' = 0
+    Category    : 'EventsGeneration'
+        Enumeration : 'EventSelector' = 'ExposureEnd'
+              * EventNotification
+        Enumeration : 'EventNotification' = 'Off'
+        Category    : 'ExposureEndEventData'
+        Category    : 'LineStartOvertriggerEventData'
+        Category    : 'FrameStartOvertriggerEventData'
+        Category    : 'AcquisitionStartOvertriggerEventData'
+        Category    : 'FrameTimeoutEventData'
+        Category    : 'FrameStartEventData'
+        Category    : 'AcquisitionStartEventData'
+        Category    : 'EventOverrunEventData'
+        Category    : 'OverTemperatureEventData'
+        Category    : 'CriticalTemperatureEventData'
+        Category    : 'ActionLateEventData'
+        Category    : 'LateActionEventData'
+        Category    : 'Line1RisingEdgeEventData'
+        Category    : 'Line2RisingEdgeEventData'
+        Category    : 'Line3RisingEdgeEventData'
+        Category    : 'Line4RisingEdgeEventData'
+        Category    : 'VirtualLine1RisingEdgeEventData'
+        Category    : 'VirtualLine2RisingEdgeEventData'
+        Category    : 'VirtualLine3RisingEdgeEventData'
+        Category    : 'VirtualLine4RisingEdgeEventData'
+        Category    : 'FrameStartWaitEventData'
+        Category    : 'AcquisitionStartWaitEventData'
+    Category    : 'UserSets'
+        Enumeration : 'UserSetSelector' = 'Default'
+              * UserSetLoad
+              * UserSetSave
+        Command     : 'UserSetLoad'
+        Command     : 'UserSetSave'
+        Enumeration : 'UserSetDefaultSelector' = 'Default'
+        Enumeration : 'DefaultSetSelector' = 'Standard'
+    Category    : 'TransportLayer'
+        Integer     : 'PayloadSize' = 3168256
+        Integer     : 'GevSCPSPacketSize' = 1500
+        Integer     : 'GevSCPD' = 0
+        Integer     : 'GevSCFTD' = 0
+        Integer     : 'GevSCBWR' = 10
+        Integer     : 'GevSCBWRA' = 10
+        Integer     : 'GevSCBWA' = 125000000
+        Integer     : 'GevSCDMT' = 251630239
+        Integer     : 'GevSCDCT' = 100159902
+        Integer     : 'GevSCFJM' = 3710052
+        Integer     : 'GevVersionMajor' = 2
+        Integer     : 'GevVersionMinor' = 0
+        Boolean     : 'GevDeviceModeIsBigEndian' = true
+        Integer     : 'GevDeviceModeCharacterSet' = 1
+        Enumeration : 'GevInterfaceSelector' = 'NetworkInterface0'
+              * GevMACAddress
+              * GevSupportedOptionalLegacy16BitBlockID
+              * GevSupportedIPConfigurationLLA
+              * GevSupportedIPConfigurationDHCP
+              * GevSupportedIPConfigurationPersistentIP
+              * GevCurrentIPConfiguration
+              * GevCurrentIPAddress
+              * GevCurrentSubnetMask
+              * GevCurrentDefaultGateway
+              * GevPersistentIPAddress
+              * GevPersistentSubnetMask
+              * GevPersistentDefaultGateway
+              * GevLinkSpeed
+              * GevLinkMaster
+              * GevLinkFullDuplex
+              * GevLinkCrossover
+        Integer     : 'GevMACAddress' = 207554441661
+        Enumeration : 'GevGVSPExtendedIDMode' = 'Off'
+        Boolean     : 'GevSupportedIPConfigurationLLA' = true
+        Boolean     : 'GevSupportedIPConfigurationDHCP' = true
+        Boolean     : 'GevSupportedIPConfigurationPersistentIP' = true
+        Integer     : 'GevCurrentIPConfiguration' = 6
+        Integer     : 'GevCurrentIPAddress' = 3232239718
+        Integer     : 'GevCurrentSubnetMask' = 4294967040
+        Integer     : 'GevCurrentDefaultGateway' = 3232239869
+        Integer     : 'GevPersistentIPAddress' = 184443748
+        Integer     : 'GevPersistentSubnetMask' = 4294967288
+        Integer     : 'GevPersistentDefaultGateway' = 184443747
+        Integer     : 'GevLinkSpeed' = 1000
+        Boolean     : 'GevLinkMaster' = false
+        Boolean     : 'GevLinkFullDuplex' = true
+        Boolean     : 'GevLinkCrossover' = true
+        StringReg   : 'GevFirstURL' = 'Local:Basler_Ace_GigE_cfb872bd_Version_3_8.zip;c0000000;13fa0'
+        StringReg   : 'GevSecondURL' = 'http://www.baslerweb.com/camera/Basler_Ace_GigE_cfb872bd_Version_3_8.xml'
+        Integer     : 'GevNumberOfInterfaces' = 1
+        Integer     : 'GevMessageChannelCount' = 1
+        Integer     : 'GevStreamChannelCount' = 1
+        Boolean     : 'GevSupportedOptionalLegacy16BitBlockID' = true
+        Boolean     : 'GevSupportedIEEE1588' = true
+        Boolean     : 'GevSupportedOptionalCommandsEVENTDATA' = false
+        Boolean     : 'GevSupportedOptionalCommandsEVENT' = true
+        Boolean     : 'GevSupportedOptionalCommandsPACKETRESEND' = true
+        Boolean     : 'GevSupportedOptionalCommandsWRITEMEM' = true
+        Boolean     : 'GevSupportedOptionalCommandsConcatenation' = true
+        Integer     : 'GevHeartbeatTimeout' = 3000
+        Integer     : 'GevTimestampTickFrequency' = 125000000
+        Command     : 'GevTimestampControlLatch'
+        Command     : 'GevTimestampControlReset'
+        Command     : 'GevTimestampControlLatchReset'
+        Integer     : 'GevTimestampValue' = 0
+        Enumeration : 'GevCCP' = 'Control'
+        Enumeration : 'GevStreamChannelSelector' = 'StreamChannel0'
+              * GevSCPInterfaceIndex
+              * GevGVSPExtendedIDMode
+              * GevSCPHostPort
+              * GevSCPSFireTestPacket
+              * GevSCPSDoNotFragment
+              * GevSCPSBigEndian
+              * GevSCPSPacketSize
+              * GevSCPD
+              * GevSCFTD
+              * GevSCDA
+              * GevSCBWR
+              * GevSCBWRA
+              * GevSCBWA
+              * GevSCDMT
+              * GevSCDCT
+              * GevSCFJM
+        Integer     : 'GevSCPInterfaceIndex' = 0
+        Integer     : 'GevSCDA' = 0
+        Integer     : 'GevSCPHostPort' = 0
+        Command     : 'GevSCPSFireTestPacket'
+        Boolean     : 'GevSCPSDoNotFragment' = true
+        Boolean     : 'GevSCPSBigEndian' = false
+        Integer     : 'TLParamsLocked' = 0
+        Boolean     : 'GevIEEE1588' = false
+        Integer     : 'GevIEEE1588ClockId' = 0
+    Category    : 'FileAccessControl'
+        Enumeration : 'FileSelector' = 'UserSet1'
+              * FileOperationSelector
+              * FileOpenMode
+              * FileAccessBuffer
+              * FileAccessOffset
+              * FileAccessLength
+              * FileOperationStatus
+              * FileOperationResult
+              * FileSize
+              * FileOperationExecute
+        Enumeration : 'FileOperationSelector' = 'Open'
+              * FileAccessOffset
+              * FileAccessLength
+              * FileOperationStatus
+              * FileOperationResult
+              * FileOperationExecute
+        Enumeration : 'FileOpenMode' = 'Read'
+        Register    : 'FileAccessBuffer'
+        Integer     : 'FileAccessOffset' = 0
+        Integer     : 'FileAccessLength' = 0
+        Enumeration : 'FileOperationStatus' = 'Success'
+        Integer     : 'FileOperationResult' = 0
+        Integer     : 'FileSize' = 16
+        Command     : 'FileOperationExecute'
+    Category    : 'AutoFunctions'
+        Integer     : 'AutoTargetValue' = 2048
+        Float       : 'GrayValueAdjustmentDampingAbs' = 0.683594
+        Integer     : 'GrayValueAdjustmentDampingRaw' = 700
+        Float       : 'BalanceWhiteAdjustmentDampingAbs' = 0
+        Integer     : 'BalanceWhiteAdjustmentDampingRaw' = 0
+        Integer     : 'AutoGainRawLowerLimit' = 0
+        Integer     : 'AutoGainRawUpperLimit' = 239
+        Float       : 'AutoExposureTimeAbsLowerLimit' = 80
+        Integer     : 'AutoExposureTimeLowerLimitRaw' = 80
+        Float       : 'AutoExposureTimeAbsUpperLimit' = 500000
+        Integer     : 'AutoExposureTimeUpperLimitRaw' = 500000
+        Enumeration : 'AutoFunctionProfile' = 'GainMinimum'
+        Category    : 'AutoFunctionAOIs'
+            Enumeration : 'AutoFunctionAOISelector' = 'AOI1'
+                  * AutoFunctionAOIWidth
+                  * AutoFunctionAOIHeight
+                  * AutoFunctionAOIOffsetX
+                  * AutoFunctionAOIOffsetY
+                  * AutoFunctionAOIUsageIntensity
+                  * AutoFunctionAOIUsageWhiteBalance
+            Integer     : 'AutoFunctionAOIWidth' = 1440
+            Integer     : 'AutoFunctionAOIHeight' = 1080
+            Integer     : 'AutoFunctionAOIOffsetX' = 8
+            Integer     : 'AutoFunctionAOIOffsetY' = 8
+            Boolean     : 'AutoFunctionAOIUsageIntensity' = true
+            Boolean     : 'AutoFunctionAOIUsageWhiteBalance' = false
+    Category    : 'RemoveParamLimits'
+        Enumeration : 'ParameterSelector' = 'Gain'
+              * RemoveLimits
+        Boolean     : 'RemoveLimits' = false
+    Category    : 'ExpertFeatureAccess'
+        Enumeration : 'ExpertFeatureAccessSelector' = 'ExpertFeature1'
+              * ExpertFeatureEnable
+              * ExpertFeatureAccessKey
+        Integer     : 'ExpertFeatureAccessKey' = 0
+    Category    : 'BLCSerialPortControl'
