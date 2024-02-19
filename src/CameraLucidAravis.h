@@ -8,10 +8,10 @@
 * \brief   Use Aravis library to pilot Lucid phoenix cameras.
 *
 */
+#include "Commons.h"
 
 #ifdef LINUX
-#include "Commons.h"
-#include "CameraDeviceManager.h"
+    #include "CameraDeviceManager.h"
 
     #include <opencv2/highgui/highgui.hpp>
     #include <opencv2/imgproc/imgproc.hpp>
@@ -59,9 +59,9 @@ namespace freeture
         int             mStartY;                // Crop starting Y.
         int             mWidth;                 // Camera region's width.
         int             mHeight;                // Camera region's height.
-        double          fps;                    // Camera acquisition frequency.
-        double          gainMin;                // Camera minimum gain.
-        double          gainMax;                // Camera maximum gain.
+        double          m_FPS;                    // Camera acquisition frequency.
+        double          m_MinGain;                // Camera minimum gain.
+        double          m_MaxGain;                // Camera maximum gain.
         unsigned int    payload;                // Width x height.
         double          exposureMin;            // Camera's minimum exposure time.
         double          exposureMax;            // Camera's maximum exposure time.
@@ -69,8 +69,8 @@ namespace freeture
         double          fpsMax;                 // Camera's maximum frame rate.
         double          temperature;            // Camera temperature in °C
         const char* capsString;
-        int             gain;                   // Camera's gain.
-        double          exp;                    // Camera's exposure time.
+        int             m_Gain;                   // Camera's gain.
+        double          m_ExposureTime;                    // Camera's exposure time.
         bool            shiftBitsImage;         // For example : bits are shifted for dmk's frames.
         guint64         nbCompletedBuffers;     // Number of frames successfully received.
         guint64         nbFailures;             // Number of frames failed to be received.

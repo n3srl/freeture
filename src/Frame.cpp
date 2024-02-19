@@ -40,17 +40,17 @@
 
 using namespace freeture;
 
-Frame::Frame(cv::Mat capImg, int g, double e, std::string acquisitionDate):
-mExposure(e), mGain(g), mFileName("noFileName"), mFrameRemaining(0),
-mFrameNumber(0), mFps(30), mFormat(CamPixFmt::MONO8), mSaturatedValue(255), mDataBuffer(nullptr)
-{
-    capImg.copyTo(mImage);
-    mDate = TimeDate::splitIsoExtendedDate(acquisitionDate);
-    mStartX = 0;
-    mStartY = 0;
-    mWidth = 0;
-    mHeight = 0;
-}
+// Frame::Frame(cv::Mat capImg, int g, double e, std::string acquisitionDate):
+// mExposure(e), mGain(g), mFileName("noFileName"), mFrameRemaining(0),
+// mFrameNumber(0), mFps(30), mFormat(CamPixFmt::MONO8), mSaturatedValue(255), mDataBuffer(nullptr)
+// {
+//     capImg.copyTo(*Image.get());
+//     mDate = TimeDate::splitIsoExtendedDate(acquisitionDate);
+//     mStartX = 0;
+//     mStartY = 0;
+//     mWidth = 0;
+//     mHeight = 0;
+// }
 
 Frame::Frame():
 mExposure(0), mGain(0), mFileName("noFileName"), mFrameRemaining(0),
@@ -62,12 +62,15 @@ mFrameNumber(0), mFps(30), mFormat(CamPixFmt::MONO8), mSaturatedValue(255), mDat
    mStartY = 0;
 }
 
-Frame::~Frame(void)
+Frame::~Frame()
 {
-//     if (mDataBuffer)
-//         delete[] mDataBuffer;
-// 
-//     mDataBuffer = nullptr;
+    if (Image) {
+        Image->release();
+        Image->deallocate();
+    }
+
+    if (mDataBuffer)
+        delete[] mDataBuffer;
 }
 
 void Frame::SetImage(const uint8_t* buffer, size_t size)
@@ -101,7 +104,17 @@ void Frame::SetImage(const uint8_t* buffer, size_t size)
             LOG_WARNING << "Frame::SetImage; Expected buffer size is different from frame size.";
     }
 
-    mDataBuffer = new uint8_t[expected_buffer_size];
-    memset(mDataBuffer,0xCD, expected_buffer_size);
-    memcpy(mDataBuffer, buffer, size);
+    
+     mDataBuffer = new uint8_t[expected_buffer_size];
+     memset(mDataBuffer,0xCD, expected_buffer_size);
+     mSize = size;
+     memcpy(mDataBuffer, buffer, size);
+}
+
+uint8_t* Frame::getData()
+{
+//     uint8_t* new_buffer = new uint8_t[mSize];
+//     memset(new_buffer, 0xCD, mSize);
+//     memcpy(mDataBuffer, new_buffer, mSize);
+    return mDataBuffer;
 }

@@ -84,7 +84,7 @@ namespace freeture
 
         boost::condition_variable* frameBuffer_condition;
         boost::mutex* frameBuffer_mutex;
-        boost::circular_buffer<Frame>* frameBuffer;
+        boost::circular_buffer<std::shared_ptr<Frame>> frameBuffer;
         bool* stackSignal;
         boost::mutex* stackSignal_mutex;
         boost::condition_variable* stackSignal_condition;
@@ -102,7 +102,7 @@ namespace freeture
         StackThread(bool*,
             boost::mutex*,
             boost::condition_variable*,
-            boost::circular_buffer<Frame>*,
+            boost::circular_buffer<std::shared_ptr<Frame>>,
             boost::mutex*,
             boost::condition_variable*,
             std::shared_ptr<CfgParam>

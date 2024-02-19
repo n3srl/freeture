@@ -54,43 +54,44 @@ sumExpTime(0.0), gainFirstFrame(0), expFirstFrame(0), fps(0), format(CamPixFmt::
 
 Stack::~Stack(){}
 
-void Stack::addFrame(Frame &i){
+void Stack::addFrame(shared_ptr<Frame> i){
 
     try{
 
-        if(TimeDate::getYYYYMMDD(i.mDate) != "00000000") {
+        if(TimeDate::getYYYYMMDD(i->mDate) != "00000000") {
 
             if(curFrames == 0){
 
-                stack = cv::Mat::zeros(i.mImage.rows, i.mImage.cols, CV_32FC1);
-                gainFirstFrame = i.mGain;
-                expFirstFrame = i.mExposure;
-                mDateFirstFrame = i.mDate;
-                fps = i.mFps;
-                format = i.mFormat;
+                cv::Mat zero_mat = cv::Mat::zeros(i->Image->rows, i->Image->cols, CV_32FC1);
+                    
+                stack = make_shared<cv::Mat>(std::move(zero_mat));
+
+                gainFirstFrame = i->mGain;
+                expFirstFrame = i->mExposure;
+                mDateFirstFrame = i->mDate;
+                fps = i->mFps;
+                format = i->mFormat;
 
             }
 
-            if(expFirstFrame != i.mExposure)
+            if(expFirstFrame != i->mExposure)
                 varExpTime = true;
 
-            sumExpTime+=i.mExposure;
+            sumExpTime+=i->mExposure;
 
-            cv::Mat curr = cv::Mat::zeros(i.mImage.rows, i.mImage.cols, CV_32FC1);
+            cv::Mat curr = cv::Mat::zeros(i->Image->rows, i->Image->cols, CV_32FC1);
 
-            i.mImage.convertTo(curr, CV_32FC1);
+            i->Image->convertTo(curr, CV_32FC1);
 
-            accumulate(curr, stack);
+            accumulate(curr, *stack.get());
             curFrames++;
-            mDateLastFrame = i.mDate;
+            mDateLastFrame = i->mDate;
 
         }
 
     }catch(exception& e){
-
         LOG_DEBUG << e.what() << endl;
         LOG_ERROR << e.what() ;
-
     }
 
 }
@@ -157,7 +158,10 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
 
                 // 'SINGLE' 'SUM' 'AVERAGE' ('MEDIAN')
                 newFits.kOBSMODE = "AVERAGE";
-                stack = stack/curFrames;
+
+                cv::Mat new_stack = *stack.get() / curFrames;
+                stack = make_shared<cv::Mat>(std::move(new_stack));
+
 
                 switch(format){
 
@@ -166,7 +170,7 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
                         {
                         LOG_INFO << "Mono12 format";
 
-                            cv::Mat newMat = cv::Mat(stack.rows,stack.cols, CV_16SC1, cv::Scalar(0));
+                            shared_ptr<cv::Mat> newMat = make_shared<cv::Mat>(stack->rows,stack->cols, CV_16SC1, cv::Scalar(0));
 
                             LOG_INFO << "Setting fits BZERO key : 32768";
                             newFits.kBZERO = 32768;
@@ -179,12 +183,12 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
                             float *ptr = NULL;
                             short *ptr2 = NULL;
 
-                            for(int i = 0; i < stack.rows; i++){
+                            for(int i = 0; i < stack->rows; i++){
 
-                                ptr = stack.ptr<float>(i);
-                                ptr2 = newMat.ptr<short>(i);
+                                ptr = stack->ptr<float>(i);
+                                ptr2 = newMat->ptr<short>(i);
 
-                                for(int j = 0; j < stack.cols; j++){
+                                for(int j = 0; j < stack->cols; j++){
 
                                     if(ptr[j] - 32768 > 32767){
 
@@ -212,17 +216,17 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
                         LOG_INFO << "Setting fits SATURATE key : 255";
                             newFits.kSATURATE = 255;
 
-                            cv::Mat newMat = cv::Mat(stack.rows,stack.cols, CV_8UC1, cv::Scalar(0));
+                            shared_ptr<cv::Mat> newMat = make_shared<cv::Mat>(stack->rows,stack->cols, CV_8UC1, cv::Scalar(0));
 
                             float * ptr;
                             unsigned char * ptr2;
 
-                            for(int i = 0; i < stack.rows; i++){
+                            for(int i = 0; i < stack->rows; i++){
 
-                                ptr = stack.ptr<float>(i);
-                                ptr2 = newMat.ptr<unsigned char>(i);
+                                ptr = stack->ptr<float>(i);
+                                ptr2 = newMat->ptr<unsigned char>(i);
 
-                                for(int j = 0; j < stack.cols; j++){
+                                for(int j = 0; j < stack->cols; j++){
 
                                     ptr2[j] = (unsigned char)ptr[j];
 
@@ -263,13 +267,13 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
 
                     LOG_INFO << "stackReduction option enabled";
 
-                   cv::Mat newMat ;
+                    shared_ptr<cv::Mat> newMat ;
 
                     float bzero  = 0.0;
                     float bscale = 1.0;
 
                     LOG_INFO << "Call reduction function.";
-                    reductionByFactorDivision(bzero, bscale).copyTo(newMat);
+                    reductionByFactorDivision(bzero, bscale)->copyTo(*(newMat.get()));
 
                     LOG_INFO << "Setting fits BZERO key : " << bzero;
                     newFits.kBZERO = bzero;
@@ -314,9 +318,9 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
 
 }
 
-cv::Mat Stack::reductionByFactorDivision(float &bzero, float &bscale){
+shared_ptr<cv::Mat> Stack::reductionByFactorDivision(float &bzero, float &bscale){
 
-   cv:: Mat newMat;
+    shared_ptr<cv::Mat> newMat;
 
     switch(format){
 
@@ -324,7 +328,7 @@ cv::Mat Stack::reductionByFactorDivision(float &bzero, float &bscale){
 
             {
 
-                newMat = cv::Mat(stack.rows,stack.cols, CV_16SC1, cv::Scalar(0));
+                newMat = make_shared<cv::Mat>(stack->rows,stack->cols, CV_16SC1, cv::Scalar(0));
                 float factor = (4095.0f * curFrames)/4095.0f;
 
                 bscale = factor;
@@ -333,12 +337,12 @@ cv::Mat Stack::reductionByFactorDivision(float &bzero, float &bscale){
                 float * ptr;
                 short * ptr2;
 
-                for(int i = 0; i < stack.rows; i++){
+                for(int i = 0; i < stack->rows; i++){
 
-                    ptr = stack.ptr<float>(i);
-                    ptr2 = newMat.ptr<short>(i);
+                    ptr = stack->ptr<float>(i);
+                    ptr2 = newMat->ptr<short>(i);
 
-                    for(int j = 0; j < stack.cols; j++){
+                    for(int j = 0; j < stack->cols; j++){
 
                         if(cvRound(ptr[j] / factor) - 32768 > 32767){
 
@@ -358,7 +362,7 @@ cv::Mat Stack::reductionByFactorDivision(float &bzero, float &bscale){
 
             {
 
-                newMat = cv::Mat(stack.rows,stack.cols, CV_8UC1, cv::Scalar(0));
+                newMat = make_shared<cv::Mat>(stack->rows,stack->cols, CV_8UC1, cv::Scalar(0));
                 float factor = curFrames;
                 bscale = factor;
                 bzero  = 0;
@@ -366,12 +370,12 @@ cv::Mat Stack::reductionByFactorDivision(float &bzero, float &bscale){
                 float * ptr;
                 unsigned char * ptr2;
 
-                for(int i = 0; i < stack.rows; i++){
+                for(int i = 0; i < stack->rows; i++){
 
-                    ptr = stack.ptr<float>(i);
-                    ptr2 = newMat.ptr<unsigned char>(i);
+                    ptr = stack->ptr<float>(i);
+                    ptr2 = newMat->ptr<unsigned char>(i);
 
-                    for(int j = 0; j < stack.cols; j++){
+                    for(int j = 0; j < stack->cols; j++){
 
                         ptr2[j] = cvRound(ptr[j] / factor) ;
 

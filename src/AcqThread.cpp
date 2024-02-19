@@ -89,7 +89,7 @@ namespace fs = boost::filesystem;
 using namespace std;
 using namespace freeture;
 
-AcqThread::AcqThread(   boost::circular_buffer<Frame>       *fb,
+AcqThread::AcqThread(   boost::circular_buffer<shared_ptr<Frame>> fb,
                         boost::mutex                        *fb_m,
                         boost::condition_variable           *fb_c,
                         bool                                *sSignal,
@@ -285,9 +285,14 @@ void AcqThread::resetFrameBuffer()
 {
     LOG_DEBUG << "AcqThread::resetFrameBuffer;" << "Cleaning frameBuffer...";
     boost::mutex::scoped_lock lock(*frameBuffer_mutex);
-    frameBuffer->clear();
+
+
+    frameBuffer.clear();
+
     mFrameNumber = 0;
+
     lock.unlock();
+
     cleanStatus = true;
 }
 
@@ -375,7 +380,7 @@ void AcqThread::operator()()
 
             do
             {
-                Frame newFrame; // Container for the grabbed image. added to the frame vector. need to be new object
+                shared_ptr<Frame> newFrame = make_shared<Frame>(); // Container for the grabbed image. added to the frame vector. need to be new object
 
                 ApplyCameraSettingsToFrame(newFrame);
 
@@ -390,10 +395,10 @@ void AcqThread::operator()()
                 // Grab a frame.
                 if (m_Device->runContinuousCapture(newFrame))
                 {
-                    newFrame.mFrameNumber = mFrameNumber;
+                    newFrame->mFrameNumber = mFrameNumber;
 
                     if (LOG_SPAM_FRAME_STATUS)
-                        LOG_INFO << "AcqThread::operator();" << "============= FRAME " << newFrame.mFrameNumber << " ============= ";
+                        LOG_INFO << "AcqThread::operator();" << "============= FRAME " << newFrame->mFrameNumber << " ============= ";
 
                     // IF DEVICE IS FRAME OR VIDEO...
                     if (input_device_type == InputDeviceType::SINGLE_FITS_FRAME || input_device_type == InputDeviceType::VIDEO)
@@ -402,7 +407,7 @@ void AcqThread::operator()()
                         // 
                         // Push the new frame in the framebuffer.
                         boost::mutex::scoped_lock lock(*frameBuffer_mutex);
-                        frameBuffer->push_back(newFrame);
+                        frameBuffer.push_back(newFrame);
                         lock.unlock();
 
                         // Notify detection thread.
@@ -427,7 +432,7 @@ void AcqThread::operator()()
                     if (input_device_type == InputDeviceType::CAMERA)
                     {
                         // Get current time in seconds.
-                        int currentTimeInSec = newFrame.mDate.hours * 3600 + newFrame.mDate.minutes * 60 + (int)newFrame.mDate.seconds;
+                        int currentTimeInSec = newFrame->mDate.hours * 3600 + newFrame->mDate.minutes * 60 + (int)newFrame->mDate.seconds;
 
                         // Detect day or night.
                         TimeMode currentTimeMode = getTimeMode(currentTimeInSec);
@@ -438,7 +443,7 @@ void AcqThread::operator()()
                         {
                             // Push the new frame in the framebuffer.
                             boost::mutex::scoped_lock lock(*frameBuffer_mutex);
-                            frameBuffer->push_back(newFrame);
+                            frameBuffer.push_back(newFrame);
                             lock.unlock();
 
                             // Check TimeMode changing.
@@ -486,11 +491,11 @@ void AcqThread::operator()()
                         {
                             // Adjust exposure time.
                             if (pExpCtrl != NULL && exposureControlActive)
-                                exposureControlStatus = pExpCtrl->controlExposureTime(m_Device, newFrame.mImage, newFrame.mDate, m_DetectionParam.MASK, m_CameraParam.ACQ_FPS);
+                                exposureControlStatus = pExpCtrl->controlExposureTime(m_Device, newFrame->Image, newFrame->mDate, m_DetectionParam.MASK, m_CameraParam.ACQ_FPS);
                         }
 
                         // Get current date YYYYMMDD.
-                        currentFrameDate = TimeDate::getYYYYMMDD(newFrame.mDate);
+                        currentFrameDate = TimeDate::getYYYYMMDD(newFrame->mDate);
 
                         // If the date has changed, sun ephemeris must be updated.
                         if (currentFrameDate != mCurrentDate)
@@ -509,7 +514,7 @@ void AcqThread::operator()()
                             boost::posix_time::ptime t2(boost::posix_time::time_from_string(nowDate));
 
                             boost::posix_time::time_duration td = t2 - t1;
-                            long secTime = td.total_seconds();
+                            int64_t secTime = td.total_seconds();
 
                             if (LOG_SPAM_FRAME_STATUS)
                                 LOG_DEBUG << "AcqThread::operator();" << "operator();" << "NEXT REGCAP : " << (int)(m_CameraParam.regcap.ACQ_REGULAR_CFG.interval - secTime) << "s" << endl;
@@ -520,7 +525,7 @@ void AcqThread::operator()()
                                 LOG_DEBUG << "AcqThread::operator();" << "operator();" << "It's time to check if need to run a regular capture.";
                                 if ((currentTimeMode == m_CameraParam.regcap.ACQ_REGULAR_MODE || m_CameraParam.regcap.ACQ_REGULAR_MODE == DAYNIGHT)) {
                                     LOG_INFO << "AcqThread::operator();" << "============= Run regular acquisition because it is " << currentTimeMode << " and ACQ_REGULAR_MODE=" << m_CameraParam.regcap.ACQ_REGULAR_MODE <<" =============";
-                                    runRegularAcquisition(newFrame);
+                                    runRegularAcquisition();
                                 }
                             }
                         }
@@ -528,10 +533,10 @@ void AcqThread::operator()()
                         // Acquisiton at scheduled time is enabled.
                         if (m_CameraParam.schcap.ACQ_SCHEDULE.size() != 0 && m_CameraParam.schcap.ACQ_SCHEDULE_ENABLED && !m_Device->mVideoFramesInput)
                         {
-                            unsigned long next = (mNextAcq.hours * 3600 + mNextAcq.min * 60 + mNextAcq.sec) - (newFrame.mDate.hours * 3600 + newFrame.mDate.minutes * 60 + newFrame.mDate.seconds);
+                            unsigned long next = (mNextAcq.hours * 3600 + mNextAcq.min * 60 + mNextAcq.sec) - (newFrame->mDate.hours * 3600 + newFrame->mDate.minutes * 60 + newFrame->mDate.seconds);
 
                             if (next < 0) {
-                                next = 24l * 3600l - (newFrame.mDate.hours * 3600 + newFrame.mDate.minutes * 60 + newFrame.mDate.seconds) + (mNextAcq.hours * 3600 + mNextAcq.min * 60 + mNextAcq.sec);
+                                next = 24l * 3600l - (newFrame->mDate.hours * 3600 + newFrame->mDate.minutes * 60 + newFrame->mDate.seconds) + (mNextAcq.hours * 3600 + mNextAcq.min * 60 + mNextAcq.sec);
                                 if (LOG_SPAM_FRAME_STATUS)
                                     LOG_DEBUG << "AcqThread::operator();" << "next : " << next;
                             }
@@ -541,31 +546,31 @@ void AcqThread::operator()()
                                 LOG_DEBUG << "AcqThread::operator();" << "NEXT SCHCAP : " << tsch.at(0) << "h" << tsch.at(1) << "m" << tsch.at(2) << "s" << endl;
 
                             // It's time to run scheduled acquisition.
-                            if (mNextAcq.hours == newFrame.mDate.hours &&
-                                mNextAcq.min == newFrame.mDate.minutes &&
-                                (int)newFrame.mDate.seconds == mNextAcq.sec) {
-                                runScheduledAcquisition(newFrame);
+                            if (mNextAcq.hours == newFrame->mDate.hours &&
+                                mNextAcq.min == newFrame->mDate.minutes &&
+                                (int)newFrame->mDate.seconds == mNextAcq.sec) {
+                                runScheduledAcquisition(newFrame->mDate);
                             }
                             else {
 
                                 // The current time has elapsed.
-                                if (newFrame.mDate.hours > mNextAcq.hours) {
+                                if (newFrame->mDate.hours > mNextAcq.hours) {
 
-                                    selectNextAcquisitionSchedule(newFrame.mDate);
+                                    selectNextAcquisitionSchedule(newFrame->mDate);
 
                                 }
-                                else if (newFrame.mDate.hours == mNextAcq.hours) {
+                                else if (newFrame->mDate.hours == mNextAcq.hours) {
 
-                                    if (newFrame.mDate.minutes > mNextAcq.min) {
+                                    if (newFrame->mDate.minutes > mNextAcq.min) {
 
-                                        selectNextAcquisitionSchedule(newFrame.mDate);
+                                        selectNextAcquisitionSchedule(newFrame->mDate);
 
                                     }
-                                    else if (newFrame.mDate.minutes == mNextAcq.min) {
+                                    else if (newFrame->mDate.minutes == mNextAcq.min) {
 
-                                        if (newFrame.mDate.seconds > mNextAcq.sec) {
+                                        if (newFrame->mDate.seconds > mNextAcq.sec) {
 
-                                            selectNextAcquisitionSchedule(newFrame.mDate);
+                                            selectNextAcquisitionSchedule(newFrame->mDate);
                                         }
 
                                     }
@@ -676,7 +681,7 @@ void AcqThread::operator()()
 }
 
 
-void  AcqThread::runScheduledAcquisition(Frame& frame) {
+void  AcqThread::runScheduledAcquisition(TimeDate::Date mDate) {
     LOG_INFO << "AcqThread::runScheduledAcquisition;\t\t" << "Run scheduled acquisition.";
 
     //reset framebuffer because time passed, free memory
@@ -691,24 +696,22 @@ void  AcqThread::runScheduledAcquisition(Frame& frame) {
         setCameraSingleFrameMode(EAcquisitionMode::SCHEDULED);
     }
 
-    ApplyCameraSettingsToFrame(frame);
-
-    LOG_INFO << "AcqThread::runScheduledAcquisition;\t\t" << "Tacking shot";
+    LOG_INFO << "AcqThread::runScheduledAcquisition;\t\t" << "Taking shot";
     runImageCapture(EAcquisitionMode::SCHEDULED,
         mNextAcq.rep,
         m_CameraParam.schcap.ACQ_SCHEDULE_OUTPUT,
         "");
 
-    LOG_INFO << "AcqThread::runScheduledAcquisition;\t\t" << "Saving image";
-    saveImageCaptured(frame, 0, m_CameraParam.regcap.ACQ_REGULAR_OUTPUT, m_CameraParam.regcap.ACQ_REGULAR_PRFX + "_reg");
+//     LOG_INFO << "AcqThread::runScheduledAcquisition;\t\t" << "Saving image";
+//     saveImageCaptured(frame, 0, m_CameraParam.regcap.ACQ_REGULAR_OUTPUT, m_CameraParam.regcap.ACQ_REGULAR_PRFX + "_reg");
 
     // Update mNextAcq
-    selectNextAcquisitionSchedule(frame.mDate);
+    selectNextAcquisitionSchedule(mDate);
 }
 
 
 
-void  AcqThread::runRegularAcquisition(Frame& frame)
+void  AcqThread::runRegularAcquisition()
 {
     LOG_INFO << "AcqThread::runRegularAcquisition;\t\t" << "Run regular acquisition.";
 
@@ -721,16 +724,14 @@ void  AcqThread::runRegularAcquisition(Frame& frame)
         setCameraSingleFrameMode(EAcquisitionMode::REGULAR);
     }
 
-    ApplyCameraSettingsToFrame(frame);
-
-    LOG_INFO << "AcqThread::runRegularAcquisition;\t\t" << "Tacking shot";
+    LOG_INFO << "AcqThread::runRegularAcquisition;\t\t" << "Taking shot";
     runImageCapture(EAcquisitionMode::REGULAR,
         m_CameraParam.regcap.ACQ_REGULAR_CFG.rep,
         m_CameraParam.regcap.ACQ_REGULAR_OUTPUT,
         m_CameraParam.regcap.ACQ_REGULAR_PRFX);
 
-    LOG_INFO << "AcqThread::runRegularAcquisition;\t\t" << "Saving image";
-    saveImageCaptured(frame, 0, m_CameraParam.regcap.ACQ_REGULAR_OUTPUT, m_CameraParam.regcap.ACQ_REGULAR_PRFX);
+//     LOG_INFO << "AcqThread::runRegularAcquisition;\t\t" << "Saving image";
+//     saveImageCaptured(frame, 0, m_CameraParam.regcap.ACQ_REGULAR_OUTPUT, m_CameraParam.regcap.ACQ_REGULAR_PRFX);
 
 
     // Reset reference time in case a long exposure has been done.
@@ -896,8 +897,8 @@ bool AcqThread::buildAcquisitionDirectory(string YYYYMMDD){
 /// <summary>
 /// Called to take regular and scheduled acquisition.
 /// Single frame camera mode needed!
-/// 
 /// </summary>
+/// 
 /// <param name="imgNumber"></param>
 /// <param name="imgExposure"></param>
 /// <param name="imgGain"></param>
@@ -912,12 +913,6 @@ void AcqThread::runImageCapture(EAcquisitionMode mode,int imgNumber, ImgFormat i
 
     if (mode == EAcquisitionMode::SCHEDULED)
         LOG_INFO << "AcqThread::runImageCapture;\t\t" << "Running scheduled capture ";
-
-    // Stop camera
-    LOG_DEBUG << "AcqThread::runImageCapture;\t\t" << "AcqThread::runImageCapture;"<<"Stopping camera";
-    m_Device->stopCamera();
-
-    setCameraSingleFrameMode(mode);
 
     // Stop stack process.
     LOG_DEBUG << "AcqThread::runImageCapture;\t\t" << "AcqThread::runImageCapture;" << "Stopping stack process";
@@ -934,7 +929,7 @@ void AcqThread::runImageCapture(EAcquisitionMode mode,int imgNumber, ImgFormat i
     {
         LOG_INFO << "AcqThread::runImageCapture;\t\t" << "Prepare capture # " << i;
         // Configuration for single capture.
-        Frame frame;
+        shared_ptr<Frame> frame = make_shared<Frame>();
 
         ApplyCameraSettingsToFrame(frame);
 
@@ -966,16 +961,16 @@ void AcqThread::runImageCapture(EAcquisitionMode mode,int imgNumber, ImgFormat i
 
 }
 
-void AcqThread::saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, string imgPrefix) {
+void AcqThread::saveImageCaptured(shared_ptr<Frame> img, int imgNum, ImgFormat outputType, string imgPrefix) {
     LOG_DEBUG << "AcqThread::saveImageCaptured;\t\t"<< "AcqThread: SAVING IMAGE CAPTURED";
 
-    if(img.mImage.data) {
+    if(img->Image->data) {
 
-        string  YYYYMMDD = TimeDate::getYYYYMMDD(img.mDate);
+        string  YYYYMMDD = TimeDate::getYYYYMMDD(img->mDate);
 
         if(buildAcquisitionDirectory(YYYYMMDD)) {
 
-            string fileName = imgPrefix + "_" + TimeDate::getYYYYMMDDThhmmss(img.mDate) + "_UT-" + Conversion::intToString(imgNum);
+            string fileName = imgPrefix + "_" + TimeDate::getYYYYMMDDThhmmss(img->mDate) + "_UT-" + Conversion::intToString(imgNum);
 
             switch(outputType) {
 
@@ -983,14 +978,14 @@ void AcqThread::saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, 
 
                     {
 
-                        switch(img.mFormat) {
+                        switch(img->mFormat) {
 
                             case CamPixFmt::MONO12 :
 
                                 {
 
                                     cv::Mat temp;
-                                    img.mImage.copyTo(temp);
+                                    img->Image->copyTo(temp);
                                     cv::Mat newMat = ImgProcessing::correctGammaOnMono12(temp, 2.2);
                                     cv::Mat newMat2 = Conversion::convertTo8UC1(newMat);
                                     SaveImg::saveJPEG(newMat2, mOutputDataPath + fileName);
@@ -1004,7 +999,7 @@ void AcqThread::saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, 
                                 {
 
                                     cv::Mat temp;
-                                    img.mImage.copyTo(temp);
+                                    img->Image->copyTo(temp);
                                     cv::Mat newMat = ImgProcessing::correctGammaOnMono8(temp, 2.2);
                                     SaveImg::saveJPEG(newMat, mOutputDataPath + fileName);
 
@@ -1021,29 +1016,29 @@ void AcqThread::saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, 
 
                         Fits2D newFits(mOutputDataPath);
                         newFits.loadKeys(mfkp, m_StationParam);
-                        newFits.kGAINDB = img.mGain;
-                        newFits.kEXPOSURE = img.mExposure/1000000.0;
-                        newFits.kONTIME = img.mExposure/1000000.0;
-                        newFits.kELAPTIME = img.mExposure/1000000.0;
-                        newFits.kDATEOBS = TimeDate::getIsoExtendedFormatDate(img.mDate);
+                        newFits.kGAINDB = img->mGain;
+                        newFits.kEXPOSURE = img->mExposure/1000000.0;
+                        newFits.kONTIME = img->mExposure/1000000.0;
+                        newFits.kELAPTIME = img->mExposure/1000000.0;
+                        newFits.kDATEOBS = TimeDate::getIsoExtendedFormatDate(img->mDate);
 
-                        double  debObsInSeconds = img.mDate.hours*3600 + img.mDate.minutes*60 + img.mDate.seconds;
-                        double  julianDate      = TimeDate::gregorianToJulian(img.mDate);
+                        double  debObsInSeconds = img->mDate.hours*3600 + img->mDate.minutes*60 + img->mDate.seconds;
+                        double  julianDate      = TimeDate::gregorianToJulian(img->mDate);
                         double  julianCentury   = TimeDate::julianCentury(julianDate);
 
-                        newFits.kCRVAL1 = TimeDate::localSideralTime_2(julianCentury, img.mDate.hours, img.mDate.minutes, (int)img.mDate.seconds, m_StationParam.SITELONG);
+                        newFits.kCRVAL1 = TimeDate::localSideralTime_2(julianCentury, img->mDate.hours, img->mDate.minutes, (int)img->mDate.seconds, m_StationParam.SITELONG);
                         newFits.kCTYPE1 = "RA---ARC";
                         newFits.kCTYPE2 = "DEC--ARC";
                         newFits.kEQUINOX = 2000.0;
 
-                        switch(img.mFormat) {
+                        switch(img->mFormat) {
 
                             case CamPixFmt::MONO12 :
 
                                 {
 
                                     // Convert unsigned short type image in short type image.
-                                    cv::Mat newMat = cv::Mat(img.mImage.rows, img.mImage.cols, CV_16SC1, cv::Scalar(0));
+                                    shared_ptr<cv::Mat> newMat = make_shared<cv::Mat>(img->Image->rows, img->Image->cols, CV_16SC1, cv::Scalar(0));
 
                                     // Set bzero and bscale for print unsigned short value in soft visualization.
                                     newFits.kBZERO = 32768;
@@ -1052,12 +1047,12 @@ void AcqThread::saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, 
                                     unsigned short *ptr = NULL;
                                     short *ptr2 = NULL;
 
-                                    for(int i = 0; i < img.mImage.rows; i++){
+                                    for(int i = 0; i < img->Image->rows; i++){
 
-                                        ptr = img.mImage.ptr<unsigned short>(i);
-                                        ptr2 = newMat.ptr<short>(i);
+                                        ptr = img->Image->ptr<unsigned short>(i);
+                                        ptr2 = newMat->ptr<short>(i);
 
-                                        for(int j = 0; j < img.mImage.cols; j++){
+                                        for(int j = 0; j < img->Image->cols; j++){
 
                                             if(ptr[j] - 32768 > 32767){
 
@@ -1082,7 +1077,7 @@ void AcqThread::saveImageCaptured(Frame &img, int imgNum, ImgFormat outputType, 
 
                                 {
 
-                                   if(newFits.writeFits(img.mImage, UC8, fileName))
+                                   if(newFits.writeFits(img->Image, UC8, fileName))
                                         LOG_DEBUG << "AcqThread::saveImageCaptured;\t\t" << "Fits saved in : " << mOutputDataPath << fileName;
 
                                 }
@@ -1361,33 +1356,36 @@ TimeMode AcqThread::getCurrentTimeMode()
     return TimeMode::NONE;
 }
 
-void AcqThread::ApplyCameraSettingsToFrame(Frame& frame)
+void AcqThread::ApplyCameraSettingsToFrame(shared_ptr<Frame> frame)
 {
-    LOG_DEBUG << "AcqThread::ApplyCameraSettingsToFrame";
-    frame.mExposure = m_CurrentCameraSettings.Exposure;
-    
-    frame.mFormat = m_CurrentCameraSettings.PixelFormat;
+    if (!frame)
+        throw exception("Frame is null");
 
-    switch (frame.mFormat) {
+    LOG_DEBUG << "AcqThread::ApplyCameraSettingsToFrame";
+    frame->mExposure = m_CurrentCameraSettings.Exposure;
+    
+    frame->mFormat = m_CurrentCameraSettings.PixelFormat;
+
+    switch (frame->mFormat) {
     case CamPixFmt::MONO12:
-        frame.mSaturatedValue = 4095;
+        frame->mSaturatedValue = 4095;
         break;
     default:
-        frame.mSaturatedValue = 255;
+        frame->mSaturatedValue = 255;
     }
 
-    frame.mFps = m_CurrentCameraSettings.FPS;
-    frame.mGain = m_CurrentCameraSettings.Gain;
-    frame.mHeight = m_CurrentCameraSettings.SizeHeight;
-    frame.mWidth = m_CurrentCameraSettings.SizeWidth; 
-    frame.mStartX = m_CurrentCameraSettings.StartX;
-    frame.mStartY = m_CurrentCameraSettings.StartY;
+    frame->mFps = m_CurrentCameraSettings.FPS;
+    frame->mGain = m_CurrentCameraSettings.Gain;
+    frame->mHeight = m_CurrentCameraSettings.SizeHeight;
+    frame->mWidth = m_CurrentCameraSettings.SizeWidth; 
+    frame->mStartX = m_CurrentCameraSettings.StartX;
+    frame->mStartY = m_CurrentCameraSettings.StartY;
 
-    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Exposure time : " << frame.mExposure;
-    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Gain : " << frame.mGain;
+    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Exposure time : " << frame->mExposure;
+    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Gain : " << frame->mGain;
     EParser<CamPixFmt> format;
-    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Format : " << format.getStringEnum(frame.mFormat);
-    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "FPS : " << frame.mFps;
+    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Format : " << format.getStringEnum(frame->mFormat);
+    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "FPS : " << frame->mFps;
 }
 
 bool AcqThread::prepareAcquisitionOnDevice(EAcquisitionMode mode)
@@ -1397,7 +1395,6 @@ bool AcqThread::prepareAcquisitionOnDevice(EAcquisitionMode mode)
     // Get Sunrise start/stop, Sunset start/stop. ---
     computeSunTimes();
 
-    
     if (mode == EAcquisitionMode::SCHEDULED)
     {
         m_CurrentCameraSettings.Gain = mNextAcq.gain;
@@ -1427,6 +1424,7 @@ bool AcqThread::prepareAcquisitionOnDevice(EAcquisitionMode mode)
                 m_CurrentCameraSettings.Exposure = m_CameraParam.regcap.ACQ_REGULAR_CFG.exp;
                 m_CurrentCameraSettings.FPS = 0;
                 m_CurrentCameraSettings.PixelFormat = m_CameraParam.regcap.ACQ_REGULAR_CFG.fmt;
+                break;
             }
             };
         }
@@ -1443,16 +1441,22 @@ bool AcqThread::prepareAcquisitionOnDevice(EAcquisitionMode mode)
                     m_CurrentCameraSettings.Exposure = m_CameraParam.ACQ_DAY_EXPOSURE;
                     m_CurrentCameraSettings.FPS = m_CameraParam.ACQ_FPS;
                     m_CurrentCameraSettings.PixelFormat = m_CameraParam.ACQ_FORMAT;
+                    break;
                 }
                 case EAcquisitionMode::REGULAR: {
                     m_CurrentCameraSettings.Gain = m_CameraParam.regcap.ACQ_REGULAR_CFG.gain;
                     m_CurrentCameraSettings.Exposure = m_CameraParam.ACQ_DAY_EXPOSURE;
                     m_CurrentCameraSettings.FPS = 0;
                     m_CurrentCameraSettings.PixelFormat = m_CameraParam.regcap.ACQ_REGULAR_CFG.fmt;
+                    break;
                 }
                 };
             }
             else {
+                LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "*************************** SET SUNRISE/SUNSET CAMERA SETTINGS";
+                LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "AUTO EXPOSURE   :  NO";
+                LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "DAYTIME         :  YES";
+
                 //SUNRISE AND SUNSET
                 switch (mode) {
                 case EAcquisitionMode::CONTINUOUS: {
@@ -1460,12 +1464,14 @@ bool AcqThread::prepareAcquisitionOnDevice(EAcquisitionMode mode)
                     m_CurrentCameraSettings.Exposure = m_CameraParam.ACQ_DAY_EXPOSURE;
                     m_CurrentCameraSettings.FPS = m_CameraParam.ACQ_FPS;
                     m_CurrentCameraSettings.PixelFormat = m_CameraParam.ACQ_FORMAT;
+                    break;
                 }
                 case EAcquisitionMode::REGULAR: {
                     m_CurrentCameraSettings.Gain = m_CameraParam.regcap.ACQ_REGULAR_CFG.gain;
                     m_CurrentCameraSettings.Exposure = m_CameraParam.ACQ_DAY_EXPOSURE;
                     m_CurrentCameraSettings.FPS = 0;
                     m_CurrentCameraSettings.PixelFormat = m_CameraParam.regcap.ACQ_REGULAR_CFG.fmt;
+                    break;
                 }
                 };
             }

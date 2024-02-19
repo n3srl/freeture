@@ -34,6 +34,7 @@
 * \brief   Load parameters from a configuration file.
 */
 #include "Commons.h"
+
 #include "CommonConfig.h"
 
 #include <fstream>

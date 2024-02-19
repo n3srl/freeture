@@ -12,7 +12,6 @@
 #include <string>
 #include <memory>
 
-
 #include <GenICam.h>
 
 #include "Camera.h"
@@ -77,11 +76,9 @@ namespace freeture
 
             void grabCleanse() override;
 
-            bool grabImage(Frame& newFrame) override;
+            bool grabImage(std::shared_ptr<Frame>  newFrame) override;
 
-            void CopyFrame(Frame&, const uint8_t*, size_t);
-
-            bool grabSingleImage(Frame& frame) override;
+            void CopyFrame(std::shared_ptr<Frame>, const uint8_t*, size_t);
 
             void getExposureBounds(double &eMin, double &eMax) override;
 

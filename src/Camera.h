@@ -156,20 +156,12 @@ namespace freeture
         virtual void grabCleanse() { destroyDevice(); };
 
         /**
-        * Get a frame from continuous acquisition.
+        * Get a frame acquisition.
         *
         * @param newFrame New frame's container object.
         * @return Success status to grab a frame.
         */
-        virtual bool grabImage(Frame& newFrame) { return false; };
-
-        /**
-        * Get a frame from single acquisition.
-        *
-        * @param newFrame Frame's container object.
-        * @return Success status to grab a frame.
-        */
-        virtual bool grabSingleImage(Frame& frame) { return false; };
+        virtual bool grabImage(std::shared_ptr<Frame> newFrame) { return false; };
 
         /**
         * Get device's exposure time bounds.
@@ -178,6 +170,7 @@ namespace freeture
         * @param eMax Return maximum exposure time value.
         */
         virtual void getExposureBounds(double& eMin, double& eMax) {};
+
         /**
         * Get device's frame acquisition bounds.
         *

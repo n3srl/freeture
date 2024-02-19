@@ -46,14 +46,15 @@
 using namespace freeture;
 using namespace std;
 
-StackThread::StackThread(   bool                            *sS,
-                            boost::mutex                    *sS_m,
-                            boost::condition_variable       *sS_c,
-                            boost::circular_buffer<Frame>   *fb,
-                            boost::mutex                    *fb_m,
-                            boost::condition_variable       *fb_c,
-                            std::shared_ptr<CfgParam>       cfg
-                            ){
+StackThread::StackThread(
+    bool* sS,
+    boost::mutex* sS_m,
+    boost::condition_variable* sS_c,
+    boost::circular_buffer<std::shared_ptr<Frame>> fb,
+    boost::mutex* fb_m,
+    boost::condition_variable* fb_c,
+    std::shared_ptr<CfgParam> cfg
+    ){
 
     mThread = NULL;
     mustStop = false;
@@ -293,10 +294,10 @@ void StackThread::operator()(){
 
                         // Fetch last frame grabbed.
                         boost::mutex::scoped_lock lock2(*frameBuffer_mutex);
-                        if(frameBuffer->size() == 0) {
+                        if(frameBuffer.size() == 0) {
                             throw "SHARED CIRCULAR BUFFER SIZE = 0 -> STACK INTERRUPTION.";
                         }
-                        Frame newFrame = frameBuffer->back();
+                        shared_ptr<Frame> newFrame = frameBuffer.back();
                         lock2.unlock();
 
                         // Add the new frame to the stack.

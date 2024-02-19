@@ -9,8 +9,9 @@
 *
 */
 
-#ifdef LINUX
 #include "Commons.h"
+
+#ifdef LINUX
 #include "CameraDeviceManager.h"
 
     #include <opencv2/highgui/highgui.hpp>

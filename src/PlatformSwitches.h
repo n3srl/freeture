@@ -2,3 +2,5 @@
 #ifdef _WIN32
     #define WINDOWS
 #endif
+
+#define LINUX

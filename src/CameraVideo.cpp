@@ -136,8 +136,8 @@ bool CameraVideo::grabImage(Frame &img){
         cvtColor(frame, frame, cv::COLOR_BGRA2GRAY);
 
         boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
-
-        Frame f = Frame(frame, 0, 0, to_iso_extended_string(time));
+        Frame f;
+        //Frame f = Frame( frame, 0, 0, to_iso_extended_string(time));
 
         img = f;
         img.mFrameNumber = mCap.get(cv::CAP_PROP_POS_FRAMES);

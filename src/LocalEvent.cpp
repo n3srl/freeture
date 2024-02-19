@@ -83,7 +83,7 @@ void LocalEvent::computeMassCenter() {
     x = x / mAbsPos.size();
     y = y / mAbsPos.size();
 
-    mLeMassCenter = cv::Point(x,y);
+    mLeMassCenter = cv::Point((int)x, (int)y);
 
 }
 
@@ -137,12 +137,12 @@ bool LocalEvent::localEventIsValid() {
         xPos = xPos / mPosPos.size();
         yPos = yPos / mPosPos.size();
 
-        mPosMassCenter = cv::Point(xPos, yPos);
+        mPosMassCenter = cv::Point((int)xPos, (int)yPos);
 
         // Search radius.
         for(it = mPosPos.begin(); it != mPosPos.end(); ++it) {
 
-            float radius = sqrt(pow(((*it).x - mPosMassCenter.x),2) + pow(((*it).y - mPosMassCenter.y),2));
+            double radius = sqrt(pow(((*it).x - mPosMassCenter.x),2) + pow(((*it).y - mPosMassCenter.y),2));
 
             if(radius > mPosRadius) {
 
@@ -170,12 +170,12 @@ bool LocalEvent::localEventIsValid() {
         xNeg = xNeg / mNegPos.size();
         yNeg = yNeg / mNegPos.size();
 
-        mNegMassCenter = cv::Point(xNeg, yNeg);
+        mNegMassCenter = cv::Point((int)xNeg, (int)yNeg);
 
         // Search radius.
         for(it = mNegPos.begin(); it != mNegPos.end(); ++it){
 
-            float radius = sqrt(pow(((*it).x - mNegMassCenter.x),2) + pow(((*it).y - mNegMassCenter.y),2));
+            double radius = sqrt(pow(((*it).x - mNegMassCenter.x),2) + pow(((*it).y - mNegMassCenter.y),2));
 
             if(radius > mNegRadius) {
 
@@ -272,14 +272,14 @@ cv::Mat LocalEvent::createPosNegAbsMap() {
         xPos = xPos / mPosPos.size();
         yPos = yPos / mPosPos.size();
 
-        cv::Point mPosMassCenter = cv::Point(xPos, yPos);
+        cv::Point mPosMassCenter = cv::Point((int)xPos, (int)yPos);
 
         // Search radius.
-        float posRadius = 0.0;
+        double posRadius = 0.0;
 
         for(it = mPosPos.begin(); it != mPosPos.end(); ++it){
 
-            float radius = sqrt(pow(((*it).x - mPosMassCenter.x),2) + pow(((*it).y - mPosMassCenter.y),2));
+            double radius = sqrt(pow(((*it).x - mPosMassCenter.x),2) + pow(((*it).y - mPosMassCenter.y),2));
 
             if(radius > posRadius) {
 
@@ -323,14 +323,14 @@ cv::Mat LocalEvent::createPosNegAbsMap() {
         xNeg = xNeg / mNegPos.size();
         yNeg = yNeg / mNegPos.size();
 
-        cv::Point mNegMassCenter = cv::Point(xNeg, yNeg);
+        cv::Point mNegMassCenter = cv::Point((int)xNeg, (int)yNeg);
 
         // Search radius.
-        float negRadius = 0.0;
+        double negRadius = 0.0;
 
         for(it = mNegPos.begin(); it != mNegPos.end(); ++it){
 
-            float radius = sqrt(pow(((*it).x - mNegMassCenter.x),2) + pow(((*it).y - mNegMassCenter.y),2));
+            double radius = sqrt(pow(((*it).x - mNegMassCenter.x),2) + pow(((*it).y - mNegMassCenter.y),2));
 
             if(radius > negRadius) {
 
@@ -353,7 +353,7 @@ void LocalEvent::mergeWithAnOtherLE(LocalEvent &LE) {
 
     mLeRoiList.insert(mLeRoiList.end(), LE.mLeRoiList.begin(), LE.mLeRoiList.end());
 
-    float dist = sqrt(pow((mLeMassCenter.x - LE.getMassCenter().x),2) + pow((mLeMassCenter.y - LE.getMassCenter().y),2));
+    double dist = sqrt(pow((mLeMassCenter.x - LE.getMassCenter().x),2) + pow((mLeMassCenter.y - LE.getMassCenter().y),2));
     completeGapWithRoi(mLeMassCenter,LE.getMassCenter());
     mAbsPos.insert(mAbsPos.end(), LE.mAbsPos.begin(), LE.mAbsPos.end());
     mPosPos.insert(mPosPos.end(), LE.mPosPos.begin(), LE.mPosPos.end());
@@ -371,23 +371,23 @@ void LocalEvent::completeGapWithRoi(cv::Point p1, cv::Point p2) {
 
     cv::Mat roi(10,10,CV_8UC1, cv::Scalar(255));
 
-    float dist = sqrt(pow((p1.x - p2.x),2) + pow((p1.y - p2.y),2));
+    double dist = sqrt(pow((p1.x - p2.x),2) + pow((p1.y - p2.y),2));
 
-    float part = dist / 10.0;
+    double part = dist / 10.0;
 
     if((int)part!=0) {
 
         cv::Point p3 = cv::Point(p1.x,p2.y);
 
-        float dist1 = sqrt(pow((p1.x - p3.x),2) + pow((p1.y - p3.y),2)); //A--> C
-        float dist2 = sqrt(pow((p2.x - p3.x),2) + pow((p2.y - p3.y),2)); //B-> C
+        double dist1 = sqrt(pow((p1.x - p3.x),2) + pow((p1.y - p3.y),2)); //A--> C
+        double dist2 = sqrt(pow((p2.x - p3.x),2) + pow((p2.y - p3.y),2)); //B-> C
 
-        float part1 = dist1 / part;
-        float part2 = dist2 / part;
+        double part1 = dist1 / part;
+        double part2 = dist2 / part;
 
         for(int i = 0; i < part ; i++){
 
-            cv::Point p = cv::Point(p3.x + i * part2, p1.y + i* part1);
+            cv::Point p = cv::Point((int)(p3.x + i * part2), (int)(p1.y + i* part1));
 
             if(p.x-5 > 0 && p.x+5 < mLeMap.cols && p.y-5 > 0 && p.y+5 < mLeMap.rows)
                 roi.copyTo(mLeMap(cv::Rect(p.x-5,p.y-5,10,10)));

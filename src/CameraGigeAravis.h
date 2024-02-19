@@ -34,46 +34,23 @@
 * \brief   Use Aravis library to pilot GigE Cameras.
 *          https://wiki.gnome.org/action/show/Projects/Aravis?action=show&redirect=Aravis
 */
-#ifdef LINUX
 #include "Commons.h"
 
-#include <iostream>
+#ifdef LINUX
+#include <memory>
 #include <string>
-#include <algorithm>
-#include <time.h>
-#include <sstream>
-#include <vector>
-#include <chrono>
-#include <thread>
-
-#include <boost/log/common.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/attributes/named_scope.hpp>
-#include <boost/log/attributes.hpp>
-#include <boost/log/sinks.hpp>
-#include <boost/log/sources/logger.hpp>
-#include <boost/log/core.hpp>
-
-#define BOOST_LOG_DYN_LINK 1
-
-#include "config.h"
-#include "ELogSeverityLevel.h"
-#include "EParser.h"
-#include "Camera.h"
-#include "Frame.h"
-#include "TimeDate.h"
-
-#include "CameraFirstInit.h"
 
 #include <arv.h>
-#include "arvinterface.h"
+#include <arvinterface.h>
+
+#include "Camera.h"
+#include "TimeDate.h"
+#include "ECamPixFmt.h"
 
 namespace freeture
 {
     class CameraDescription;
+    class Frame;
 
     class CameraGigeAravis : public Camera
     {
@@ -81,26 +58,19 @@ namespace freeture
 
     private:
 
-        GError* error = nullptr;        // ARAVIS API Error
-        ArvCamera* camera;                // Camera to control.
+        GError* error = nullptr;                // ARAVIS API Error
+        ArvCamera* camera;                      // Camera to control.
         ArvPixelFormat  pixFormat;              // Image format.
-        ArvStream* stream;                // Object for video stream reception.
+        ArvStream* stream;                      // Object for video stream reception.
 
-        int             mStartX;                // Crop starting X.
-        int             mStartY;                // Crop starting Y.
-        int             mWidth;                 // Camera region's width.
-        int             mHeight;                // Camera region's height.
-        double          fps;                    // Camera acquisition frequency.
-        double          gainMin;                // Camera minimum gain.
-        double          gainMax;                // Camera maximum gain.
         unsigned int    payload;                // Width x height.
         double          exposureMin;            // Camera's minimum exposure time.
         double          exposureMax;            // Camera's maximum exposure time.
-        const char* capsString;
-        int             gain;                   // Camera's gain.
-        double          exp;                    // Camera's exposure time.
+        const char*     capsString;
         bool            shiftBitsImage;         // For example : bits are shifted for dmk's frames.
 
+        float sensor_width;
+        float sensor_height;
 
         guint64         nbCompletedBuffers;     // Number of frames successfully received.
         guint64         nbFailures;             // Number of frames failed to be received.
@@ -112,11 +82,9 @@ namespace freeture
 
         CameraGigeAravis(CameraDescription, cameraParam settings);
 
-        CameraGigeAravis();
-
         ~CameraGigeAravis();
 
-        bool createDevice(int id);
+        bool createDevice();
 
         void grabCleanse();
 
@@ -124,9 +92,9 @@ namespace freeture
 
         void acqStop();
 
-        bool grabImage(Frame& newFrame);
+        bool grabImage(std::shared_ptr<Frame>  newFrame);
 
-        bool grabSingleImage(Frame& frame);
+        bool grabSingleImage(std::shared_ptr<Frame>  frame);
 
         bool getDeviceNameById(int id, std::string& device);
 

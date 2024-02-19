@@ -35,8 +35,12 @@
 
 #include "CameraV4l2.h"
 
+#include "Logger.h"
+#include "Conversion.h"
+
 #ifdef LINUX
 using namespace freeture;
+using namespace std;
 
     enum io_method {
         IO_METHOD_READ,
@@ -61,11 +65,8 @@ using namespace freeture;
     int              frame_number = 0;
 
 
-    boost::log::sources::severity_logger< LogSeverityLevel >  CameraV4l2::logger;
-    CameraV4l2::Init CameraV4l2::initializer;
-
-    CameraV4l2::CameraV4l2(){
-
+    CameraV4l2::CameraV4l2()
+    {
         io_method io = IO_METHOD_MMAP;
         fd = -1;
         out_buf = 1;
@@ -84,11 +85,9 @@ using namespace freeture;
         mHeight = 480;
         n_buffers = 3;
 
-        mExposureAvailable = true;
-        mGainAvailable = true;
+        m_ExposureAvailable = true;
+        m_GainAvailable = true;
         mCustomSize = false;
-        mInputDeviceType = CAMERA;
-
     }
 
     CameraV4l2::~CameraV4l2(){
@@ -107,11 +106,11 @@ using namespace freeture;
             return false;
         }
 
-        std::cout << "Driver name     : " << caps.driver << std::endl;
-        std::cout << "Device name     : " << caps.card << std::endl;
-        std::cout << "Device location : " << caps.bus_info << std::endl;
-        printf ("Driver version  : %u.%u.%u\n",(caps.version >> 16) & 0xFF, (caps.version >> 8) & 0xFF, caps.version & 0xFF);
-        std::cout << "Capabilities    : " << caps.capabilities << std::endl;
+        LOG_DEBUG << "Driver name     : " << caps.driver ;
+        LOG_DEBUG << "Device name     : " << caps.card ;
+        LOG_DEBUG << "Device location : " << caps.bus_info ;
+        LOG_DEBUG << "Driver version  :"  << ((caps.version >> 16) & 0xFF) << " " << ((caps.version >> 8) & 0xFF) << " " << (caps.version & 0xFF);
+        LOG_DEBUG << "Capabilities    : " << caps.capabilities ;
 
         struct v4l2_cropcap cropcap;
         memset(&cropcap, 0, sizeof(cropcap));
@@ -173,12 +172,12 @@ using namespace freeture;
 
         double eMin, eMax; int gMin, gMax;
         getExposureBounds(eMin, eMax);
-        std::cout << "Min exposure    : " << eMin << std::endl;
-        std::cout << "Max exposure    : " << eMax << std::endl;
+        LOG_DEBUG << "Min exposure    : " << eMin ;
+        LOG_DEBUG << "Max exposure    : " << eMax ;
 
         getGainBounds(gMin, gMax);
-        std::cout << "Min gain        : " << gMin << std::endl;
-        std::cout << "Max gain        : " << gMax << std::endl;
+        LOG_DEBUG << "Min gain        : " << gMin ;
+        LOG_DEBUG << "Max gain        : " << gMax ;
 
         return true;
 
@@ -214,7 +213,7 @@ using namespace freeture;
                     struct v4l2_capability caps = {};
 
                     if (-1 == xioctl(fd, VIDIOC_QUERYCAP, &caps)) {
-                        std::cout << "Fail Querying Capabilities." << std::endl;
+                        LOG_DEBUG << "Fail Querying Capabilities." ;
                         perror("Querying Capabilities");
                         res = false;
                     }else {
@@ -250,7 +249,7 @@ using namespace freeture;
         bool res = true;
         int deviceNumber = 0;
 
-        std::cout << std::endl << "------------ USB2 CAMERAS WITH V4L2 ----------" << std::endl << std::endl;
+        LOG_DEBUG  << "------------ USB2 CAMERAS WITH V4L2 ----------"  ;
 
         do {
 
@@ -278,7 +277,7 @@ using namespace freeture;
                         res = false;
                     }else {
 
-                        std::cout << "-> [" << deviceNumber << "] " << caps.card << std::endl;
+                        LOG_DEBUG << "-> [" << deviceNumber << "] " << caps.card ;
 
                     }
                 }
@@ -291,14 +290,14 @@ using namespace freeture;
 
                 // file doesn't exist
                 if(deviceNumber == 0)
-                    std::cout << "-> No cameras detected ..." << std::endl;
+                    LOG_DEBUG << "-> No cameras detected ..." ;
                 loop = false;
 
             }
 
         }while(loop);
 
-        std::cout << std::endl << "------------------------------------------------" << std::endl << std::endl;
+        LOG_DEBUG  << "------------------------------------------------"  ;
 
         return res;
 
@@ -467,11 +466,11 @@ using namespace freeture;
                 return false;
             }
 
-            std::cout << "Driver name     : " << caps.driver << std::endl;
-            std::cout << "Device name     : " << caps.card << std::endl;
-            std::cout << "Device location : " << caps.bus_info << std::endl;
+            LOG_DEBUG << "Driver name     : " << caps.driver ;
+            LOG_DEBUG << "Device name     : " << caps.card ;
+            LOG_DEBUG << "Device location : " << caps.bus_info ;
             printf ("Driver version  : %u.%u.%u\n",(caps.version >> 16) & 0xFF, (caps.version >> 8) & 0xFF, caps.version & 0xFF);
-            std::cout << "Capabilities    : " << caps.capabilities << std::endl;
+            LOG_DEBUG << "Capabilities    : " << caps.capabilities ;
 
             return true;
 
@@ -568,7 +567,7 @@ using namespace freeture;
             return false;
 
         if(-1 == xioctl(fd, VIDIOC_S_FMT, &mFormat)) {
-            std::cout << "Fail to set fmt." << std::endl;
+            LOG_DEBUG << "Fail to set fmt." ;
             return false;
         }
 
@@ -735,7 +734,7 @@ using namespace freeture;
 
         unsigned char* ImageBuffer = NULL;
 
-        Mat img = Mat(mFormat.fmt.pix.height,mFormat.fmt.pix.width,CV_8UC1, Scalar(0));
+        cv::Mat img = cv::Mat(mFormat.fmt.pix.height,mFormat.fmt.pix.width,CV_8UC1, cv::Scalar(0));
         size_t s = mFormat.fmt.pix.width*mFormat.fmt.pix.height;
 
         bool grabSuccess = false;
@@ -806,7 +805,7 @@ using namespace freeture;
 
         if(frame.mHeight > 0 && frame.mWidth > 0) {
 
-            std::cout << "Setting size to : " << frame.mWidth << "x" << frame.mHeight << std::endl;
+            LOG_DEBUG << "Setting size to : " << frame.mWidth << "x" << frame.mHeight ;
             mWidth = frame.mWidth;
             mHeight = frame.mHeight;
             mCustomSize = true;
@@ -817,8 +816,8 @@ using namespace freeture;
 
         acqStart();
 
-        std::cout << ">> Height : " << mFormat.fmt.pix.height << std::endl;
-        std::cout << ">> Width  : " << mFormat.fmt.pix.width << std::endl;
+        LOG_DEBUG << ">> Height : " << mFormat.fmt.pix.height ;
+        LOG_DEBUG << ">> Width  : " << mFormat.fmt.pix.width ;
 
         if(!setPixelFormat(frame.mFormat))
             return false;
@@ -830,7 +829,7 @@ using namespace freeture;
 
         unsigned char* ImageBuffer = NULL;
 
-        Mat img = Mat(mFormat.fmt.pix.height,mFormat.fmt.pix.width,CV_8UC1, Scalar(0));
+        cv::Mat img = cv::Mat(mFormat.fmt.pix.height,mFormat.fmt.pix.width,CV_8UC1, cv::Scalar(0));
         size_t s = mFormat.fmt.pix.width*mFormat.fmt.pix.height;
 
         bool grabSuccess = false;
@@ -891,7 +890,7 @@ using namespace freeture;
             frame.mSaturatedValue = 255;
             frame.mFrameNumber = mFrameCounter;
 
-            std::cout << "size image buffer : " << sizeof(buffers[buf.index].start)  << std::endl;
+            LOG_DEBUG << "size image buffer : " << sizeof(buffers[buf.index].start)  ;
             if(!convertImage(ImageBuffer, frame.mImg))
                 grabSuccess = false;
 
@@ -904,7 +903,7 @@ using namespace freeture;
 
     }
 
-    bool CameraV4l2::convertImage(unsigned char* buffer, Mat &image) {
+    bool CameraV4l2::convertImage(unsigned char* buffer, cv::Mat &image) {
 
         bool res = false;
 
@@ -916,7 +915,7 @@ using namespace freeture;
 
                     {
 
-                        image = Mat(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC1, Scalar(0));
+                        image = cv::Mat(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC1, cv::Scalar(0));
                         memcpy(image.ptr(), buffer, mFormat.fmt.pix.width*mFormat.fmt.pix.height);
                         res = true;
 
@@ -967,7 +966,7 @@ using namespace freeture;
                 case V4L2_PIX_FMT_BGR24 :
 
                     {
-                        Mat dispimg = Mat(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC3, buffer);
+                        Mat dispimg = cv::Mat(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC3, buffer);
                         cvtColor(dispimg,image,cv::COLOR_BGRA2GRAY);
                         res = true;
 
@@ -978,7 +977,7 @@ using namespace freeture;
                 case V4L2_PIX_FMT_RGB24 :
 
                     {
-                        Mat dispimg = Mat(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC3, buffer);
+                        cv::Mat dispimg = cv::Mat(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC3, buffer);
                         cvtColor(dispimg,image,cv::COLOR_BGRA2GRAY);
                         res = true;
 
@@ -1023,12 +1022,12 @@ using namespace freeture;
 
         } else {
 
-            /*std::cout << "Name    : " << queryctrl.name << std::endl;
-            std::cout << "Min     : " << queryctrl.minimum << std::endl;
-            std::cout << "Max     : " << queryctrl.maximum << std::endl;
-            std::cout << "Step    : " << queryctrl.step << std::endl;
-            std::cout << "Default : " << queryctrl.default_value << std::endl;
-            std::cout << "Flags   : " << queryctrl.flags << std::endl;*/
+            /*LOG_DEBUG << "Name    : " << queryctrl.name ;
+            LOG_DEBUG << "Min     : " << queryctrl.minimum ;
+            LOG_DEBUG << "Max     : " << queryctrl.maximum ;
+            LOG_DEBUG << "Step    : " << queryctrl.step ;
+            LOG_DEBUG << "Default : " << queryctrl.default_value ;
+            LOG_DEBUG << "Flags   : " << queryctrl.flags ;*/
 
             eMin = queryctrl.minimum;
             eMax = queryctrl.maximum;
@@ -1087,12 +1086,12 @@ using namespace freeture;
 
         } else {
 
-            /*std::cout << "Name    : " << queryctrl.name << std::endl;
-            std::cout << "Min     : " << queryctrl.minimum << std::endl;
-            std::cout << "Max     : " << queryctrl.maximum << std::endl;
-            std::cout << "Step    : " << queryctrl.step << std::endl;
-            std::cout << "Default : " << queryctrl.default_value << std::endl;
-            std::cout << "Flags   : " << queryctrl.flags << std::endl;*/
+            /*LOG_DEBUG << "Name    : " << queryctrl.name ;
+            LOG_DEBUG << "Min     : " << queryctrl.minimum ;
+            LOG_DEBUG << "Max     : " << queryctrl.maximum ;
+            LOG_DEBUG << "Step    : " << queryctrl.step ;
+            LOG_DEBUG << "Default : " << queryctrl.default_value ;
+            LOG_DEBUG << "Flags   : " << queryctrl.flags ;*/
 
             gMin = queryctrl.minimum;
             gMax = queryctrl.maximum;
@@ -1121,14 +1120,14 @@ using namespace freeture;
         if(fmt.fmt.pix.pixelformat == V4L2_PIX_FMT_GREY) {
 
             strncpy(fourcc, (char *)&fmt.fmt.pix.pixelformat, 4);
-            std::cout << "Pixel format : V4L2_PIX_FMT_GREY" << std::endl;
+            LOG_DEBUG << "Pixel format : V4L2_PIX_FMT_GREY" ;
             format = MONO_8;
 
         // http://linuxtv.org/downloads/v4l-dvb-apis/V4L2-PIX-FMT-Y12.html
         }else if(fmt.fmt.pix.pixelformat == V4L2_PIX_FMT_Y12) {
 
             strncpy(fourcc, (char *)&fmt.fmt.pix.pixelformat, 4);
-            std::cout << "Pixel format : V4L2_PIX_FMT_Y12" << std::endl;
+            LOG_DEBUG << "Pixel format : V4L2_PIX_FMT_Y12" ;
             format = MONO_12;
 
         }*/
@@ -1150,7 +1149,7 @@ using namespace freeture;
 
                 case V4L2_FRMSIZE_TYPE_DISCRETE :
 
-                    std::cout << "[" << frmsize.index << "] : " << frmsize.discrete.width << "x" << frmsize.discrete.height << std::endl;
+                    LOG_DEBUG << "[" << frmsize.index << "] : " << frmsize.discrete.width << "x" << frmsize.discrete.height ;
                     res = true;
 
                     break;
@@ -1161,13 +1160,13 @@ using namespace freeture;
 
                 case V4L2_FRMSIZE_TYPE_STEPWISE :
 
-                    std::cout << "Min width : " << frmsize.stepwise.min_width << std::endl;
-                    std::cout << "Max width : " << frmsize.stepwise.max_width << std::endl;
-                    std::cout << "Step width : " << frmsize.stepwise.step_width << std::endl;
+                    LOG_DEBUG << "Min width : " << frmsize.stepwise.min_width ;
+                    LOG_DEBUG << "Max width : " << frmsize.stepwise.max_width ;
+                    LOG_DEBUG << "Step width : " << frmsize.stepwise.step_width ;
 
-                    std::cout << "Min height : " << frmsize.stepwise.min_height << std::endl;
-                    std::cout << "Max height : " << frmsize.stepwise.max_height << std::endl;
-                    std::cout << "Step height : " << frmsize.stepwise.step_height << std::endl;
+                    LOG_DEBUG << "Min height : " << frmsize.stepwise.min_height ;
+                    LOG_DEBUG << "Max height : " << frmsize.stepwise.max_height ;
+                    LOG_DEBUG << "Step height : " << frmsize.stepwise.step_height ;
 
                     break;
 
@@ -1219,7 +1218,7 @@ using namespace freeture;
         if (temp.type == V4L2_FRMIVAL_TYPE_DISCRETE) {
             while (ioctl(fd, VIDIOC_ENUM_FRAMEINTERVALS, &temp) != -1) {
                 values.push_back(float(temp.discrete.denominator)/temp.discrete.numerator);
-                std::cout << values.back() << " fps" << std::endl;
+                LOG_DEBUG << values.back() << " fps" ;
                 temp.index += 1;
                 res = true;
             }
@@ -1235,7 +1234,7 @@ using namespace freeture;
                 stepval = float(temp.stepwise.step.numerator)/temp.stepwise.step.denominator;
             }
             for (float cval = minval; cval <= maxval; cval += stepval) {
-                std::cout << 1/cval << " fps" << std::endl;
+                LOG_DEBUG << 1/cval << " fps" ;
                 values.push_back(1.0/cval);
                 res = true;
             }
@@ -1252,7 +1251,7 @@ using namespace freeture;
 
         streamparm.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         if (-1 == ioctl(fd, VIDIOC_G_PARM, &streamparm)) {
-            std::cout << "Fail to read fps value." << std::endl;
+            LOG_DEBUG << "Fail to read fps value." ;
             return false;
         }
 
@@ -1317,7 +1316,7 @@ using namespace freeture;
                     return false;
                 }
 
-                std::cout << ">> Manual exposure setted." << std::endl;
+                LOG_DEBUG << ">> Manual exposure setted." ;
 
             }
 
@@ -1376,12 +1375,12 @@ using namespace freeture;
 
             if(expMin == -1 && expMax == -1) {
 
-                std::cout << "Exposure time not supported." << std::endl;
+                LOG_DEBUG << "Exposure time not supported." ;
                 return true;
 
             }
 
-            std::cout << "> Exposure value (" << val << ") is not in range [ " << expMin << " - " << expMax << " ]" << std::endl;
+            LOG_DEBUG << "> Exposure value (" << val << ") is not in range [ " << expMin << " - " << expMax << " ]" ;
 
         }
 
@@ -1434,12 +1433,12 @@ using namespace freeture;
 
             if(gainMin == -1 && gainMax == -1) {
 
-                std::cout << "Gain not supported." << std::endl;
+                LOG_DEBUG << "Gain not supported." ;
                 return true;
 
             }
 
-            std::cout << "> Gain value (" << val << ") is not in range [ " << gainMin << " - " << gainMax << " ]" << std::endl;
+            LOG_DEBUG << "> Gain value (" << val << ") is not in range [ " << gainMin << " - " << gainMax << " ]" ;
 
         }
 
@@ -1472,12 +1471,12 @@ using namespace freeture;
                     tpf = &setfps.parm.capture.timeperframe;
 
                     tpf->numerator = temp.discrete.numerator;
-                    //std::cout << "numerator : " << tpf->numerator << std::endl;
+                    //LOG_DEBUG << "numerator : " << tpf->numerator ;
                     tpf->denominator = temp.discrete.denominator;//cvRound(fps);
-                    //std::cout << "denominator : " << tpf->denominator << std::endl;
+                    //LOG_DEBUG << "denominator : " << tpf->denominator ;
                     //retval=1;
                     if (ioctl(fd, VIDIOC_S_PARM, &setfps) < 0) {
-                        std::cout << "Failed to set camera FPS:"  << strerror(errno) << std::endl;
+                        LOG_DEBUG << "Failed to set camera FPS:"  << strerror(errno) ;
                         res = false;
                         break;
                     }
@@ -1494,7 +1493,7 @@ using namespace freeture;
         float stepval = 0;
         if (temp.type == V4L2_FRMIVAL_TYPE_CONTINUOUS) {
             stepval = 1;
-            std::cout << "V4L2_FRMIVAL_TYPE_CONTINUOUS" << std::endl;
+            LOG_DEBUG << "V4L2_FRMIVAL_TYPE_CONTINUOUS" ;
             struct v4l2_streamparm setfps;
             struct v4l2_fract *tpf;
             memset (&setfps, 0, sizeof (setfps));
@@ -1502,12 +1501,12 @@ using namespace freeture;
             tpf = &setfps.parm.capture.timeperframe;
 
             tpf->numerator = 1000;
-            //std::cout << "numerator : " << tpf->numerator << std::endl;
+            //LOG_DEBUG << "numerator : " << tpf->numerator ;
             tpf->denominator = fps*1000;//cvRound(fps);
-            //std::cout << "denominator : " << tpf->denominator << std::endl;
+            //LOG_DEBUG << "denominator : " << tpf->denominator ;
             //retval=1;
             if (ioctl(fd, VIDIOC_S_PARM, &setfps) < 0) {
-                std::cout << "Failed to set camera FPS:"  << strerror(errno) << std::endl;
+                LOG_DEBUG << "Failed to set camera FPS:"  << strerror(errno) ;
                 res = false;
 
             }else{
@@ -1521,14 +1520,14 @@ using namespace freeture;
         }
 
         if (temp.type == V4L2_FRMIVAL_TYPE_STEPWISE) {
-            std::cout << "V4L2_FRMIVAL_TYPE_STEPWISE" << std::endl;
+            LOG_DEBUG << "V4L2_FRMIVAL_TYPE_STEPWISE" ;
             float minval = float(temp.stepwise.min.numerator)/temp.stepwise.min.denominator;
             float maxval = float(temp.stepwise.max.numerator)/temp.stepwise.max.denominator;
             if (stepval == 0) {
                 stepval = float(temp.stepwise.step.numerator)/temp.stepwise.step.denominator;
             }
             /*for (float cval = minval; cval <= maxval; cval += stepval) {
-                std::cout << 1/cval << " fps" << std::endl;
+                LOG_DEBUG << 1/cval << " fps" ;
 
             }*/
 
@@ -1664,7 +1663,7 @@ using namespace freeture;
         pfmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         pfmt.fmt.pix.field = V4L2_FIELD_NONE;
 
-        std::cout << ">> Device pixel formats :" << std::endl;
+        LOG_DEBUG << ">> Device pixel formats :" ;
 
         while (0 == xioctl(fd, VIDIOC_ENUM_FMT, &fmtdesc)) {
 
@@ -1676,20 +1675,20 @@ using namespace freeture;
             std::string fmt = std::string(fourcc);
             std::transform(fmt.begin(), fmt.end(),fmt.begin(), ::toupper);
             pixfmt.push_back(fmt);
-            std::cout << "- " << fmt << std::endl;
+            LOG_DEBUG << "- " << fmt ;
             fmtdesc.index++;
         }
 
         // Compare found pixel formats to currently formats supported by freeture
 
-        std::cout << std::endl <<  ">> Available pixel formats :" << std::endl;
+        LOG_DEBUG  <<  ">> Available pixel formats :" ;
         EParser<CamPixFmt> fmt;
 
         for( int i = 0; i != pixfmt.size(); i++ ) {
 
             if(fmt.isEnumValue(pixfmt.at(i))) {
 
-                std::cout << "- " << pixfmt.at(i) << " available --> ID : " << fmt.parseEnum(pixfmt.at(i)) << std::endl;
+                LOG_DEBUG << "- " << pixfmt.at(i) << " available --> ID : " << fmt.parseEnum(pixfmt.at(i)) ;
 
             }
 

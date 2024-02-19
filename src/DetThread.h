@@ -89,13 +89,13 @@ namespace freeture
         bool                            mIsRunning;                 // Detection thread running status.
         bool                            mWaitFramesToCompleteEvent;
         int                             mNbWaitFrames;
-        std::string                          mCfgPath;
-        std::string                          mEventPath;                 // Path of the last detected event.
+        std::string                     mCfgPath;
+        std::string                     mEventPath;                 // Path of the last detected event.
         TimeDate::Date                  mEventDate;                 // Date of the last detected event.
         int                             mNbDetection;               // Number of detection.
         bool                            mInterruptionStatus;
         boost::mutex                    mInterruptionStatusMutex;
-        boost::circular_buffer<Frame>* frameBuffer;
+        boost::circular_buffer<std::shared_ptr<Frame>> frameBuffer;
         boost::mutex* frameBuffer_mutex;
         boost::condition_variable* frameBuffer_condition;
         bool* detSignal;
@@ -115,7 +115,7 @@ namespace freeture
 
     public:
 
-        DetThread(boost::circular_buffer<Frame>*,
+        DetThread(boost::circular_buffer<std::shared_ptr<Frame>>,
             boost::mutex*,
             boost::condition_variable*,
             bool*,

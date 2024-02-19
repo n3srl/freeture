@@ -57,7 +57,7 @@ namespace pt = boost::posix_time;
 using namespace freeture;
 using namespace std;
 
-DetThread::DetThread(boost::circular_buffer<Frame>* fb,
+DetThread::DetThread(boost::circular_buffer<std::shared_ptr<Frame>> fb,
     boost::mutex* fb_m,
     boost::condition_variable* fb_c,
     bool* dSignal,
@@ -213,18 +213,23 @@ void DetThread::operator ()()
                     mForceToReset = true;
                 }
                 mInterruptionStatusMutex.unlock();
-                if(!mForceToReset){
+                if(!mForceToReset)
+                {
                     errorWhen = "!Force to reset";
                     // Fetch the last grabbed frame.
-                    Frame lastFrame;
+                    shared_ptr<Frame> lastFrame = make_shared<Frame>();
                     boost::mutex::scoped_lock lock2(*frameBuffer_mutex);
-                    if(frameBuffer->size() > 2) lastFrame = frameBuffer->back();
+                    if(frameBuffer.size() > 2) 
+                        lastFrame = frameBuffer.back();
+                    
                     lock2.unlock();
 
                     t = (double)cv::getTickCount();
 
-                    if(lastFrame.mImage.data) {
-                        mFormat = lastFrame.mFormat;
+                    if (lastFrame->Image)
+                    if(lastFrame->Image->data)
+                    {
+                        mFormat = lastFrame->mFormat;
 
                         
 
@@ -245,7 +250,7 @@ void DetThread::operator ()()
                         }
                         } catch (exception& e)
                         {
-                            LOG_INFO<< "Frameis not valid" << endl;
+                            LOG_INFO<< "Frame is not valid" << e.what();
                            
                         }
                         
@@ -555,12 +560,12 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
 
     // If the number of the first frame to save for the event is not in the framebuffer.
     // The first frame to save become the first frame available in the framebuffer.
-    if(frameBuffer->front().mFrameNumber > numFirstFrameToSave)
-        numFirstFrameToSave = frameBuffer->front().mFrameNumber;
+    if(frameBuffer.front()->mFrameNumber > numFirstFrameToSave)
+        numFirstFrameToSave = frameBuffer.front()->mFrameNumber;
 
     // Check the number of the last frame to save.
-    if(frameBuffer->back().mFrameNumber < numLastFrameToSave)
-        numLastFrameToSave = frameBuffer->back().mFrameNumber;
+    if(frameBuffer.back()->mFrameNumber < numLastFrameToSave)
+        numLastFrameToSave = frameBuffer.back()->mFrameNumber;
 
     // Total frames to save.
     int nbTotalFramesToSave = numLastFrameToSave - numFirstFrameToSave;
@@ -591,7 +596,7 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
     cv::VideoWriter *video = NULL;
 
     if(mdtp.DET_SAVE_AVI) {
-        video = new cv::VideoWriter(mEventPath + "video.avi", cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 5, cv::Size(static_cast<int>(frameBuffer->front().mImage.cols), static_cast<int>(frameBuffer->front().mImage.rows)), false);
+        video = new cv::VideoWriter(mEventPath + "video.avi", cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 5, cv::Size(static_cast<int>(frameBuffer.front()->Image->cols), static_cast<int>(frameBuffer.front()->Image->rows)), false);
     }
 
     // Init fits 3D.
@@ -599,7 +604,7 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
 
     if(mdtp.DET_SAVE_FITS3D) {
 
-        fits3d = Fits3D(mFormat, frameBuffer->front().mImage.rows, frameBuffer->front().mImage.cols, (numLastFrameToSave - numFirstFrameToSave +1), mEventPath + "fits3D");
+        fits3d = Fits3D(mFormat, frameBuffer.front()->Image->rows, frameBuffer.front()->Image->cols, (numLastFrameToSave - numFirstFrameToSave +1), mEventPath + "fits3D");
         pt::ptime time = pt::microsec_clock::universal_time();
         fits3d.kDATE = pt::to_iso_extended_string(time);
 
@@ -617,48 +622,48 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
     bool varExpTime = false;
 
     // Loop framebuffer.
-    boost::circular_buffer<Frame>::iterator it;
-    for(it = frameBuffer->begin(); it != frameBuffer->end(); ++it){
+    boost::circular_buffer<shared_ptr<Frame>>::iterator it;
+    for (it = frameBuffer.begin(); it != frameBuffer.end(); ++it) {
 
         // Get infos about the first frame of the event for fits 3D.
-        if((*it).mFrameNumber == numFirstFrameToSave && mdtp.DET_SAVE_FITS3D){
+        if ((*it)->mFrameNumber == numFirstFrameToSave && mdtp.DET_SAVE_FITS3D) {
 
-            fits3d.kDATEOBS = TimeDate::getIsoExtendedFormatDate((*it).mDate);
+            fits3d.kDATEOBS = TimeDate::getIsoExtendedFormatDate((*it)->mDate);
 
             // Gain.
-            fits3d.kGAINDB = (*it).mGain;
+            fits3d.kGAINDB = (*it)->mGain;
             // Saturation.
-            fits3d.kSATURATE = (*it).mSaturatedValue;
+            fits3d.kSATURATE = (*it)->mSaturatedValue;
             // FPS.
-            fits3d.kCD3_3 = (*it).mFps;
+            fits3d.kCD3_3 = (*it)->mFps;
             // CRVAL1 : sideral time.
-            double  julianDate      = TimeDate::gregorianToJulian((*it).mDate);
-            double  julianCentury   = TimeDate::julianCentury(julianDate);
-            double  sideralT        = TimeDate::localSideralTime_2(julianCentury, (*it).mDate.hours, (*it).mDate.minutes, (int)(*it).mDate.seconds, mFitsHeader.kSITELONG);
+            double  julianDate = TimeDate::gregorianToJulian((*it)->mDate);
+            double  julianCentury = TimeDate::julianCentury(julianDate);
+            double  sideralT = TimeDate::localSideralTime_2(julianCentury, (*it)->mDate.hours, (*it)->mDate.minutes, (int)(*it)->mDate.seconds, mFitsHeader.kSITELONG);
             fits3d.kCRVAL1 = sideralT;
             // Projection and reference system
             fits3d.kCTYPE1 = "RA---ARC";
             fits3d.kCTYPE2 = "DEC--ARC";
             // Equinox
             fits3d.kEQUINOX = 2000.0;
-            firstExpTime = (*it).mExposure;
-            dateFirstFrame = (*it).mDate;
+            firstExpTime = (*it)->mExposure;
+            dateFirstFrame = (*it)->mDate;
 
         }
 
         // Get infos about the last frame of the event record for fits 3D.
-        if((*it).mFrameNumber == numLastFrameToSave && mdtp.DET_SAVE_FITS3D){
+        if ((*it)->mFrameNumber == numLastFrameToSave && mdtp.DET_SAVE_FITS3D) {
             cout << "DATE first : " << dateFirstFrame.hours << " H " << dateFirstFrame.minutes << " M " << dateFirstFrame.seconds << " S" << endl;
-            cout << "DATE last : " << (*it).mDate.hours << " H " << (*it).mDate.minutes << " M " << (*it).mDate.seconds << " S" << endl;
-            fits3d.kELAPTIME = ((*it).mDate.hours*3600 + (*it).mDate.minutes*60 + (*it).mDate.seconds) - (dateFirstFrame.hours*3600 + dateFirstFrame.minutes*60 + dateFirstFrame.seconds);
+            cout << "DATE last : " << (*it)->mDate.hours << " H " << (*it)->mDate.minutes << " M " << (*it)->mDate.seconds << " S" << endl;
+            fits3d.kELAPTIME = ((*it)->mDate.hours * 3600 + (*it)->mDate.minutes * 60 + (*it)->mDate.seconds) - (dateFirstFrame.hours * 3600 + dateFirstFrame.minutes * 60 + dateFirstFrame.seconds);
 
         }
 
         // If the current frame read from the framebuffer has to be saved.
-        if((*it).mFrameNumber >= numFirstFrameToSave && (*it).mFrameNumber < numLastFrameToSave) {
+        if ((*it)->mFrameNumber >= numFirstFrameToSave && (*it)->mFrameNumber < numLastFrameToSave) {
 
             // Save fits2D.
-            if(mdtp.DET_SAVE_FITS2D) {
+            if (mdtp.DET_SAVE_FITS2D) {
 
                 string fits2DPath = mEventPath + "fits2D/";
                 string fits2DName = "frame_" + Conversion::numbering(nbDigitOnNbTotalFramesToSave, c) + Conversion::intToString(c);
@@ -667,7 +672,7 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
                 Fits2D newFits(fits2DPath);
                 newFits.loadKeys(mfkp, mstp);
                 // Frame's acquisition date.
-                newFits.kDATEOBS = TimeDate::getIsoExtendedFormatDate((*it).mDate);
+                newFits.kDATEOBS = TimeDate::getIsoExtendedFormatDate((*it)->mDate);
                 // Fits file creation date.
                 boost::posix_time::ptime time = pt::second_clock::universal_time();
                 // YYYYMMDDTHHMMSS,fffffffff where T is the date-time separator
@@ -675,68 +680,66 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
                 // Name of the fits file.
                 newFits.kFILENAME = fits2DName;
                 // Exposure time.
-                newFits.kONTIME = (*it).mExposure/1000000.0;
+                newFits.kONTIME = (*it)->mExposure / 1000000.0;
                 // Gain.
-                newFits.kGAINDB = (*it).mGain;
+                newFits.kGAINDB = (*it)->mGain;
                 // Saturation.
-                newFits.kSATURATE = (*it).mSaturatedValue;
+                newFits.kSATURATE = (*it)->mSaturatedValue;
                 // FPS.
-                newFits.kCD3_3 = (*it).mFps;
+                newFits.kCD3_3 = (*it)->mFps;
                 // CRVAL1 : sideral time.
-                double  julianDate      = TimeDate::gregorianToJulian((*it).mDate);
-                double  julianCentury   = TimeDate::julianCentury(julianDate);
-                double  sideralT        = TimeDate::localSideralTime_2(julianCentury, (*it).mDate.hours, (*it).mDate.minutes, (*it).mDate.seconds, mFitsHeader.kSITELONG);
+                double  julianDate = TimeDate::gregorianToJulian((*it)->mDate);
+                double  julianCentury = TimeDate::julianCentury(julianDate);
+                double  sideralT = TimeDate::localSideralTime_2(julianCentury, (*it)->mDate.hours, (*it)->mDate.minutes, (*it)->mDate.seconds, mFitsHeader.kSITELONG);
                 newFits.kCRVAL1 = sideralT;
-                newFits.kEXPOSURE = (*it).mExposure/1000000.0;
+                newFits.kEXPOSURE = (*it)->mExposure / 1000000.0;
                 // Projection and reference system
                 newFits.kCTYPE1 = "RA---ARC";
                 newFits.kCTYPE2 = "DEC--ARC";
                 // Equinox
                 newFits.kEQUINOX = 2000.0;
 
-                if(!fs::exists(path(fits2DPath))) {
-                    if(fs::create_directory(path(fits2DPath)))
+                if (!fs::exists(path(fits2DPath))) {
+                    if (fs::create_directory(path(fits2DPath)))
                         LOG_INFO << "Success to create directory : " << fits2DPath;
                 }
 
-                switch(mFormat) {
+                switch (mFormat) {
 
-                    case CamPixFmt::MONO12 :
-                        {
-                            newFits.writeFits((*it).mImage, S16, fits2DName, mdp.FITS_COMPRESSION_METHOD);
-                        }
-                        break;
-
-                    default :
-
-                        {
-                            newFits.writeFits((*it).mImage, UC8, fits2DName, mdp.FITS_COMPRESSION_METHOD);
-                        }
-
+                case CamPixFmt::MONO12:
+                {
+                    newFits.writeFits((*it)->Image, S16, fits2DName, mdp.FITS_COMPRESSION_METHOD);
                 }
+                break;
 
+                default:
+
+                {
+                    newFits.writeFits((*it)->Image, UC8, fits2DName, mdp.FITS_COMPRESSION_METHOD);
+                }
+                }
             }
 
-            if(mdtp.DET_SAVE_AVI) {
-                cv::Mat iv = Conversion::convertTo8UC1((*it).mImage);
-                if(video->isOpened()) {
+            if (mdtp.DET_SAVE_AVI) {
+                cv::Mat iv = Conversion::convertTo8UC1(*(*it)->Image.get());
+                if (video->isOpened()) {
                     video->write(iv);
                 }
             }
 
             // Add a frame to fits cube.
-            if(mdtp.DET_SAVE_FITS3D) {
+            if (mdtp.DET_SAVE_FITS3D) {
 
-                if(firstExpTime != (*it).mExposure)
+                if (firstExpTime != (*it)->mExposure)
                     varExpTime = true;
 
-                sumExpTime += (*it).mExposure;
-                fits3d.addImageToFits3D((*it).mImage);
+                sumExpTime += (*it)->mExposure;
+                fits3d.addImageToFits3D(*(*it)->Image.get());
 
             }
 
             // Add frame to the event's stack.
-            if(mdtp.DET_SAVE_SUM && (*it).mFrameNumber >= firstEvPosInFB && (*it).mFrameNumber <= lastEvPosInFB){
+            if (mdtp.DET_SAVE_SUM && (*it)->mFrameNumber >= firstEvPosInFB && (*it)->mFrameNumber <= lastEvPosInFB) {
 
                 stack.addFrame((*it));
 
@@ -760,8 +763,8 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
         if(varExpTime)
             fits3d.kEXPOSURE = 999999;
         else {
-            it = frameBuffer->begin();
-            fits3d.kEXPOSURE = (*it).mExposure/1000000.0;
+            it = frameBuffer.begin();
+            fits3d.kEXPOSURE = (*it)->mExposure/1000000.0;
         }
 
         // Exposure time sum of frames in the fits cube.
@@ -783,7 +786,8 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
 
     if(mdtp.DET_SAVE_SUM_WITH_HIST_EQUALIZATION) {
 
-        cv::Mat s,s1, eqHist;
+        shared_ptr<cv::Mat> s,s1, eqHist;
+
         float bzero  = 0.0;
         float bscale = 1.0;
         s = stack.reductionByFactorDivision(bzero,bscale);
@@ -792,12 +796,14 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
         string value = fmt.getStringEnum(mFormat);
 
         cout << "mFormat : " << value << endl;
-        if(mFormat != CamPixFmt::MONO8)
-            Conversion::convertTo8UC1(s).copyTo(s);
+        cv::Mat& mat = *s.get();
 
-        equalizeHist(s, eqHist);
-        SaveImg::saveJPEG(eqHist,mEventPath+mStationName+"_"+TimeDate::getYYYYMMDDThhmmss(mEventDate)+"_UT");
+        if (mFormat != CamPixFmt::MONO8) {
+            Conversion::convertTo8UC1(mat).copyTo(mat);
+        }
 
+        equalizeHist(mat, *eqHist.get());
+        SaveImg::saveJPEG(*eqHist.get(),mEventPath+mStationName+"_"+TimeDate::getYYYYMMDDThhmmss(mEventDate)+"_UT");
     }
 
     // *********************************** SEND MAIL NOTIFICATION ***********************************

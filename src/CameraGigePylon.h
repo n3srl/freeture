@@ -35,8 +35,9 @@
  * \brief   Use Pylon library to pilot GigE Cameras.
  */
 
-#ifdef USE_PYLON
 #include "Commons.h"
+
+#ifdef USE_PYLON
 
 
 #include "config.h"

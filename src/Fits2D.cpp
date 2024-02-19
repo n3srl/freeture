@@ -621,7 +621,7 @@ bool Fits2D::writeKeywords(fitsfile *fptr){
 
 }
 
-bool Fits2D::writeFits(cv::Mat img, ImgBitDepth imgType, std::string fileName, std::string compression) {
+bool Fits2D::writeFits(shared_ptr<cv::Mat> img, ImgBitDepth imgType, std::string fileName, std::string compression) {
 
     int status = 0;
 
@@ -631,7 +631,7 @@ bool Fits2D::writeFits(cv::Mat img, ImgBitDepth imgType, std::string fileName, s
     long naxis = 2;
 
     // Image size.
-    long naxes[2] = { img.cols, img.rows };
+    long naxes[2] = { img->cols, img->rows };
 
     // First pixel to write.
     firstPixel = 1;
@@ -681,7 +681,7 @@ bool Fits2D::writeFits(cv::Mat img, ImgBitDepth imgType, std::string fileName, s
         case 0:
         {
             //https://www-n.oca.eu/pichon/Tableau_2D.pdf
-            unsigned char ** tab = (unsigned char * *)malloc( img.rows * sizeof(unsigned char *)) ;
+            unsigned char ** tab = (unsigned char * *)malloc( img->rows * sizeof(unsigned char *)) ;
 
             if(tab == NULL){
 
@@ -727,12 +727,12 @@ bool Fits2D::writeFits(cv::Mat img, ImgBitDepth imgType, std::string fileName, s
             // Initialize the values in the fits image with the mat's values.
              for ( int j = 0; j < naxes[1]; j++){
 
-                 unsigned char * matPtr = img.ptr<unsigned char>(j);
+                 unsigned char * matPtr = img->ptr<unsigned char>(j);
 
                  for ( int i = 0; i < naxes[0]; i++){
 
                      // Affect a value and inverse the image.
-                     tab[img.rows-1-j][i] = (unsigned char)matPtr[i];
+                     tab[img->rows-1-j][i] = (unsigned char)matPtr[i];
 
                 }
             }
@@ -755,7 +755,7 @@ bool Fits2D::writeFits(cv::Mat img, ImgBitDepth imgType, std::string fileName, s
         case 1:
         {
             //https://www-n.oca.eu/pichon/Tableau_2D.pdf
-            char ** tab = (char * *) malloc( img.rows * sizeof( char * ) ) ;
+            char ** tab = (char * *) malloc( img->rows * sizeof( char * ) ) ;
 
             if(tab == NULL){
 
@@ -802,12 +802,12 @@ bool Fits2D::writeFits(cv::Mat img, ImgBitDepth imgType, std::string fileName, s
             // Initialize the values in the fits image with the mat's values.
              for( int j = 0; j < naxes[1]; j++){
 
-                 char * matPtr = img.ptr<char>(j);
+                 char * matPtr = img->ptr<char>(j);
 
                  for(int i = 0; i < naxes[0]; i++){
 
                      // Affect a value and inverse the image.
-                     tab[img.rows-1-j][i] = (char)matPtr[i];
+                     tab[img->rows-1-j][i] = (char)matPtr[i];
 
                 }
             }
@@ -831,7 +831,7 @@ bool Fits2D::writeFits(cv::Mat img, ImgBitDepth imgType, std::string fileName, s
         {
 
             //https://www-n.oca.eu/pichon/Tableau_2D.pdf
-            unsigned short ** tab = (unsigned short * *) malloc( img.rows * sizeof( unsigned short * ) ) ;
+            unsigned short ** tab = (unsigned short * *) malloc( img->rows * sizeof( unsigned short * ) ) ;
 
             if(tab == NULL){
 
@@ -878,12 +878,12 @@ bool Fits2D::writeFits(cv::Mat img, ImgBitDepth imgType, std::string fileName, s
             // Initialize the values in the fits image with the mat's values.
             for ( int j = 0; j < naxes[1]; j++){
 
-                 unsigned short * matPtr = img.ptr<unsigned short>(j);
+                 unsigned short * matPtr = img->ptr<unsigned short>(j);
 
                  for ( int i = 0; i < naxes[0]; i++){
 
                      // Affect a value and inverse the image.
-                     tab[img.rows-1-j][i] = (unsigned short)matPtr[i];
+                     tab[img->rows-1-j][i] = (unsigned short)matPtr[i];
                 }
             }
 
@@ -909,10 +909,10 @@ bool Fits2D::writeFits(cv::Mat img, ImgBitDepth imgType, std::string fileName, s
 
             cv::Mat newMat;
 
-            if(img.type() == CV_16UC1) {
+            if(img->type() == CV_16UC1) {
 
                 // Convert unsigned short type image in short type image.
-                newMat = cv::Mat(img.rows, img.cols, CV_16SC1, cv::Scalar(0));
+                newMat = cv::Mat(img->rows, img->cols, CV_16SC1, cv::Scalar(0));
 
                 // Set bzero and bscale for print unsigned short value in soft visualization.
                 kBZERO = 32768;
@@ -921,12 +921,12 @@ bool Fits2D::writeFits(cv::Mat img, ImgBitDepth imgType, std::string fileName, s
                 unsigned short * ptr;
                 short * ptr2;
 
-                for(int i = 0; i < img.rows; i++){
+                for(int i = 0; i < img->rows; i++){
 
-                    ptr = img.ptr<unsigned short>(i);
+                    ptr = img->ptr<unsigned short>(i);
                     ptr2 = newMat.ptr<short>(i);
 
-                    for(int j = 0; j < img.cols; j++){
+                    for(int j = 0; j < img->cols; j++){
 
                         if(ptr[j] - 32768 > 32767){
 
@@ -941,12 +941,12 @@ bool Fits2D::writeFits(cv::Mat img, ImgBitDepth imgType, std::string fileName, s
 
             }else{
 
-                img.copyTo(newMat);
+                img->copyTo(newMat);
 
             }
 
             //https://www-n.oca.eu/pichon/Tableau_2D.pdf
-            short ** tab = (short * *) malloc( img.rows * sizeof( short * ) ) ;
+            short ** tab = (short * *) malloc( img->rows * sizeof( short * ) ) ;
 
             if(tab == NULL){
 
@@ -1023,7 +1023,7 @@ bool Fits2D::writeFits(cv::Mat img, ImgBitDepth imgType, std::string fileName, s
         {
 
             //https://www-n.oca.eu/pichon/Tableau_2D.pdf
-            float ** tab = (float * *) malloc( img.rows * sizeof( float * ) ) ;
+            float ** tab = (float * *) malloc( img->rows * sizeof( float * ) ) ;
 
             if(tab == NULL){
 
@@ -1067,12 +1067,12 @@ bool Fits2D::writeFits(cv::Mat img, ImgBitDepth imgType, std::string fileName, s
             // Initialize the values in the fits image with the mat's values.
             for( int j = 0; j < naxes[1]; j++){
 
-                 float * matPtr = img.ptr<float>(j);
+                 float * matPtr = img->ptr<float>(j);
 
                  for ( int i = 0; i < naxes[0]; i++){
 
                      // Affect a value and inversed the image.
-                     tab[img.rows-1-j][i] = (float)matPtr[i];
+                     tab[img->rows-1-j][i] = (float)matPtr[i];
                  }
             }
 

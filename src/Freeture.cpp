@@ -44,7 +44,7 @@ void Freeture::signalHandler(int signum)
 
 void Freeture::handler(const boost::system::error_code& error, int signal_number)
 {
-    LOG_WARNING << "Freeture::signalHandler;" << "handling signal " << signal_number << std::endl;
+    LOG_WARNING << "Freeture::signalHandler;" << "handling signal " << signal_number ;
     m_SigTermFlag = true;
 }
 
@@ -52,7 +52,6 @@ void Freeture::handler(const boost::system::error_code& error, int signal_number
 freeture::Freeture::Freeture(int argc, const char** argv) :
     m_FreetureSettings(std::make_shared<CfgParam>(m_FreetureCommandLineSettings.configurationFilePath))
 {
-
     m_Argc=argc;
     m_Argv=argv;
 }
@@ -112,22 +111,29 @@ void Freeture::selectMode( boost::program_options::variables_map& vm)
 
             // Crop start x
             if(vm.count("startx")) m_FreetureCommandLineSettings.startx = vm["startx"].as<int>();
+
             // Crop start y
             if(vm.count("starty")) m_FreetureCommandLineSettings.starty = vm["starty"].as<int>();
+
             // Cam width size
             if(vm.count("width")) m_FreetureCommandLineSettings.acqWidth = vm["width"].as<int>();
+
             // Cam height size
             if(vm.count("height")) m_FreetureCommandLineSettings.acqHeight = vm["height"].as<int>();
+
             // Gain value.
             if(vm.count("gain")) m_FreetureCommandLineSettings.gain = vm["gain"].as<int>();
+
             // Exposure value.
             if(vm.count("exposure")) m_FreetureCommandLineSettings.exp = vm["exposure"].as<double>();
+
             // Filename.
             if(vm.count("filename")) m_FreetureCommandLineSettings.fileName = vm["filename"].as<string>();
 
             if(vm.count("display")) m_FreetureCommandLineSettings.display = true;
 
             if(vm.count("bmp")) m_FreetureCommandLineSettings.bmp = true;
+
             if(vm.count("fits")) m_FreetureCommandLineSettings.fits = true;
 
             // Send fits by mail if configuration file is correct.
@@ -137,11 +143,11 @@ void Freeture::selectMode( boost::program_options::variables_map& vm)
     if (m_CurrentRunMode == FreetureMode::UNKNOWN)
     {
         LOG_INFO << "MODE " << m_FreetureCommandLineSettings.mode << " is not available. Correct modes are : " <<endl;
-        LOG_INFO << "[1] Check configuration file."                         ;
-        LOG_INFO << "[2] Run continous acquisition."                        ;
-        LOG_INFO << "[3] Run meteor detection."                             ;
-        LOG_INFO << "[4] Run single capture."                               ;
-        LOG_INFO << "[5] Clean logs."                                        ;
+        LOG_INFO << "[1] Check configuration file.";
+        LOG_INFO << "[2] Run continous acquisition.";
+        LOG_INFO << "[3] Run meteor detection.";
+        LOG_INFO << "[4] Run single capture.";
+        LOG_INFO << "[5] Clean logs.";
 
         LOG_INFO << "Execute freeture command to see options." ;
     }
@@ -357,7 +363,7 @@ void Freeture::modeContinuousAcquisition()
 
     while (!interruption)
     {
-        Frame frame;
+        shared_ptr<Frame> frame = make_shared<Frame>();
 
         double tacq = (double)cv::getTickCount();
         if (m_Device->runContinuousCapture(frame)) {
@@ -365,7 +371,7 @@ void Freeture::modeContinuousAcquisition()
             LOG_INFO << " >> [ TIME ACQ ] : " << tacq << " ms";
 
             if (m_FreetureCommandLineSettings.display) {
-                cv::imshow("FreeTure (ESC to stop)", frame.mImage);
+                cv::imshow("FreeTure (ESC to stop)", *frame->Image.get());
                 cv::waitKey(1);
             }
         }
@@ -428,7 +434,7 @@ void Freeture::modeMeteorDetection()
     /// ------------------------------------------------------------------
 
     // Circular buffer to store last n grabbed frames.
-    boost::circular_buffer<Frame> frameBuffer(m_FreetureSettings->getDetParam().ACQ_BUFFER_SIZE * m_FreetureSettings->getCamParam().ACQ_FPS);
+    boost::circular_buffer<shared_ptr<Frame>> frameBuffer(m_FreetureSettings->getDetParam().ACQ_BUFFER_SIZE * m_FreetureSettings->getCamParam().ACQ_FPS);
     boost::mutex frameBuffer_m;
     boost::condition_variable frameBuffer_c;
 
@@ -451,7 +457,7 @@ void Freeture::modeMeteorDetection()
         if (m_FreetureSettings->getDetParam().DET_ENABLED) {
             LOG_INFO << "CREATE DETECTION THREAD...";
 
-            m_DetectionThread = std::make_shared<DetThread>(&frameBuffer,
+            m_DetectionThread = std::make_shared<DetThread>(frameBuffer,
                 &frameBuffer_m,
                 &frameBuffer_c,
                 &signalDet,
@@ -474,7 +480,7 @@ void Freeture::modeMeteorDetection()
             m_StackThread = std::make_shared< StackThread>(&signalStack,
                 &signalStack_m,
                 &signalStack_c,
-                &frameBuffer,
+                frameBuffer,
                 &frameBuffer_m,
                 &frameBuffer_c,
                 m_FreetureSettings
@@ -492,7 +498,7 @@ void Freeture::modeMeteorDetection()
 
         LOG_INFO << "CREATE ACQUISITION THREAD...";
         // Create acquisition thread.
-        m_AcquisitionThread = std::make_shared<AcqThread>(&frameBuffer,
+        m_AcquisitionThread = std::make_shared<AcqThread>(frameBuffer,
             &frameBuffer_m,
             &frameBuffer_c,
             &signalStack,
@@ -684,19 +690,20 @@ void Freeture::modeSingleAcquisition()
     /// ---------------------- RUN SINGLE CAPTURE ------------------------
     /// ------------------------------------------------------------------
 
-    Frame frame;
-    frame.mExposure = m_FreetureCommandLineSettings.exp;
-    frame.mGain = m_FreetureCommandLineSettings.gain;
-    frame.mFormat = static_cast<CamPixFmt>(m_FreetureCommandLineSettings.acqFormat);
-    frame.mStartX = m_FreetureCommandLineSettings.startx != 0 ? m_FreetureCommandLineSettings.startx : m_FreetureSettings->getCamParam().ACQ_STARTX;
-    frame.mStartY = m_FreetureCommandLineSettings.starty != 0 ? m_FreetureCommandLineSettings.starty : m_FreetureSettings->getCamParam().ACQ_STARTY;
-    frame.mHeight = m_FreetureCommandLineSettings.acqHeight != 0 ? m_FreetureCommandLineSettings.acqHeight : m_FreetureSettings->getCamParam().ACQ_HEIGHT;
-    frame.mWidth = m_FreetureCommandLineSettings.acqWidth != 0 ? m_FreetureCommandLineSettings.acqWidth : m_FreetureSettings->getCamParam().ACQ_WIDTH;
+    shared_ptr<Frame> frame = make_shared<Frame>();
 
-    LOG_INFO << "++++++++++++++++++++++++++ startx " << frame.mStartX;
-    LOG_INFO << "++++++++++++++++++++++++++ starty " << frame.mStartY;
-    LOG_INFO << "++++++++++++++++++++++++++ acqHeight " << frame.mHeight;
-    LOG_INFO << "++++++++++++++++++++++++++ acqWidth " << frame.mWidth;
+    frame->mExposure = m_FreetureCommandLineSettings.exp;
+    frame->mGain = m_FreetureCommandLineSettings.gain;
+    frame->mFormat = static_cast<CamPixFmt>(m_FreetureCommandLineSettings.acqFormat);
+    frame->mStartX = m_FreetureCommandLineSettings.startx != 0 ? m_FreetureCommandLineSettings.startx : m_FreetureSettings->getCamParam().ACQ_STARTX;
+    frame->mStartY = m_FreetureCommandLineSettings.starty != 0 ? m_FreetureCommandLineSettings.starty : m_FreetureSettings->getCamParam().ACQ_STARTY;
+    frame->mHeight = m_FreetureCommandLineSettings.acqHeight != 0 ? m_FreetureCommandLineSettings.acqHeight : m_FreetureSettings->getCamParam().ACQ_HEIGHT;
+    frame->mWidth = m_FreetureCommandLineSettings.acqWidth != 0 ? m_FreetureCommandLineSettings.acqWidth : m_FreetureSettings->getCamParam().ACQ_WIDTH;
+
+    LOG_INFO << "++++++++++++++++++++++++++ startx " << frame->mStartX;
+    LOG_INFO << "++++++++++++++++++++++++++ starty " << frame->mStartY;
+    LOG_INFO << "++++++++++++++++++++++++++ acqHeight " << frame->mHeight;
+    LOG_INFO << "++++++++++++++++++++++++++ acqWidth " << frame->mWidth;
 
     m_Device->setCameraGain(m_FreetureCommandLineSettings.gain);
     m_Device->setCameraExposureTime(m_FreetureCommandLineSettings.exp);
@@ -712,7 +719,7 @@ void Freeture::modeSingleAcquisition()
     /// ------------------- SAVE / DISPLAY CAPTURE -----------------------
     /// ------------------------------------------------------------------
 
-    if (frame.mImage.data) {
+    if (frame->Image->data) {
 
         // Save the frame in BMP.
         if (m_FreetureCommandLineSettings.bmp) {
@@ -720,9 +727,9 @@ void Freeture::modeSingleAcquisition()
             LOG_INFO << ">> Saving bmp file ...";
 
             cv::Mat temp1, newMat;
-            frame.mImage.copyTo(temp1);
+            frame->Image->copyTo(temp1);
 
-            if (frame.mFormat == CamPixFmt::MONO12) {
+            if (frame->mFormat == CamPixFmt::MONO12) {
                 newMat = ImgProcessing::correctGammaOnMono12(temp1, 2.2);
                 cv::Mat temp = Conversion::convertTo8UC1(newMat);
             }
@@ -747,10 +754,10 @@ void Freeture::modeSingleAcquisition()
             m_FreetureSettings->enableErrors = true;
             if (m_FreetureSettings->checkStationParam() && m_FreetureSettings->checkFitskeysParam()) {
                 useCfg = true;
-                double  debObsInSeconds = frame.mDate.hours * 3600 + frame.mDate.minutes * 60 + frame.mDate.seconds;
-                double  julianDate = TimeDate::gregorianToJulian(frame.mDate);
+                double  debObsInSeconds = frame->mDate.hours * 3600 + frame->mDate.minutes * 60 + frame->mDate.seconds;
+                double  julianDate = TimeDate::gregorianToJulian(frame->mDate);
                 double  julianCentury = TimeDate::julianCentury(julianDate);
-                double  sideralT = TimeDate::localSideralTime_2(julianCentury, frame.mDate.hours, frame.mDate.minutes, (int)frame.mDate.seconds, fh.kSITELONG);
+                double  sideralT = TimeDate::localSideralTime_2(julianCentury, frame->mDate.hours, frame->mDate.minutes, (int)frame->mDate.seconds, fh.kSITELONG);
                 newFits.kCRVAL1 = sideralT;
                 newFits.loadKeys(m_FreetureSettings->getFitskeysParam(), m_FreetureSettings->getStationParam());
 
@@ -760,19 +767,19 @@ void Freeture::modeSingleAcquisition()
             newFits.kELAPTIME = m_FreetureCommandLineSettings.exp / 1000000.0;
             newFits.kEXPOSURE = m_FreetureCommandLineSettings.exp / 1000000.0;
             newFits.kONTIME = m_FreetureCommandLineSettings.exp / 1000000.0;
-            newFits.kDATEOBS = TimeDate::getIsoExtendedFormatDate(frame.mDate);
+            newFits.kDATEOBS = TimeDate::getIsoExtendedFormatDate(frame->mDate);
             newFits.kCTYPE1 = "RA---ARC";
             newFits.kCTYPE2 = "DEC--ARC";
             newFits.kEQUINOX = 2000.0;
 
-            if (frame.mFormat == CamPixFmt::MONO12) {
+            if (frame->mFormat == CamPixFmt::MONO12) {
                 // Create FITS image with BITPIX = SHORT_IMG (16-bits signed integers), pixel with TSHORT (signed short)
-                if (newFits.writeFits(frame.mImage, S16, m_FreetureCommandLineSettings.fileName + "-" + Conversion::intToString(filenum)))
+                if (newFits.writeFits(frame->Image, S16, m_FreetureCommandLineSettings.fileName + "-" + Conversion::intToString(filenum)))
                     LOG_INFO << ">> Fits saved in : " << m_FreetureCommandLineSettings.savePath << m_FreetureCommandLineSettings.fileName << "-" << Conversion::intToString(filenum) << ".fit";
             }
             else {
                 // Create FITS image with BITPIX = BYTE_IMG (8-bits unsigned integers), pixel with TBYTE (8-bit unsigned byte)
-                if (newFits.writeFits(frame.mImage, UC8, m_FreetureCommandLineSettings.fileName + "-" + Conversion::intToString(filenum)))
+                if (newFits.writeFits(frame->Image, UC8, m_FreetureCommandLineSettings.fileName + "-" + Conversion::intToString(filenum)))
                     LOG_INFO << ">> Fits saved in : " << m_FreetureCommandLineSettings.savePath << m_FreetureCommandLineSettings.fileName << "-" << Conversion::intToString(filenum) << ".fit";
 
             }
@@ -806,9 +813,9 @@ void Freeture::modeSingleAcquisition()
             LOG_INFO << ">> Display single capture.";
 
             cv::Mat temp, temp1;
-            frame.mImage.copyTo(temp1);
+            frame->Image->copyTo(temp1);
 
-            if (frame.mFormat == CamPixFmt::MONO12) {
+            if (frame->mFormat == CamPixFmt::MONO12) {
                 cv::Mat gammaCorrected = ImgProcessing::correctGammaOnMono12(temp1, 2.2);
                 temp = Conversion::convertTo8UC1(gammaCorrected);
             }

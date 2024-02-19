@@ -42,6 +42,7 @@
 #include "videoInput.h"
 #include "Frame.h"
 #include "Camera.h"
+
 namespace freeture
 {
     class CameraDescription;

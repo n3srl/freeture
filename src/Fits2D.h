@@ -37,6 +37,7 @@
 #include "Commons.h"
 
 #include <string>
+#include <memory>
 
 #include "fitsio.h"
 #include "EImgBitDepth.h"
@@ -78,7 +79,7 @@ namespace freeture
         * @return Success status to create and write the file.
         *
         */
-        bool writeFits(cv::Mat img, ImgBitDepth imgType, std::string fileName, std::string compression = "");
+        bool writeFits(std::shared_ptr<cv::Mat> img, ImgBitDepth imgType, std::string fileName, std::string compression = "");
 
         /**
         * Read a Fits file in 32 bits float format.

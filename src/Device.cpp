@@ -349,7 +349,7 @@ bool Device::stopCamera()
 /*
  * Called every frame
  */
-bool Device::runContinuousCapture(Frame &img)
+bool Device::runContinuousCapture(shared_ptr<Frame> img)
 {
     if (LOG_SPAM_FRAME_STATUS)
         LOG_DEBUG << "Device::runContinuousCapture";
@@ -371,10 +371,10 @@ bool Device::runContinuousCapture(Frame &img)
     return false;
 }
 
-bool Device::runSingleCapture(Frame &img) {
+bool Device::runSingleCapture(shared_ptr<Frame> img) {
     LOG_DEBUG << "Device::runSingleCapture";
 
-    if(m_Camera->grabSingleImage(img))
+    if(m_Camera->grabImage(img))
         return true;
 
     return false;

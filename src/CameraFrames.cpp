@@ -320,8 +320,9 @@ bool CameraFrames::grabImage(Frame &img) {
         }
 
         boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
+        Frame f;
 
-        Frame f = Frame(resMat, 0, 0, to_iso_extended_string(time));
+        //Frame f = Frame( resMat, 0, 0, to_iso_extended_string(time));
 
         img = f;
 

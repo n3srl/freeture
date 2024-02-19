@@ -1,6 +1,7 @@
 #pragma once
-#ifdef LINUX
 #include "Commons.h"
+
+#ifdef LINUX
 
 #include "CameraScanner.h"
 

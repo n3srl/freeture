@@ -271,8 +271,8 @@ bool DetectionTemporal::runDetection(Frame &c) {
         //LOG_DEBUG << "DetThread run DetectionTemporal !mSubDivisionStatus" << endl;
         mSubdivisionPos.clear();
 
-        int h = c.mImage.rows;
-        int w = c.mImage.cols;
+        int h = c.Image->rows;
+        int w = c.Image->cols;
 
         if(mdtp.DET_DOWNSAMPLE_ENABLED) {
             h /= 2;
@@ -324,12 +324,12 @@ bool DetectionTemporal::runDetection(Frame &c) {
         if(mdtp.DET_DOWNSAMPLE_ENABLED) {
 
             tDownsample = (double)cv::getTickCount();
-            pyrDown(c.mImage, currImg, cv::Size(c.mImage.cols / 2, c.mImage.rows / 2));
+            pyrDown(*c.Image.get(), currImg, cv::Size(c.Image->cols / 2, c.Image->rows / 2));
             tDownsample = ((double)cv::getTickCount() - tDownsample);
 
         }else {
 
-            c.mImage.copyTo(currImg);
+            c.Image->copyTo(currImg);
 
         }
 
@@ -391,8 +391,8 @@ bool DetectionTemporal::runDetection(Frame &c) {
             cv::Scalar meanPosDiff, stddevPosDiff, meanNegDiff, stddevNegDiff;
             meanStdDev(posDiffImg, meanPosDiff, stddevPosDiff, mMaskManager->mCurrentMask);
             meanStdDev(negDiffImg, meanNegDiff, stddevNegDiff, mMaskManager->mCurrentMask);
-            int posThreshold = stddevPosDiff[0] * 5 + 10;
-            int negThreshold = stddevNegDiff[0] * 5 + 10;
+            double posThreshold = stddevPosDiff[0] * 5.0 + 10.0;
+            double negThreshold = stddevNegDiff[0] * 5.0 + 10.0;
 
             if(mdtp.DET_DEBUG) {
 
@@ -476,7 +476,7 @@ bool DetectionTemporal::runDetection(Frame &c) {
             //         Link between LE.
             // ----------------------------------
 
-            int leNumber = listLocalEvents.size();
+            size_t leNumber = listLocalEvents.size();
 
             // Iterator list on localEvent list : localEvent contains a positive or negative cluster.
             vector<vector<LocalEvent>::iterator > itLePos, itLeNeg;
@@ -514,7 +514,7 @@ bool DetectionTemporal::runDetection(Frame &c) {
 
                     cv::Point A = (*itLePos.at(i)).getMassCenter();
                     cv::Point B = (*(*j)).getMassCenter();
-                    float dist = sqrt(pow((A.x - B.x),2) + pow((A.y - B.y),2));
+                    double dist = sqrt(pow((A.x - B.x),2) + pow((A.y - B.y),2));
 
                     if(dist < 50) {
 

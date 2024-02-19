@@ -112,11 +112,12 @@ ExposureControl::ExposureControl(int timeInterval,
     mNbFramesControlled = 0;
 }
 
-bool ExposureControl::calculate(cv::Mat& image, cv::Mat &mask){
+bool ExposureControl::calculate(shared_ptr<cv::Mat> image, cv::Mat &mask){
 
-    if(!mask.data){
+    if(!mask.data) 
+    {
 
-        mask = cv::Mat(image.rows, image.cols, CV_8UC1, cv::Scalar(255));
+        mask = cv::Mat(image->rows, image->cols, CV_8UC1, cv::Scalar(255));
 
     }
 
@@ -124,7 +125,7 @@ bool ExposureControl::calculate(cv::Mat& image, cv::Mat &mask){
 
     unsigned char * ptr_mask;
 
-    switch(image.type()){
+    switch(image->type()){
 
         case CV_16U :
 
@@ -133,12 +134,12 @@ bool ExposureControl::calculate(cv::Mat& image, cv::Mat &mask){
                 unsigned short * ptr = NULL;
 
                 // Loop pixel's region.
-                for(int i = 0; i < image.rows; i++){
+                for(int i = 0; i < image->rows; i++){
 
-                    ptr = image.ptr<unsigned short>(i);
+                    ptr = image->ptr<unsigned short>(i);
                     ptr_mask = mask.ptr<unsigned char>(i);
 
-                    for(int j = 0; j < image.cols; j++){
+                    for(int j = 0; j < image->cols; j++){
 
                         if(ptr_mask[j] != 0){
 
@@ -178,12 +179,12 @@ bool ExposureControl::calculate(cv::Mat& image, cv::Mat &mask){
                 unsigned char * ptr = NULL;
 
                 // Loop pixel's region.
-                for(int i = 0; i < image.rows; i++){
+                for(int i = 0; i < image->rows; i++){
 
-                    ptr = image.ptr<unsigned char>(i);
+                    ptr = image->ptr<unsigned char>(i);
                     ptr_mask = mask.ptr<unsigned char>(i);
 
-                    for(int j = 0; j < image.cols; j++){
+                    for(int j = 0; j < image->cols; j++){
 
                         if((int)ptr_mask[j] != 0){
 
@@ -226,7 +227,7 @@ float ExposureControl::computeMSV(){
 
 }
 
-bool ExposureControl::controlExposureTime(freeture::Device *camera, cv::Mat image, TimeDate::Date imageDate, cv::Mat mask, double fps){
+bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<cv::Mat> image, TimeDate::Date imageDate, cv::Mat mask, double fps){
 
     try {
 
@@ -280,7 +281,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, cv::Mat imag
 
                             // Save initial status before exposure control
 
-                            cv::Mat saveFrame; image.copyTo(saveFrame);
+                            cv::Mat saveFrame; image->copyTo(saveFrame);
 
                             if(saveFrame.type() == CV_16U) saveFrame = Conversion::convertTo8UC1(saveFrame);
 
@@ -547,7 +548,8 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, cv::Mat imag
                             // Save data to control exposure time process
                             if(autoExposureSaveImage) {
 
-                                cv::Mat saveFrame; image.copyTo(saveFrame);
+                                cv::Mat saveFrame;
+                                image->copyTo(saveFrame);
 
                                 if(saveFrame.type() == CV_16U) saveFrame = Conversion::convertTo8UC1(saveFrame);
 

@@ -74,7 +74,7 @@ namespace freeture
         // Communication with the shared framebuffer.
         boost::condition_variable*      frameBuffer_condition;
         boost::mutex*                   frameBuffer_mutex;
-        boost::circular_buffer<Frame>*  frameBuffer;
+        boost::circular_buffer<std::shared_ptr<Frame>>  frameBuffer;
 
         // Communication with DetThread.
         bool* stackSignal;
@@ -123,7 +123,7 @@ namespace freeture
 
     public:
 
-        AcqThread(boost::circular_buffer<Frame>*,
+        AcqThread(boost::circular_buffer<std::shared_ptr<Frame>>,
             boost::mutex*,
             boost::condition_variable*,
             bool*,
@@ -132,8 +132,8 @@ namespace freeture
             bool*,
             boost::mutex*,
             boost::condition_variable*,
-            std::shared_ptr <DetThread>,
-            std::shared_ptr <StackThread>,
+            std::shared_ptr<DetThread>,
+            std::shared_ptr<StackThread>,
             std::shared_ptr<CfgParam>
         );
 
@@ -192,9 +192,9 @@ namespace freeture
 
     private:
         
-        void runScheduledAcquisition(Frame&);
+        void runScheduledAcquisition(TimeDate::Date);
       
-        void runRegularAcquisition(Frame&);
+        void runRegularAcquisition();
 
         // Compute in seconds the sunrise start/stop times and the sunset start/stop times.
         bool computeSunTimes();
@@ -206,7 +206,7 @@ namespace freeture
         void selectNextAcquisitionSchedule(TimeDate::Date date);
 
         // Save a capture on disk.
-        void saveImageCaptured(Frame& img, int imgNum, ImgFormat outputType, std::string imgPrefix);
+        void saveImageCaptured(std::shared_ptr<Frame> img, int imgNum, ImgFormat outputType, std::string imgPrefix);
 
         // Run a regular or scheduled acquisition.
         void runImageCapture(EAcquisitionMode mode, int imgNumber, ImgFormat imgOutput, std::string imgPrefix);
@@ -231,6 +231,6 @@ namespace freeture
         /// <returns></returns>
         bool prepareAcquisitionOnDevice(EAcquisitionMode mode);
 
-        void ApplyCameraSettingsToFrame(Frame&);
+        void ApplyCameraSettingsToFrame(std::shared_ptr<Frame>);
     };
 }

@@ -31,13 +31,15 @@
 * \version 1.0
 * \date    26/11/2014
 */
+#include "Mask.h"
 
 #include <opencv2/imgcodecs.hpp>
 
 #include "Constants.h"
-#include "Mask.h"
+#include "Logger.h"
 
 using namespace freeture;
+using namespace std;
 
 
 Mask::Mask(int timeInterval, bool customMask, std::string customMaskPath, bool downsampleMask, CamPixFmt format, bool updateMask):
@@ -100,7 +102,7 @@ bool Mask::applyMask(cv::Mat &currFrame) {
 
             if(mCurrentMask.rows != currFrame.rows || mCurrentMask.cols != currFrame.cols) {
 
-                throw "Mask's size is not correct according to frame's size.";
+                throw exception("Mask's size is not correct according to frame's size.");
 
             }
 
@@ -145,7 +147,7 @@ bool Mask::applyMask(cv::Mat &currFrame) {
         }
 
         if (LOG_SPAM_FRAME_STATUS)
-            std::cout << "NEXT MASK : " << (mUpdateInterval - (int)diffTime) << "s" << std::endl;
+            LOG_DEBUG << "Mask::applyMask;" << "NEXT MASK : " << (mUpdateInterval - (int)diffTime) << "s" << std::endl;
 
     }
 

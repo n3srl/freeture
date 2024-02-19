@@ -36,6 +36,7 @@
 //header refactoring true
 #include "Commons.h"
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -88,10 +89,8 @@ namespace freeture
         * @param c Current frame.
         * @return Success to perform analysis.
         */
-        virtual bool runDetection(Frame& c) {
-
+        virtual bool runDetection(std::shared_ptr<Frame> c) {
             return false;
-
         }
 
         /**

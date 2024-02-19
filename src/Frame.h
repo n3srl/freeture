@@ -48,14 +48,14 @@ namespace freeture
     class Frame {
 
     private:
-
+        uint8_t* mDataBuffer;
+        size_t mSize;
     public:
 
         TimeDate::Date      mDate;               // Acquisition date.
         double              mExposure;           // Camera's exposure value used to grab the frame.
         int                 mGain;               // Camera's gain value used to grab the frame.
         CamPixFmt           mFormat;             // Pixel format.
-        cv::Mat             mImage;                // Frame's image data.
         std::string         mFileName;           // Frame's name.
         int                 mFrameNumber;        // Each frame is identified by a number corresponding to the acquisition order.
         int                 mFrameRemaining;     // Define the number of remaining frames if the input source is a video or a set of single frames.
@@ -65,13 +65,16 @@ namespace freeture
         int                 mStartY;
         int                 mWidth;
         int                 mHeight;
-        uint8_t*            mDataBuffer;
 
-        Frame(cv::Mat capImg, int g, double e, std::string acquisitionDate);
+        std::shared_ptr<cv::Mat> Image;                // Frame's image data.
+
+        //Frame(cv::Mat capImg, int g, double e, std::string acquisitionDate);
 
         Frame();
 
         ~Frame();
+
+        uint8_t* getData();
 
         void SetImage(const uint8_t*, size_t);
     };

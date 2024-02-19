@@ -34,7 +34,7 @@
 * \brief   Create/Analyse histogram of a gray image.
 */
 #include "Commons.h"
-
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -108,11 +108,11 @@ namespace freeture
         */
         ExposureControl(int timeInterval, bool saveImage, bool saveInfos, std::string dataPath, std::string station);
 
-        bool calculate(cv::Mat& image, cv::Mat& mask);
+        bool calculate(std::shared_ptr<cv::Mat> image, cv::Mat& mask);
 
         float computeMSV();
 
-        bool controlExposureTime(freeture::Device* camera, cv::Mat image, TimeDate::Date imageDate, cv::Mat mask, double fps);
+        bool controlExposureTime(freeture::Device* camera, std::shared_ptr<cv::Mat> image, TimeDate::Date imageDate, cv::Mat mask, double fps);
 
         bool checkDataLocation(TimeDate::Date date);
 

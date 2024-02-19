@@ -62,9 +62,9 @@ bool DetectionTemplate::runDetection(Frame &c) {
     cv::Mat currImg;
 
     if(mdtp.DET_DOWNSAMPLE_ENABLED)
-        pyrDown(c.mImage, currImg, cv::Size(c.mImage.cols / 2, c.mImage.rows / 2));
+        pyrDown(*c.Image.get(), currImg, cv::Size(c.Image->cols / 2, c.Image->rows / 2));
     else
-        c.mImage.copyTo(currImg);
+        c.Image->copyTo(currImg);
 
     // --------------------------------
     //          OPERATIONS
@@ -102,7 +102,7 @@ bool DetectionTemplate::runDetection(Frame &c) {
         cv::Mat absDiffBinaryMap = cv::Mat(currImg.rows,currImg.cols, CV_8UC1, cv::Scalar(0));
         cv::Scalar meanAbsDiff, stddevAbsDiff;
         cv::meanStdDev(absdiffImg, meanAbsDiff, stddevAbsDiff, mMaskControl->mCurrentMask);
-        int absDiffThreshold = meanAbsDiff[0] * 3;
+        double absDiffThreshold = meanAbsDiff[0] * 3.0;
 
         if(absdiffImg.type() == CV_16UC1) {
 

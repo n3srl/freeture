@@ -34,11 +34,9 @@
 */
 #include "Commons.h"
 
-
 #ifdef LINUX
 
-    #include <opencv2/highgui/highgui.hpp>
-    #include <opencv2/imgproc/imgproc.hpp>
+    #include <opencv2/opencv.hpp>
 
     #include <iostream>
     #include <string>
@@ -65,16 +63,7 @@
     #include <linux/videodev2.h>
 
     #include "EParser.h"
-    #include <boost/log/common.hpp>
-    #include <boost/log/expressions.hpp>
-    #include <boost/log/utility/setup/file.hpp>
-    #include <boost/log/utility/setup/console.hpp>
-    #include <boost/log/utility/setup/common_attributes.hpp>
-    #include <boost/log/attributes/named_scope.hpp>
-    #include <boost/log/attributes.hpp>
-    #include <boost/log/sinks.hpp>
-    #include <boost/log/sources/logger.hpp>
-    #include <boost/log/core.hpp>
+   
     #include "ELogSeverityLevel.h"
     #include "PixFmtConv.h"
     #include <algorithm>
@@ -87,20 +76,6 @@
         class CameraV4l2 : public Camera {
 
         private:
-
-            static boost::log::sources::severity_logger< LogSeverityLevel > logger;
-
-            static class Init {
-
-            public:
-
-                Init() {
-
-                    logger.add_attribute("ClassName", boost::log::attributes::constant<std::string>("CameraV4l2"));
-
-                }
-
-            }initializer;
 
             const char* mDeviceName;
             int fd;
@@ -119,7 +94,6 @@
             int read_frame(void);
             void errno_exit(const char* s);
             int xioctl(int fh, int request, void* arg);
-
 
             CameraV4l2(CameraDescription, cameraParam);
 
@@ -230,7 +204,7 @@
 
         private:
 
-            bool convertImage(unsigned char* buffer, Mat& image);
+            bool convertImage(unsigned char* buffer, cv::Mat& image);
 
             bool setSize();
 

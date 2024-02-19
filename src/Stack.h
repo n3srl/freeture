@@ -35,7 +35,7 @@
 */
 //header refactoring ok
 #include "Commons.h"
-
+#include <memory>
 #include <string>
 
 #include <opencv2/opencv.hpp>
@@ -52,7 +52,7 @@ namespace freeture
     private:
 
       
-        cv::Mat             stack;
+        std::shared_ptr<cv::Mat>  stack;
         int             curFrames;
         int             gainFirstFrame;
         int             expFirstFrame;
@@ -85,7 +85,7 @@ namespace freeture
         *
         * @param i Frame to add.
         */
-        void addFrame(Frame& i);
+        void addFrame(std::shared_ptr<Frame> i);
 
         /**
         * Get Date of the first frame of the stack.
@@ -113,7 +113,7 @@ namespace freeture
         */
         int getNbFramesStacked() { return curFrames; };
 
-        cv::Mat getStack() { return stack; };
+        std::shared_ptr<cv::Mat> getStack() { return stack; };
 
         /**
         * Reduce stack in float 32 bits to 8 or 16 bits.
@@ -122,7 +122,7 @@ namespace freeture
         * @param bscale
         * @return Reduced image.
         */
-        cv::Mat reductionByFactorDivision(float& bzero, float& bscale);
+        std::shared_ptr<cv::Mat> reductionByFactorDivision(float& bzero, float& bscale);
 
     };
 }

@@ -135,6 +135,7 @@ using namespace std;
             }
 
             Arena::SetNodeValue<double>(m_ArenaDevice->GetNodeMap(), "AcquisitionFrameRate", val);
+            getFPS(m_FPS);
 
             return true;
         }
@@ -908,7 +909,7 @@ using namespace std;
         LOG_DEBUG << "CameraLucidArena_PHX016S::grabCleanse; *** DO NOTHING ***";
     }
 
-    bool CameraLucidArena_PHX016S::grabImage(Frame& newFrame)
+    bool CameraLucidArena_PHX016S::grabImage(shared_ptr<Frame> newFrame)
     {
         try
         {
@@ -918,42 +919,48 @@ using namespace std;
             if (!checkSDKDevice())
                 throw exception("SDK not initialized");
 
-            Arena::IImage* pImage = m_ArenaDevice->GetImage(IMAGE_TIMEOUT);
+            Arena::IImage* pOriginalImage = m_ArenaDevice->GetImage(IMAGE_TIMEOUT);
 
-            if (!pImage->HasImageData()) {
+            if (!pOriginalImage->HasImageData()) {
                 LOG_ERROR << "Image has not image data";
             }
 
-            if (pImage->HasChunkData()) {
+            if (pOriginalImage->HasChunkData()) {
                 LOG_ERROR << "Image has data chunk";
             }
-            size_t payload_size = pImage->GetPayloadSize();
-            size_t size = pImage->GetSizeFilled();
-            size_t width = pImage->GetWidth();
-            size_t height = pImage->GetHeight();
-            size_t size_of_buffer = pImage->GetSizeOfBuffer();
 
-            if (pImage->IsIncomplete()) {
+            Arena::IImage* pCopiedImage = Arena::ImageFactory::Create(pOriginalImage->GetData(),
+                pOriginalImage->GetPayloadSize(), pOriginalImage->GetWidth(),
+                pOriginalImage->GetHeight(),
+                pOriginalImage->GetPixelFormat());
+
+            m_ArenaDevice->RequeueBuffer(pOriginalImage);
+
+            size_t payload_size = pCopiedImage->GetPayloadSize();
+            size_t size = pCopiedImage->GetSizeFilled();
+            size_t width = pCopiedImage->GetWidth();
+            size_t height = pCopiedImage->GetHeight();
+            size_t size_of_buffer = pCopiedImage->GetSizeOfBuffer();
+
+            if (pCopiedImage->IsIncomplete()) {
                 LOG_ERROR << "Image is incomplete: " << " size_filled=" << size << "<= payload size= " << payload_size << "<= size_of_buffer" << size_of_buffer;
                 LOG_ERROR << "this is likely due to missed packets or a small buffer";
                 getStreamMissedPacketCount();
             }
 
+            string m_PixelFormat = GetPixelFormatName(static_cast<PfncFormat>(pCopiedImage->GetPixelFormat()));
 
-            string m_PixelFormat = GetPixelFormatName(static_cast<PfncFormat>(pImage->GetPixelFormat()));
-
-            uint64_t timestampNs = pImage->GetTimestampNs();
+            uint64_t timestampNs = pCopiedImage->GetTimestampNs();
 
             if (LOG_SPAM_FRAME_STATUS)
                 LOG_DEBUG << " (" << " Gain " << m_Gain << "; FPS " << m_FPS << "; Exposure " << m_ExposureTime << "; " << size << " bytes; " << width << "x" << height << "; " << m_PixelFormat << "; timestamp (ns): " << timestampNs << ")";
 
-            const uint8_t* u_buffer_data = pImage->GetData();
+            const uint8_t* u_buffer_data = pCopiedImage->GetData();
 
-            size_t buffer_size = pImage->GetSizeFilled();
+            size_t buffer_size = pCopiedImage->GetSizeFilled();
 
             CopyFrame(newFrame, u_buffer_data, buffer_size);
-
-            m_ArenaDevice->RequeueBuffer(pImage);
+            Arena::ImageFactory::Destroy(pCopiedImage);
 
             return true;
         }
@@ -1030,106 +1037,6 @@ using namespace std;
 
         return false;
     }
-
-    bool CameraLucidArena_PHX016S::grabSingleImage(Frame& frame)
-    {
-        bool res = true;
-
-        try {
-            LOG_DEBUG << "CameraLucidArena_PHX016S::grabSingleImage";
-
-            if (!checkSDKDevice())
-                throw exception("SDK not initialized");
-
-            if (!setNightRegular())
-                return false;
-
-            m_FPS = MIN_FPS;
-            m_PixelFormat = frame.mFormat;
-            m_ExposureTime = frame.mExposure;
-            m_Gain = frame.mGain;
-
-            if (!grabInitialization())
-                throw exception("FAILED TO grabInitialization");
-
-            if (!acqStart(false))
-                throw exception("FAILED TO acqStart");
-
-            if (!m_ArenaDevice)
-                throw exception("DEVICE DIED");
-
-            Arena::IImage* pImage = m_ArenaDevice->GetImage(IMAGE_TIMEOUT);
-
-            if (pImage->HasImageData()) {
-                LOG_ERROR << "Image has data";
-            }
-
-            if (pImage->HasChunkData()) {
-                LOG_ERROR << "Image has data chunk";
-            }
-
-            if (pImage->IsIncomplete()) {
-                LOG_ERROR << "Image is incomplete";
-                return false;
-            }
-
-            size_t size = pImage->GetSizeFilled();
-            size_t width = pImage->GetWidth();
-            size_t height = pImage->GetHeight();
-            string format = GetPixelFormatName(static_cast<PfncFormat>(pImage->GetPixelFormat()));
-            uint64_t timestampNs = pImage->GetTimestampNs();
-
-            LOG_DEBUG << " (" << " Gain " << m_Gain << "; FPS " << m_FPS << "; Exposure " << m_ExposureTime << "; " << size << " bytes; " << width << "x" << height << "; " << format << "; timestamp (ns): " << timestampNs << ")";
-
-            const uint8_t* u_buffer_data = pImage->GetData();
-            size_t buffer_size = pImage->GetSizeFilled();
-
-            CopyFrame(frame, u_buffer_data, buffer_size);
-
-            //    Requeue image buffer
-            //    Requeue an image buffer when access to it is no longer needed.
-            //    Notice that failing to requeue buffers may cause memory to leak and
-            //    may also result in the stream engine being starved due to there
-            //    being no available buffers.
-            m_ArenaDevice->RequeueBuffer(pImage);
-        }
-        catch (GenICam::GenericException& e) {
-            res = false;
-            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << e.what();
-        }
-        catch (std::exception& ex)
-        {
-            res = false;
-            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << "Standard exception thrown: " << ex.what();
-        }
-        catch (...)
-        {
-            res = false;
-            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << "Unexpected exception thrown";
-        }
-
-        try
-        {
-
-            LOG_DEBUG << "CameraLucidArena_PHX016S::grabSingleImage" << "Stop Stream";
-            m_ArenaDevice->StopStream();
-            return res;
-        }
-        catch (GenICam::GenericException& e) {
-            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << e.what();
-        }
-        catch (std::exception& ex)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << "Standard exception thrown: " << ex.what();
-        }
-        catch (...)
-        {
-            LOG_ERROR << "CameraLucidArena_PHX016S::grabSingleImage; " << "Unexpected exception thrown";
-        }
-
-        return false;
-    }
-
 
     /**
      * INTERNALS
@@ -1384,16 +1291,15 @@ using namespace std;
         return false;
     }
 
-    void CameraLucidArena_PHX016S::CopyFrame(Frame& frame, const uint8_t* u_buffer_data, size_t buffer_size)
+    void CameraLucidArena_PHX016S::CopyFrame(shared_ptr<Frame> frame, const uint8_t* u_buffer_data, size_t buffer_size)
     {
         try
         {
             LOG_DEBUG << "CameraLucidArena_PHX016S::CopyFrame";
 
-            frame.SetImage(u_buffer_data, buffer_size);
+            frame->SetImage(u_buffer_data, buffer_size);
 
-
-            cv::Mat image;
+            shared_ptr<cv::Mat> image = make_shared<cv::Mat>();
             int saturateVal = 0;
 
             switch (m_PixelFormat)
@@ -1401,7 +1307,7 @@ using namespace std;
             case CamPixFmt::MONO8:
                 {
                     //BOOST_LOG_SEV(logger, normal) << "Creating Mat 8 bits ...";
-                    image = cv::Mat(m_Height, m_Width, CV_8UC1, frame.mDataBuffer);
+                    image = make_shared<cv::Mat>(m_Height, m_Width, CV_8UC1, frame->getData());
                     saturateVal = 255;
                     break;
                 }
@@ -1409,16 +1315,16 @@ using namespace std;
                 {
 
                     //BOOST_LOG_SEV(logger, normal) << "Creating Mat 16 bits ...";
-                    image = cv::Mat(m_Height, m_Width, CV_16UC1, frame.mDataBuffer);
+                    image = make_shared<cv::Mat>(m_Height, m_Width, CV_16UC1, frame->getData());
                     saturateVal = 4095;
 
                     if (m_ShiftBitsImage) {
 
                         unsigned short* p;
 
-                        for (int i = 0; i < image.rows; i++) {
-                            p = image.ptr<unsigned short>(i);
-                            for (int j = 0; j < image.cols; j++)
+                        for (int i = 0; i < image->rows; i++) {
+                            p = image->ptr<unsigned short>(i);
+                            for (int j = 0; j < image->cols; j++)
                                 p[j] = p[j] >> 4;
                         }
                     }
@@ -1426,18 +1332,16 @@ using namespace std;
                 }
                 case CamPixFmt::MONO16:
                 {
-                    image = cv::Mat(m_Height, m_Width, CV_16UC1, frame.mDataBuffer);
+                    image = make_shared<cv::Mat>(m_Height, m_Width, CV_16UC1, frame->getData());
                     saturateVal = 65535;
                 }
             }
 
-            frame.mImage = image;
-            frame.mFps = m_FPS;
-            frame.mFormat = m_PixelFormat;
-            frame.mDate = TimeDate::splitIsoExtendedDate(to_iso_extended_string(boost::posix_time::microsec_clock::universal_time()));
-            frame.mSaturatedValue = saturateVal;
-
-            //frame.mFrameNumber = m_FrameCounter; //set from outside
+            frame->Image = image;
+            frame->mFps = m_FPS;
+            frame->mFormat = m_PixelFormat;
+            frame->mDate = TimeDate::splitIsoExtendedDate(to_iso_extended_string(boost::posix_time::microsec_clock::universal_time()));
+            frame->mSaturatedValue = saturateVal;
         }
         catch (std::exception& ex)
         {
@@ -1650,7 +1554,7 @@ using namespace std;
                 Arena::SetNodeValue<bool>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamPacketResendEnable", false);
 
                 LOG_DEBUG << "CameraLucidArena_PHX016S::grabInitialization;" << "Set camera TriggerMode to Off";
-                Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "TriggerMode", "On");
+                Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "TriggerMode", "Off");
 
                 return true;
             }

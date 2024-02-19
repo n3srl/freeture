@@ -36,7 +36,7 @@
 */
 //header refactoring ok
 #include "Commons.h"
-
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -85,8 +85,8 @@ namespace freeture
 
         void Setup(cameraParam cp, framesParam fp, videoParam vp);
 
-        bool runContinuousCapture(Frame& img);
-        bool runSingleCapture(Frame& img);
+        bool runContinuousCapture(std::shared_ptr<Frame> img);
+        bool runSingleCapture(std::shared_ptr<Frame> img);
 
         /// <summary>
         /// Call camera acqStart. 

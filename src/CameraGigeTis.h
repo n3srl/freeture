@@ -34,8 +34,9 @@
 * \brief   Use Imaging source sdk to pilot GigE Cameras.
 */
 //git clone https://github.com/TheImagingSource/tiscamera.git
-#ifdef TISCAMERA
 #include "Commons.h"
+
+#ifdef TISCAMERA
 
 #include <opencv2/highgui/highgui.hpp>
     #include <opencv2/imgproc/imgproc.hpp>
