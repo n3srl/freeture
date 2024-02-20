@@ -16,6 +16,8 @@
 
 #ifdef LINUX
 #include "CameraV4l2.h"
+#include "CameraGigeAravis.h"
+#include "CameraGigeAravis.h"
 #endif
 
 #ifdef VIDEOINPUT
@@ -92,7 +94,7 @@ Camera* CameraFactory::createCamera(CameraDescription camera_descriptor, paramet
     {
         LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: LUCID_ARAVIS";
 #ifdef LINUX
-        camera = new CameraLucidArena(camera_descriptor,runtime_configuration.camInput);
+        camera = new CameraGigeAravis(camera_descriptor,runtime_configuration.camInput);
 #endif
         break;
     }

@@ -1946,4 +1946,39 @@ using namespace std;
         }
     }
 
+    bool CameraV4l2::initSDK()
+    {
+        return true;
+    }
+
+    bool CameraV4l2::initOnce()
+    {
+        return true;
+    }
+
+    bool CameraV4l2::init()
+    {
+        return true;
+    }
+
+    void CameraV4l2::fetchBounds(parameters&)
+    {
+
+    }
+
+    void CameraV4l2::configure(parameters&)
+    {
+
+    }
+
+    bool CameraV4l2::configurationCheck(parameters&)
+    {
+        return true;
+    }
+
+    double CameraV4l2::getMinExposureTime()
+    {
+        return 0;
+    }
+
 #endif

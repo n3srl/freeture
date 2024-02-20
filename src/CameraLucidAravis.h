@@ -1,5 +1,4 @@
 #pragma once
-
 /**
 * \file    CameraLucidArena.h
 * \author  Andrea Novati -- N3 S.r.l.
@@ -81,11 +80,8 @@ namespace freeture
     public:
 
 
-        CameraLucidArena(CameraDescription, cameraParam );
-
-        CameraLucidArena();
-
-        ~CameraLucidArena();
+        CameraLucidAravis(CameraDescription, cameraParam );
+        ~CameraLucidAravis();
 
         bool createDevice(int id);
         bool recreateDevice(int);

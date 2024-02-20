@@ -2,11 +2,23 @@
 
 #include <string>
 
-#include "CameraGigeAravisScanner.h"
 #include "CameraLucidArenaScanner.h"
 #include "CameraLucidArena_Scanner.h"
 
+
+#ifdef LINUX
+
+#include "CameraGigeAravisScanner.h"
+#include "CameraLucidArenaScanner.h"
+
+#endif
+
+
+
 #include "Logger.h"
+
+
+
 
 using namespace std;
 using namespace freeture;
