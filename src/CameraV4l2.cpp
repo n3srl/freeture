@@ -1064,7 +1064,7 @@ using namespace std;
 
     }
 
-    void CameraV4l2::getGainBounds(int &gMin, int &gMax){
+    void CameraV4l2::getGainBounds(double &gMin, double&gMax){
 
         struct v4l2_queryctrl queryctrl;
         memset(&queryctrl, 0, sizeof(queryctrl));
