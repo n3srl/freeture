@@ -10,76 +10,43 @@
 #include "Commons.h"
 
 #ifdef LINUX
-    #include "CameraDeviceManager.h"
+#include "CameraDeviceManager.h"
 
-    #include <opencv2/highgui/highgui.hpp>
-    #include <opencv2/imgproc/imgproc.hpp>
+#include <string>
+#include <memory>
 
-    #include <iostream>
-    #include <string>
-    #include "Frame.h"
-    #include "TimeDate.h"
-    #include "Camera.h"
-    #include "arv.h"
-    #include "arvinterface.h"
-    #include <time.h>
-    #include <algorithm>
-    #include "EParser.h"
+#include "Camera.h"
+#include "CamPixFmt.h"
 
-    #define BOOST_LOG_DYN_LINK 1
 
-    #include <boost/log/common.hpp>
-    #include <boost/log/expressions.hpp>
-    #include <boost/log/utility/setup/file.hpp>
-    #include <boost/log/utility/setup/console.hpp>
-    #include <boost/log/utility/setup/common_attributes.hpp>
-    #include <boost/log/attributes/named_scope.hpp>
-    #include <boost/log/attributes.hpp>
-    #include <boost/log/sinks.hpp>
-    #include <boost/log/sources/logger.hpp>
-    #include <boost/log/core.hpp>
-    #include "ELogSeverityLevel.h"
+#include "arv.h"
+#include "arvinterface.h"
 
 namespace freeture
 {
+    class Frame;
     class CameraDescription;
-    class cameraParam;
+    struct cameraParam;
+
 
     class CameraLucidAravis : public Camera
     {
 
     private:
-
         GError* error = nullptr;        // ARAVIS API Error
         ArvCamera* camera;                // Camera to control.
         ArvPixelFormat  pixFormat;              // Image format.
         ArvStream* stream;                // Object for video stream reception.
-        int             mStartX;                // Crop starting X.
-        int             mStartY;                // Crop starting Y.
-        int             mWidth;                 // Camera region's width.
-        int             mHeight;                // Camera region's height.
-        double          m_FPS;                    // Camera acquisition frequency.
-        double          m_MinGain;                // Camera minimum gain.
-        double          m_MaxGain;                // Camera maximum gain.
+       
         unsigned int    payload;                // Width x height.
-        double          exposureMin;            // Camera's minimum exposure time.
-        double          exposureMax;            // Camera's maximum exposure time.
-        double          fpsMin;                 // Camera's minimum frame rate.
-        double          fpsMax;                 // Camera's maximum frame rate.
-        double          temperature;            // Camera temperature in °C
         const char* capsString;
-        int             m_Gain;                   // Camera's gain.
-        double          m_ExposureTime;                    // Camera's exposure time.
         bool            shiftBitsImage;         // For example : bits are shifted for dmk's frames.
         guint64         nbCompletedBuffers;     // Number of frames successfully received.
         guint64         nbFailures;             // Number of frames failed to be received.
         guint64         nbUnderruns;
         int             frameCounter;           // Counter of success received frames.
 
-
     public:
-
-
         CameraLucidAravis(CameraDescription, cameraParam );
         ~CameraLucidAravis();
 
@@ -92,9 +59,9 @@ namespace freeture
 
         void acqStop();
 
-        bool grabImage(Frame& newFrame);
+        bool grabImage(std::shared_ptr<Frame> newFrame);
 
-        bool grabSingleImage(Frame& frame);
+        bool grabSingleImage(std::shared_ptr<Frame> frame);
 
         bool getDeviceNameById(int id, std::string& device);
 
