@@ -52,7 +52,7 @@ using namespace std;
 CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam settings):
     Camera(description, settings),
     payload(0), nbCompletedBuffers(0),
-    nbFailures(0), nbUnderruns(0), frameCounter(0), shiftBitsImage(shift), stream(nullptr)
+    nbFailures(0), nbUnderruns(0), frameCounter(0), shiftBitsImage(settings.SHIFT_BITS), stream(nullptr)
 {
     m_ExposureAvailable = true;
     m_GainAvailable = true;
@@ -635,7 +635,7 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
                     if(pixFormat == ARV_PIXEL_FORMAT_MONO_8){
 
                         cv::Mat image = cv::Mat(m_Height, m_Width, CV_8UC1, buffer_data);
-                        image.copyTo(frame->Image);
+                        image.copyTo(*frame->Image.get());
 
                     }else if(pixFormat == ARV_PIXEL_FORMAT_MONO_12){
 
@@ -652,7 +652,7 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
                             }
                         }
 
-                        image.copyTo(frame->Image);
+                        image.copyTo(*frame->Image.get());
                     }
 
                     frame->mDate = TimeDate::splitIsoExtendedDate(to_iso_extended_string(time));
