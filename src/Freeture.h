@@ -6,6 +6,7 @@
 
  //header refactoring ok
 #include <memory>
+#include <thread>
 
 #include "Commons.h"
 #include "FreetureSettings.h"

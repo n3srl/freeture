@@ -35,9 +35,10 @@
 */
 //header refactoring ok
 #include "Commons.h"
-#include <memory>
 
-#include <string.h>
+#include <thread>
+#include <memory>
+#include <string>
 
 #include <boost/thread/thread.hpp>
 #include <boost/thread/condition_variable.hpp>

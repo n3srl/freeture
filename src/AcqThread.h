@@ -38,6 +38,7 @@
 #include "Commons.h"
 
 #include <memory>
+#include <thread>
 
 #include <boost/thread/thread.hpp>
 #include <boost/thread/condition_variable.hpp>
