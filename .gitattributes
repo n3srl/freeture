@@ -1,0 +1,27 @@
+# Track DLL files for Windows
+*.dll filter=lfs diff=lfs merge=lfs -text
+
+# Track EXE files for Windows (if you have executables as part of your libraries)
+*.exe filter=lfs diff=lfs merge=lfs -text
+
+# Track Linux shared libraries
+*.so filter=lfs diff=lfs merge=lfs -text
+
+# Track archive files (static libraries for Linux and sometimes Windows)
+*.a filter=lfs diff=lfs merge=lfs -text
+*.lib filter=lfs diff=lfs merge=lfs -text
+
+# If you have specific directories for your binaries, you might want to specify them
+# For example, for binaries stored in 'libs/windows' and 'libs/linux':
+libs/windows/*.dll filter=lfs diff=lfs merge=lfs -text
+libs/windows/*.exe filter=lfs diff=lfs merge=lfs -text
+libs/linux/*.so filter=lfs diff=lfs merge=lfs -text
+libs/linux/*.a filter=lfs diff=lfs merge=lfs -text
+
+*.pdf filter=lfs diff=lfs merge=lfs -text
+*.pak filter=lfs diff=lfs merge=lfs -text
+*.bin filter=lfs diff=lfs merge=lfs -text
+*.100 filter=lfs diff=lfs merge=lfs -text
+*.0 filter=lfs diff=lfs merge=lfs -text
+*.84 filter=lfs diff=lfs merge=lfs -text
+*.gz filter=lfs diff=lfs merge=lfs -text
