@@ -69,7 +69,8 @@ using namespace std;
     int              frame_number = 0;
 
 
-    CameraV4l2::CameraV4l2()
+    CameraV4l2::CameraV4l2(CameraDescription description, cameraParam settings):
+        Camera(description, settings),
     {
         io_method io = IO_METHOD_MMAP;
         fd = -1;
