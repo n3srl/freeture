@@ -1,78 +1,87 @@
 
 #ifdef LINUX
-#include <iostream>
 
-#include "CameraLucidArenaScanner.h"
+#include "CameraLucidAravis_Scanner.h"
+
+#include <string>
+
 #include "arv.h"
 #include "arvinterface.h"
+
+#include "CameraDescription.h"
+#include "Logger.h"
 
 using namespace std;
 using namespace freeture;
 
-CameraLucidArenaScanner::CameraLucidArenaScanner(CamSdkType sdk):CameraScanner(sdk)
+CameraLucidAravis_Scanner::CameraLucidAravis_Scanner(CamSdkType sdk): CameraScanner(sdk)
 {
+    
 }
 
-            void CameraLucidArenaScanner::UpdateCameraList()
-            {
-                cout << "CameraLucidArenaScanner::UpdateCameraList" << endl;
-                    ArvInterface *interface;
+CameraLucidAravis_Scanner::~CameraLucidAravis_Scanner()
+{
 
-                    //arv_update_device_list();
+}
 
-                    int ni = arv_get_n_interfaces();
+void CameraLucidAravis_Scanner::UpdateCameraList()
+{
+    LOG_DEBUG << "CameraLucidAravis_Scanner::UpdateCameraList";
+    ArvInterface* interface;
 
+    //arv_update_device_list();
 
-                    for (int j = 0; j< ni; j++)
-                    {
+    int ni = arv_get_n_interfaces();
 
-                        const char* name = arv_get_interface_id (j);
-                        
-                        if (strcmp(name,"GigEVision") == 0) {
-                            interface = arv_gv_interface_get_instance();
-                            arv_interface_update_device_list(interface);
-                            //int nb = arv_get_n_devices();
+    for (int j = 0; j < ni; j++)
+    {
 
-                            int nb = arv_interface_get_n_devices(interface);
+        const char* name = arv_get_interface_id(j);
 
-                            for(int i = 0; i < nb; i++){
-                                
-                                CameraDescription c;
+        if (strcmp(name, "GigEVision") == 0) {
+            interface = arv_gv_interface_get_instance();
+            arv_interface_update_device_list(interface);
+            //int nb = arv_get_n_devices();
 
-                                //const char* str = arv_get_device_id(i);
-                                const char* str = arv_interface_get_device_id(interface,i);
-                                const char* addr = arv_interface_get_device_address(interface,i);
-                                string s = str;
-                                string t = "Lucid";
-                                if (s.find(t)!= string::npos)
-                                {
-                                    
-                                    c.Id = i;
-                                    c.Description = "NAME[" + s + "] SDK[LUCIDARAVIS] IP: " + addr;
-                                    c.DeviceId =string(str);
-                                    c.Address = string(addr);
-                                    c.Interface = j;
-                                    c.Sdk = CamSdkType::LUCID_ARAVIS;
+            int nb = arv_interface_get_n_devices(interface);
 
-                                    Devices.push_back(c);
-                                }
-                                t = "Machine";
-                                if (s.find(t)!= string::npos)
-                                {
-                                    
-                                    c.Id = i;
-                                    c.Description = "NAME[" + s + "] SDK[LUCIDARAVIS] IP: " + addr;
-                                    c.DeviceId =string(str);
-                                    c.Address = string(addr);
-                                    c.Interface = j;
-                                    c.Sdk = CamSdkType::LUCID_ARAVIS;
+            for (int i = 0; i < nb; i++) {
+                CameraDescription c;
 
-                                    Devices.push_back(c);
-                                }
-                            }
-                        }
-                    }
+                //const char* str = arv_get_device_id(i);
+                const char* str = arv_interface_get_device_id(interface, i);
+                const char* addr = arv_interface_get_device_address(interface, i);
+                string s = str;
+                string t = "Lucid";
+                if (s.find(t) != string::npos)
+                {
+
+                    c.Id = i;
+                    c.Description = "NAME[" + s + "] SDK[LUCIDARAVIS] IP: " + addr;
+                    c.DeviceId = string(str);
+                    c.Address = string(addr);
+                    c.Interface = j;
+                    c.Sdk = CamSdkType::LUCID_ARAVIS;
+
+                    Devices.push_back(c);
+                }
+                t = "Machine";
+                if (s.find(t) != string::npos)
+                {
+
+                    c.Id = i;
+                    c.Description = "NAME[" + s + "] SDK[LUCIDARAVIS] IP: " + addr;
+                    c.DeviceId = string(str);
+                    c.Address = string(addr);
+                    c.Interface = j;
+                    c.Sdk = CamSdkType::LUCID_ARAVIS;
+
+                    Devices.push_back(c);
+                }
             }
+        }
+    }
+}
 
 
 #endif
