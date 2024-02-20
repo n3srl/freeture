@@ -40,6 +40,7 @@
 #include <iostream>
 #include <boost/date_time/posix_time/time_formatters.hpp>
 
+#include "Frame.h"
 #include "Logger.h"
 #include "EParser.h"
 #include "CameraFirstInit.h"
