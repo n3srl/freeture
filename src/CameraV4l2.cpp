@@ -34,7 +34,11 @@
 */
 
 #include "CameraV4l2.h"
+#include <boost/date_time.hpp>
 
+#include "TimeDate.h"
+#include "EParser.h"
+#include "Frame.h"
 #include "Logger.h"
 #include "Conversion.h"
 

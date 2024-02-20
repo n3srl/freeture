@@ -10,6 +10,7 @@
 #include "Commons.h"
 
 #include <opencv2/opencv.hpp>
+#include <boost/date_time.hpp>
 
 #include "Logger.h"
 #include "TimeDate.h"
@@ -1137,7 +1138,7 @@ void CameraLucidAravis::getAvailablePixelFormats() {
 
             if ((double)val >= gMin && (double)val <= gMax) {
 
-                gain = val;
+                m_Gain = val;
                 arv_camera_set_gain(camera, (double)val, &error);
                 CheckAravisError(&error);
 
@@ -1267,7 +1268,7 @@ void CameraLucidAravis::getAvailablePixelFormats() {
             arv_camera_set_region(camera, 0, 0, sensor_width, sensor_height, &error);
             CheckAravisError(&error);
 
-            arv_camera_get_region(camera, nullptr, nullptr, &mWidth, &mHeight, &error);
+            arv_camera_get_region(camera, nullptr, nullptr, &m_Width, &m_Height, &error);
             CheckAravisError(&error);
         }
 
