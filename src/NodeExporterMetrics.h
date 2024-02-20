@@ -24,7 +24,7 @@ namespace freeture
         std::string m_CompleteDataPath="";
         std::string m_cDate = "";
     public:
-        char* OutputPath = "/freeture/freeture_metric";
+        const char* OutputPath = "/freeture/freeture_metric";
 
         NodeExporterMetrics(NodeExporterMetrics& other) = delete;
         void operator=(const NodeExporterMetrics&) = delete;
