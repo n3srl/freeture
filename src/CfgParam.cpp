@@ -37,6 +37,7 @@
 #include "CfgParam.h"
 #include "SParam.h"
 
+#include "CameraFirstInit.h"
 #include "Logger.h"
 #include "EParser.h"
 #include "Conversion.h"
