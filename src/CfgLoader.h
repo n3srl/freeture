@@ -35,7 +35,6 @@
 */
 #include "Commons.h"
 
-#include "CommonConfig.h"
 
 #include <fstream>
 #include <string>

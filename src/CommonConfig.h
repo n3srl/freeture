@@ -1,7 +1,6 @@
 #pragma once
 #include "CameraFirstInit.h"
 
-#ifdef WINDOWS
 #define DEFAULT_CAMERA_INIT_CONFIG FREETURE_WRITE_CONFIG_PATH
 #define DEFAULT_CAMERA_ID "0"
 #define DEFAULT_CAMERA_SERIAL ""
@@ -104,12 +103,3 @@
 #define DEFAULT_MAIL_SMTP_LOGIN ""
 #define DEFAULT_MAIL_SMTP_PASSWORD ""
 #define DEFAULT_MAIL_RECIPIENT ""
-
-
-
-
-#endif
-
-#ifdef LINUX
-
-#endif
