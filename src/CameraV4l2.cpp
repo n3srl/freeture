@@ -341,6 +341,11 @@ using namespace std;
 
     }
 
+    bool CameraV4l2::createDevice()
+    {
+        return true;
+    }
+
     bool CameraV4l2::setSize(int startx, int starty, int width, int height, bool customSize) {
         mStartX = startx;
         mStartY = starty;
@@ -1979,6 +1984,11 @@ using namespace std;
     double CameraV4l2::getMinExposureTime()
     {
         return 0;
+    }
+
+    bool CameraV4l2::destroyDevice()
+    {
+        return true;
     }
 
 #endif

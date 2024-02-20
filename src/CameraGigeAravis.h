@@ -84,7 +84,9 @@ namespace freeture
 
         ~CameraGigeAravis();
 
-        bool createDevice();
+        bool createDevice() override;
+
+        bool destroyDevice() override;
 
         void grabCleanse();
 

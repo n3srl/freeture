@@ -90,6 +90,11 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
         return true;
     }
 
+    bool CameraGigeAravis::createDevice()
+    {
+        return true;
+    }
+
     bool CameraGigeAravis::setSize(int startx, int starty, int width, int height, bool customSize) {
         int sensor_width, sensor_height;
         arv_camera_get_sensor_size(camera, &sensor_width, &sensor_height, &error);
@@ -1128,17 +1133,17 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
 
     bool CameraGigeAravis::initSDK()
     {
-
+        return true;
     }
 
     bool CameraGigeAravis::initOnce()
     {
-
+        return true;
     }
 
     bool CameraGigeAravis::init()
     {
-
+        return true;
     }
 
     void CameraGigeAravis::fetchBounds(parameters&)
@@ -1153,12 +1158,17 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
 
     bool CameraGigeAravis::configurationCheck(parameters&)
     {
-
+        return true;
     }
 
     double CameraGigeAravis::getMinExposureTime()
     {
+        return 30;
+    }
 
+    bool CameraGigeAravis::destroyDevice()
+    {
+        return true;
     }
 
 #endif

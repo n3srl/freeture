@@ -202,6 +202,10 @@
 
             double getMinExposureTime() override;
 
+            bool destroyDevice() override;
+
+            bool createDevice() override;
+
         private:
 
             bool convertImage(unsigned char* buffer, cv::Mat& image);
