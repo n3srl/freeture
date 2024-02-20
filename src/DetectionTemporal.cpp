@@ -225,7 +225,7 @@ void DetectionTemporal::saveDetectionInfos(string p, int nbFramesAround){
     // Save positions.
     if(mdtp.temporal.DET_SAVE_POS) {
 
-        ofstream posFile;
+        std::ofstream posFile;
         string posFilePath = p + "positions.txt";
         posFile.open(posFilePath.c_str());
 
