@@ -420,7 +420,7 @@ using namespace std;
 
                         }
 
-                        if(mHeight >= frmsize.stepwise.min_height && mHeight <=frmsize.stepwise.max_height) {
+                        if(m_Height >= frmsize.stepwise.min_height && m_Height <=frmsize.stepwise.max_height) {
 
                             mFormat.fmt.pix.height = m_Height;
 
@@ -804,7 +804,7 @@ using namespace std;
 
             mFrameCounter++;
 
-            if(!convertImage(ImageBuffer, newFrame->Image))
+            if(!convertImage(ImageBuffer, *newFrame->Image.get()))
                 grabSuccess = false;
 
         }
@@ -814,7 +814,7 @@ using namespace std;
 
     bool CameraV4l2::grabSingleImage(shared_ptr<Frame> frame){
 
-        createDevice(camID);
+        createDevice();
 
         if(frame->mHeight > 0 && frame->mWidth > 0) {
 
@@ -1695,9 +1695,12 @@ using namespace std;
 
             if(fmt.isEnumValue(pixfmt.at(i))) {
 
-                LOG_DEBUG << "- " << pixfmt.at(i) << " available --> ID : " << fmt.parseEnum(pixfmt.at(i)) ;
+                LOG_DEBUG << "FOUND " << pixfmt.at(i) ;
 
             }
+            else 
+                LOG_DEBUG << "NOT FOUND " << pixfmt.at(i);
+
 
         }
 
