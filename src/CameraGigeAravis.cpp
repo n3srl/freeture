@@ -367,7 +367,7 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
 
         if(arv_buffer == nullptr){
 
-            throw exception("arv_buffer is nullptr");
+            throw runtime_error("arv_buffer is nullptr");
             return false;
         }else{
 
@@ -635,7 +635,7 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
                     if(pixFormat == ARV_PIXEL_FORMAT_MONO_8){
 
                         cv::Mat image = cv::Mat(m_Height, m_Width, CV_8UC1, buffer_data);
-                        image.copyTo(frame.Image);
+                        image.copyTo(frame->Image);
 
                     }else if(pixFormat == ARV_PIXEL_FORMAT_MONO_12){
 
@@ -652,7 +652,7 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
                             }
                         }
 
-                        image.copyTo(frame.Image);
+                        image.copyTo(frame->Image);
                     }
 
                     frame->mDate = TimeDate::splitIsoExtendedDate(to_iso_extended_string(time));
@@ -797,8 +797,11 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
 
                     if(fmt.isEnumValue(pixfmt.at(i))) {
 
-                        LOG_DEBUG << "- " << pixfmt.at(i) << " available --> ID : " << fmt.parseEnum(pixfmt.at(i));
+                        LOG_DEBUG << "Found " << pixfmt.at(i) ;
 
+                    }
+                    else {
+                        LOG_DEBUG << "Not Found " << pixfmt.at(i);
                     }
 
                 }
