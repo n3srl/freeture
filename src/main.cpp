@@ -9,18 +9,21 @@
 #include "Freeture.h"
 #include "Logger.h"
 
-std::unique_ptr<freeture::Freeture> freeture_instance;
+using namespace freeture;
+using namespace std;
+
+shared_ptr<Freeture> freeture_instance;
 
 int main(int argc, const char ** argv)
 {
     try
     {
-        freeture_instance = std::make_unique<freeture::Freeture>(argc,argv);
+        freeture_instance = make_shared<Freeture>(argc,argv);
         freeture_instance->Run();
     }
     catch(...)
     {
-        std::cout << "main;" << ">> Generic Error"  << std::endl;
+        cout << "main;" << ">> Generic Error"  << endl;
     }
 
     return 0 ;
