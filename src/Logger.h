@@ -7,6 +7,7 @@
 */
 #include "Commons.h"
 
+#include <thread>
 #include <fstream>
 #include <string>
 #include <memory>
