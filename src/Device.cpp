@@ -41,18 +41,6 @@
 #include "EParser.h"
 #include "ECamSdkType.h"
 #include "CameraDeviceManager.h"
-#include "CameraFrames.h"
-#include "CameraVideo.h"
-
-#ifdef USE_ARENA
-#include "CameraLucidArena_PHX016S.h"
-#endif
-
-#ifdef LINUX
-#include "CameraV4l2.h"
-#include "CameraGigeAravis.h"
-#include "CameraLucidArena.h"
-#endif
 
 using namespace std;
 using namespace freeture;
