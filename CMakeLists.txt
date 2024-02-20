@@ -10,7 +10,10 @@ project(freeture VERSION 1.4)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-
+# The version number.
+set(VERSION 1.4.1)
+# Configuration file default path
+set(CFG_PATH /usr/local/share/freeture/ )
 
 #Configure CMAKE
 
@@ -45,8 +48,13 @@ message(STATUS "CMake Configuration; Build directory: ${BUILD_DIR}")
 #Platform detection
 
 if ( "${CMAKE_HOST_SYSTEM_NAME}" MATCHES "Windows")
+	OPTION(LINUX "Linux system" OFF)
+	OPTION(WINDOWS "Windows system" ON)
 	message(STATUS "Platform detection; Windows platform detected")
 	add_definitions(-D_WIN32_WINNT="0x0A00")
+ELSE("${CMAKE_HOST_SYSTEM_NAME}" MATCHES "Linux")
+	OPTION(LINUX "Linux system" ON)
+	OPTION(WINDOWS "Windows system" OFF)
 endif()
 
 message(STATUS "Platform detection; CMAKE_HOST_SYSTEM_NAME ${CMAKE_HOST_SYSTEM_NAME}")
@@ -242,19 +250,23 @@ set (CFITS_LIBARARIES
 
 
 #adding sources
-#configure_file(config.h.in config.h COPYONLY)
-configure_file(${CMAKE_CURRENT_BINARY_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+
+configure_file("./config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/config.h")
 
 set(SOURCES
 	src/AcqSchedule.cpp
 	src/AcqSchedule.h
 	src/AcqThread.cpp
 	src/AcqThread.h
+	src/ArenaSDKManager.cpp
+	src/ArenaSDKManager.h
 	src/Base64.cpp
 	src/Base64.h
 	src/Camera.h
 	src/CameraDeviceManager.cpp
 	src/CameraDeviceManager.h
+	src/CameraFactory.cpp
+	src/CameraFactory.h
 	src/CameraFirstInit.h
 	src/CameraFrames.cpp
 	src/CameraFrames.h
@@ -266,16 +278,18 @@ set(SOURCES
 	src/CameraGigePylon.h
 	src/CameraGigeTis.cpp
 	src/CameraGigeTis.h
-	#src/CameraLucidAravis.cpp
 	src/CameraLucidAravis.h
-	#src/CameraLucidAravis_Scanner.cpp
 	src/CameraLucidAravis_Scanner.h
+	src/CameraLucidArena.cpp
+	src/CameraLucidArenaScanner.cpp
+	src/CameraLucidArenaScanner.h
 	src/CameraLucidArena_PHX016S.cpp
 	src/CameraLucidArena_PHX016S.h
 	src/CameraLucidArena_Scanner.cpp
 	src/CameraLucidArena_Scanner.h
 	src/CameraScanner.cpp
 	src/CameraScanner.h
+	src/CameraSettings.h
 	src/CameraV4l2.cpp
 	src/CameraV4l2.h
 	src/CameraVideo.cpp
@@ -287,12 +301,11 @@ set(SOURCES
 	src/CfgParam.cpp
 	src/CfgParam.h
 	src/Circle.h
-	src/Constants.h
-	src/Conversion.h
-	src/Conversion.cpp
-	src/PlatformSwitches.h
-	src/Commons.h
 	src/CommonConfig.h
+	src/Commons.h
+	src/Constants.h
+	src/Conversion.cpp
+	src/Conversion.h
 	src/Detection.h
 	src/DetectionTemplate.cpp
 	src/DetectionTemplate.h
@@ -303,13 +316,18 @@ set(SOURCES
 	src/Device.cpp
 	src/Device.h
 	src/Doxyfile
+	src/EAcquisitionMode.h
+	src/ECamModel.h
 	src/ECamPixFmt.h
 	src/ECamSdkType.h
 	src/EDetMeth.h
+	src/EFreetureMode.h
 	src/EImgBitDepth.h
 	src/EImgFormat.h
 	src/EInputDeviceType.h
+	src/ELogLevel.h
 	src/ELogSeverityLevel.h
+	src/ELogThread.h
 	src/EParser.cpp
 	src/EParser.h
 	src/Ephemeris.cpp
@@ -329,6 +347,7 @@ set(SOURCES
 	src/Frame.h
 	src/Freeture.cpp
 	src/Freeture.h
+	src/FreetureSettings.h
 	src/GlobalEvent.cpp
 	src/GlobalEvent.h
 	src/Histogram.cpp
@@ -337,12 +356,15 @@ set(SOURCES
 	src/HistogramGray.h
 	src/HistogramRGB.cpp
 	src/HistogramRGB.h
+	src/IAcqThread.h
+	src/ICameraFab.h
 	src/ImgProcessing.cpp
 	src/ImgProcessing.h
 	src/LocalEvent.cpp
 	src/LocalEvent.h
-	src/Logger.h
 	src/Logger.cpp
+	src/Logger.h
+	src/Loggercpp.cpp
 	src/main.cpp
 	src/Mask.cpp
 	src/Mask.h
@@ -352,6 +374,7 @@ set(SOURCES
 	src/OpenSSL.h
 	src/PixFmtConv.cpp
 	src/PixFmtConv.h
+	src/PlatformSwitches.h
 	src/SaveImg.cpp
 	src/SaveImg.h
 	src/SMTPClient.cpp
@@ -364,10 +387,6 @@ set(SOURCES
 	src/StackThread.h
 	src/TimeDate.cpp
 	src/TimeDate.h
-	src/CameraFactory.cpp
-	src/CameraFactory.h
-	src/ICameraFab.h
-	src/ArenaSDKManager.h
 )
 
 

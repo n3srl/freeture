@@ -1,1 +1,8 @@
-//empty config
+#pragma once
+
+#define VERSION "@VERSION@"
+#define CFG_PATH "@CFG_PATH@"
+
+#cmakedefine WINDOWS
+#cmakedefine LINUX
+#cmakedefine USE_PYLON

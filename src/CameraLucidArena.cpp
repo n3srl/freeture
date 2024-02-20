@@ -7,10 +7,11 @@
 *
 */
 
-#include "ErrorManager.cpp"
-#include "CameraLucidArena.h"
+#include "Commons.h"
 
 #ifdef LINUX
+#include "CameraLucidArena.h"
+
 using namespace freeture;
 
     boost::log::sources::severity_logger< LogSeverityLevel >  CameraLucidArena::logger;
