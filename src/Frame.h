@@ -68,7 +68,7 @@ namespace freeture
 
         std::shared_ptr<cv::Mat> Image;                // Frame's image data.
 
-        //Frame(cv::Mat capImg, int g, double e, std::string acquisitionDate);
+        Frame(cv::Mat capImg, int g, double e, std::string acquisitionDate);
 
         Frame();
 
