@@ -34,7 +34,10 @@ void CheckAravisError(GError** error)
         if (gError_ptr != nullptr)
         {
             GError& _error = *gError_ptr;
-            throw runtime_error( "GError - Domain: " << _error.domain << ", code: " << _error.code << ", message: " << _error.message );
+            std::ostringstream oss;
+            oss << "GError - Domain: " << _error.domain << ", code: " << _error.code << ", message: " << _error.message;
+
+            throw runtime_error(oss.str());
             delete gError_ptr;
             gError_ptr = nullptr;
 
@@ -43,8 +46,18 @@ void CheckAravisError(GError** error)
 }
 
 CameraLucidAravis::CameraLucidAravis(CameraDescription description, cameraParam settings) :
-    camera(description, settings),
-    payload(0), nbCompletedBuffers(0), nbFailures(0), nbUnderruns(0), frameCounter(0), shiftBitsImage(cameraParam.SHIFT_BITS), stream(nullptr)
+    Camera(description, settings),
+    error(nullptr),
+    camera(nullptr),
+    pixFormat(),
+    stream(nullptr),
+    payload(0),
+    capsString(nullptr),
+    shiftBitsImage(settings.SHIFT_BITS),
+    nbCompletedBuffers(0),
+    nbFailures(0),
+    nbUnderruns(0),
+    frameCounter(0)
 {
     m_ExposureAvailable = true;
     m_GainAvailable = true;
@@ -228,12 +241,12 @@ bool CameraLucidAravis::grabInitialization()
     capsString = arv_pixel_format_to_gst_caps_string(pixFormat);
     LOG_DEBUG << "Camera format :" << capsString;
 
-    gain = arv_camera_get_gain(camera, &error);
+    m_Gain = arv_camera_get_gain(camera, &error);
     CheckAravisError(&error);
 
     LOG_DEBUG << "Camera gain :" << m_Gain;
 
-    exp = arv_camera_get_exposure_time(camera, &error);
+    m_ExposureTime = arv_camera_get_exposure_time(camera, &error);
     CheckAravisError(&error);
 
     LOG_DEBUG << "Camera exposure :" << m_ExposureTime;
@@ -250,8 +263,8 @@ bool CameraLucidAravis::grabInitialization()
     CheckAravisError(&error);
 
     LOG_DEBUG << "PAYLOAD         :" << payload;
-    LOG_DEBUG << "Start X         :" << m_StartX << "Start Y         :" << m_StartY;
-    LOG_DEBUG << "Width           :" << m_Width << "Height          :" << m_Height;
+    LOG_DEBUG << "Start X         :" << m_StartX << "Start Y:" << m_StartY;
+    LOG_DEBUG << "Width           :" << m_Width << "Height:" << m_Height;
     LOG_DEBUG << "Exp Range       : [" << m_MinExposure << "-" << m_MaxExposure << "]";
     LOG_DEBUG << "Exp             :" << m_ExposureTime;
     LOG_DEBUG << "Gain Range      : [" << m_MinGain << "-" << m_MaxGain << "]";
@@ -259,8 +272,6 @@ bool CameraLucidAravis::grabInitialization()
     LOG_DEBUG << "Fps Range       : [" << m_MinFPS << "-" << m_MaxFPS << "]";
     LOG_DEBUG << "Fps             :" << m_FPS;
     LOG_DEBUG << "Type            :" << capsString;
-
-    LOG_DEBUG;
 
     // Create a new stream object. Open stream on Camera.
     stream = arv_camera_create_stream(camera, nullptr, nullptr, &error);

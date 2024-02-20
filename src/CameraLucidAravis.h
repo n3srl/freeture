@@ -30,12 +30,12 @@ namespace freeture
 
     private:
         GError* error = nullptr;        // ARAVIS API Error
-        ArvCamera* camera;                // Camera to control.
+        ArvCamera*      camera;                // Camera to control.
         ArvPixelFormat  pixFormat;              // Image format.
-        ArvStream* stream;                // Object for video stream reception.
+        ArvStream*      stream;                // Object for video stream reception.
        
         unsigned int    payload;                // Width x height.
-        const char* capsString;
+        const char*     capsString;
         bool            shiftBitsImage;         // For example : bits are shifted for dmk's frames.
         guint64         nbCompletedBuffers;     // Number of frames successfully received.
         guint64         nbFailures;             // Number of frames failed to be received.
