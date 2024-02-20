@@ -484,7 +484,7 @@ bool CameraLucidAravis::grabImage(shared_ptr<Frame> newFrame)
                     saturateVal = 65535;
                 }
 
-                newFrame = make_shared<Frame>(image, gain, exp, acquisitionDate);
+                newFrame = make_shared<Frame>(image, m_Gain, m_ExposureTime, acquisitionDate);
                 newFrame->mFps = m_FPS;
                 newFrame->mFormat = imgDepth;
                 //BOOST_LOG_SEV(logger, normal) << "Setting saturated value of frame ...";
@@ -1079,7 +1079,7 @@ void CameraLucidAravis::getAvailablePixelFormats() {
 
             if(val >= expMin && val <= expMax) {
 
-                exp = val;
+                m_ExposureTime = val;
                 arv_camera_set_exposure_time(camera, val, &error);
                 CheckAravisError(&error);
 
