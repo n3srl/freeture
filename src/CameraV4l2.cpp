@@ -91,17 +91,7 @@ using namespace std;
         out_buf = 1;
         frame_count = 10;
         frame_number = 0;
-        expMin = 0;
-        expMax = 0;
-        exp =0;
-        gain = 0;
-        gainMin = 0;
-        gainMax = 0;
         mFrameCounter = 0;
-        mStartX = 0;
-        mStartY = 0;
-        mWidth = 640;
-        mHeight = 480;
         n_buffers = 3;
 
         m_ExposureAvailable = true;
@@ -346,8 +336,8 @@ using namespace std;
             return false;
         }
 
-        getExposureBounds(expMin, expMax);
-        getGainBounds(gainMin, gainMax);
+        getExposureBounds(m_MinExposure, m_MaxExposure);
+        getGainBounds(m_MinGain, m_MaxGain);
 
         memset(&mFormat, 0, sizeof(mFormat));
         mFormat.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -366,10 +356,10 @@ using namespace std;
     }
 
     bool CameraV4l2::setSize(int startx, int starty, int width, int height, bool customSize) {
-        mStartX = startx;
-        mStartY = starty;
-        mWidth = width;
-        mHeight = height;
+        m_StartX = startx;
+        m_StartY = starty;
+        m_Width = width;
+        m_Height = height;
         mCustomSize = customSize;
         return true;
     }
@@ -401,7 +391,7 @@ using namespace std;
 
                     }else {
 
-                        if((abs(static_cast<int>(mWidth - chooseWidth)) > abs(static_cast<int>(mWidth - frmsize.discrete.width))) && (abs(static_cast<int>(mHeight - chooseHeight)) > abs(static_cast<int>(mHeight - frmsize.discrete.height)))) {
+                        if((abs(static_cast<int>(m_Width - chooseWidth)) > abs(static_cast<int>(m_Width - frmsize.discrete.width))) && (abs(static_cast<int>(m_Height - chooseHeight)) > abs(static_cast<int>(m_Height - frmsize.discrete.height)))) {
                             chooseWidth = frmsize.discrete.width;
                             chooseHeight = frmsize.discrete.height;
                         }
@@ -421,9 +411,9 @@ using namespace std;
 
                     if(mCustomSize) {
 
-                        if(mWidth >= frmsize.stepwise.min_width && mWidth <=frmsize.stepwise.max_width) {
+                        if(m_Width >= frmsize.stepwise.min_width && m_Width <=frmsize.stepwise.max_width) {
 
-                            mFormat.fmt.pix.width = mWidth;
+                            mFormat.fmt.pix.width = m_Width;
 
                         }else {
 
@@ -433,7 +423,7 @@ using namespace std;
 
                         if(mHeight >= frmsize.stepwise.min_height && mHeight <=frmsize.stepwise.max_height) {
 
-                            mFormat.fmt.pix.height = mHeight;
+                            mFormat.fmt.pix.height = m_Height;
 
                         }else {
 
@@ -786,15 +776,13 @@ using namespace std;
 
             if(0 == r) {
               fprintf(stderr, "select timeout\n");
-              BOOST_LOG_SEV(logger, warning) << "Select timeout !";
-              //exit(EXIT_FAILURE);
+              LOG_WARNING << "Select timeout !";
             }
 
             if(read_frame()) {
                 grabSuccess = true;
                 break;
             }
-            /* EAGAIN - continue select loop. */
         }
 
        if(grabSuccess) {
@@ -805,13 +793,16 @@ using namespace std;
             newFrame.mDate = TimeDate::splitIsoExtendedDate(to_iso_extended_string(time));
 
             double fps = 0;
+
             if(getFPS(fps))
                 newFrame.mFps = fps;
+
             newFrame.mFormat = CamPixFmt::MONO8;
             newFrame.mSaturatedValue = 255;
             newFrame.mFrameNumber = mFrameCounter;
-            newFrame.mExposure = exp;
-            newFrame.mGain = gain;
+            newFrame.mExposure = m_ExposureTime;
+            newFrame.mGain = m_Gain;
+
             mFrameCounter++;
 
             if(!convertImage(ImageBuffer, newFrame.mImg))
@@ -820,7 +811,6 @@ using namespace std;
         }
 
         return grabSuccess;
-
     }
 
     bool CameraV4l2::grabSingleImage(shared_ptr<Frame> frame){
@@ -830,8 +820,8 @@ using namespace std;
         if(frame->mHeight > 0 && frame->mWidth > 0) {
 
             LOG_DEBUG << "Setting size to : " << frame->mWidth << "x" << frame->mHeight ;
-            mWidth = frame->mWidth;
-            mHeight = frame->mHeight;
+            m_Width = frame->mWidth;
+            m_Height = frame->mHeight;
             mCustomSize = true;
 
         }
@@ -846,9 +836,9 @@ using namespace std;
         if(!setPixelFormat(frame->mFormat))
             return false;
 
-        if(expMin != -1 && expMax != -1)
+        if(m_MinExposure != -1 && m_MaxExposure != -1)
             setExposureTime(frame->mExposure);
-        if(expMin != -1 && expMax != -1)
+        if(m_MinExposure != -1 && m_MaxExposure != -1)
             setGain(frame->mGain);
 
         unsigned char* ImageBuffer = NULL;
@@ -1091,16 +1081,16 @@ using namespace std;
             } else {
 
                 printf(">> V4L2_CID_GAIN is not supported\n");
-                gainMin = -1;
-                gainMax = -1;
+                m_MinGain = -1;
+                m_MaxGain = -1;
 
             }
 
         } else if (queryctrl.flags & V4L2_CTRL_FLAG_DISABLED) {
 
             printf(">> V4L2_CID_GAIN is not supported\n");
-            gainMin = -1;
-            gainMax = -1;
+            m_MinGain = -1;
+            m_MaxGain = -1;
 
         } else {
 
@@ -1297,7 +1287,7 @@ using namespace std;
 
     bool CameraV4l2::setExposureTime(double val){
 
-        if(expMax > 0 && expMin > 0 && val >= expMin && val <= expMax) {
+        if(m_MaxExposure > 0 && m_MinExposure > 0 && val >= m_MinExposure && val <= m_MaxExposure) {
 
             // ************************ DISABLE AUTO EXPOSURE *****************************
 
@@ -1377,7 +1367,7 @@ using namespace std;
                 */
 
                 control.value = val/100;
-                exp = val;
+                m_ExposureTime = val;
                 printf(">> V4L2_CID_EXPOSURE_ABSOLUTE setted to %f (%f with V4L2)\n", val, val/100);
 
                 if (-1 == ioctl(fd, VIDIOC_S_CTRL, &control)) {
@@ -1391,14 +1381,14 @@ using namespace std;
 
         }else {
 
-            if(expMin == -1 && expMax == -1) {
+            if(m_MinExposure == -1 && m_MaxExposure == -1) {
 
                 LOG_DEBUG << "Exposure time not supported." ;
                 return true;
 
             }
 
-            LOG_DEBUG << "> Exposure value (" << val << ") is not in range [ " << expMin << " - " << expMax << " ]" ;
+            LOG_DEBUG << "> Exposure value (" << val << ") is not in range [ " << m_MinExposure << " - " << m_MaxExposure << " ]" ;
 
         }
 
@@ -1407,7 +1397,7 @@ using namespace std;
 
     bool CameraV4l2::setGain(int val){
 
-        if(gainMax > 0 && gainMin > 0 && val >= gainMin && val <= gainMax) {
+        if(m_MaxGain > 0 && m_MinGain > 0 && val >= m_MinGain && val <= m_MaxGain) {
 
             struct v4l2_queryctrl queryctrl;
             struct v4l2_control control;
@@ -1436,7 +1426,7 @@ using namespace std;
                 memset(&control, 0, sizeof (control));
                 control.id = V4L2_CID_GAIN;
                 control.value = val;
-                gain = val;
+                m_Gain = val;
 
                 if (-1 == ioctl(fd, VIDIOC_S_CTRL, &control)) {
                     perror("VIDIOC_S_CTRL");
@@ -1449,14 +1439,14 @@ using namespace std;
 
         }else {
 
-            if(gainMin == -1 && gainMax == -1) {
+            if(m_MinGain == -1 && m_MaxGain == -1) {
 
                 LOG_DEBUG << "Gain not supported." ;
                 return true;
 
             }
 
-            LOG_DEBUG << "> Gain value (" << val << ") is not in range [ " << gainMin << " - " << gainMax << " ]" ;
+            LOG_DEBUG << "> Gain value (" << val << ") is not in range [ " << m_MinGain << " - " << m_MaxGain << " ]" ;
 
         }
 

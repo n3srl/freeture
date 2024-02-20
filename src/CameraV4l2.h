@@ -59,9 +59,6 @@
 
             const char* mDeviceName;
             int fd;
-            double expMin, expMax, exp;
-            int gainMin, gainMax, gain;
-            int mStartX, mStartY, mWidth, mHeight;
             int mFrameCounter;
             struct v4l2_format mFormat;
             bool mCustomSize;
