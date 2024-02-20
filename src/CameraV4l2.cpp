@@ -179,14 +179,13 @@ using namespace std;
                 fourcc,
                 fmt.fmt.pix.field);*/
 
-        double eMin, eMax; int gMin, gMax;
-        getExposureBounds(eMin, eMax);
-        LOG_DEBUG << "Min exposure    : " << eMin ;
-        LOG_DEBUG << "Max exposure    : " << eMax ;
+        getExposureBounds(m_MinExposure, m_MaxExposure);
+        LOG_DEBUG << "Min exposure    : " << m_MinExposure;
+        LOG_DEBUG << "Max exposure    : " << m_MaxExposure;
 
-        getGainBounds(gMin, gMax);
-        LOG_DEBUG << "Min gain        : " << gMin ;
-        LOG_DEBUG << "Max gain        : " << gMax ;
+        getGainBounds(m_MinGain, m_MaxGain);
+        LOG_DEBUG << "Min gain        : " << m_MinGain;
+        LOG_DEBUG << "Max gain        : " << m_MaxGain;
 
         return true;
 
@@ -790,22 +789,22 @@ using namespace std;
             ImageBuffer = (unsigned char*)buffers[buf.index].start;
 
             boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
-            newFrame.mDate = TimeDate::splitIsoExtendedDate(to_iso_extended_string(time));
+            newFrame->mDate = TimeDate::splitIsoExtendedDate(to_iso_extended_string(time));
 
             double fps = 0;
 
             if(getFPS(fps))
-                newFrame.mFps = fps;
+                newFrame->mFps = fps;
 
-            newFrame.mFormat = CamPixFmt::MONO8;
-            newFrame.mSaturatedValue = 255;
-            newFrame.mFrameNumber = mFrameCounter;
-            newFrame.mExposure = m_ExposureTime;
-            newFrame.mGain = m_Gain;
+            newFrame->mFormat = CamPixFmt::MONO8;
+            newFrame->mSaturatedValue = 255;
+            newFrame->mFrameNumber = mFrameCounter;
+            newFrame->mExposure = m_ExposureTime;
+            newFrame->mGain = m_Gain;
 
             mFrameCounter++;
 
-            if(!convertImage(ImageBuffer, newFrame.mImg))
+            if(!convertImage(ImageBuffer, newFrame->Image))
                 grabSuccess = false;
 
         }
@@ -863,8 +862,8 @@ using namespace std;
                 /* Timeout. */
                 int timeout = 2;
 
-                if(frame.mExposure/1000000 > 1)
-                    timeout = timeout + (int)(frame.mExposure/1000000);
+                if(frame->mExposure/1000000 > 1)
+                    timeout = timeout + (int)(frame->mExposure/1000000);
 
                 tv.tv_sec = timeout;
                 tv.tv_usec = 0;
@@ -907,7 +906,7 @@ using namespace std;
             frame->mFrameNumber = mFrameCounter;
 
             LOG_DEBUG << "size image buffer : " << sizeof(buffers[buf.index].start)  ;
-            if(!convertImage(ImageBuffer, frame->Image))
+            if(!convertImage(ImageBuffer, *frame->Image.get()))
                 grabSuccess = false;
         }
 
