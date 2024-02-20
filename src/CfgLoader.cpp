@@ -36,6 +36,9 @@
 */
 
 #include "CfgLoader.h"
+
+#include "CommonConfig.h"
+
 #include <string>
 
 #include "Logger.h"
