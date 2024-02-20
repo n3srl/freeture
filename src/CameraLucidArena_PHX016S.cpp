@@ -241,7 +241,7 @@ using namespace std;
 
             if (!getDeviceInfoBySerial(m_CameraDescriptor.Serial, device_info)) {
                 LOG_ERROR << "CameraLucidArena_PHX016S::getModelName" << "Camera not found";
-                return false;
+                return string();
             }
 
             return device_info.ModelName().c_str();
