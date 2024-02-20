@@ -25,7 +25,7 @@ using namespace std;
 #include "CameraLucidAravis.h"
 
 
-void CheckAravisError(GError** error)
+void CheckAravisError(GError** gError)
 {
     if (gError != nullptr)
     {
@@ -40,7 +40,6 @@ void CheckAravisError(GError** error)
             throw runtime_error(oss.str());
             delete gError_ptr;
             gError_ptr = nullptr;
-
         }
     }
 }
