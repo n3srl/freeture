@@ -157,7 +157,7 @@ namespace freeture
     public:
         void setLogThread(LogThread, thread_id_type, bool reset = false);
         
-        static logger_type get();
+        static logger_type& get();
     };
 }
 

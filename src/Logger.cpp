@@ -158,7 +158,7 @@ void freeture::Logger::init()
 //     return m_Instance;
 // }
 
-logger_type freeture::Logger::get()
+logger_type& freeture::Logger::get()
 {
     return m_LoggerInstance;
 }
