@@ -36,21 +36,22 @@
 */
 #include "Commons.h"
 
-#ifdef LINUX
 #include <memory>
 #include <string>
-
-#include <arv.h>
-#include <arvinterface.h>
 
 #include "Camera.h"
 #include "TimeDate.h"
 #include "ECamPixFmt.h"
 
+#ifdef LINUX
+#include <arv.h>
+#include <arvinterface.h>
+
 namespace freeture
 {
     class CameraDescription;
     class Frame;
+    struct cameraParam;
 
     class CameraGigeAravis : public Camera
     {

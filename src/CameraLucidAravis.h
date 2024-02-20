@@ -9,16 +9,13 @@
 */
 #include "Commons.h"
 
-#ifdef LINUX
-#include "CameraDeviceManager.h"
-
 #include <string>
 #include <memory>
 
 #include "Camera.h"
-#include "CamPixFmt.h"
+#include "ECamPixFmt.h"
 
-
+#ifdef LINUX
 #include "arv.h"
 #include "arvinterface.h"
 
@@ -27,7 +24,6 @@ namespace freeture
     class Frame;
     class CameraDescription;
     struct cameraParam;
-
 
     class CameraLucidAravis : public Camera
     {
