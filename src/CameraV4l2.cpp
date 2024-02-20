@@ -939,7 +939,7 @@ using namespace std;
                 case V4L2_PIX_FMT_YUYV :
                     {
                         unsigned char* bigbuffer = (unsigned char*)malloc(mFormat.fmt.pix.height * mFormat.fmt.pix.width*3*sizeof(char));
-                        Mat dispimg(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC3, bigbuffer);
+                        cv::Mat dispimg(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC3, bigbuffer);
                         PixFmtConv::YUYV_to_BGR24(buffer, bigbuffer, mFormat.fmt.pix.width, mFormat.fmt.pix.height, mFormat.fmt.pix.bytesperline);
                         cvtColor(dispimg,image,cv::COLOR_BGRA2GRAY);
                         res = true;
@@ -953,7 +953,7 @@ using namespace std;
                     {
                         unsigned char bigbuffer[mFormat.fmt.pix.height * mFormat.fmt.pix.width*3];
                         PixFmtConv::UYVY_to_BGR24(buffer, bigbuffer, mFormat.fmt.pix.width, mFormat.fmt.pix.height, mFormat.fmt.pix.bytesperline);
-                        Mat dispimg(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC3, bigbuffer);
+                        cv::Mat dispimg(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC3, bigbuffer);
                         cvtColor(dispimg,image,cv::COLOR_BGRA2GRAY);
                         res = true;
                     }
@@ -965,7 +965,7 @@ using namespace std;
 
                         unsigned char bigbuffer[mFormat.fmt.pix.height * mFormat.fmt.pix.width*3];
                         PixFmtConv::RGB565_to_BGR24(buffer, bigbuffer, mFormat.fmt.pix.width, mFormat.fmt.pix.height);
-                        Mat dispimg(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC3, bigbuffer);
+                        cv::Mat dispimg(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC3, bigbuffer);
                         cvtColor(dispimg,image,cv::COLOR_BGRA2GRAY);
                         res = true;
 
@@ -975,7 +975,7 @@ using namespace std;
 
                 case V4L2_PIX_FMT_BGR24 :
                     {
-                        Mat dispimg = cv::Mat(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC3, buffer);
+                        cv::Mat dispimg = cv::Mat(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC3, buffer);
                         cvtColor(dispimg,image,cv::COLOR_BGRA2GRAY);
                         res = true;
 
