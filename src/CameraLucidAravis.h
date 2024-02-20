@@ -29,7 +29,7 @@ namespace freeture
     {
 
     private:
-        GError* error = nullptr;        // ARAVIS API Error
+        GError*         error = nullptr;        // ARAVIS API Error
         ArvCamera*      camera;                // Camera to control.
         ArvPixelFormat  pixFormat;              // Image format.
         ArvStream*      stream;                // Object for video stream reception.

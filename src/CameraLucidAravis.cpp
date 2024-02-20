@@ -885,9 +885,11 @@ void CameraLucidAravis::getAvailablePixelFormats() {
 
                 if (fmt.isEnumValue(pixfmt.at(i))) {
 
-                    LOG_DEBUG << "-" << pixfmt.at(i) << "available --> ID :" << fmt.parseEnum(pixfmt.at(i));
+                    LOG_DEBUG << "Found " << pixfmt.at(i) ;
 
                 }
+                else
+                    LOG_WARNING << "NOT Found " << pixfmt.at(i);
 
             }
 
@@ -1279,7 +1281,7 @@ void CameraLucidAravis::getAvailablePixelFormats() {
 
     bool CameraLucidAravis::initOnce()
     {
-        return true
+        return true;
     }
 
     bool CameraLucidAravis::init()
