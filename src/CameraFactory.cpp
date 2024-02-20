@@ -17,7 +17,7 @@
 #ifdef LINUX
 #include "CameraV4l2.h"
 #include "CameraGigeAravis.h"
-#include "CameraGigeAravis.h"
+#include "CameraLucidAravis.h"
 #endif
 
 #ifdef VIDEOINPUT
