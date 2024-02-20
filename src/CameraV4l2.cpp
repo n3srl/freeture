@@ -34,6 +34,7 @@
 */
 
 #include "CameraV4l2.h"
+
 #include <boost/date_time.hpp>
 
 #include "TimeDate.h"
@@ -41,10 +42,23 @@
 #include "Frame.h"
 #include "Logger.h"
 #include "Conversion.h"
+#include "TimeDate.h"
 
-#ifdef LINUX
 using namespace freeture;
 using namespace std;
+
+
+#ifdef LINUX
+#include <unistd.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <sys/mman.h>
+#include <sys/ioctl.h>
+#include <time.h>
+#include <fcntl.h>              /* low-level i/o */
+
 
     enum io_method {
         IO_METHOD_READ,
@@ -70,7 +84,7 @@ using namespace std;
 
 
     CameraV4l2::CameraV4l2(CameraDescription description, cameraParam settings):
-        Camera(description, settings),
+        Camera(description, settings)
     {
         io_method io = IO_METHOD_MMAP;
         fd = -1;
@@ -110,10 +124,10 @@ using namespace std;
             perror("Querying Capabilities");
             return false;
         }
-
-        LOG_DEBUG << "Driver name     : " << caps.driver ;
-        LOG_DEBUG << "Device name     : " << caps.card ;
-        LOG_DEBUG << "Device location : " << caps.bus_info ;
+        
+        LOG_DEBUG << "Driver name     : " << reinterpret_cast<const char*>(caps.driver) ;
+        LOG_DEBUG << "Device name     : " << reinterpret_cast<const char*>(caps.card) ;
+        LOG_DEBUG << "Device location : " << reinterpret_cast<const char*>(caps.bus_info) ;
         LOG_DEBUG << "Driver version  :"  << ((caps.version >> 16) & 0xFF) << " " << ((caps.version >> 8) & 0xFF) << " " << (caps.version & 0xFF);
         LOG_DEBUG << "Capabilities    : " << caps.capabilities ;
 
@@ -225,7 +239,7 @@ using namespace std;
 
                         std::pair<int,std::string> c;
                         c.first = deviceNumber;
-                        std::string s( reinterpret_cast< char const* >(caps.card) ) ;
+                        std::string s(reinterpret_cast<const char*>(caps.card));
                         c.second = "NAME[" + s + "] SDK[V4L2]";
                         camerasList.push_back(c);
 
@@ -282,7 +296,7 @@ using namespace std;
                         res = false;
                     }else {
 
-                        LOG_DEBUG << "-> [" << deviceNumber << "] " << caps.card ;
+                        LOG_DEBUG << "-> [" << deviceNumber << "] " << reinterpret_cast<const char*>(caps.card) ;
 
                     }
                 }
@@ -387,7 +401,7 @@ using namespace std;
 
                     }else {
 
-                        if((abs(mWidth - chooseWidth) > abs(mWidth - frmsize.discrete.width)) && (abs(mHeight - chooseHeight) > abs(mHeight - frmsize.discrete.height))) {
+                        if((abs(static_cast<int>(mWidth - chooseWidth)) > abs(static_cast<int>(mWidth - frmsize.discrete.width))) && (abs(static_cast<int>(mHeight - chooseHeight)) > abs(static_cast<int>(mHeight - frmsize.discrete.height)))) {
                             chooseWidth = frmsize.discrete.width;
                             chooseHeight = frmsize.discrete.height;
                         }
@@ -475,10 +489,10 @@ using namespace std;
                 perror("Querying Capabilities");
                 return false;
             }
-
-            LOG_DEBUG << "Driver name     : " << caps.driver ;
-            LOG_DEBUG << "Device name     : " << caps.card ;
-            LOG_DEBUG << "Device location : " << caps.bus_info ;
+            
+            LOG_DEBUG << "Driver name     : " << reinterpret_cast<const char*>(caps.driver) ;
+            LOG_DEBUG << "Device name     : " << reinterpret_cast<const char*>(caps.card) ;
+            LOG_DEBUG << "Device location : " << reinterpret_cast<const char*>(caps.bus_info) ;
             printf ("Driver version  : %u.%u.%u\n",(caps.version >> 16) & 0xFF, (caps.version >> 8) & 0xFF, caps.version & 0xFF);
             LOG_DEBUG << "Capabilities    : " << caps.capabilities ;
 
@@ -740,7 +754,7 @@ using namespace std;
 
     }
 
-    bool CameraV4l2::grabImage(Frame &newFrame) {
+    bool CameraV4l2::grabImage(shared_ptr<Frame> newFrame) {
 
         unsigned char* ImageBuffer = NULL;
 
@@ -793,7 +807,7 @@ using namespace std;
             double fps = 0;
             if(getFPS(fps))
                 newFrame.mFps = fps;
-            newFrame.mFormat = MONO8;
+            newFrame.mFormat = CamPixFmt::MONO8;
             newFrame.mSaturatedValue = 255;
             newFrame.mFrameNumber = mFrameCounter;
             newFrame.mExposure = exp;
@@ -809,15 +823,15 @@ using namespace std;
 
     }
 
-    bool CameraV4l2::grabSingleImage(Frame &frame){
+    bool CameraV4l2::grabSingleImage(shared_ptr<Frame> frame){
 
         createDevice(camID);
 
-        if(frame.mHeight > 0 && frame.mWidth > 0) {
+        if(frame->mHeight > 0 && frame->mWidth > 0) {
 
-            LOG_DEBUG << "Setting size to : " << frame.mWidth << "x" << frame.mHeight ;
-            mWidth = frame.mWidth;
-            mHeight = frame.mHeight;
+            LOG_DEBUG << "Setting size to : " << frame->mWidth << "x" << frame->mHeight ;
+            mWidth = frame->mWidth;
+            mHeight = frame->mHeight;
             mCustomSize = true;
 
         }
@@ -829,13 +843,13 @@ using namespace std;
         LOG_DEBUG << ">> Height : " << mFormat.fmt.pix.height ;
         LOG_DEBUG << ">> Width  : " << mFormat.fmt.pix.width ;
 
-        if(!setPixelFormat(frame.mFormat))
+        if(!setPixelFormat(frame->mFormat))
             return false;
 
         if(expMin != -1 && expMax != -1)
-            setExposureTime(frame.mExposure);
+            setExposureTime(frame->mExposure);
         if(expMin != -1 && expMax != -1)
-            setGain(frame.mGain);
+            setGain(frame->mGain);
 
         unsigned char* ImageBuffer = NULL;
 
@@ -892,25 +906,25 @@ using namespace std;
 
 
             boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
-            frame.mDate = TimeDate::splitIsoExtendedDate(to_iso_extended_string(time));
+            frame->mDate = TimeDate::splitIsoExtendedDate(to_iso_extended_string(time));
 
             double fps = 0;
+
             if(getFPS(fps))
-                frame.mFps = fps;
-            frame.mSaturatedValue = 255;
-            frame.mFrameNumber = mFrameCounter;
+                frame->mFps = fps;
+
+            frame->mSaturatedValue = 255;
+            frame->mFrameNumber = mFrameCounter;
 
             LOG_DEBUG << "size image buffer : " << sizeof(buffers[buf.index].start)  ;
-            if(!convertImage(ImageBuffer, frame.mImg))
+            if(!convertImage(ImageBuffer, frame->Image))
                 grabSuccess = false;
-
         }
 
         acqStop();
         grabCleanse();
 
         return grabSuccess;
-
     }
 
     bool CameraV4l2::convertImage(unsigned char* buffer, cv::Mat &image) {
@@ -922,7 +936,6 @@ using namespace std;
             switch(mFormat.fmt.pix.pixelformat) {
 
                 case V4L2_PIX_FMT_GREY :
-
                     {
 
                         image = cv::Mat(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC1, cv::Scalar(0));
@@ -934,7 +947,6 @@ using namespace std;
                     break;
 
                 case V4L2_PIX_FMT_YUYV :
-
                     {
                         unsigned char* bigbuffer = (unsigned char*)malloc(mFormat.fmt.pix.height * mFormat.fmt.pix.width*3*sizeof(char));
                         Mat dispimg(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC3, bigbuffer);
@@ -948,7 +960,6 @@ using namespace std;
                     break;
 
                 case V4L2_PIX_FMT_UYVY :
-
                     {
                         unsigned char bigbuffer[mFormat.fmt.pix.height * mFormat.fmt.pix.width*3];
                         PixFmtConv::UYVY_to_BGR24(buffer, bigbuffer, mFormat.fmt.pix.width, mFormat.fmt.pix.height, mFormat.fmt.pix.bytesperline);
@@ -960,7 +971,6 @@ using namespace std;
                     break;
 
                 case V4L2_PIX_FMT_RGB565 :
-
                     {
 
                         unsigned char bigbuffer[mFormat.fmt.pix.height * mFormat.fmt.pix.width*3];
@@ -974,7 +984,6 @@ using namespace std;
                     break;
 
                 case V4L2_PIX_FMT_BGR24 :
-
                     {
                         Mat dispimg = cv::Mat(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC3, buffer);
                         cvtColor(dispimg,image,cv::COLOR_BGRA2GRAY);
@@ -985,7 +994,6 @@ using namespace std;
                     break;
 
                 case V4L2_PIX_FMT_RGB24 :
-
                     {
                         cv::Mat dispimg = cv::Mat(mFormat.fmt.pix.height, mFormat.fmt.pix.width, CV_8UC3, buffer);
                         cvtColor(dispimg,image,cv::COLOR_BGRA2GRAY);
@@ -1283,7 +1291,7 @@ using namespace std;
             return "";
         }
 
-        return (char*)caps.card;
+        return (char*)reinterpret_cast<const char*>(caps.card);
 
     }
 
@@ -1570,7 +1578,7 @@ using namespace std;
 
                 switch(depth) {
 
-                    case MONO8 :
+                    case CamPixFmt::MONO8 :
 
                         {
 
@@ -1580,7 +1588,7 @@ using namespace std;
 
                         break;
 
-                    case GREY :
+                    case CamPixFmt::GREY :
 
                         {
 
@@ -1590,7 +1598,7 @@ using namespace std;
 
                         break;
 
-                    case YUYV :
+                    case CamPixFmt::YUYV :
 
                         {
 
@@ -1600,7 +1608,7 @@ using namespace std;
 
                         break;
 
-                    case UYVY :
+                    case CamPixFmt::UYVY :
 
                         {
 
@@ -1610,7 +1618,7 @@ using namespace std;
 
                         break;
 
-                    case RGB565 :
+                    case CamPixFmt::RGB565 :
 
                         {
 
@@ -1620,7 +1628,7 @@ using namespace std;
 
                         break;
 
-                    case BGR3 :
+                    case CamPixFmt::BGR3 :
 
                         {
 
@@ -1630,7 +1638,7 @@ using namespace std;
 
                         break;
 
-                    case RGB3 :
+                    case CamPixFmt::RGB3 :
 
                         {
 
@@ -1651,7 +1659,7 @@ using namespace std;
 
         if(!fmtFound) {
 
-            BOOST_LOG_SEV(logger, critical) << ">> FORMAT " << fstring << " NOT SUPPORTED !";
+            LOG_ERROR << ">> FORMAT " << fstring << " NOT SUPPORTED !";
             return false;
         }
 

@@ -34,44 +34,24 @@
 */
 #include "Commons.h"
 
+#include <string>
+#include <memory>
+#include <vector>
+
+#include <opencv2/opencv.hpp>
+
+#include "Camera.h"
+#include "PixFmtConv.h"
+
 #ifdef LINUX
 
-    #include <opencv2/opencv.hpp>
-
-    #include <iostream>
-    #include <string>
-    #include "Frame.h"
-    #include "TimeDate.h"
-    #include "Camera.h"
-    #include <time.h>
-
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <string.h>
-    #include <assert.h>
-
-
-    #include <fcntl.h>              /* low-level i/o */
-    #include <unistd.h>
-    #include <errno.h>
-    #include <sys/stat.h>
-    #include <sys/types.h>
-    #include <sys/time.h>
-    #include <sys/mman.h>
-    #include <sys/ioctl.h>
-
     #include <linux/videodev2.h>
-
-    #include "EParser.h"
-   
-    #include "ELogSeverityLevel.h"
-    #include "PixFmtConv.h"
-    #include <algorithm>
 
     namespace freeture
     {
         class CameraDescription;
-        class cameraParam;
+        class Frame;
+        struct cameraParam;
 
         class CameraV4l2 : public Camera {
 
@@ -115,9 +95,9 @@
 
             void acqStop();
 
-            bool grabImage(Frame& newFrame);
+            bool grabImage(std::shared_ptr<Frame>);
 
-            bool grabSingleImage(Frame& frame);
+            bool grabSingleImage(std::shared_ptr<Frame>);
 
             bool getDeviceNameById(int id, std::string& device);
 
