@@ -553,7 +553,6 @@ bool CameraLucidAravis::grabSingleImage(shared_ptr<Frame> frame)
         setFrameSize(frame->mStartX, frame->mStartY, frame->mWidth, frame->mHeight, 1);
         //arv_camera_set_region(camera, frame.mStartX, frame.mStartY, frame.mWidth, frame.mHeight);
         //arv_camera_get_region (camera, nullptr, nullptr, &mWidth, &mHeight);
-
     }
     else
     {
@@ -702,7 +701,7 @@ bool CameraLucidAravis::grabSingleImage(shared_ptr<Frame> frame)
                 if (pixFormat == ARV_PIXEL_FORMAT_MONO_8) {
 
                     cv::Mat image = cv::Mat(m_Height, m_Width, CV_8UC1, buffer_data);
-                    image.copyTo(frame->Image);
+                    image.copyTo(*frame->Image.get());
 
                 }
                 else if (pixFormat == ARV_PIXEL_FORMAT_MONO_12 || pixFormat == ARV_PIXEL_FORMAT_MONO_16) {
@@ -720,7 +719,7 @@ bool CameraLucidAravis::grabSingleImage(shared_ptr<Frame> frame)
                         }
                     }
 
-                    image.copyTo(frame->Image);
+                    image.copyTo(*frame->Image.get());
                 }
 
                 frame->mDate = TimeDate::splitIsoExtendedDate(to_iso_extended_string(time));
@@ -1239,8 +1238,8 @@ void CameraLucidAravis::getAvailablePixelFormats() {
         if (customSize) {
 
             if (arv_device_get_feature(arv_camera_get_device(camera), "OffsetX")) {
-                LOG_DEBUG << "Starting from :" << mStartX << "," << mStartY;
-                LOG_DEBUG << "Starting from :" << mStartX << "," << mStartY;
+                LOG_DEBUG << "Starting from :" << m_StartX << "," << m_StartY;
+                LOG_DEBUG << "Starting from :" << m_StartX << "," << m_StartY;
             }
             else {
                 LOG_WARNING << "OffsetX, OffsetY are not available: cannot set offset.";
@@ -1249,7 +1248,7 @@ void CameraLucidAravis::getAvailablePixelFormats() {
             arv_camera_set_region(camera, startx, starty, width, height, &error);
             CheckAravisError(&error);
 
-            arv_camera_get_region(camera, &mStartX, &mStartY, &mWidth, &mHeight, &error);
+            arv_camera_get_region(camera, &m_StartX, &m_StartY, &m_Width, &m_Height, &error);
             CheckAravisError(&error);
 
             // Default is maximum size
