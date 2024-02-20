@@ -956,7 +956,7 @@ void AcqThread::runImageCapture(EAcquisitionMode mode,int imgNumber, ImgFormat i
     LOG_DEBUG << "AcqThread::runImageCapture;\t\t" << "Restarting camera in continuous mode...";
 
     if (!setCameraInContinousMode()) {
-        throw exception("Restart camera in continuous mode impossible");
+        throw runtime_error("Restart camera in continuous mode impossible");
     }
 
 }
@@ -1359,7 +1359,7 @@ TimeMode AcqThread::getCurrentTimeMode()
 void AcqThread::ApplyCameraSettingsToFrame(shared_ptr<Frame> frame)
 {
     if (!frame)
-        throw exception("Frame is null");
+        throw runtime_error("Frame is null");
 
     LOG_DEBUG << "AcqThread::ApplyCameraSettingsToFrame";
     frame->mExposure = m_CurrentCameraSettings.Exposure;

@@ -102,7 +102,7 @@ bool Mask::applyMask(cv::Mat &currFrame) {
 
             if(mCurrentMask.rows != currFrame.rows || mCurrentMask.cols != currFrame.cols) {
 
-                throw exception("Mask's size is not correct according to frame's size.");
+                throw runtime_error("Mask's size is not correct according to frame's size.");
 
             }
 

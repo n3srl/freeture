@@ -79,7 +79,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::getFPSBounds";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             double fpsMin = 0.0;
             double fpsMax = 0.0;
@@ -117,7 +117,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::setFPS"<< "(" << val <<")";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             if (val < MIN_FPS)
                 val = MIN_FPS;
@@ -160,7 +160,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::getFPS";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             GenApi::CFloatPtr pAcquisitionFrameRate = m_ArenaDevice->GetNodeMap()->GetNode("AcquisitionFrameRate");
 
@@ -198,7 +198,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::getDeviceInfoBySerial";
           
             if (!checkSDK())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             m_ArenaSDKSystem->UpdateDevices(100);
 
@@ -235,7 +235,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::getModelName";
 
             if (!checkSDK())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             Arena::DeviceInfo device_info;
 
@@ -271,7 +271,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::getModelName";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             double exposureMin = 0.0;
             double exposureMax = 0.0;
@@ -310,7 +310,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::getExposureTime";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             GenApi::CFloatPtr pExposureTime = m_ArenaDevice->GetNodeMap()->GetNode("ExposureTime");
 
@@ -345,7 +345,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::setExposureTime (" << val <<")";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
 
             double expMin, expMax;
@@ -407,7 +407,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::setGain" << "(" << val <<")";;
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
 
             double gMin, gMax;
@@ -460,7 +460,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::setGain";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
 
             GenApi::CFloatPtr pGain = m_ArenaDevice->GetNodeMap()->GetNode("Gain");
@@ -493,7 +493,7 @@ using namespace std;
              LOG_DEBUG << "CameraLucidArena_PHX016S::getGainBounds";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             double gainMin = 0.0;
             double gainMax = 0.0;
@@ -535,7 +535,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::getFrameSize";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
 
             int64_t ww = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Width");
@@ -571,7 +571,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::setDefaultFrameSize";
             
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             LOG_DEBUG << "CameraLucidArena_PHX016S::setDefaultFrameSize;"<<"Camera sensor size : " << MAX_WIDTH << "x" << MAX_HEIGHT;
 
@@ -609,10 +609,10 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::setFrameSize";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             if (m_StartX % 2 != 0)
-                throw exception("X Offset must be multiple of 2");
+                throw runtime_error("X Offset must be multiple of 2");
 
             Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Width", m_Width);
             Arena::SetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Height", m_Height);
@@ -653,7 +653,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::getPixelFormat";
           
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
 
             GenICam::gcstring _pixFormat = Arena::GetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "PixelFormat");
@@ -695,7 +695,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::setPixelFormat";
            
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             switch (m_PixelFormat)
             {
@@ -917,7 +917,7 @@ using namespace std;
                 LOG_DEBUG << "CameraLucidArena_PHX016S::grabImage";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             Arena::IImage* pOriginalImage = m_ArenaDevice->GetImage(IMAGE_TIMEOUT);
 
@@ -991,7 +991,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::acqStart";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             if (continuous) {
                 // Set acquisition mode
@@ -1075,7 +1075,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::setSingleShotMode";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "AcquisitionMode", "SingleFrame");
 
@@ -1104,7 +1104,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::setDayContinuous";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             setContinuousMode();
             setGain(m_CameraSettings.ACQ_DAY_GAIN);
@@ -1131,7 +1131,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::setNightContinuous";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             setContinuousMode();
             setGain(m_CameraSettings.ACQ_NIGHT_GAIN);
@@ -1158,7 +1158,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::setDayRegular";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             setSingleShotMode();
             setGain(m_CameraSettings.ACQ_DAY_GAIN);
@@ -1185,7 +1185,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::setNightRegular";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             setSingleShotMode();
             setGain(m_CameraSettings.regcap.ACQ_REGULAR_CFG.gain);
@@ -1214,7 +1214,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::getStreamMissedPacketCount";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             GenApi::INode* pNode = m_ArenaDevice->GetTLStreamNodeMap()->GetNode("StreamMissedPacketCount");
             if (pNode)
@@ -1257,7 +1257,7 @@ using namespace std;
 
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             GenICam::gcstring value = GenICam::gcstring(selector.c_str());
 
@@ -1404,7 +1404,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::createDevice";
 
             if (!checkSDK())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             Arena::DeviceInfo target_device_info;
 
@@ -1418,7 +1418,7 @@ using namespace std;
             m_ArenaDevice = m_ArenaSDKSystem->CreateDevice(target_device_info);
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             return true;
         }
@@ -1476,11 +1476,11 @@ using namespace std;
             LOG_DEBUG <<"CameraLucidArena_PHX016S::init;" << "CameraLucidArena_PHX016S::init";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             //get temperature
             if (!getTemperature("Sensor"))
-                throw exception("Error getting camera sensor temperature");
+                throw runtime_error("Error getting camera sensor temperature");
             LOG_INFO << "CameraLucidArena_PHX016S::init;" << "TEMPERATURE\t:" << m_LastTemperature << "[C]";
 
 
@@ -1488,31 +1488,31 @@ using namespace std;
             EParser<CamPixFmt> px_fmt_parser;
             string fstring = px_fmt_parser.getStringEnum(static_cast<CamPixFmt>(m_PixelFormat));
             if (!setPixelFormat())
-                throw exception("Error setting pixel format");
+                throw runtime_error("Error setting pixel format");
             LOG_INFO << "CameraLucidArena_PHX016S::init;" << "PIXEL FORMAT\t\t:" << fstring;
 
 
             //set frame size
             if (!setFrameSize())
-                throw exception("Error setting frame size");
+                throw runtime_error("Error setting frame size");
             LOG_INFO << "CameraLucidArena_PHX016S::init;" << "FRAME SIZE \t\t:" << m_Width<<"x"<<m_Height<<" ("<<m_StartX<<","<<m_StartY<<")";
 
 
             //set fps
             if (!setFPS(MIN_FPS))
-                throw exception("Error setting minimum FPS value");
+                throw runtime_error("Error setting minimum FPS value");
             LOG_INFO << "CameraLucidArena_PHX016S::init;" << "FPS\t\t:" << m_FPS;
 
 
             //set exposure time
             if (!setExposureTime(MIN_US_NORMAL))
-                throw exception("Error setting minimum exposure time value");
+                throw runtime_error("Error setting minimum exposure time value");
             LOG_INFO << "CameraLucidArena_PHX016S::init;" << "EXPOSURE\t:" << m_ExposureTime;
 
 
             //set gain
             if (!setGain(MIN_GAIN))
-                throw exception("Error setting minimum gain value");
+                throw runtime_error("Error setting minimum gain value");
             LOG_INFO << "CameraLucidArena_PHX016S::init;" << "GAIN\t\t:" << m_Gain;
 
 
@@ -1599,7 +1599,7 @@ using namespace std;
             LOG_DEBUG << "CameraLucidArena_PHX016S::configurationCheck";
 
             if (!checkSDKDevice())
-                throw exception("SDK not initialized");
+                throw runtime_error("SDK not initialized");
 
             //SET CONTINUOUS MODE 
             if (!setDayContinuous()) {
@@ -1654,7 +1654,7 @@ using namespace std;
         LOG_DEBUG << "CameraLucidArena_PHX016S::fetchBounds";
 
         if (!checkSDKDevice())
-            throw exception("SDK not initialized");
+            throw runtime_error("SDK not initialized");
 
         //fetch gain bounds
         getGainBounds(m_MinGain,m_MaxGain);
@@ -1685,7 +1685,7 @@ using namespace std;
         LOG_DEBUG << "CameraLucidArena_PHX016S::destroyDevice";
 
         if (!checkSDK())
-            throw exception("SDK not initialized");
+            throw runtime_error("SDK not initialized");
 
         if (m_ArenaDevice != nullptr)
         {

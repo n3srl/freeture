@@ -334,7 +334,7 @@ void Freeture::modeContinuousAcquisition()
     EParser<CamPixFmt> fmt;
     string fstring = fmt.getStringEnum(static_cast<CamPixFmt>(m_FreetureCommandLineSettings.acqFormat));
     if (fstring == "")
-        throw exception(">> Pixel format specified not found.");
+        throw runtime_error(">> Pixel format specified not found.");
 
     LOG_INFO << "------------------------------------------------";
     LOG_INFO << "CAM ID    : " << m_FreetureCommandLineSettings.devID;
@@ -344,7 +344,7 @@ void Freeture::modeContinuousAcquisition()
     LOG_INFO << "------------------------------------------------";
 
     if (!m_CameraDeviceManager->selectDevice(m_FreetureSettings->getAllParam()))
-        throw exception("Fail to select device.");
+        throw runtime_error("Fail to select device.");
 
     m_Device->setCameraSize(m_FreetureCommandLineSettings.startx, m_FreetureCommandLineSettings.starty, m_FreetureCommandLineSettings.acqWidth, m_FreetureCommandLineSettings.acqHeight);
 
@@ -418,14 +418,14 @@ void Freeture::modeMeteorDetection()
     LOG_INFO << "CHECKING FREETURE CONFIGURATOION...";
 
     if (!m_FreetureSettings->allParamAreCorrect())
-        throw exception("Configuration file is not correct. Fail to launch detection mode.");
+        throw runtime_error("Configuration file is not correct. Fail to launch detection mode.");
     else
         LOG_INFO << "OK";
 
     LOG_INFO << "SELECTING DEVICE " << m_FreetureSettings->getAllParam().DEVICE_ID << "...";
 
     if (!m_CameraDeviceManager->selectDevice(m_FreetureSettings->getAllParam()))
-        throw exception("Failed to select device.");
+        throw runtime_error("Failed to select device.");
     else
         LOG_INFO << "OK";
 
@@ -466,7 +466,7 @@ void Freeture::modeMeteorDetection()
                 m_FreetureSettings);
 
             if (!m_DetectionThread->startThread())
-                throw exception("Fail to start detection thread.");
+                throw runtime_error("Fail to start detection thread.");
             else
                 LOG_INFO << "OK";
         }
@@ -487,7 +487,7 @@ void Freeture::modeMeteorDetection()
                 );
 
             if (!m_StackThread->startThread())
-                throw exception("Fail to start stack thread.");
+                throw runtime_error("Fail to start stack thread.");
             else {
                 LOG_INFO << "OK";
 #ifdef LINUX
@@ -514,7 +514,7 @@ void Freeture::modeMeteorDetection()
 
 
         if (!m_AcquisitionThread->startThread()) {
-            throw exception("Fail to start acquisition thread.");
+            throw runtime_error("Fail to start acquisition thread.");
         }
         else
         {
@@ -629,7 +629,7 @@ void Freeture::modeSingleAcquisition()
     EParser<CamPixFmt> fmt;
     string fstring = fmt.getStringEnum(static_cast<CamPixFmt>(m_FreetureCommandLineSettings.acqFormat));
     if (fstring == "")
-        throw exception(">> Pixel format specified not found.");
+        throw runtime_error(">> Pixel format specified not found.");
 
     LOG_INFO << "------------------------------------------------";
     LOG_INFO << "CAM ID    : " << m_FreetureCommandLineSettings.devID;
@@ -709,7 +709,7 @@ void Freeture::modeSingleAcquisition()
     m_Device->setCameraExposureTime(m_FreetureCommandLineSettings.exp);
 
     if (!m_Device->runSingleCapture(frame)) {
-        throw exception(">> Single capture failed.");
+        throw runtime_error(">> Single capture failed.");
     }
 
 
@@ -962,7 +962,7 @@ void Freeture::createDeviceManager()
         size_t device_count = m_CameraDeviceManager->getDeviceCount();
         
         if (device_count == 0) {
-            throw exception("NO DEVICES AVAIALABLE");
+            throw runtime_error("NO DEVICES AVAIALABLE");
         }
 
         if (device_count != 1)
@@ -974,5 +974,5 @@ void Freeture::createDeviceManager()
         return;
     }
 
-    throw exception("This running mode have not camera device manager feature");
+    throw runtime_error("This running mode have not camera device manager feature");
 }
