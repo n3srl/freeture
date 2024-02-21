@@ -1,9 +1,10 @@
-#ifdef LINUX
+#include "CameraGigeAravis_Scanner.h"
 
 #include <iostream>
 
-#include "CameraGigeAravis_Scanner.h"
 #include "Logger.h"
+
+#ifdef LINUX
 
 #include "arv.h"
 #include "arvinterface.h"

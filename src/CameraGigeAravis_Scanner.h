@@ -1,9 +1,9 @@
 #pragma once
 #include "Commons.h"
 
-#ifdef LINUX
-
 #include "CameraScanner.h"
+
+#ifdef LINUX
 
 namespace freeture
 {
