@@ -274,17 +274,22 @@ set(SOURCES
 	src/CameraGigePylon.h
 	src/CameraGigeTis.cpp
 	src/CameraGigeTis.h
+	
 	src/CameraGigeAravis.cpp
 	src/CameraGigeAravis.h
-	src/CameraLucidAravis.h
-	src/CameraLucidAravis.cpp
-	src/CameraLucidArena_PHX016S.cpp
-	src/CameraLucidArena_PHX016S.h
-	src/CameraLucidAravis_Scanner.h
-	src/CameraLucidArena_Scanner.cpp
-	src/CameraLucidArena_Scanner.h
 	src/CameraGigeAravis_Scanner.h
 	src/CameraGigeAravis_Scanner.cpp
+
+	src/CameraLucidAravis.h
+	src/CameraLucidAravis.cpp
+	src/CameraLucidAravis_Scanner.h
+	src/CameraLucidAravis_Scanner.cpp
+
+	src/CameraLucidArena_PHX016S.cpp
+	src/CameraLucidArena_PHX016S.h
+	src/CameraLucidArena_Scanner.cpp
+	src/CameraLucidArena_Scanner.h
+	
 	src/CameraScanner.cpp
 	src/CameraScanner.h
 	src/CameraSettings.h

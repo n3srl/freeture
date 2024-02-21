@@ -1,15 +1,15 @@
+#include "CameraLucidAravis_Scanner.h"
+#include <string>
+#include "CameraDescription.h"
+#include "Logger.h"
 
 #ifdef LINUX
 
-#include "CameraLucidAravis_Scanner.h"
 
-#include <string>
 
 #include "arv.h"
 #include "arvinterface.h"
 
-#include "CameraDescription.h"
-#include "Logger.h"
 
 using namespace std;
 using namespace freeture;
