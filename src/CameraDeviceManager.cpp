@@ -256,6 +256,8 @@ void CameraDeviceManager::initScanners()
     m_AvailableScanners.push_back(ptr);
 #endif
 
+    if (m_AvailableScanners.size() == 0)
+        LOG_ERROR << "CameraDeviceManager::initScanners;" << "NO SCANNERS AVAILABLE!";
 /*
 * DA SVILUPPARE!
 * 
