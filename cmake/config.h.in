@@ -1,10 +1,18 @@
+#pragma once
+
 #ifndef FREETURE_CONFIG_H
 #define FREETURE_CONFIG_H
 
 #define VERSION "@VERSION@"
 #define CFG_PATH "@CFG_PATH@"
+
 #cmakedefine WINDOWS
 #cmakedefine LINUX
 #cmakedefine USE_PYLON
+#cmakedefine USE_ARENA
+#cmakedefine USE_TIS
+#cmakedefine USE_V4L
+#cmakedefine USE_ARAVIS
+
 
 #endif // FREETURE_CONFIG_HAS
