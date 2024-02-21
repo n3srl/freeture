@@ -3,6 +3,7 @@
 #include <string>
 
 #include "CameraLucidArena_Scanner.h"
+#include "Logger.h"
 
 #ifdef LINUX
 
@@ -11,15 +12,19 @@
 
 #endif
 
-
-
-#include "Logger.h"
-
-
-
-
 using namespace std;
 using namespace freeture;
+
+
+
+CameraScanner::CameraScanner(CamSdkType sdk) :Sdk(sdk)
+{
+}
+
+CameraScanner::~CameraScanner() {
+
+}
+
 
 /**
   Update the List of camera descriptions and return back the vector
@@ -66,13 +71,13 @@ CameraScanner* CameraScanner::CreateScanner(CamSdkType sdk)
   */
 bool CameraScanner::listCameras()
 {
-    LOG_DEBUG << "CameraLucidArena::listCameras"<< endl;
-    LOG_DEBUG << endl << "------------ GIGE CAMERAS WITH ARAVIS ----------" << endl << endl;
+    LOG_DEBUG << "CameraLucidArena::listCameras";
+    LOG_DEBUG << "------------ CAMERAS ----------";
 
     for(int i = 0; i < Devices.size(); i++)
-        LOG_DEBUG << "-> [" << Devices[i].Id << "] " << Devices[i].Description<< endl;
+        LOG_DEBUG << "-> [" << Devices[i].Id << "] " << Devices[i].Description;
 
-    LOG_DEBUG << endl << "------------------------------------------------" << endl << endl;
+    LOG_DEBUG << "-------------------------------";
 
     return true;
 }

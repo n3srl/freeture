@@ -48,25 +48,25 @@ namespace freeture
     class Frame {
 
     private:
-        uint8_t* mDataBuffer;
-        size_t mSize;
+        uint8_t*                    mDataBuffer;
+        size_t                      mSize;
     public:
 
-        TimeDate::Date      mDate;               // Acquisition date.
-        double              mExposure;           // Camera's exposure value used to grab the frame.
-        int                 mGain;               // Camera's gain value used to grab the frame.
-        CamPixFmt           mFormat;             // Pixel format.
-        std::string         mFileName;           // Frame's name.
-        int                 mFrameNumber;        // Each frame is identified by a number corresponding to the acquisition order.
-        int                 mFrameRemaining;     // Define the number of remaining frames if the input source is a video or a set of single frames.
-        double              mSaturatedValue;     // Max pixel value in the image.
-        int                 mFps;                // Camera's fps.
-        int                 mStartX;
-        int                 mStartY;
-        int                 mWidth;
-        int                 mHeight;
+        TimeDate::Date              mDate;               // Acquisition date.
+        double                      mExposure;           // Camera's exposure value used to grab the frame.
+        int                         mGain;               // Camera's gain value used to grab the frame.
+        CamPixFmt                   mFormat;             // Pixel format.
+        std::string                 mFileName;           // Frame's name.
+        int                         mFrameNumber;        // Each frame is identified by a number corresponding to the acquisition order.
+        int                         mFrameRemaining;     // Define the number of remaining frames if the input source is a video or a set of single frames.
+        double                      mSaturatedValue;     // Max pixel value in the image.
+        int                         mFps;                // Camera's fps.  -- TODO double!
+        int                         mStartX;
+        int                         mStartY;
+        int                         mWidth;
+        int                         mHeight;
 
-        std::shared_ptr<cv::Mat> Image;                // Frame's image data.
+        std::shared_ptr<cv::Mat>    Image;                // Frame's image data.
 
         Frame(cv::Mat capImg, int g, double e, std::string acquisitionDate);
 

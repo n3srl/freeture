@@ -1,5 +1,4 @@
 #pragma once
-
 /**
 * \file    CameraLucidArena.h
 * \author  Andrea Novati -- N3 S.r.l.
@@ -9,12 +8,19 @@
 *
 */
 
+
+
+
 #include "Commons.h"
-
 #include "CameraScanner.h"
-#include "ECamSdkType.h"
 
-#ifdef LINUX
+
+
+
+
+
+
+
 namespace freeture
 {
     class CameraLucidAravis_Scanner : public CameraScanner
@@ -23,9 +29,8 @@ namespace freeture
     public:
         CameraLucidAravis_Scanner(CamSdkType);
 
-        ~CameraLucidAravis_Scanner();
+        ~CameraLucidAravis_Scanner() override;
 
         virtual void UpdateCameraList() override;
     };
 }
-#endif

@@ -40,26 +40,45 @@
 
 using namespace freeture;
 
-// Frame::Frame(cv::Mat capImg, int g, double e, std::string acquisitionDate):
-// mExposure(e), mGain(g), mFileName("noFileName"), mFrameRemaining(0),
-// mFrameNumber(0), mFps(30), mFormat(CamPixFmt::MONO8), mSaturatedValue(255), mDataBuffer(nullptr)
-// {
-//     capImg.copyTo(*Image.get());
-//     mDate = TimeDate::splitIsoExtendedDate(acquisitionDate);
-//     mStartX = 0;
-//     mStartY = 0;
-//     mWidth = 0;
-//     mHeight = 0;
-// }
+ Frame::Frame(cv::Mat capImg, int gain, double exposure_time, std::string acquisitionDate):
+     mDataBuffer(nullptr),
+     mSize(0),
+     mDate(TimeDate::splitIsoExtendedDate(acquisitionDate)),
+     mExposure(exposure_time),
+     mGain(gain),
+     mFormat(CamPixFmt::MONO8),
+     mFileName("noFileName"),
+     mFrameNumber(0),
+     mFrameRemaining(0),
+     mSaturatedValue(255),
+     mFps(0),
+     mStartX(0),
+     mStartY(0),
+     mWidth(0),
+     mHeight(0),
+     Image()
+ {
+     capImg.copyTo(*Image.get());
+ }
 
 Frame::Frame():
-mExposure(0), mGain(0), mFileName("noFileName"), mFrameRemaining(0),
-mFrameNumber(0), mFps(30), mFormat(CamPixFmt::MONO8), mSaturatedValue(255), mDataBuffer(nullptr) {
-
-   mWidth = 0;
-   mHeight = 0;
-   mStartX = 0;
-   mStartY = 0;
+    mDataBuffer(nullptr),
+    mSize(0),
+    mDate(),
+    mExposure(0.0),
+    mGain(0),
+    mFormat(CamPixFmt::MONO8),
+    mFileName("noFileName"),
+    mFrameNumber(0),
+    mFrameRemaining(0),
+    mSaturatedValue(255),
+    mFps(0),
+    mStartX(0),
+    mStartY(0),
+    mWidth(0),
+    mHeight(0),
+    Image()
+{
 }
 
 Frame::~Frame()

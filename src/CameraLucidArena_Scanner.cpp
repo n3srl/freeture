@@ -1,15 +1,22 @@
+/**
+* \file    CameraGigeAravis_Scanner.cpp
+* \author  Andrea Novati -- N3 S.r.l.
+* \version 1.0
+* \date    02/21/2024
+* \brief   Use Arena SDK library to scan Lucid Arena Phoenix Cameras
+*
+*/
 #include "CameraLucidArena_Scanner.h"
 
 #include <iostream>
 
+#include "Logger.h"
+
 #include "ArenaSDKManager.h"
-
-
 #include <ArenaApi.h>
 #include <SaveApi.h>
 #include <GenICam.h>
 
-#include "Logger.h"
 
 using namespace GenICam;
 using namespace freeture;

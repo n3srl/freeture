@@ -46,9 +46,9 @@ namespace freeture
 
         CameraScanner() = delete;
 
-        CameraScanner(CamSdkType sdk) :Sdk(sdk)
-        {
-        }
+        CameraScanner(CamSdkType);
+
+        virtual ~CameraScanner();
 
         /**
             Update the List of camera descriptions and return back the vector

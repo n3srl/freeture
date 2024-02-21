@@ -426,7 +426,7 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
                         //LOG_DEBUG << "> Time shift : " << t3;
                     }
                     //BOOST_LOG_SEV(logger, normal) << "Creating frame object ...";
-                    newFrame = make_shared <Frame>(image, m_Gain, m_ExposureTime, acquisitionDate);
+                    newFrame = make_shared<Frame>(image, m_Gain, m_ExposureTime, acquisitionDate);
                     //BOOST_LOG_SEV(logger, normal) << "Setting date of frame ...";
                     //newFrame.setAcqDateMicro(acqDateInMicrosec);
                     //BOOST_LOG_SEV(logger, normal) << "Setting fps of frame ...";
