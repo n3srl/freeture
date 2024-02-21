@@ -1,6 +1,6 @@
 #include "CameraLucidAravis_Scanner.h"
 #include <string>
-#include "CameraDescription.h"
+
 #include "Logger.h"
 
 #ifdef LINUX
