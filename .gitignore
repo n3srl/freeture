@@ -24,4 +24,5 @@ src/.deps/
 stamp-h1
 src/freeture
 cmake/CMakeCache.txt
+build/
 
