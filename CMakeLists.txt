@@ -109,6 +109,7 @@ endif()
 
 
 #LUCID ArenaSDK
+
 set (Lucid_DIR "C:/Program Files/Lucid Vision Labs/Arena SDK")
 				
 set (Lucid_RELEASE "C:/Program Files/Lucid Vision Labs/Arena SDK/x64Release")
@@ -151,8 +152,8 @@ foreach(file  ${Lucid_GenICam_LIBARARIES})
 endforeach()
 
 if (Arena_FOUND)
+	OPTION(USE_ARENA "Arena SDK" ON)
 	message (STATUS "Arena SDK Configuration;Include ARENA SDK in config" )
-	file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/config.h.in "#define USE_ARENA true")
 endif()
 
 set(Lucid_ARENA_LIBRARIES

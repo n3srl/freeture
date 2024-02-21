@@ -141,6 +141,9 @@ bool CameraDeviceManager::selectDevice(parameters runtime_configuration)
 }
 
 CamSdkType CameraDeviceManager::getDeviceSdk(int id) {
+
+    LOG_DEBUG << "CameraDeviceManager::getDeviceSdk";
+
     shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
     vector<CameraDescription> devices = m_CameraDeviceManager->getListDevice();
 
@@ -155,6 +158,7 @@ CamSdkType CameraDeviceManager::getDeviceSdk(int id) {
 vector<CameraDescription> CameraDeviceManager::getListDevice()
 {
     LOG_DEBUG << "CameraDeviceManager::getListDevice";
+    LOG_DEBUG << "CameraDeviceManager::initScanners;"<< "Available scanners: " << m_AvailableScanners.size();
 
     for (scanner_type scanner : m_AvailableScanners) 
     {
@@ -172,6 +176,8 @@ vector<CameraDescription> CameraDeviceManager::getListDevice()
 
 void CameraDeviceManager::mergeList(vector<CameraDescription>& Devices)
 {
+    LOG_DEBUG << "CameraDeviceManager::mergeList";
+
     //foreach device found test if already exists. if not add to list
     for (int i = 0; i < Devices.size(); i++)
     {
@@ -214,14 +220,14 @@ void CameraDeviceManager::initScanners()
     m_AvailableScanners.push_back(ptr);
 #endif
 
-#ifdef TISCAMERA
+#ifdef USE_TISCAMERA
     LOG_INFO << "TIS CAMERA SCANNER AVAILABLE";
     ptr = CameraScanner::CreateScanner(CamSdkType::TIS);
     assert(ptr != nullptr);
     m_AvailableScanners.push_back(ptr);
 #endif
 
-#ifdef VIDEOINPUT
+#ifdef USE_VIDEOINPUT
     LOG_INFO << "VIDEO INPUT SCANNER AVAILABLE";
     ptr = CameraScanner::CreateScanner(CamSdkType::VIDEOINPUT);
     assert(ptr != nullptr);

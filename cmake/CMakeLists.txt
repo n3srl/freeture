@@ -304,10 +304,33 @@ ELSE(${OperatingSystem} MATCHES "Windows")
 	#link_directories(${OPENSSL_LIBRARY_DIRS})
 	target_link_libraries(${EXE_NAME} ${ARENASDK_LIBRARIES})
 
-
+	
 
 	ENDIF(${OperatingSystem} MATCHES "Linux")
 ENDIF(${OperatingSystem} MATCHES "Windows")
+
+if ${TIS_FOUND} 
+	OPTION(USE_ TIS "Tis cameras available" ON)
+endif()
+
+
+if ${V4L2_FOUND} 
+	OPTION(USE_V4L "Video4Linux available" ON)
+endif()
+
+
+if ${aravis_FOUND} 
+	OPTION(USE_ARAVIS "Lib Aravis available" ON)
+endif()
+
+
+
+if ${ARENASDK_FOUND} 
+	OPTION(USE_ARAVIS "Arena SDK available" ON)
+endif()
+
+
+
 
 #------------------------------------------------
 # configure a header file to pass some of the CMake settings
