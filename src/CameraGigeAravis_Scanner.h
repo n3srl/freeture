@@ -7,10 +7,10 @@
 
 namespace freeture
 {
-    class CameraGigeAravisScanner : public CameraScanner
+    class CameraGigeAravis_Scanner : public CameraScanner
     {
     public:
-        CameraGigeAravisScanner(CamSdkType);
+        CameraGigeAravis_Scanner(CamSdkType);
 
         virtual void UpdateCameraList() override;
 
