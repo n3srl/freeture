@@ -97,8 +97,6 @@ void Stack::addFrame(shared_ptr<Frame> i){
 }
 
 bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
-
-
     double  debObsInSeconds = mDateFirstFrame.hours*3600 + mDateFirstFrame.minutes*60 + mDateFirstFrame.seconds;
     double  endObsInSeconds = mDateLastFrame.hours*3600 + mDateLastFrame.minutes*60 + mDateLastFrame.seconds;
     double  elapTime        = endObsInSeconds - debObsInSeconds;
@@ -148,7 +146,7 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
     LOG_INFO << "Setting fits DATEOBS key : 2000.0";
     newFits.kEQUINOX = 2000.0;
 
-    switch(stackMthd){
+    switch(stackMthd) {
 
         case MEAN :
 
@@ -163,7 +161,7 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
                 stack = make_shared<cv::Mat>(std::move(new_stack));
 
 
-                switch(format){
+                switch(format) {
 
                     case CamPixFmt::MONO12 :
 
@@ -314,8 +312,11 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
 
             break;
 
+        default: 
+            return false;
     }
 
+    return true;
 }
 
 shared_ptr<cv::Mat> Stack::reductionByFactorDivision(float &bzero, float &bscale){
