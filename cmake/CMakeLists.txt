@@ -311,7 +311,7 @@ ENDIF(${OperatingSystem} MATCHES "Windows")
 
 if (TIS_FOUND) 
 	message ( STATUS "Tis cameras available" )
-	OPTION(USE_ TIS "Tis cameras available" ON)
+	OPTION(USE_TIS "Tis cameras available" ON)
 endif()
 
 if (V4L2_FOUND)
@@ -326,7 +326,7 @@ endif()
 
 if (ARENASDK_FOUND)
 	message ( STATUS  "Arena SDK available" )
-	OPTION(USE_ARAVIS "Arena SDK available" ON)
+	OPTION(USE_ARENA "Arena SDK available" ON)
 endif()
 
 
