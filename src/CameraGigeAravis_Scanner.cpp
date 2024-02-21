@@ -17,7 +17,7 @@ CameraGigeAravis_Scanner::CameraGigeAravis_Scanner(CamSdkType sdk):CameraScanner
 }
         void CameraGigeAravis_Scanner::UpdateCameraList()
         {
-            freeture::LogDebug("CameraGigeAravis_Scanner::UpdateCameraList");
+            LOG_DEBUG <<<"CameraGigeAravis_Scanner::UpdateCameraList";
 
             ArvInterface *interface;
 
@@ -28,7 +28,7 @@ CameraGigeAravis_Scanner::CameraGigeAravis_Scanner(CamSdkType sdk):CameraScanner
             for (int j = 0; j< ni; j++)
             {
                 const char* name = arv_get_interface_id (j);
-                freeture::LogDebug("CameraGigeAravis_Scanner::UpdateCameraList",name);
+                LOG_DEBUG <<"CameraGigeAravis_Scanner::UpdateCameraList"<<name;
 
                 if (strcmp(name,"GigEVision") == 0)
                 {
@@ -38,7 +38,7 @@ CameraGigeAravis_Scanner::CameraGigeAravis_Scanner(CamSdkType sdk):CameraScanner
                     //int nb = arv_get_n_devices();
 
                     int nb = arv_interface_get_n_devices(interface);
-                    freeture::LogDebug("CameraGigeAravis_Scanner::UpdateCameraList","Devices detected: ", nb);
+                    LOG_DEBUG <<"CameraGigeAravis_Scanner::UpdateCameraList"<<"Devices detected: "<<nb;
 
                     for(int i = 0; i < nb; i++)
                     {
@@ -48,7 +48,7 @@ CameraGigeAravis_Scanner::CameraGigeAravis_Scanner(CamSdkType sdk):CameraScanner
                         const char* str = arv_interface_get_device_id(interface,i);
                         const char* addr = arv_interface_get_device_address(interface,i);
 
-                        //freeture::LogDebug("CameraGigeAravis_Scanner::UpdateCameraList","\t- ", str," ",addr);
+                        //LOG_DEBUG <<"CameraGigeAravis_Scanner::UpdateCameraList","\t- ", str," ",addr);
 
                         string s = str;
                         string a = addr;
