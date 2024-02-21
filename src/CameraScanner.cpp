@@ -2,14 +2,12 @@
 
 #include <string>
 
-#include "CameraLucidArenaScanner.h"
 #include "CameraLucidArena_Scanner.h"
-
 
 #ifdef LINUX
 
-#include "CameraGigeAravisScanner.h"
-#include "CameraLucidArenaScanner.h"
+#include "CameraGigeAravis_Scanner.h"
+#include "CameraLucidAravis_Scanner.h"
 
 #endif
 
@@ -42,9 +40,9 @@ CameraScanner* CameraScanner::CreateScanner(CamSdkType sdk)
     {
 #ifdef LINUX
         case CamSdkType::ARAVIS:
-            return new CameraGigeAravisScanner(sdk);
+            return new CameraGigeAravis_Scanner(sdk);
         case CamSdkType::LUCID_ARAVIS:
-            return new CameraLucidArenaScanner(sdk);
+            return new CameraLucidAravis_Scanner(sdk);
 #endif
         case CamSdkType::LUCID_ARENA:
             return new CameraLucidArena_Scanner(sdk);
