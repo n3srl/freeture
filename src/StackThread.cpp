@@ -50,29 +50,16 @@ StackThread::StackThread(
     bool* sS,
     boost::mutex* sS_m,
     boost::condition_variable* sS_c,
-    boost::circular_buffer<std::shared_ptr<Frame>> fb,
+    boost::circular_buffer<std::shared_ptr<Frame>>& fb,
     boost::mutex* fb_m,
     boost::condition_variable* fb_c,
     std::shared_ptr<CfgParam> cfg
-    ){
-
-    mThread = NULL;
-    mustStop = false;
-    frameBuffer = fb;
-    frameBuffer_mutex = fb_m;
-    frameBuffer_condition = fb_c;
-    stackSignal = sS;
-    stackSignal_mutex = sS_m;
-    stackSignal_condition = sS_c;
-    completeDataPath = "";
-    isRunning = false;
-    interruptionStatus = false;
-
-    mdp = cfg->getDataParam();
-    mstp = cfg->getStationParam();
-    msp = cfg->getStackParam();
-    mfkp = cfg->getFitskeysParam();
-    mPixfmt = cfg->getCamParam().ACQ_FORMAT;
+) : 
+    m_ThreadID(), mThread(nullptr), mustStop(false), mustStopMutex(), isRunning(false),interruptionStatus(false),
+interruptionStatusMutex(), frameBuffer_condition(fb_c), frameBuffer_mutex(fb_m), frameBuffer(fb), stackSignal(sS), 
+stackSignal_mutex(sS_m), stackSignal_condition(sS_c), mstp(cfg->getStationParam()), mfkp(cfg->getFitskeysParam()),
+mdp(cfg->getDataParam()), msp(cfg->getStackParam()), mPixfmt(cfg->getCamParam().ACQ_FORMAT), completeDataPath("")
+{
 }
 
 StackThread::~StackThread(void){
@@ -241,10 +228,13 @@ bool StackThread::getRunStatus(){
 
 }
 
+/// <summary>
+/// 
+/// </summary>
 void StackThread::operator()(){
     m_ThreadID = std::this_thread::get_id();
 
-    Logger::GetLogger()->setLogThread(LogThread::STACK_THREAD, m_ThreadID, true);
+    Logger::GetLogger()->setLogThread(LogThread::STACK_THREAD, m_ThreadID);
 
     bool stop = false;
     isRunning = true;
@@ -254,14 +244,20 @@ void StackThread::operator()(){
     LOG_INFO << "============== Start stack thread ============";
     LOG_INFO << "==============================================";
 
-    try{
-
-        do{
+    try {
+        unsigned long interval = msp.STACK_INTERVAL * 1000;
+        do {
             string cDate ="";
             try {
 
+
+
                 // Thread is sleeping...
-                boost::this_thread::sleep(boost::posix_time::millisec(msp.STACK_INTERVAL*1000));
+                if (interval) {
+                    LOG_DEBUG << "operator();" << "Thread sleeping for " << interval << "[ms]";
+                    boost::this_thread::sleep(boost::posix_time::millisec(interval));
+                    LOG_DEBUG << "operator();" << "Create a stack to accumulate n frames.";
+                }
 
                 // Create a stack to accumulate n frames.
                 Stack frameStack = Stack(mdp.FITS_COMPRESSION_METHOD, mfkp, mstp);
@@ -275,12 +271,16 @@ void StackThread::operator()(){
                 long secTime = 0;
 
                 do {
-
+                    /// Wait new frame from AcqThread.
+                    if (LOG_SPAM_FRAME_STATUS)
+                        LOG_DEBUG << "operator();" << "This is STACK THREAD waiting ACQUISTION THREAD for a new frame.";
                     // Communication with AcqThread. Wait for a new frame.
                     boost::mutex::scoped_lock lock(*stackSignal_mutex);
                     while(!(*stackSignal)) stackSignal_condition->wait(lock);
                     *stackSignal = false;
                     lock.unlock();
+                    LOG_DEBUG << "operator();" << "Unlocked";
+
 
                     double t = (double)cv::getTickCount();
 
@@ -330,16 +330,18 @@ void StackThread::operator()(){
                     boost::posix_time::time_duration td = t2 - t1;
                     secTime = td.total_seconds();
                     if (LOG_SPAM_FRAME_STATUS)
-                        LOG_DEBUG << "NEXT STACK : " << (int)(msp.STACK_TIME - secTime) << "s" <<  endl;
+                        LOG_DEBUG << "operator();" << "NEXT STACK : " << (int)(msp.STACK_TIME - secTime) << "s";
 
                 } while(secTime <= msp.STACK_TIME);
 
                 // Stack finished. Save it.
+                LOG_DEBUG << "operator();" << "Stack finished. Save it.";
+
                 if(buildStackDataDirectory(frameStack.getDateFirstFrame())) {
 
                     if(!frameStack.saveStack(completeDataPath, msp.STACK_MTHD, msp.STACK_REDUCTION)){
 
-                        LOG_ERROR << "Fail to save stack.";
+                        LOG_ERROR << "operator();" << "Fail to save stack.";
 
                     }
 
@@ -347,20 +349,20 @@ void StackThread::operator()(){
 
                 }else{
 
-                    LOG_ERROR << "Fail to build stack directory. " << completeDataPath;
+                    LOG_ERROR << "operator();" << "Fail to build stack directory. " << completeDataPath;
 
                 }
 
             } catch(const boost::thread_interrupted&) {
 
-                LOG_INFO << "Stack thread INTERRUPTED";
-                LOG_DEBUG << "Stack thread INTERRUPTED" << endl;
+                LOG_INFO << "operator();" << "Stack thread INTERRUPTED";
             }
 
             // Get the "must stop" state (thread-safe)
             mustStopMutex.lock();
             stop = mustStop;
             mustStopMutex.unlock();
+
             NodeExporterMetrics::GetInstance().UpdateMetrics(completeDataPath,cDate);
             NodeExporterMetrics::GetInstance().WriteMetrics();
 
@@ -368,11 +370,11 @@ void StackThread::operator()(){
 
     }catch(const char * msg){
 
-        LOG_ERROR << msg;
+        LOG_ERROR << "operator();" << msg;
 
     }catch(exception& e){
 
-        LOG_ERROR << e.what();
+        LOG_ERROR << "operator();" << e.what();
 
     }
 

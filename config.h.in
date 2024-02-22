@@ -1,5 +1,8 @@
 #pragma once
 
+
+
+
 #define VERSION "@VERSION@"
 #define CFG_PATH "@CFG_PATH@"
 

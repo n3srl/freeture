@@ -368,7 +368,6 @@ set(SOURCES
 	src/LocalEvent.h
 	src/Logger.cpp
 	src/Logger.h
-	src/Loggercpp.cpp
 	src/main.cpp
 	src/Mask.cpp
 	src/Mask.h

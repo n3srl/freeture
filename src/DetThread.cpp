@@ -57,37 +57,47 @@ namespace pt = boost::posix_time;
 using namespace freeture;
 using namespace std;
 
-DetThread::DetThread(boost::circular_buffer<std::shared_ptr<Frame>> fb,
+DetThread::DetThread(boost::circular_buffer<std::shared_ptr<Frame>>& fb,
     boost::mutex* fb_m,
     boost::condition_variable* fb_c,
     bool* dSignal,
     boost::mutex* dSignal_m,
     boost::condition_variable* dSignal_c,
     std::shared_ptr<CfgParam> cfg
-):
-                        pDetMthd(NULL), mForceToReset(false), mMustStop(false),
-                        mEventPath(""), mIsRunning(false), mNbDetection(0), mWaitFramesToCompleteEvent(false), mCurrentDataSetLocation(""),
-                        mNbWaitFrames(0), mInterruptionStatus(false) {
-
-    frameBuffer = fb;
-    frameBuffer_mutex = fb_m;
-    frameBuffer_condition = fb_c;
-    detSignal = dSignal;
-    detSignal_mutex = dSignal_m;
-    detSignal_condition = dSignal_c;
-    pThread = NULL;
-
-    mFormat = cfg->getCamParam().ACQ_FORMAT;
-
-
-    mStationName = cfg->getStationParam().STATION_NAME;
-    mdp = cfg->getDataParam();
-    mdtp = cfg->getDetParam();
-    mmp = cfg->getMailParam();
-    mfkp = cfg->getFitskeysParam();
-    mstp = cfg->getStationParam();
-
-    mNbFramesAround = 0;
+) :
+    m_ThreadID(),
+    pThread(nullptr),
+    pDetMthd(nullptr),
+    mMustStop(false),
+    mMustStopMutex(),
+    mStationName(cfg->getStationParam().STATION_NAME),
+    mFormat(cfg->getCamParam().ACQ_FORMAT),
+    mFitsHeader(),
+    mIsRunning(false),
+    mWaitFramesToCompleteEvent(false),
+    mNbWaitFrames(0),
+    mCfgPath(""),
+    mEventPath(""),
+    mEventDate(),
+    mNbDetection(0),
+    mInterruptionStatus(false),
+    mInterruptionStatusMutex(),
+    frameBuffer(fb),
+    frameBuffer_mutex(fb_m),
+    frameBuffer_condition(fb_c),
+    detSignal(dSignal),
+    detSignal_mutex(dSignal_m),
+    detSignal_condition(dSignal_c),
+    mCurrentDataSetLocation(""),
+    mDetectionResults(),
+    mForceToReset(false),
+    mdtp(cfg->getDetParam()),
+    mdp(cfg->getDataParam()),
+    mmp(cfg->getMailParam()),
+    mfkp(cfg->getFitskeysParam()),
+    mstp(cfg->getStationParam()),
+    mNbFramesAround(0)
+{
 
     mFitsHeader.loadKeys(mfkp, mstp);
 
@@ -114,7 +124,6 @@ DetThread::DetThread(boost::circular_buffer<std::shared_ptr<Frame>> fb,
             break;
 
     }
-
 }
 
 DetThread::~DetThread(void){
@@ -176,7 +185,7 @@ void DetThread::interruptThread(){
 void DetThread::operator ()()
 {
     m_ThreadID = std::this_thread::get_id();
-    Logger::GetLogger()->setLogThread(LogThread::DETECTION_THRED, m_ThreadID,true);
+    Logger::GetLogger()->setLogThread(LogThread::DETECTION_THRED, m_ThreadID);
 
     mIsRunning = true;
     bool stopThread = false;
@@ -199,6 +208,9 @@ void DetThread::operator ()()
             try {
                 
                 /// Wait new frame from AcqThread.
+                if (LOG_SPAM_FRAME_STATUS)
+                    LOG_DEBUG << "operator();" << "This is DETECTION THREAD waiting ACQUISTION THREAD for a new frame.";
+
                 boost::mutex::scoped_lock lock(*detSignal_mutex);
                 while (!(*detSignal)) detSignal_condition->wait(lock);
                 *detSignal = false;

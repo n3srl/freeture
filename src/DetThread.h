@@ -83,7 +83,7 @@ namespace freeture
         Detection* pDetMthd;                  // Pointer on detection method.
         bool                            mMustStop;
         boost::mutex                    mMustStopMutex;
-        std::string                          mStationName;               // Name of the station              (parameter from configuration file).
+        std::string                     mStationName;               // Name of the station              (parameter from configuration file).
         CamPixFmt                       mFormat;                    // Acquisition bit depth            (parameter from configuration file).
         Fits                            mFitsHeader;
         bool                            mIsRunning;                 // Detection thread running status.
@@ -95,7 +95,7 @@ namespace freeture
         int                             mNbDetection;               // Number of detection.
         bool                            mInterruptionStatus;
         boost::mutex                    mInterruptionStatusMutex;
-        boost::circular_buffer<std::shared_ptr<Frame>> frameBuffer;
+        boost::circular_buffer<std::shared_ptr<Frame>>& frameBuffer;
         boost::mutex* frameBuffer_mutex;
         boost::condition_variable* frameBuffer_condition;
         bool* detSignal;
@@ -115,7 +115,7 @@ namespace freeture
 
     public:
 
-        DetThread(boost::circular_buffer<std::shared_ptr<Frame>>,
+        DetThread(boost::circular_buffer<std::shared_ptr<Frame>>&,
             boost::mutex*,
             boost::condition_variable*,
             bool*,

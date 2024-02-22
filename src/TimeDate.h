@@ -57,6 +57,29 @@ namespace freeture
 
             Date() :year(0), month(0), day(0), hours(0), minutes(0), seconds(0) {}
 
+            // Constructor that takes a boost::posix_time::ptime
+            Date(const boost::posix_time::ptime& pt) {
+                if (pt.is_not_a_date_time()) {
+                    // Handle the case where pt does not represent a valid date/time
+                    year = 0;
+                    month = 0;
+                    day = 0;
+                    hours = 0;
+                    minutes = 0;
+                    seconds = 0;
+                }
+                else {
+                    boost::gregorian::date datePart = pt.date(); // Date part
+                    boost::posix_time::time_duration timePart = pt.time_of_day(); // Time part
+
+                    year = datePart.year();
+                    month = datePart.month();
+                    day = datePart.day();
+                    hours = timePart.hours();
+                    minutes = timePart.minutes();
+                    seconds = static_cast<double>(timePart.seconds()) + static_cast<double>(timePart.fractional_seconds()) / 1000000.0; // Add microseconds converted to seconds
+                }
+            }
         };
 
         /**

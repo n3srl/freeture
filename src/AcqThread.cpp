@@ -77,7 +77,6 @@
 #include "Fits2D.h"
 #include "SaveImg.h"
 #include "Conversion.h"
-#include "EParser.h"
 #include "ImgProcessing.h"
 #include "Camera.h"
 
@@ -89,26 +88,46 @@ namespace fs = boost::filesystem;
 using namespace std;
 using namespace freeture;
 
-AcqThread::AcqThread(   boost::circular_buffer<shared_ptr<Frame>> fb,
-                        boost::mutex                        *fb_m,
-                        boost::condition_variable           *fb_c,
-                        bool                                *sSignal,
-                        boost::mutex                        *sSignal_m,
-                        boost::condition_variable           *sSignal_c,
-                        bool                                *dSignal,
-                        boost::mutex                        *dSignal_m,
-                        boost::condition_variable           *dSignal_c,
-                        shared_ptr<DetThread>               detection,
-                        shared_ptr<StackThread>             stack,
-                        std::shared_ptr<CfgParam> cfg
-                        ): 
+AcqThread::AcqThread(boost::circular_buffer<shared_ptr<Frame>>& fb,
+    boost::mutex* fb_m,
+    boost::condition_variable* fb_c,
+    bool* sSignal,
+    boost::mutex* sSignal_m,
+    boost::condition_variable* sSignal_c,
+    bool* dSignal,
+    boost::mutex* dSignal_m,
+    boost::condition_variable* dSignal_c,
+    shared_ptr<DetThread>               detection,
+    shared_ptr<StackThread>             stack,
+    std::shared_ptr<CfgParam> cfg
+) :
+    m_ThreadID(),
+    m_CurrentThreadLoopTime(),
+    m_PreviousThreadLoopTime(),
+    mMustStopMutex(),
+    mThread(nullptr),
+    mMustStop(false), 
+    mThreadTerminated(false),
+    frameBuffer_condition(fb_c),
+    frameBuffer_mutex(fb_m),
+    frameBuffer(fb),
+    m_StackThread_IsRunning(false),
+    stackSignal(sSignal),
+    stackSignal_mutex(sSignal_m),
+    stackSignal_condition(sSignal_c),
+    m_DetThread_IsRunning(false),
+    detSignal(dSignal),
+    detSignal_mutex(dSignal_m),
+    detSignal_condition(dSignal_c),
     m_Device(nullptr),
     pExpCtrl(nullptr),
-    mMustStop(false),
-    mThreadTerminated(false),
-    stackSignal(nullptr),
-    detSignal(nullptr),
-    mDeviceID(0),  
+    pDetection(detection),
+    pStack(stack),
+    mOutputDataPath(""),
+    mCurrentDate(""),
+    m_LastRegularAcquisitionTimestamp(),
+    m_LastMetricTimestamp(),
+    mDeviceID(0),
     mNextAcqIndex(0),
     mStartSunriseTime(0),
     mStopSunriseTime(0),
@@ -116,36 +135,40 @@ AcqThread::AcqThread(   boost::circular_buffer<shared_ptr<Frame>> fb,
     mStopSunsetTime(0),
     mCurrentTime(0),
     mFrameNumber(0),
-    cleanStatus(false)
+    cleanStatus(false),
+    mNextAcq(),
+    m_StackParam(cfg->getStackParam()),
+    m_StationParam(cfg->getStationParam()),
+    m_DetectionParam(cfg->getDetParam()),
+    m_DataParam(cfg->getDataParam()),
+    mfkp(cfg->getFitskeysParam()),
+    m_CameraParam(cfg->getCamParam()),
+    m_FramesParam(cfg->getFramesParam()),
+    m_VideoParam(cfg->getVidParam()),
+    m_CurrentCameraSettings(),
+    m_CurrentAcquisitionMode(),
+    m_FPS_metrics(cfg->getDetParam().ACQ_BUFFER_SIZE* cfg->getCamParam().ACQ_FPS),
+    m_CurrentFPS(0.0),
+    tacq_metric(0.0),
+    m_FPS_Sum(0.0),
+    nextSunset(),
+    nextSunrise(),
+    m_CircularBufferSize(cfg->getDetParam().ACQ_BUFFER_SIZE* cfg->getCamParam().ACQ_FPS),
+    m_CurrentTimeMode(),
+    m_CurrentTimeInSeconds(0),
+    m_CurrentFrame(),
+    previousTimeMode(),
+    time_mode_parser(),
+    m_RunnedRegularAcquisition(false),
+    m_RunnedScheduledAcquisition(false),
+    exposureControlStatus(false),
+    exposureControlActive(false)
+  
 {
     LOG_DEBUG << "AcqThread::AcqThread";
     shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
-
-    frameBuffer             = fb;
-    frameBuffer_mutex       = fb_m;
-    frameBuffer_condition   = fb_c;
-    stackSignal             = sSignal;
-    stackSignal_mutex       = sSignal_m;
-    stackSignal_condition   = sSignal_c;
-    detSignal               = dSignal;
-    detSignal_mutex         = dSignal_m;
-    detSignal_condition     = dSignal_c;
-    pDetection              = detection;
-    pStack                  = stack;
-    mThread                 = NULL;
-    mMustStop               = false;
     m_Device                 = m_CameraDeviceManager->getDevice();
-    mThreadTerminated       = false;
-    mNextAcqIndex           = 0;
-    pExpCtrl                = NULL;
-
-    m_DataParam             = cfg->getDataParam();
-    m_StackParam            = cfg->getStackParam();
-    m_StationParam          = cfg->getStationParam();
-    m_DetectionParam        = cfg->getDetParam();
-    m_CameraParam           = cfg->getCamParam();
-    m_FramesParam           = cfg->getFramesParam();
-    m_VideoParam            = cfg->getVidParam();
+    
 }
 
 AcqThread::~AcqThread(void){
@@ -237,6 +260,7 @@ bool AcqThread::getThreadStatus(){
 void AcqThread::startDetectionThread() 
 {
     if (pDetection != nullptr) {
+        LOG_DEBUG << "AcqThread::startDetectionThread; DETECTION THREAD START SIGNAL";
         boost::mutex::scoped_lock lock2(*detSignal_mutex);
         *detSignal = true;
         detSignal_condition->notify_one();
@@ -244,9 +268,12 @@ void AcqThread::startDetectionThread()
     }
 }
 
+
 void AcqThread::stopDetectionThread()
 {
     if ( pDetection != nullptr ) {
+        LOG_DEBUG << "AcqThread::stopDetectionThread; DETECTION THREAD STOP SIGNAL";
+
         boost::mutex::scoped_lock lock(*detSignal_mutex);
         *detSignal = false;
         lock.unlock();
@@ -261,6 +288,8 @@ void AcqThread::startStackThread()
 {
     if (pStack != nullptr)
     {
+        LOG_DEBUG << "AcqThread::startStackThread; STACK THREAD START SIGNAL";
+
         boost::mutex::scoped_lock lock3(*stackSignal_mutex);
         *stackSignal = true;
         stackSignal_condition->notify_one();
@@ -268,10 +297,13 @@ void AcqThread::startStackThread()
     }
 }
 
+
 void AcqThread::stopStackThread()
 {
     if (pStack != nullptr)
     {
+        LOG_DEBUG << "AcqThread::stopStackThread; STACK THREAD STOP SIGNAL";
+
         boost::mutex::scoped_lock lock(*stackSignal_mutex);
         *stackSignal = false;
         lock.unlock();
@@ -287,7 +319,6 @@ void AcqThread::resetFrameBuffer()
     LOG_DEBUG << "AcqThread::resetFrameBuffer;" << "Cleaning frameBuffer...";
     boost::mutex::scoped_lock lock(*frameBuffer_mutex);
 
-
     frameBuffer.clear();
 
     mFrameNumber = 0;
@@ -295,16 +326,6 @@ void AcqThread::resetFrameBuffer()
     lock.unlock();
 
     cleanStatus = true;
-}
-
-void AcqThread::notifyDetectionThread() {
-    if(pDetection != NULL)
-    {
-        boost::mutex::scoped_lock lock2(*detSignal_mutex);
-        *detSignal = true;
-        detSignal_condition->notify_one();
-        lock2.unlock();
-    }
 }
 
 void AcqThread::operator()()
@@ -325,10 +346,7 @@ void AcqThread::operator()()
         // Search next acquisition according to the current time.
         selectNextAcquisitionSchedule(TimeDate::splitIsoExtendedDate(boost::posix_time::to_iso_extended_string(boost::posix_time::microsec_clock::universal_time())));
 
-        // Exposure adjustment variables. used only if ACQ_AUTOEXPOSURE_ENABLED = true
-        bool exposureControlStatus = false;
-        bool exposureControlActive = false;
-
+   
         // If exposure can be set on the input device.
         if (m_DetectionParam.ACQ_AUTOEXPOSURE_ENABLED)
         {
@@ -345,8 +363,9 @@ void AcqThread::operator()()
             }
         }
 
-        TimeMode previousTimeMode = getTimeMode(getNowInSeconds());
-
+        previousTimeMode = getTimeMode(getNowInSeconds());
+       
+        LOG_INFO << "CURRENT TIME MODE: " << time_mode_parser.getStringEnum(previousTimeMode);
         //Initialize low frequency parameters
         m_CurrentCameraSettings.StartX = m_CameraParam.ACQ_STARTX;
         m_CurrentCameraSettings.StartY = m_CameraParam.ACQ_STARTY;
@@ -371,279 +390,87 @@ void AcqThread::operator()()
             }
 
             // Reference time to compute interval between regular captures.
-            cDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
-            refDate = cDate.substr(0, cDate.find("."));
+            m_PreviousThreadLoopTime = m_LastRegularAcquisitionTimestamp = m_CurrentThreadLoopTime = boost::posix_time::microsec_clock::universal_time();
 
             if (!setCameraInContinousMode()) {
                 LOG_ERROR << "AcqThread::operator();" << "Cannot set continuous camera mode";
                 break;
             }
 
+          
+           
             do
             {
-                shared_ptr<Frame> newFrame = make_shared<Frame>(); // Container for the grabbed image. added to the frame vector. need to be new object
+                //WRITE CODE TO BE NOT CLEARED EVERY TIME OF THE DAY... USELESS CARBON 
+                nextSunset.clear();
+                nextSunrise.clear();
 
-                ApplyCameraSettingsToFrame(newFrame);
 
-                string currentFrameDate;
+                m_CurrentThreadLoopTime = boost::posix_time::microsec_clock::universal_time();
+                m_CurrentTimeDate = TimeDate::Date(m_CurrentThreadLoopTime);
+                m_CurrentTimeInSeconds = m_CurrentTimeDate.hours * 3600 + m_CurrentTimeDate.minutes * 60 + (int)m_CurrentTimeDate.seconds;
 
-                // Time counter of grabbing a frame.
-                double tacq = (double)cv::getTickCount();
-                double fps;
-                vector<int> nextSunset;
-                vector<int> nextSunrise;
+                // Detect day or night.
+                m_CurrentTimeMode = getTimeMode(m_CurrentTimeInSeconds);
 
-                // Grab a frame.
-                if (m_Device->runContinuousCapture(newFrame))
+                tacq_metric = (double)cv::getTickCount();
+
+
+                continuousAcquisition_ThreadLoop();
+
+                regularAcquisition_ThreadLoop();
+
+                scheduledAcquisition_ThreadLoop();
+
+
+                //CALCULATE SUN EPHEMERYS
+
+                // If the date has changed, sun ephemeris must be updated.
+                if (m_PreviousThreadLoopTime.date() != boost::posix_time::microsec_clock::universal_time().date())
                 {
-                    newFrame->mFrameNumber = mFrameNumber;
+                    LOG_INFO << "AcqThread::operator();" << "Date has changed. Former Date is " << m_PreviousThreadLoopTime.date() << ". New Date is " << m_CurrentThreadLoopTime.date() << ".";
+                    computeSunTimes();
+                }
 
+                // Print time before sunrise.
+
+                if (!isSunrise(m_CurrentTimeInSeconds)) {
+                    nextSunrise.clear();
+                    if (m_CurrentTimeInSeconds < mStartSunriseTime)
+                        nextSunrise = TimeDate::HdecimalToHMS((mStartSunriseTime - m_CurrentTimeInSeconds) / 3600.0);
+                    if (m_CurrentTimeInSeconds > mStopSunsetTime)
+                        nextSunrise = TimeDate::HdecimalToHMS(((24 * 3600 - m_CurrentTimeInSeconds) + mStartSunriseTime) / 3600.0);
                     if (LOG_SPAM_FRAME_STATUS)
-                        LOG_INFO << "AcqThread::operator();" << "============= FRAME " << newFrame->mFrameNumber << " ============= ";
+                        if (nextSunrise.size() > 0)
+                            LOG_DEBUG << "AcqThread::operator();" << "NEXT SUNRISE : " << nextSunrise.at(0) << "h" << nextSunrise.at(1) << "m" << nextSunrise.at(2) << "s";
+                }
 
-                    // IF DEVICE IS FRAME OR VIDEO...
-                    if (input_device_type == InputDeviceType::SINGLE_FITS_FRAME || input_device_type == InputDeviceType::VIDEO)
-                    {
-                        // If camera type in input is FRAMES or VIDEO.
-                        // 
-                        // Push the new frame in the framebuffer.
-                        boost::mutex::scoped_lock lock(*frameBuffer_mutex);
-                        frameBuffer.push_back(newFrame);
-                        lock.unlock();
-
-                        // Notify detection thread.
-                        notifyDetectionThread();
-
-                        // Slow down the time in order to give more time to the detection process.
-                        int twait = 100;
-                        if (m_VideoParam.INPUT_TIME_INTERVAL == 0 && m_FramesParam.INPUT_TIME_INTERVAL > 0)
-                            twait = m_FramesParam.INPUT_TIME_INTERVAL;
-                        else if (m_VideoParam.INPUT_TIME_INTERVAL > 0 && m_FramesParam.INPUT_TIME_INTERVAL == 0)
-                            twait = m_VideoParam.INPUT_TIME_INTERVAL;
-#ifdef WINDOWS
-                        Sleep(twait);
-#else
-#ifdef LINUX
-                        usleep(twait * 1000);
-#endif
-#endif
-                    }
-
-                    //IF DEVICE IS A CAMERA...
-                    if (input_device_type == InputDeviceType::CAMERA)
-                    {
-                        // Get current time in seconds.
-                        int currentTimeInSec = newFrame->mDate.hours * 3600 + newFrame->mDate.minutes * 60 + (int)newFrame->mDate.seconds;
-
-                        // Detect day or night.
-                        TimeMode currentTimeMode = getTimeMode(currentTimeInSec);
-
-                        //If exposure control is enabled 
-                        //If exposure control is not active, the new frame can be shared with others threads.
-                        if (!exposureControlStatus || !m_DetectionParam.ACQ_AUTOEXPOSURE_ENABLED)
-                        {
-                            // Push the new frame in the framebuffer.
-                            boost::mutex::scoped_lock lock(*frameBuffer_mutex);
-                            frameBuffer.push_back(newFrame);
-                            lock.unlock();
-
-                            // Check TimeMode changing.
-                            // Notify detection thread.
-                            if (previousTimeMode != currentTimeMode && m_DetectionParam.DET_MODE != DAYNIGHT) {
-                                LOG_INFO << "AcqThread::operator();" << "TimeMode has changed and Detection thread need to be stopped because it is " << currentTimeMode << " and DET_MODE =" << m_StackParam.STACK_MODE;
-                                stopDetectionThread();
-                            }
-                            else if (m_DetectionParam.DET_MODE == currentTimeMode || m_DetectionParam.DET_MODE == DAYNIGHT) {
-                                LOG_INFO << "AcqThread::operator();" << "TimeMode has changed and Detection thread need to be started because it is " << currentTimeMode << " and STACK_MODE=" << m_StackParam.STACK_MODE;
-                                startDetectionThread();
-                            }
-
-                            // Notify stack thread.
-                            if (previousTimeMode != currentTimeMode && m_StackParam.STACK_MODE != DAYNIGHT) {
-                                LOG_INFO << "AcqThread::operator();" << "TimeMode has changed and Stack thread need to be stopped because it is " << currentTimeMode << " and STACK_MODE=" << m_StackParam.STACK_MODE;
-                                stopStackThread();
-                            }
-                            else if (m_StackParam.STACK_MODE == currentTimeMode || m_StackParam.STACK_MODE == DAYNIGHT) {
-                                LOG_INFO << "AcqThread::operator();" << "TimeMode has changed and Stack thread need to be started because it is " << currentTimeMode << " and STACK_MODE=" << m_StackParam.STACK_MODE;
-                                startStackThread();
-                            }
-
-                            cleanStatus = false;
-                        }
-                        else {
-
-                            // Exposure control is active, the new frame can't be shared with others threads.
-                            if (!cleanStatus) {
-
-                                // If stack process exists.
-                                stopStackThread();
-
-                                // If detection process exists
-                                stopDetectionThread();
-
-                                // Reset framebuffer.
-                                resetFrameBuffer();
-                            }
-                        }
-
-                        previousTimeMode = currentTimeMode;
-
-                        if (m_DetectionParam.ACQ_AUTOEXPOSURE_ENABLED)
-                        {
-                            // Adjust exposure time.
-                            if (pExpCtrl != NULL && exposureControlActive)
-                                exposureControlStatus = pExpCtrl->controlExposureTime(m_Device, newFrame->Image, newFrame->mDate, m_DetectionParam.MASK, m_CameraParam.ACQ_FPS);
-                        }
-
-                        // Get current date YYYYMMDD.
-                        currentFrameDate = TimeDate::getYYYYMMDD(newFrame->mDate);
-
-                        // If the date has changed, sun ephemeris must be updated.
-                        if (currentFrameDate != mCurrentDate)
-                        {
-                            LOG_INFO << "AcqThread::operator();" << "Date has changed. Former Date is " << mCurrentDate << ". New Date is " << currentFrameDate << ".";
-                            computeSunTimes();
-                        }
-
-                        // Acquisition at regular time interval is enabled.
-                        if (m_CameraParam.regcap.ACQ_REGULAR_ENABLED && !m_Device->mVideoFramesInput) {
-
-                            cDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
-                            string nowDate = cDate.substr(0, cDate.find("."));
-
-                            boost::posix_time::ptime t1(boost::posix_time::time_from_string(refDate));
-                            boost::posix_time::ptime t2(boost::posix_time::time_from_string(nowDate));
-
-                            boost::posix_time::time_duration td = t2 - t1;
-                            int64_t secTime = td.total_seconds();
-
-                            if (LOG_SPAM_FRAME_STATUS)
-                                LOG_DEBUG << "AcqThread::operator();" << "operator();" << "NEXT REGCAP : " << (int)(m_CameraParam.regcap.ACQ_REGULAR_CFG.interval - secTime) << "s" << endl;
-
-                            // Check it's time to run a regular capture.
-                            if (secTime >= m_CameraParam.regcap.ACQ_REGULAR_CFG.interval)
-                            {
-                                LOG_DEBUG << "AcqThread::operator();" << "operator();" << "It's time to check if need to run a regular capture.";
-                                if ((currentTimeMode == m_CameraParam.regcap.ACQ_REGULAR_MODE || m_CameraParam.regcap.ACQ_REGULAR_MODE == DAYNIGHT)) {
-                                    LOG_INFO << "AcqThread::operator();" << "============= Run regular acquisition because it is " << currentTimeMode << " and ACQ_REGULAR_MODE=" << m_CameraParam.regcap.ACQ_REGULAR_MODE <<" =============";
-                                    runRegularAcquisition();
-                                }
-                            }
-                        }
-
-                        // Acquisiton at scheduled time is enabled.
-                        if (m_CameraParam.schcap.ACQ_SCHEDULE.size() != 0 && m_CameraParam.schcap.ACQ_SCHEDULE_ENABLED && !m_Device->mVideoFramesInput)
-                        {
-                            unsigned long next = (mNextAcq.hours * 3600 + mNextAcq.min * 60 + mNextAcq.sec) - (newFrame->mDate.hours * 3600 + newFrame->mDate.minutes * 60 + newFrame->mDate.seconds);
-
-                            if (next < 0) {
-                                next = 24l * 3600l - (newFrame->mDate.hours * 3600 + newFrame->mDate.minutes * 60 + newFrame->mDate.seconds) + (mNextAcq.hours * 3600 + mNextAcq.min * 60 + mNextAcq.sec);
-                                if (LOG_SPAM_FRAME_STATUS)
-                                    LOG_DEBUG << "AcqThread::operator();" << "next : " << next;
-                            }
-
-                            vector<int>tsch = TimeDate::HdecimalToHMS(next / 3600.0);
-                            if (LOG_SPAM_FRAME_STATUS)
-                                LOG_DEBUG << "AcqThread::operator();" << "NEXT SCHCAP : " << tsch.at(0) << "h" << tsch.at(1) << "m" << tsch.at(2) << "s" << endl;
-
-                            // It's time to run scheduled acquisition.
-                            if (mNextAcq.hours == newFrame->mDate.hours &&
-                                mNextAcq.min == newFrame->mDate.minutes &&
-                                (int)newFrame->mDate.seconds == mNextAcq.sec) {
-                                runScheduledAcquisition(newFrame->mDate);
-                            }
-                            else {
-
-                                // The current time has elapsed.
-                                if (newFrame->mDate.hours > mNextAcq.hours) {
-
-                                    selectNextAcquisitionSchedule(newFrame->mDate);
-
-                                }
-                                else if (newFrame->mDate.hours == mNextAcq.hours) {
-
-                                    if (newFrame->mDate.minutes > mNextAcq.min) {
-
-                                        selectNextAcquisitionSchedule(newFrame->mDate);
-
-                                    }
-                                    else if (newFrame->mDate.minutes == mNextAcq.min) {
-
-                                        if (newFrame->mDate.seconds > mNextAcq.sec) {
-
-                                            selectNextAcquisitionSchedule(newFrame->mDate);
-                                        }
-
-                                    }
-
-                                }
-
-                            }
-
-
-                            if (m_CurrentAcquisitionMode != EAcquisitionMode::CONTINUOUS)
-                            {
-                                LOG_INFO << "AcqThread::operator();" << "Set camera in continuous mode";
-                                setCameraInContinousMode();
-                            }
-                        }
-
-                        // Check sunrise and sunset time.
-                        if ((isSunrise(currentTimeInSec) || isSunset(currentTimeInSec))
-                            && !m_Device->mVideoFramesInput) {
-
-                            if (m_DetectionParam.ACQ_AUTOEXPOSURE_ENABLED)
-                                exposureControlActive = true;
-
-                        }
-                        else {
-
-                            // Print time before sunrise.
-                            if (!isSunrise(currentTimeInSec)) {
-                                nextSunrise.clear();
-                                if (currentTimeInSec < mStartSunriseTime)
-                                    nextSunrise = TimeDate::HdecimalToHMS((mStartSunriseTime - currentTimeInSec) / 3600.0);
-                                if (currentTimeInSec > mStopSunsetTime)
-                                    nextSunrise = TimeDate::HdecimalToHMS(((24 * 3600 - currentTimeInSec) + mStartSunriseTime) / 3600.0);
-                                if (LOG_SPAM_FRAME_STATUS)
-                                    if (nextSunrise.size() > 0)
-                                        LOG_DEBUG << "AcqThread::operator();" << "NEXT SUNRISE : " << nextSunrise.at(0) << "h" << nextSunrise.at(1) << "m" << nextSunrise.at(2) << "s";
-                            }
-
-                            // Print time before sunset.
-                            if (!isSunset())
-                            {
-                                nextSunset.clear();
-                                nextSunset = TimeDate::HdecimalToHMS((mStartSunsetTime - currentTimeInSec) / 3600.0);
-                                if (LOG_SPAM_FRAME_STATUS)
-                                    if (nextSunset.size() > 0)
-                                        LOG_DEBUG << "AcqThread::operator();" << "NEXT SUNSET : " << nextSunset.at(0) << "h" << nextSunset.at(1) << "m" << nextSunset.at(2) << "s";
-                            }
-
-                            if (m_DetectionParam.ACQ_AUTOEXPOSURE_ENABLED)
-                            {
-                                exposureControlActive = false;
-                                exposureControlStatus = false;
-                            }
-                        }
-                    }
+                // Print time before sunset.
+                if (!isSunset())
+                {
+                    nextSunset.clear();
+                    nextSunset = TimeDate::HdecimalToHMS((mStartSunsetTime - m_CurrentTimeInSeconds) / 3600.0);
+                    if (LOG_SPAM_FRAME_STATUS)
+                        if (nextSunset.size() > 0)
+                            LOG_DEBUG << "AcqThread::operator();" << "NEXT SUNSET : " << nextSunset.at(0) << "h" << nextSunset.at(1) << "m" << nextSunset.at(2) << "s";
                 }
 
 
-                mFrameNumber++;
+                //CALCULATE METRICS
+                tacq_metric = ((static_cast<double>(cv::getTickCount()) - tacq_metric) / cv::getTickFrequency()) * 1000;
+                m_CurrentFPS = (1.0 / (tacq_metric / 1000.0));
 
-                tacq = (((double)cv::getTickCount() - tacq) / cv::getTickFrequency()) * 1000;
-                fps = (1.0 / (tacq / 1000.0));
+                metrics_ThreadLoop();
 
-                if (LOG_SPAM_FRAME_STATUS)
-                    LOG_INFO << "AcqThread::operator();" << " [ TIME ACQ ] : " << tacq << " ms   ~cFPS(" << fps << ")" << endl;
+                m_RunnedScheduledAcquisition = false;
+                m_RunnedRegularAcquisition = false;
 
+                //CHECK THREAD STOP
                 mMustStopMutex.lock();
                 stop = mMustStop;
                 mMustStopMutex.unlock();
 
-                NodeExporterMetrics::GetInstance().UpdateMetrics(fps, tacq,m_Device->getTemperature(), &nextSunrise, &nextSunset);
-                NodeExporterMetrics::GetInstance().WriteMetrics();
+                previousTimeMode = m_CurrentTimeMode;
 
             } while (stop == false && !m_Device->getCameraStatus());
 
@@ -684,7 +511,7 @@ void AcqThread::operator()()
 
 void  AcqThread::runScheduledAcquisition(TimeDate::Date mDate) {
     LOG_INFO << "AcqThread::runScheduledAcquisition;\t\t" << "Run scheduled acquisition.";
-
+    m_RunnedScheduledAcquisition = true;
     //reset framebuffer because time passed, free memory
     LOG_DEBUG << "AcqThread::runScheduledAcquisition;\t\t" << "Reset frame buffer";
     resetFrameBuffer();
@@ -715,7 +542,7 @@ void  AcqThread::runScheduledAcquisition(TimeDate::Date mDate) {
 void  AcqThread::runRegularAcquisition()
 {
     LOG_INFO << "AcqThread::runRegularAcquisition;\t\t" << "Run regular acquisition.";
-
+    m_RunnedRegularAcquisition = true;
     //reset framebuffer because time passed, free memory
     LOG_DEBUG << "AcqThread::runRegularAcquisition;\t\t" << "Reset frame buffer";
     resetFrameBuffer();
@@ -730,15 +557,6 @@ void  AcqThread::runRegularAcquisition()
         m_CameraParam.regcap.ACQ_REGULAR_CFG.rep,
         m_CameraParam.regcap.ACQ_REGULAR_OUTPUT,
         m_CameraParam.regcap.ACQ_REGULAR_PRFX);
-
-//     LOG_INFO << "AcqThread::runRegularAcquisition;\t\t" << "Saving image";
-//     saveImageCaptured(frame, 0, m_CameraParam.regcap.ACQ_REGULAR_OUTPUT, m_CameraParam.regcap.ACQ_REGULAR_PRFX);
-
-
-    // Reset reference time in case a long exposure has been done.
-    cDate = to_simple_string(boost::posix_time::microsec_clock::universal_time());
-    refDate = cDate.substr(0, cDate.find("."));
-    
 }
 
 
@@ -946,14 +764,8 @@ void AcqThread::runImageCapture(EAcquisitionMode mode,int imgNumber, ImgFormat i
 
     }
 
-    #ifdef _WIN32
-        Sleep(5);
-    #else
-        #ifdef LINUX
-            sleep(5);
-        #endif
-    #endif
-
+    //boost::this_thread::sleep(boost::posix_time::millisec(5));
+ 
     LOG_DEBUG << "AcqThread::runImageCapture;\t\t" << "Restarting camera in continuous mode...";
 
     if (!setCameraInContinousMode()) {
@@ -1123,13 +935,14 @@ bool AcqThread::computeSunTimes() {
     if(month.size() == 1) month = "0" + month;
     string day = Conversion::intToString(intDate.at(2));
     if(day.size() == 1) day = "0" + day;
+    
     mCurrentDate = Conversion::intToString(intDate.at(0)) + month + day;
     mCurrentTime = intDate.at(3) * 3600 + intDate.at(4) * 60 + intDate.at(5);
 
     LOG_DEBUG << "AcqThread::computeSunTimes;\t\t" << "LOCAL DATE      :  " << mCurrentDate;
 
     if(m_CameraParam.ephem.EPHEMERIS_ENABLED) {
-
+        LOG_INFO << "COMPUTE SUN TIMES WITH EPHEMERIS";
         Ephemeris ephem1 = Ephemeris(mCurrentDate, m_CameraParam.ephem.SUN_HORIZON_1, m_StationParam.SITELONG, m_StationParam.SITELAT);
 
         if(!ephem1.computeEphemeris(sunriseStartH, sunriseStartM,sunsetStopH, sunsetStopM)) {
@@ -1147,7 +960,7 @@ bool AcqThread::computeSunTimes() {
         }
 
     }else {
-
+        LOG_INFO << "COMPUTE DEFAULT SUN TIMES";
         sunriseStartH = m_CameraParam.ephem.SUNRISE_TIME.at(0);
         sunriseStartM = m_CameraParam.ephem.SUNRISE_TIME.at(1);
 
@@ -1495,6 +1308,286 @@ bool AcqThread::prepareAcquisitionOnDevice(EAcquisitionMode mode)
         return false;
 
     return true;
+}
 
+/// <summary>
+/// 
+/// </summary>
+void AcqThread::metrics_ThreadLoop()
+{
+    //calculate floating average for FPS circular buffer the same size as the frame buffer
+
+    //if runned a scheduled or regular acquisition, jump this fps value. is not valid.
+    if ( m_RunnedScheduledAcquisition || m_RunnedRegularAcquisition )
+    {
+        m_LastMetricTimestamp = m_CurrentThreadLoopTime;
+        return;
+    }
+
+    m_FPS_Sum += m_CurrentFPS;
+
+    if (m_CurrentFPS < 30)
+        LOG_WARNING << "FPS is below 30 " << m_CurrentFPS;
+
+    if (m_FPS_metrics.size() >= m_CircularBufferSize)
+        m_FPS_Sum -= m_FPS_metrics.front();
+
+    m_FPS_metrics.push_back(m_CurrentFPS);
+
+    //UPDATE NODE EXPORTER METRICS
+    boost::posix_time::time_duration metrics_time_elapsed = m_CurrentThreadLoopTime - m_LastMetricTimestamp;
+    int64_t secTime = metrics_time_elapsed.total_seconds();
+
+    if (secTime > METRICS_ACQUISITION_TIME)
+    {
+
+        double fps_floating_average = m_FPS_Sum / ( m_FPS_metrics.size() )  ;
+        double temperature = m_Device->getTemperature();
+        NodeExporterMetrics::GetInstance().UpdateMetrics(fps_floating_average, tacq_metric, temperature, &nextSunrise, &nextSunset);
+        NodeExporterMetrics::GetInstance().WriteMetrics();
+
+        m_LastMetricTimestamp = m_CurrentThreadLoopTime;
+    }
+}
+
+void AcqThread::scheduledAcquisition_ThreadLoop()
+{
+    // ACQUISITION AT SCHEDULED TIME IS ENABLED.
+    if (m_CameraParam.schcap.ACQ_SCHEDULE.size() != 0 && m_CameraParam.schcap.ACQ_SCHEDULE_ENABLED)
+    {
+        unsigned long next = (mNextAcq.hours * 3600 + mNextAcq.min * 60 + mNextAcq.sec) - (m_CurrentTimeDate.hours * 3600 + m_CurrentTimeDate.minutes * 60 + m_CurrentTimeDate.seconds);
+
+        if (next < 0) {
+            next = 24l * 3600l - (m_CurrentTimeDate.hours * 3600 + m_CurrentTimeDate.minutes * 60 + m_CurrentTimeDate.seconds) + (mNextAcq.hours * 3600 + mNextAcq.min * 60 + mNextAcq.sec);
+            if (LOG_SPAM_FRAME_STATUS)
+                LOG_DEBUG << "AcqThread::operator();" << "next : " << next;
+        }
+
+        vector<int>tsch = TimeDate::HdecimalToHMS(next / 3600.0);
+        if (LOG_SPAM_FRAME_STATUS)
+            LOG_DEBUG << "AcqThread::operator();" << "NEXT SCHCAP : " << tsch.at(0) << "h" << tsch.at(1) << "m" << tsch.at(2) << "s" << endl;
+
+        // It's time to run scheduled acquisition.
+        if (mNextAcq.hours == m_CurrentTimeDate.hours &&
+            mNextAcq.min == m_CurrentTimeDate.minutes &&
+            (int)m_CurrentTimeDate.seconds == mNextAcq.sec) {
+            runScheduledAcquisition(m_CurrentTimeDate);
+        }
+        else {
+
+            // The current time has elapsed.
+            if (m_CurrentTimeDate.hours > mNextAcq.hours) {
+
+                selectNextAcquisitionSchedule(m_CurrentTimeDate);
+
+            }
+            else if (m_CurrentTimeDate.hours == mNextAcq.hours) {
+
+                if (m_CurrentTimeDate.minutes > mNextAcq.min) {
+
+                    selectNextAcquisitionSchedule(m_CurrentTimeDate);
+
+                }
+                else if (m_CurrentTimeDate.minutes == mNextAcq.min) {
+
+                    if (m_CurrentTimeDate.seconds > mNextAcq.sec) {
+
+                        selectNextAcquisitionSchedule(m_CurrentTimeDate);
+                    }
+
+                }
+
+            }
+
+        }
+
+
+        if (m_CurrentAcquisitionMode != EAcquisitionMode::CONTINUOUS)
+        {
+            LOG_INFO << "AcqThread::operator();" << "Set camera in continuous mode";
+            setCameraInContinousMode();
+        }
+    }
+}
+
+void AcqThread::regularAcquisition_ThreadLoop()
+{
+    // ACQUISITION AT REGULAR TIME INTERVAL IS ENABLED
+    if (m_CameraParam.regcap.ACQ_REGULAR_ENABLED)
+    {
+        boost::posix_time::time_duration regular_acq_time_elapsed = m_CurrentThreadLoopTime - m_LastRegularAcquisitionTimestamp;
+        int64_t secTime = regular_acq_time_elapsed.total_seconds();
+
+        if (LOG_SPAM_FRAME_STATUS)
+            LOG_DEBUG << "AcqThread::operator();" << "operator();" << "NEXT REGCAP : " << (int)(m_CameraParam.regcap.ACQ_REGULAR_CFG.interval - secTime) << "s" << endl;
+
+        // Check it's time to run a regular capture.
+        if (secTime >= m_CameraParam.regcap.ACQ_REGULAR_CFG.interval)
+        {
+            LOG_DEBUG << "AcqThread::operator();" << "operator();" << "It's time to check if need to run a regular capture.";
+            if ((m_CurrentTimeMode == m_CameraParam.regcap.ACQ_REGULAR_MODE || m_CameraParam.regcap.ACQ_REGULAR_MODE == DAYNIGHT)) {
+                LOG_INFO << "AcqThread::operator();" << "============= Run regular acquisition because it is " << m_CurrentTimeMode << " and ACQ_REGULAR_MODE=" << m_CameraParam.regcap.ACQ_REGULAR_MODE << " =============";
+                runRegularAcquisition();
+
+                // Reset reference time in case a long exposure has been done.
+                m_LastRegularAcquisitionTimestamp = m_CurrentThreadLoopTime;
+            }
+
+            if (m_CurrentAcquisitionMode != EAcquisitionMode::CONTINUOUS)
+            {
+                LOG_INFO << "AcqThread::operator();" << "Set camera in continuous mode";
+                setCameraInContinousMode();
+            }
+        }
+    }
+}
+
+void AcqThread::continuousAcquisition_ThreadLoop()
+{
+    InputDeviceType input_device_type = m_Device->getDeviceType();
+
+    m_CurrentFrame = make_shared<Frame>(); // Container for the grabbed image. added to the frame vector. need to be new object
+    m_CurrentFrame->mDate = m_CurrentTimeDate;
+
+    ApplyCameraSettingsToFrame(m_CurrentFrame);
+
+    // GRAB A CONTINUOUS FRAME
+    if (m_Device->runContinuousCapture(m_CurrentFrame))
+    {
+        m_CurrentFrame->mFrameNumber = mFrameNumber;
+
+        if (LOG_SPAM_FRAME_STATUS)
+            LOG_INFO << "AcqThread::operator();" << "============= FRAME " << m_CurrentFrame->mFrameNumber << " ============= ";
+
+
+        switch (input_device_type) {
+        // IF DEVICE IS FRAME OR VIDEO...
+        case InputDeviceType::SINGLE_FITS_FRAME:
+        case InputDeviceType::VIDEO:
+            continuousAcquisition_VIDEO();
+            break;
+
+        //IF DEVICE IS A CAMERA... EXPOSURE CONTROL MANAGEMENT
+        case InputDeviceType::CAMERA:
+            continuousAcquisition_CAMERA();
+            break;
+
+        }
+
+        //PUSH THE NEW FRAME IN THE FRAMEBUFFER AFTER EVENTUALLY THREADS STOP
+        boost::mutex::scoped_lock lock(*frameBuffer_mutex);
+        frameBuffer.push_back(m_CurrentFrame);
+        lock.unlock();
+
+
+        // Notify detection thread for new frame.
+        if (m_DetThread_IsRunning)
+            startDetectionThread();
+
+        // Notify stack thread for new frame.
+        if (m_StackThread_IsRunning)
+            startStackThread();
+
+        
+        mFrameNumber++;
+
+        //LOG
+        if (LOG_SPAM_FRAME_STATUS)
+            LOG_INFO << "AcqThread::operator();" << " [ TIME ACQ ] : " << tacq_metric << " ms   ~cFPS(" << m_CurrentFPS << ")" << endl;
+
+        
+        
+    }
+}
+
+void AcqThread::continuousAcquisition_VIDEO()
+{
+
+    // Slow down the time in order to give more time to the detection process.
+    int twait = DEFAULT_VIDEO_WAIT_BETWEEN_FRAMES;
+    if (m_VideoParam.INPUT_TIME_INTERVAL == 0 && m_FramesParam.INPUT_TIME_INTERVAL > 0)
+        twait = m_FramesParam.INPUT_TIME_INTERVAL;
+    else if (m_VideoParam.INPUT_TIME_INTERVAL > 0 && m_FramesParam.INPUT_TIME_INTERVAL == 0)
+        twait = m_VideoParam.INPUT_TIME_INTERVAL;
+
+    boost::this_thread::sleep(boost::posix_time::millisec(twait * 1000));
+
+}
+
+void AcqThread::continuousAcquisition_CAMERA()
+{
+    //IF EXPOSURE CONTROL IS ENABLED
+    if (m_DetectionParam.ACQ_AUTOEXPOSURE_ENABLED)
+    {
+        if ((isSunrise(m_CurrentTimeInSeconds) || isSunset(m_CurrentTimeInSeconds))) {
+
+            exposureControlActive = true;
+
+        }
+        else
+        {
+            exposureControlActive = false;
+            exposureControlStatus = false;
+        }
+
+        if (exposureControlStatus) {
+            // Exposure control is active, the new frame can't be shared with others threads.
+            if (!cleanStatus) {
+                // If stack process exists.
+                stopStackThread();
+
+                // If detection process exists
+                stopDetectionThread();
+
+                // Reset framebuffer.
+                resetFrameBuffer();
+            }
+        }
+
+
+        // Adjust exposure time.
+        if (pExpCtrl != NULL && exposureControlActive)
+            exposureControlStatus = pExpCtrl->controlExposureTime(m_Device, m_CurrentFrame->Image, m_CurrentFrame->mDate, m_DetectionParam.MASK, m_CameraParam.ACQ_FPS);
+
+    }
+
+
+    //IF EXPOSURE CONTROL IS DISABLED SETUP DET AND STACK THREADS
+    if (!m_DetectionParam.ACQ_AUTOEXPOSURE_ENABLED && !exposureControlStatus)
+    {
+        // Check TimeMode changing.
+        // Notify detection thread.
+        if (previousTimeMode != m_CurrentTimeMode && m_DetectionParam.DET_MODE != DAYNIGHT) {
+            LOG_INFO << "AcqThread::operator();" << "TimeMode has changed and Detection thread need to be stopped because it is " << time_mode_parser.getStringEnum(m_CurrentTimeMode) << " and DET_MODE =" << time_mode_parser.getStringEnum(m_StackParam.STACK_MODE);
+            //stopDetectionThread();
+            m_DetThread_IsRunning = false;
+        }
+        else if (m_DetectionParam.DET_MODE == m_CurrentTimeMode || m_DetectionParam.DET_MODE == DAYNIGHT) {
+            if (!m_DetThread_IsRunning)
+            {
+                LOG_INFO << "AcqThread::operator();" << "TimeMode has changed and Detection thread need to be started because it is " << time_mode_parser.getStringEnum(m_CurrentTimeMode) << " and STACK_MODE=" << time_mode_parser.getStringEnum(m_StackParam.STACK_MODE);
+                //startDetectionThread();
+                m_DetThread_IsRunning = true;
+            }
+        }
+
+
+        // Notify stack thread.
+        if (previousTimeMode != m_CurrentTimeMode && m_StackParam.STACK_MODE != DAYNIGHT) {
+            if (m_StackThread_IsRunning)
+            {
+                LOG_INFO << "AcqThread::operator();" << "TimeMode has changed and Stack thread need to be stopped because it is " << time_mode_parser.getStringEnum(m_CurrentTimeMode) << " and STACK_MODE=" << time_mode_parser.getStringEnum(m_StackParam.STACK_MODE);
+                //stopStackThread();
+                m_StackThread_IsRunning = false;
+            }
+        }
+        else if (m_StackParam.STACK_MODE == m_CurrentTimeMode || m_StackParam.STACK_MODE == DAYNIGHT) {
+            if (!m_StackThread_IsRunning) {
+                LOG_INFO << "AcqThread::operator();" << "TimeMode has changed and Stack thread need to be started because it is " << time_mode_parser.getStringEnum(m_CurrentTimeMode) << " and STACK_MODE=" << time_mode_parser.getStringEnum(m_StackParam.STACK_MODE);
+                //startStackThread();
+                m_StackThread_IsRunning = true;
+            }
+        }
+    }
 }
 

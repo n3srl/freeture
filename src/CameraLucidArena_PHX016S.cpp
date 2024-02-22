@@ -921,6 +921,7 @@ using namespace std;
             if (!checkSDKDevice())
                 throw runtime_error("SDK not initialized");
 
+
             Arena::IImage* pOriginalImage = m_ArenaDevice->GetImage(IMAGE_TIMEOUT);
 
             if (!pOriginalImage->HasImageData()) {
@@ -930,6 +931,8 @@ using namespace std;
             if (pOriginalImage->HasChunkData()) {
                 LOG_ERROR << "Image has data chunk";
             }
+
+            newFrame->mDate = TimeDate::Date(boost::posix_time::microsec_clock::universal_time());
 
             Arena::IImage* pCopiedImage = Arena::ImageFactory::Create(pOriginalImage->GetData(),
                 pOriginalImage->GetPayloadSize(), pOriginalImage->GetWidth(),
@@ -1263,7 +1266,6 @@ using namespace std;
 
             GenICam::gcstring value = GenICam::gcstring(selector.c_str());
 
-            Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "AcquisitionMode", "Continuous");
             Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "DeviceTemperatureSelector", value);
 
             //sensor

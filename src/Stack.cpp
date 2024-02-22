@@ -265,7 +265,7 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
 
                     LOG_INFO << "stackReduction option enabled";
 
-                    shared_ptr<cv::Mat> newMat ;
+                    shared_ptr<cv::Mat> newMat = make_shared<cv::Mat>();
 
                     float bzero  = 0.0;
                     float bscale = 1.0;

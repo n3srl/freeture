@@ -44,6 +44,7 @@
 #include <boost/thread/condition_variable.hpp>
 #include <boost/circular_buffer.hpp>
 
+#include "EParser.h"
 #include "SParam.h"
 #include "CameraSettings.h"
 #include "TimeDate.h"
@@ -67,6 +68,9 @@ namespace freeture
         std::thread::id m_ThreadID;
 
         //COMMON THREADS ATTRIBUTES
+        boost::posix_time::ptime m_CurrentThreadLoopTime;
+        boost::posix_time::ptime m_PreviousThreadLoopTime;
+
         boost::mutex        mMustStopMutex;
         boost::thread*      mThread;                     // Acquisition thread.
         bool                mMustStop;              // Signal to stop thread.
@@ -75,14 +79,16 @@ namespace freeture
         // Communication with the shared framebuffer.
         boost::condition_variable*      frameBuffer_condition;
         boost::mutex*                   frameBuffer_mutex;
-        boost::circular_buffer<std::shared_ptr<Frame>>  frameBuffer;
+        boost::circular_buffer<std::shared_ptr<Frame>>&  frameBuffer;
 
-        // Communication with DetThread.
+        // Communication with StackThread.
+        bool m_StackThread_IsRunning = false;
         bool* stackSignal;
         boost::mutex* stackSignal_mutex;
         boost::condition_variable* stackSignal_condition;
 
-        // Communication with StackThread.
+        // Communication with DetThread.
+        bool m_DetThread_IsRunning=false;
         bool* detSignal;
         boost::mutex* detSignal_mutex;
         boost::condition_variable* detSignal_condition;
@@ -94,8 +100,9 @@ namespace freeture
         std::shared_ptr<StackThread>    pStack;                 // Pointer on stack thread in order to save and reset a stack when a regular capture occurs.
         std::string                     mOutputDataPath;        // Dynamic location where to save data (regular captures etc...).
         std::string                     mCurrentDate;
-        std::string                     cDate;
-        std::string                     refDate;
+        TimeDate::Date                  m_CurrentTimeDate;
+        boost::posix_time::ptime        m_LastRegularAcquisitionTimestamp;
+        boost::posix_time::ptime        m_LastMetricTimestamp;
         int                             mDeviceID;              // Index of the device to use.
         int                             mNextAcqIndex;
         int                             mStartSunriseTime;      // In seconds.
@@ -105,7 +112,6 @@ namespace freeture
         int                             mCurrentTime;           // In seconds.
         unsigned long long              mFrameNumber;           // frame #
         bool                            cleanStatus = false;
-      
 
         // Parameters from configuration file.
         scheduleParam       mNextAcq;               // Next scheduled acquisition.
@@ -122,9 +128,34 @@ namespace freeture
         CameraSettings m_CurrentCameraSettings;
         EAcquisitionMode m_CurrentAcquisitionMode;
 
+
+        boost::circular_buffer<double>  m_FPS_metrics;
+
+        double m_CurrentFPS = 0.0;
+        double tacq_metric = 0.0;
+        double m_FPS_Sum = 0.0;
+
+        std::vector<int> nextSunset;
+        std::vector<int> nextSunrise;
+
+        size_t m_CircularBufferSize;
+        TimeMode m_CurrentTimeMode;
+        int m_CurrentTimeInSeconds = 0;
+        std::shared_ptr<Frame> m_CurrentFrame;
+        TimeMode previousTimeMode;
+        EParser<TimeMode> time_mode_parser;
+        bool m_RunnedRegularAcquisition = false;
+        bool m_RunnedScheduledAcquisition = false;
+
+        //EXPOSURE CONTROL
+
+        // Exposure adjustment variables. used only if ACQ_AUTOEXPOSURE_ENABLED = true
+        bool exposureControlStatus = false;
+        bool exposureControlActive = false;
+
     public:
 
-        AcqThread(boost::circular_buffer<std::shared_ptr<Frame>>,
+        AcqThread(boost::circular_buffer<std::shared_ptr<Frame>>&,
             boost::mutex*,
             boost::condition_variable*,
             bool*,
@@ -174,25 +205,49 @@ namespace freeture
 
         int getTimeInSeconds(boost::posix_time::ptime);
 
+        /// <summary>
+        /// unlock condition variable for detection thread and notify_one
+        /// </summary>
+        /// <param name="YYYYMMDD"></param>
+        /// <returns></returns>
         void startDetectionThread();
 
+        /// <summary>
+        /// lock condition variable for detection thread and interrupt thread
+        /// </summary>
         void stopDetectionThread();
 
+        /// <summary>
+        ///  lock condition variable for stack thread and interrupt thread
+        /// </summary>
         void stopStackThread();
 
+        /// <summary>
+        /// unlock condition variable for stack thread and notify_one
+        /// </summary>
+        /// <param name="img"></param>
+        /// <param name="imgNum"></param>
+        /// <param name="outputType"></param>
+        /// <param name="imgPrefix"></param>
         void startStackThread();
 
         void resetFrameBuffer();
 
-        void notifyDetectionThread();
+    private:
+
+        void regularAcquisition_ThreadLoop();
+        void scheduledAcquisition_ThreadLoop();
+        void continuousAcquisition_ThreadLoop();
+        void metrics_ThreadLoop();
+
+        void continuousAcquisition_VIDEO();
+        void continuousAcquisition_CAMERA();
 
         //internal device management
         bool setCameraInContinousMode();
 
         bool setCameraSingleFrameMode(EAcquisitionMode mode);
 
-    private:
-        
         void runScheduledAcquisition(TimeDate::Date);
       
         void runRegularAcquisition();

@@ -81,8 +81,6 @@ string freeture::Logger::getThreadId(LogThread thread)
 
 void freeture::Logger::setLogThread(LogThread log_thread, thread_id_type thread_id, bool reset)
 {
-    BOOST_LOG_SCOPED_THREAD_TAG("Tag", log_thread);
-
     std::ostringstream oss;
     oss << thread_id;
     std::string threadIdStr = oss.str();
