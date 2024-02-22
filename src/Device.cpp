@@ -47,7 +47,7 @@ using namespace freeture;
 
 namespace fs = boost::filesystem;
 
-void printValues(cameraParam cp, string log) {
+void printValues(cameraParam& cp, string log) {
     EParser<CamPixFmt> fmt;
     string val = fmt.getStringEnum(cp.ACQ_FORMAT);
 
@@ -69,7 +69,7 @@ void printValues(cameraParam cp, string log) {
     LOG_DEBUG << log << "ACQ_STARTY=" << cp.ACQ_STARTY;
 }
 
-void printValues(CameraSettings cp, string log)
+void printValues(CameraSettings& cp, string log)
 {
     EParser<CamPixFmt> fmt;
     string val = fmt.getStringEnum(cp.PixelFormat);

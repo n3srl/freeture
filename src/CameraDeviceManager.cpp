@@ -36,10 +36,12 @@ bool CameraDeviceManager::createDevice()
     LOG_DEBUG << "CameraDeviceManager::createDevice";
     m_Device = new Device();
 
+    LOG_DEBUG << "CameraDeviceManager::createDevice;"<< "Assign camera";
     //assign camera
     m_Device->setCamera( m_Camera );
     
     //Setup with runtime values
+    LOG_DEBUG << "CameraDeviceManager::createDevice;" << "Setup with runtime values";
     m_Device->Setup(m_SelectedRuntimeConfiguration.camInput, m_SelectedRuntimeConfiguration.framesInput, m_SelectedRuntimeConfiguration.vidInput);
 
     return  true;
@@ -83,9 +85,11 @@ bool CameraDeviceManager::createCamera()
             LOG_DEBUG << "CameraDeviceManager::createCamera;" << "Factory fails to create the camera with SDK : " << parser.getStringEnum(camera_description.Sdk);
             return false;
         }
-    }
 
-    LOG_ERROR << "No device with CAMERA_ID " << m_SelectedRuntimeConfiguration.DEVICE_ID << " nor CAMERA_SERIAL="<< m_SelectedRuntimeConfiguration.CAMERA_SERIAL;
+        return true;
+    }
+    else 
+        LOG_ERROR << "No device with CAMERA_ID " << m_SelectedRuntimeConfiguration.DEVICE_ID << " nor CAMERA_SERIAL="<< m_SelectedRuntimeConfiguration.CAMERA_SERIAL;
 
     return false;
 }

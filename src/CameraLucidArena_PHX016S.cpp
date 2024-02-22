@@ -1498,6 +1498,11 @@ using namespace std;
         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "AcquisitionFrameRate = 0.1";
         ArenaSDKManager::setFloatValue(m_ArenaDevice, "AcquisitionFrameRate", 0.1);
         
+
+        // select user set 1
+        ArenaSDKManager::setStringValue(m_ArenaDevice, "UserSetSelector", "UserSet1");
+
+        // execute the save
         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "Send command: UserSetSave";
         ArenaSDKManager::sendCommand(m_ArenaDevice, "UserSetSave");
         

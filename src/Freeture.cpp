@@ -624,8 +624,6 @@ void Freeture::modeSingleAcquisition()
 
     createDeviceManager();
 
-    m_Device->Setup(m_FreetureSettings->getCamParam(), m_FreetureSettings->getFramesParam(), m_FreetureSettings->getVidParam());
-
     EParser<CamPixFmt> fmt;
     string fstring = fmt.getStringEnum(static_cast<CamPixFmt>(m_FreetureCommandLineSettings.acqFormat));
     if (fstring == "")

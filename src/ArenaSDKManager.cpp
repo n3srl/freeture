@@ -264,8 +264,6 @@ void ArenaSDKManager::exploreNode(GenApi::INode* pNode, size_t depth)
     // Retrieve node name
     GenICam::gcstring nodeName = pNode->GetName();
 
-    string name = nodeName;
-    
     // Retrieve accessibility
     GenApi::EAccessMode accessMode = pNode->GetAccessMode();
     GenICam::gcstring accessModeStr = GenApi::EAccessModeClass::ToString(accessMode);

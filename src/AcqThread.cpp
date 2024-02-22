@@ -182,6 +182,7 @@ bool AcqThread::setCameraSingleFrameMode(EAcquisitionMode mode)
         m_Device->stopCamera();
 
     m_Device->Setup(m_CameraParam, m_FramesParam, m_VideoParam);
+
     LOG_DEBUG << "AcqThread::setCameraSingleMode;" << "Prepare single-frame acquisition.";
 
     if (!prepareAcquisitionOnDevice(mode)) {
