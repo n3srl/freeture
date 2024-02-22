@@ -641,7 +641,7 @@ void AcqThread::operator()()
                 stop = mMustStop;
                 mMustStopMutex.unlock();
 
-                NodeExporterMetrics::GetInstance().UpdateMetrics(fps, tacq, &nextSunrise, &nextSunset);
+                NodeExporterMetrics::GetInstance().UpdateMetrics(fps, tacq,m_Device->getTemperature(), &nextSunrise, &nextSunset);
                 NodeExporterMetrics::GetInstance().WriteMetrics();
 
             } while (stop == false && !m_Device->getCameraStatus());

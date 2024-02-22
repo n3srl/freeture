@@ -7,6 +7,7 @@
 
 namespace expr = boost::log::expressions;
 namespace attrs = boost::log::attributes;
+namespace posix_time = boost::posix_time;
 
 using namespace std;
 
@@ -32,6 +33,7 @@ freeture::Logger::Logger(freeture::LogThread thread,thread_id_type thread_id, st
     m_Instance = this;
 
     init();
+
     setLogThread(thread, thread_id);
 }
 
@@ -44,10 +46,10 @@ void freeture::Logger::addDefaultSink(string logger_name, string file_name, LogT
     m_SinkBackend = boost::make_shared<backend_type>(
         keywords::target = m_LogPathFolder,
         keywords::file_name = m_LogPathFolder + string(file_name),
-        keywords::rotation_size = 10 * 1024 * 1024,
-        keywords::time_based_rotation = sinks::file::rotation_at_time_point(0, 0, 0),
+        keywords::rotation_size = m_LogArchiveLimitMB * 1024 * 1024,
+        keywords::time_based_rotation = sinks::file::rotation_at_time_interval(posix_time::hours( m_LogArchiveDays * 24)),
         keywords::auto_flush = true,
-        keywords::format = log_string,
+        keywords::format = m_LogString,
         keywords::max_size = m_LogArchiveLimitMB * 1024 * 1024 //bytes 
         );
 
@@ -60,7 +62,7 @@ void freeture::Logger::addDefaultSink(string logger_name, string file_name, LogT
     else
         m_Sink->set_filter(trivial::severity >= m_LogSeverityFilter);
 
-    m_Sink->set_formatter(logging::parse_formatter(log_string));
+    m_Sink->set_formatter(logging::parse_formatter(m_LogString));
     core->add_sink(m_Sink);
 }
 
@@ -95,22 +97,22 @@ void freeture::Logger::setLogThread(LogThread log_thread, thread_id_type thread_
         {
             logging::core::get()->remove_all_sinks();
         }
+    
+        switch (log_thread) {
+        case LogThread::FREETURE_THREAD:
+            addDefaultSink(FREETURE_LOGGER_NAME, FREETURE_FILE_NAME, LogThread::FREETURE_THREAD);
+            break;
+        case LogThread::ACQUISITION_THREAD:
+            addDefaultSink(ACQ_THREAD_LOGGER_NAME, ACQ_THREAD_FILE_NAME, LogThread::ACQUISITION_THREAD);
+            break;
+        case LogThread::STACK_THREAD:
+            addDefaultSink(STACK_THREAD_LOGGER_NAME, STACK_THREAD_FILE_NAME, LogThread::STACK_THREAD);
+            break;
+        case LogThread::DETECTION_THRED:
+            addDefaultSink(DET_THREAD_LOGGER_NAME, DET_THREAD_FILE_NAME, LogThread::DETECTION_THRED);
+            break;
+        };
     }
-
-    switch (log_thread) {
-    case LogThread::FREETURE_THREAD:
-        addDefaultSink(FREETURE_LOGGER_NAME, FREETURE_FILE_NAME, LogThread::FREETURE_THREAD);
-        break;
-    case LogThread::ACQUISITION_THREAD:
-        addDefaultSink(ACQ_THREAD_LOGGER_NAME, ACQ_THREAD_FILE_NAME, LogThread::ACQUISITION_THREAD);
-        break;
-    case LogThread::STACK_THREAD:
-        addDefaultSink(STACK_THREAD_LOGGER_NAME, STACK_THREAD_FILE_NAME, LogThread::STACK_THREAD);
-        break;
-    case LogThread::DETECTION_THRED:
-        addDefaultSink(DET_THREAD_LOGGER_NAME, DET_THREAD_FILE_NAME, LogThread::DETECTION_THRED);
-        break;
-    };
 }
 
 void freeture::Logger::setSeverityLevel()
@@ -143,7 +145,7 @@ void freeture::Logger::init()
     logging::add_common_attributes();
     logging::core::get()->add_global_attribute("ThreadID", attrs::current_thread_id());
 
-    logging::add_console_log(std::cout, boost::log::keywords::format = log_string);
+    logging::add_console_log(std::cout, boost::log::keywords::format = m_LogString);
 
 }
 

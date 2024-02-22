@@ -138,5 +138,6 @@ namespace freeture
         bool isStreaming();
         
         double getMinExposureTime();
+        double getTemperature();
     };
 }

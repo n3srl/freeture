@@ -422,7 +422,7 @@ void Freeture::modeMeteorDetection()
     else
         LOG_INFO << "OK";
 
-    LOG_INFO << "SELECTING DEVICE " << m_FreetureSettings->getAllParam().DEVICE_ID << "...";
+    LOG_INFO << "SELECTING DEVICE, CAMERA_ID=" << m_FreetureSettings->getAllParam().DEVICE_ID << ", CAMERA_SERIAL=" << m_FreetureSettings->getAllParam().CAMERA_SERIAL << "...";
 
     if (!m_CameraDeviceManager->selectDevice(m_FreetureSettings->getAllParam()))
         throw runtime_error("Failed to select device.");
@@ -868,6 +868,7 @@ void Freeture::Run()
         fetchProgramOption();
 
         m_Logger = make_shared<Logger>(LogThread::FREETURE_THREAD, m_ThreadID, m_FreetureSettings->getLogParam().LOG_PATH, m_FreetureSettings->getLogParam().LOG_ARCHIVE_DAY, m_FreetureSettings->getLogParam().LOG_SIZE_LIMIT, m_FreetureSettings->getLogParam().LOG_SEVERITY);
+        m_Logger->setLogThread(LogThread::FREETURE_THREAD, m_ThreadID);
 
         LOG_INFO << "================================================" ;
         LOG_INFO << "======        FREETURE - " << VERSION << "           ======= " ;

@@ -283,7 +283,9 @@ namespace freeture
         */
         virtual bool getDataSetStatus() { return false; };
 
-        virtual double getMinExposureTime() = 0;
+
+        virtual double getMinExposureTime() { return std::numeric_limits<double>::quiet_NaN(); };
+        virtual double getTemperature() { return std::numeric_limits<double>::quiet_NaN(); };
 
         /**
         * Load next data set of frames.

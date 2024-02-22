@@ -609,7 +609,7 @@ using namespace std;
         try {
             LOG_DEBUG << "CameraLucidArena_PHX016S::setFrameSize";
 
-            if (!checkSDKDevice())
+            if ( !checkSDKDevice() )
                 throw runtime_error("SDK not initialized");
 
             if (m_StartX % 2 != 0)
@@ -623,6 +623,7 @@ using namespace std;
 
             m_StartX = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "OffsetX");
             m_StartY = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "OffsetY");
+
             m_Width = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Width");
             m_Height = Arena::GetNodeValue<int64_t>(m_ArenaDevice->GetNodeMap(), "Height");
 
@@ -1273,7 +1274,7 @@ using namespace std;
             GenApi::CFloatPtr t = m_ArenaDevice->GetNodeMap()->GetNode("DeviceTemperature");
 
             double temperature = t->GetValue();
-            LOG_INFO << "CameraLucidArena_PHX016S::getTemperature;" << currentEntrySymbolic << "=" << temperature << "°C";
+            LOG_INFO << "CameraLucidArena_PHX016S::getTemperature;" << currentEntrySymbolic << "=" << temperature << "[C]";
             m_LastTemperature = temperature;
             return true;
         }
@@ -1290,6 +1291,13 @@ using namespace std;
         }
 
         return false;
+    }
+
+    double CameraLucidArena_PHX016S::getTemperature()
+    {
+        if (!getTemperature("Sensor"))
+            return std::numeric_limits<double>::quiet_NaN();
+        return m_LastTemperature;
     }
 
     void CameraLucidArena_PHX016S::CopyFrame(shared_ptr<Frame> frame, const uint8_t* u_buffer_data, size_t buffer_size)
@@ -1467,6 +1475,34 @@ using namespace std;
     bool CameraLucidArena_PHX016S::initOnce()
     {
         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce";
+      
+        LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "EXPLORING CAMERA MAP - THIS WILL NOT BE PART OF A PRODUCTION BUILD";
+        // ArenaSDKManager::exploreNodeMaps(m_ArenaDevice);
+
+        //this is an enumeration Off - Continuous
+        //LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "ExposureAutoLowerLimit = Off";
+        //ArenaSDKManager::setStringValue(m_ArenaDevice, "ExposureAutoLowerLimit", "Off");
+
+        //this is an enumeration Off - Continuous  - Once
+        LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "ExposureAuto = Off";
+        ArenaSDKManager::setStringValue(m_ArenaDevice, "ExposureAuto", "Off");
+
+        //this is an enumeration Off - Continuous
+        LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "ExposureAutoLimitAuto = Off";
+        ArenaSDKManager::setStringValue(m_ArenaDevice, "ExposureAutoLimitAuto", "Off");
+
+        LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "AcquisitionFrameRateEnable = true";
+        ArenaSDKManager::setBooleanValue(m_ArenaDevice, "AcquisitionFrameRateEnable", true);
+
+
+        LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "AcquisitionFrameRate = 0.1";
+        ArenaSDKManager::setFloatValue(m_ArenaDevice, "AcquisitionFrameRate", 0.1);
+        
+        LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "Send command: UserSetSave";
+        ArenaSDKManager::sendCommand(m_ArenaDevice, "UserSetSave");
+        
+        LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "UserSetDefault = UserSet1";
+        ArenaSDKManager::setStringValue(m_ArenaDevice, "UserSetDefault", "UserSet1");
 
         return true;
     }
@@ -1542,7 +1578,7 @@ using namespace std;
 
                 LOG_INFO << "CameraLucidArena_PHX016S::grabInitialization;" << "Enable stream to auto negotiate packet size";
                 Arena::SetNodeValue<bool>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamAutoNegotiatePacketSize", true);
-
+                
                 // Disable stream packet resend
                 //    Enable stream packet resend before starting the stream. Images are
                 //    sent from the camera to the host in packets using UDP protocol,
@@ -1694,6 +1730,7 @@ using namespace std;
             if (m_Streaming)
                 acqStop();
 
+            LOG_DEBUG << "CameraLucidArena_PHX016S::destroyDevice;" << "Deallocating Arena Device";
             m_ArenaSDKSystem->DestroyDevice(m_ArenaDevice);
         }
 

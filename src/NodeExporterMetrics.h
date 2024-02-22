@@ -14,6 +14,8 @@ namespace freeture
 
         double m_AcqFPS;
         double m_AcqTime;
+        double m_Temperature;
+
         std::vector<int>* m_NextSunrise = nullptr;
         std::vector<int>* m_NextSunset = nullptr;
 
@@ -34,7 +36,7 @@ namespace freeture
         virtual ~NodeExporterMetrics();
 
         //metrics from AcqThread
-        void UpdateMetrics(double, double, std::vector<int>*, std::vector<int>*);
+        void UpdateMetrics(double, double,double, std::vector<int>*, std::vector<int>*);
 
         //metrics from DetThread
         void UpdateMetrics(int, double);

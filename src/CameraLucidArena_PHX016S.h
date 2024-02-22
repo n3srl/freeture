@@ -162,6 +162,7 @@ namespace freeture
             bool configurationCheck(parameters&) override;
 
             double getMinExposureTime() override;
+            double getTemperature() override;
         private:
             bool setDefaultFrameSize();
             bool setSingleShotMode();

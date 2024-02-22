@@ -124,7 +124,7 @@ namespace freeture
         static Logger* GetLogger();
 
     private:
-        std::string log_string = "%TimeStamp%;ThreadID: %ThreadID%;%Severity%;%Tag%; %Message%";
+        std::string m_LogString = "%TimeStamp%;ThreadID: %ThreadID%;%Severity%;%Tag%; %Message%";
 
         static logger_type m_LoggerInstance;
         static Logger* m_Instance;

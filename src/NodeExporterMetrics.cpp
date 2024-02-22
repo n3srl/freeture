@@ -32,12 +32,13 @@ void NodeExporterMetrics::UpdateMetrics(int DetNbDetection, double DetTime)
     m_DetTime = DetTime;
 }
 
-void NodeExporterMetrics::UpdateMetrics(double AcqFPS,double AcqTime,vector<int>* NextSunrise=nullptr,vector<int>* NextSunset =nullptr)
+void NodeExporterMetrics::UpdateMetrics(double AcqFPS, double AcqTime, double Temperature, vector<int>* NextSunrise = nullptr, vector<int>* NextSunset = nullptr)
 {
-            m_AcqFPS = AcqFPS;
-            m_AcqTime = AcqTime;
-            m_NextSunrise = NextSunrise;
-            m_NextSunset = NextSunset;
+    m_AcqFPS = AcqFPS;
+    m_AcqTime = AcqTime;
+    m_NextSunrise = NextSunrise;
+    m_NextSunset = NextSunset;
+    m_Temperature = Temperature;
 }
 
 void NodeExporterMetrics::UpdateMetrics(std::string CompleteDataPath , std::string cDate)
@@ -59,7 +60,8 @@ void NodeExporterMetrics::WriteMetrics()
 
                std::ofstream out(OutputPath);
                out <<"freeture_acq_thread_time{description=\"Camera acquisition time [ms]\"} "<< m_AcqTime << " "<<timestamp.count() << endl;
-               out <<"freeture_acq_thread_fps{description=\"Camera acquisition thread frames per seconds [Hz]\"} "<< m_AcqFPS << " "<< timestamp.count() << endl;
+               out << "freeture_acq_thread_fps{description=\"Camera acquisition thread frames per seconds [Hz]\"} " << m_AcqFPS << " " << timestamp.count() << endl;
+               out << "freeture_camera_sensor_temperature{description=\"Camera sensor temperature [C]\"} " << m_Temperature << " " << timestamp.count() << endl;
 
                if (m_NextSunrise!=nullptr)
                     if (m_NextSunrise->size()>2)
@@ -68,6 +70,8 @@ void NodeExporterMetrics::WriteMetrics()
                if (m_NextSunset!=nullptr)
                     if (m_NextSunset->size()>2)
                         out << "freeture_acq_thread_next_sunset{description=\"Next sunset\"} "   << m_NextSunset->at(0)  << "h" << m_NextSunset->at(1)  << "m" << m_NextSunset->at(2)  << "s" << " "<< timestamp.count() << endl;
+
+
 
                out <<"freeture_det_thread_nb_detection{description=\"Camera detection thread current session detection count\"} "<< m_DetNbDetection << " "<< timestamp.count() << endl;
                out <<"freeture_det_thread_det_time{description=\"Camera detection thread current detection time [ms]\"} "<< m_DetTime << " "<< timestamp.count() << endl;

@@ -446,3 +446,8 @@ double Device::getMinExposureTime()
 {
     return m_Camera->getMinExposureTime();
 }
+
+double Device::getTemperature()
+{
+    return m_Camera->getTemperature();
+}
