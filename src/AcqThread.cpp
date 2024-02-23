@@ -1354,8 +1354,8 @@ void AcqThread::metrics_ThreadLoop()
 
         double fps_floating_average = m_FPS_Sum / ( m_FPS_metrics.size() )  ;
         double temperature = m_Device->getTemperature();
-        NodeExporterMetrics::GetInstance().UpdateMetrics(fps_floating_average, tacq_metric, temperature, &nextSunrise, &nextSunset);
-        NodeExporterMetrics::GetInstance().WriteMetrics();
+        NodeExporterMetrics::GetInstance(m_StationParam.STATION_NAME).UpdateMetrics(fps_floating_average, tacq_metric, temperature, &nextSunrise, &nextSunset);
+        NodeExporterMetrics::GetInstance(m_StationParam.STATION_NAME).WriteMetrics();
 
         m_LastMetricTimestamp = m_CurrentThreadLoopTime;
     }

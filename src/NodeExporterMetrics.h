@@ -21,17 +21,17 @@ namespace freeture
 
         bool m_Writing = false;
         static NodeExporterMetrics* m_Instance;
-        NodeExporterMetrics() = default;
+        NodeExporterMetrics(std::string);
 
         std::string m_CompleteDataPath="";
         std::string m_cDate = "";
     public:
-        const char* OutputPath = "/freeture/freeture_metric";
+        std::string OutputPath = "/freeture/freeture_metric";
 
         NodeExporterMetrics(NodeExporterMetrics& other) = delete;
         void operator=(const NodeExporterMetrics&) = delete;
 
-        static NodeExporterMetrics& GetInstance();
+        static NodeExporterMetrics& GetInstance(std::string station_code);
 
         virtual ~NodeExporterMetrics();
 

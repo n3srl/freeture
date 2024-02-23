@@ -12,10 +12,10 @@ using namespace freeture;
 
 NodeExporterMetrics* NodeExporterMetrics::m_Instance = nullptr;
 
-NodeExporterMetrics& NodeExporterMetrics::GetInstance()
+NodeExporterMetrics& NodeExporterMetrics::GetInstance(std::string station_code)
 {
     if (m_Instance == nullptr)
-        m_Instance = new NodeExporterMetrics();
+        m_Instance = new NodeExporterMetrics(station_code);
 
     return *m_Instance;
 }
@@ -92,4 +92,9 @@ void NodeExporterMetrics::WriteMetrics()
         {
             cout << e.what() << endl;
         }
+}
+
+NodeExporterMetrics::NodeExporterMetrics(std::string station_name)
+    : OutputPath("/freeture/"+ station_name+"/freeture_metric")
+{
 }

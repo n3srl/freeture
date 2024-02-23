@@ -363,8 +363,8 @@ void StackThread::operator()(){
             stop = mustStop;
             mustStopMutex.unlock();
 
-            NodeExporterMetrics::GetInstance().UpdateMetrics(completeDataPath,cDate);
-            NodeExporterMetrics::GetInstance().WriteMetrics();
+            NodeExporterMetrics::GetInstance(mstp.STATION_NAME).UpdateMetrics(completeDataPath,cDate);
+            NodeExporterMetrics::GetInstance(mstp.STATION_NAME).WriteMetrics();
 
         } while(!stop);
 

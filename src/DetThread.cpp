@@ -346,8 +346,8 @@ void DetThread::operator ()()
             stopThread = mMustStop;
             mMustStopMutex.unlock();
 
-            NodeExporterMetrics::GetInstance().UpdateMetrics(mNbDetection,t);
-            NodeExporterMetrics::GetInstance().WriteMetrics();
+            NodeExporterMetrics::GetInstance(mstp.STATION_NAME).UpdateMetrics(mNbDetection,t);
+            NodeExporterMetrics::GetInstance(mstp.STATION_NAME).WriteMetrics();
         }while(!stopThread);
 
         if(mDetectionResults.size() == 0) {
