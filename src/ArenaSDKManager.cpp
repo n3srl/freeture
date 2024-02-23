@@ -150,7 +150,7 @@ bool ArenaSDKManager::sendCommand(Arena::IDevice* device, string command)
     return false;
 }
 
-
+#if ARENA_TOOLS
 void ArenaSDKManager::exploreNodeMap(GenApi::INodeMap* pNodeMap)
 {
     // Get number of nodes
@@ -666,3 +666,4 @@ void ArenaSDKManager::exploreFloat(GenApi::CFloatPtr pFloat)
         LOG_DEBUG << "ArenaSDKManager::exploreInteger;" << "Unexpected exception thrown";
     }
 }
+#endif

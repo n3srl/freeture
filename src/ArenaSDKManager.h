@@ -51,7 +51,7 @@ namespace freeture
         static bool setStringValue(Arena::IDevice*, std::string, std::string);
         static bool sendCommand(Arena::IDevice*, std::string);
 
-
+#if ARENA_TOOLS
         /// <summary>
         /// explores a node map
         /// (1) retrieves total number of nodes
@@ -135,6 +135,7 @@ namespace freeture
         /// (3) demonstrates value setter in a comment
         /// </summary>
         static void exploreString(GenApi::CStringPtr pString);
+#endif
     };
 
 }
