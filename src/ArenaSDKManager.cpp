@@ -58,6 +58,28 @@ bool ArenaSDKManager::setBooleanValue(Arena::IDevice* device, string feature, bo
 
 }
 
+
+bool ArenaSDKManager::setIntegerValue(Arena::IDevice* device, string feature, int value)
+{
+    try {
+        Arena::SetNodeValue<double>(device->GetNodeMap(), feature.c_str(), value);
+        return true;
+    }
+    catch (GenICam::GenericException& ge)
+    {
+        throw runtime_error(ge.what());
+    }
+    catch (std::exception& ex)
+    {
+        throw runtime_error(ex.what());
+    }
+    catch (...)
+    {
+        throw runtime_error("Unexpected exception thrown");
+    }
+
+}
+
 bool ArenaSDKManager::setSwitchValue(Arena::IDevice* device, string feature, ArenaSwitch value)
 {
     try {

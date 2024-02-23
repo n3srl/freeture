@@ -297,12 +297,12 @@ void Freeture::modeTest()
     else
         LOG_INFO << "OK";
 
-    LOG_INFO << "Selecting device " << m_FreetureSettings->getAllParam().DEVICE_ID;
-    if (!m_CameraDeviceManager->selectDevice(m_FreetureSettings->getAllParam())) {
-        error = true;
-        LOG_ERROR << "KO";
-    }
+    LOG_INFO << "SELECTING DEVICE, CAMERA_ID=" << m_FreetureSettings->getAllParam().DEVICE_ID << ", CAMERA_SERIAL=" << m_FreetureSettings->getAllParam().CAMERA_SERIAL << "...";
+
+    if (!m_CameraDeviceManager->selectDevice(m_FreetureSettings->getAllParam()))
+        throw runtime_error("Failed to select device.");
     else {
+        LOG_INFO << "OK";
 
         LOG_INFO << "Check input device configuration...";
         if (!m_FreetureSettings->checkInputParam(m_CameraDeviceManager->getDevice()->getDeviceType()))
@@ -343,8 +343,11 @@ void Freeture::modeContinuousAcquisition()
     LOG_INFO << "EXPOSURE  : " << m_FreetureCommandLineSettings.exp;
     LOG_INFO << "------------------------------------------------";
 
+    LOG_INFO << "SELECTING DEVICE, CAMERA_ID=" << m_FreetureSettings->getAllParam().DEVICE_ID << ", CAMERA_SERIAL=" << m_FreetureSettings->getAllParam().CAMERA_SERIAL << "...";
     if (!m_CameraDeviceManager->selectDevice(m_FreetureSettings->getAllParam()))
         throw runtime_error("Fail to select device.");
+    else
+        LOG_INFO << "OK";
 
     m_Device->setCameraSize(m_FreetureCommandLineSettings.startx, m_FreetureCommandLineSettings.starty, m_FreetureCommandLineSettings.acqWidth, m_FreetureCommandLineSettings.acqHeight);
 

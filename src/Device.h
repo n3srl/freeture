@@ -103,6 +103,7 @@ namespace freeture
         bool stopCamera();
 
         bool getDeviceName();
+        std::string Device::getDeviceModel();
         InputDeviceType getDeviceType();
  
         bool setCameraExposureTime(double value);
@@ -136,7 +137,9 @@ namespace freeture
         void setCamera(Camera*);
 
         bool isStreaming();
-        
+        bool isConnected();
+        bool connect();
+
         double getMinExposureTime();
         double getTemperature();
     };

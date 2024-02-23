@@ -970,15 +970,18 @@ using namespace std;
             return true;
         }
         catch (GenICam::GenericException& e) {
-            LOG_ERROR << "CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S;" << e.what();
+            LOG_ERROR << "CameraLucidArena_PHX016S::grabImage;" << e.what();
+            disconnect();
         }
         catch (std::exception& ex)
         {
-            LOG_ERROR << "CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S;" << "Standard exception thrown: " << ex.what();
+            LOG_ERROR << "CameraLucidArena_PHX016S::grabImage;" << "Standard exception thrown: " << ex.what();
+            disconnect();
         }
         catch (...)
         {
-            LOG_ERROR << "CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S;" << "Unexpected exception thrown";
+            LOG_ERROR << "CameraLucidArena_PHX016S::grabImage;" << "Unexpected exception thrown";
+            disconnect();
         }
         return false;
     }
@@ -999,6 +1002,17 @@ using namespace std;
                 throw runtime_error("SDK not initialized");
 
             if (continuous) {
+                // Disable stream packet resend
+                //    Enable stream packet resend before starting the stream. Images are
+                //    sent from the camera to the host in packets using UDP protocol,
+                //    which includes a header image number, packet number, and timestamp
+                //    information. If a packet is missed while receiving an image, a
+                //    packet resend is requested and this information is used to retrieve
+                //    and redeliver the missing packet in the correct order.
+
+                LOG_INFO << "CameraLucidArena_PHX016S::grabInitialization;" << "Disable stream packet resend";
+                Arena::SetNodeValue<bool>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamPacketResendEnable", false);
+
                 // Set acquisition mode
                 //    Set acquisition mode before starting the stream. Starting the stream
                 //    requires the acquisition mode to be set beforehand. The acquisition
@@ -1009,7 +1023,19 @@ using namespace std;
                 LOG_INFO << "CameraLucidArena_PHX016S::acqStart;" << "Set camera to CONTINUOUS MODE";
                 Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "AcquisitionMode", "Continuous");
             }
-            else {
+            else
+            {
+                // Disable stream packet resend
+                //    Enable stream packet resend before starting the stream. Images are
+                //    sent from the camera to the host in packets using UDP protocol,
+                //    which includes a header image number, packet number, and timestamp
+                //    information. If a packet is missed while receiving an image, a
+                //    packet resend is requested and this information is used to retrieve
+                //    and redeliver the missing packet in the correct order.
+
+                LOG_INFO << "CameraLucidArena_PHX016S::grabInitialization;" << "Enable stream packet resend";
+                Arena::SetNodeValue<bool>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamPacketResendEnable", true);
+
                 LOG_INFO << "CameraLucidArena_PHX016S::acqStart;" << "Set camera to SINGLEFRAME";
                 Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "AcquisitionMode", "SingleFrame");
             }
@@ -1406,9 +1432,9 @@ using namespace std;
     /*
      *   FAB METHODS
      */
-     /**
-  * Create a Lucid camera using serial number
-  */
+   /**
+    * Create a Lucid camera using serial number
+    */
     bool CameraLucidArena_PHX016S::createDevice()
     {
         try {
@@ -1430,6 +1456,8 @@ using namespace std;
 
             if (!checkSDKDevice())
                 throw runtime_error("SDK not initialized");
+
+            m_Connected = true;
 
             return true;
         }
@@ -1477,9 +1505,11 @@ using namespace std;
     bool CameraLucidArena_PHX016S::initOnce()
     {
         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce";
-      
+
+#if ARENA_TOOLS
         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "EXPLORING CAMERA MAP - THIS WILL NOT BE PART OF A PRODUCTION BUILD";
-        // ArenaSDKManager::exploreNodeMaps(m_ArenaDevice);
+        ArenaSDKManager::exploreNodeMaps(m_ArenaDevice);
+#endif
 
         //this is an enumeration Off - Continuous
         //LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "ExposureAutoLowerLimit = Off";
@@ -1496,6 +1526,11 @@ using namespace std;
         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "AcquisitionFrameRateEnable = true";
         ArenaSDKManager::setBooleanValue(m_ArenaDevice, "AcquisitionFrameRateEnable", true);
 
+        LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "GammaEnable = false";
+        ArenaSDKManager::setBooleanValue(m_ArenaDevice, "GammaEnable", false);
+
+//         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "GevSCPSPacketSize = 1500";
+//         ArenaSDKManager::setIntegerValue(m_ArenaDevice, "GevSCPSPacketSize", 1500);
 
         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "AcquisitionFrameRate = 0.1";
         ArenaSDKManager::setFloatValue(m_ArenaDevice, "AcquisitionFrameRate", 0.1);
@@ -1517,7 +1552,7 @@ using namespace std;
     bool CameraLucidArena_PHX016S::init()
     {
         try {
-            LOG_DEBUG <<"CameraLucidArena_PHX016S::init;" << "CameraLucidArena_PHX016S::init";
+            LOG_DEBUG << "CameraLucidArena_PHX016S::init;" << "CameraLucidArena_PHX016S::init";
 
             if (!checkSDKDevice())
                 throw runtime_error("SDK not initialized");
@@ -1586,17 +1621,6 @@ using namespace std;
                 LOG_INFO << "CameraLucidArena_PHX016S::grabInitialization;" << "Enable stream to auto negotiate packet size";
                 Arena::SetNodeValue<bool>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamAutoNegotiatePacketSize", true);
                 
-                // Disable stream packet resend
-                //    Enable stream packet resend before starting the stream. Images are
-                //    sent from the camera to the host in packets using UDP protocol,
-                //    which includes a header image number, packet number, and timestamp
-                //    information. If a packet is missed while receiving an image, a
-                //    packet resend is requested and this information is used to retrieve
-                //    and redeliver the missing packet in the correct order.
-
-                LOG_INFO << "CameraLucidArena_PHX016S::grabInitialization;" << "Disable stream packet resend";
-                Arena::SetNodeValue<bool>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamPacketResendEnable", false);
-
                 LOG_DEBUG << "CameraLucidArena_PHX016S::grabInitialization;" << "Set camera TriggerMode to Off";
                 Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetNodeMap(), "TriggerMode", "Off");
 
@@ -1739,8 +1763,48 @@ using namespace std;
 
             LOG_DEBUG << "CameraLucidArena_PHX016S::destroyDevice;" << "Deallocating Arena Device";
             m_ArenaSDKSystem->DestroyDevice(m_ArenaDevice);
+
+            m_Connected = false;
         }
 
         return true;
     }
 
+    bool CameraLucidArena_PHX016S::reset()
+    {
+        // execute the save
+        LOG_DEBUG << "CameraLucidArena_PHX016S::reset;" << "Perform device reset";
+        if (!ArenaSDKManager::sendCommand(m_ArenaDevice, "DeviceReset")) {
+            LOG_ERROR << "CameraLucidArena_PHX016S::reset;" << "Reset failed";
+            return false;
+        }
+        else 
+            LOG_DEBUG << "CameraLucidArena_PHX016S::reset;" << "OK";
+
+        return true;
+    }
+
+    std::string CameraLucidArena_PHX016S::getModel()
+    {
+        return MODEL "(" CHIPSET_MODEL ")";
+    }
+
+    bool CameraLucidArena_PHX016S::isConnected()
+    {
+        return m_Connected;
+    }
+
+    bool CameraLucidArena_PHX016S::connect()
+    {
+        bool destroyed, created;
+
+        destroyed = destroyDevice();
+        created = createDevice();
+
+        return m_Connected;
+    }
+
+    bool CameraLucidArena_PHX016S::disconnect()
+    {
+        return destroyDevice();
+    }

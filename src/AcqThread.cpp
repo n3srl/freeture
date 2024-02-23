@@ -415,6 +415,15 @@ void AcqThread::operator()()
 
                 tacq_metric = (double)cv::getTickCount();
 
+                //check if device is connected.
+                if (!m_Device->isConnected()) {
+                    LOG_ERROR << "DEVICE IS NOT CONNECTED ANYMORE";
+                    if (!m_Device->connect()) {
+                        LOG_ERROR << "CONNECTION FAILED WAITING 1s";
+                        boost::this_thread::sleep(boost::posix_time::millisec(1000));
+                        continue;
+                    }
+                }
 
                 continuousAcquisition_ThreadLoop();
 
@@ -774,16 +783,16 @@ void AcqThread::runImageCapture(EAcquisitionMode mode,int imgNumber, ImgFormat i
 
 }
 
-void AcqThread::saveImageCaptured(shared_ptr<Frame> img, int imgNum, ImgFormat outputType, string imgPrefix) {
+void AcqThread::saveImageCaptured(shared_ptr<Frame> frame, int imgNum, ImgFormat outputType, string imgPrefix) {
     LOG_DEBUG << "AcqThread::saveImageCaptured;\t\t"<< "AcqThread: SAVING IMAGE CAPTURED";
 
-    if(img->Image->data) {
+    if(frame->Image->data) {
 
-        string  YYYYMMDD = TimeDate::getYYYYMMDD(img->mDate);
+        string  YYYYMMDD = TimeDate::getYYYYMMDD(frame->mDate);
 
         if(buildAcquisitionDirectory(YYYYMMDD)) {
 
-            string fileName = imgPrefix + "_" + TimeDate::getYYYYMMDDThhmmss(img->mDate) + "_UT-" + Conversion::intToString(imgNum);
+            string fileName = imgPrefix + "_" + TimeDate::getYYYYMMDDThhmmss(frame->mDate) + "_UT-" + Conversion::intToString(imgNum);
 
             switch(outputType) {
 
@@ -791,14 +800,14 @@ void AcqThread::saveImageCaptured(shared_ptr<Frame> img, int imgNum, ImgFormat o
 
                     {
 
-                        switch(img->mFormat) {
+                        switch(frame->mFormat) {
 
                             case CamPixFmt::MONO12 :
 
                                 {
 
                                     cv::Mat temp;
-                                    img->Image->copyTo(temp);
+                                    frame->Image->copyTo(temp);
                                     cv::Mat newMat = ImgProcessing::correctGammaOnMono12(temp, 2.2);
                                     cv::Mat newMat2 = Conversion::convertTo8UC1(newMat);
                                     SaveImg::saveJPEG(newMat2, mOutputDataPath + fileName);
@@ -812,7 +821,7 @@ void AcqThread::saveImageCaptured(shared_ptr<Frame> img, int imgNum, ImgFormat o
                                 {
 
                                     cv::Mat temp;
-                                    img->Image->copyTo(temp);
+                                    frame->Image->copyTo(temp);
                                     cv::Mat newMat = ImgProcessing::correctGammaOnMono8(temp, 2.2);
                                     SaveImg::saveJPEG(newMat, mOutputDataPath + fileName);
 
@@ -829,29 +838,31 @@ void AcqThread::saveImageCaptured(shared_ptr<Frame> img, int imgNum, ImgFormat o
 
                         Fits2D newFits(mOutputDataPath);
                         newFits.loadKeys(mfkp, m_StationParam);
-                        newFits.kGAINDB = img->mGain;
-                        newFits.kEXPOSURE = img->mExposure/1000000.0;
-                        newFits.kONTIME = img->mExposure/1000000.0;
-                        newFits.kELAPTIME = img->mExposure/1000000.0;
-                        newFits.kDATEOBS = TimeDate::getIsoExtendedFormatDate(img->mDate);
+                        newFits.kSATURATE = frame->mSaturatedValue;
+                        newFits.kCAMERA = m_Device->getDeviceName();
+                        newFits.kGAINDB = frame->mGain;
+                        newFits.kEXPOSURE = frame->mExposure/1000000.0;
+                        newFits.kONTIME = frame->mExposure/1000000.0;
+                        newFits.kELAPTIME = frame->mExposure/1000000.0;
+                        newFits.kDATEOBS = TimeDate::getIsoExtendedFormatDate(frame->mDate);
 
-                        double  debObsInSeconds = img->mDate.hours*3600 + img->mDate.minutes*60 + img->mDate.seconds;
-                        double  julianDate      = TimeDate::gregorianToJulian(img->mDate);
+                        double  debObsInSeconds = frame->mDate.hours*3600 + frame->mDate.minutes*60 + frame->mDate.seconds;
+                        double  julianDate      = TimeDate::gregorianToJulian(frame->mDate);
                         double  julianCentury   = TimeDate::julianCentury(julianDate);
 
-                        newFits.kCRVAL1 = TimeDate::localSideralTime_2(julianCentury, img->mDate.hours, img->mDate.minutes, (int)img->mDate.seconds, m_StationParam.SITELONG);
+                        newFits.kCRVAL1 = TimeDate::localSideralTime_2(julianCentury, frame->mDate.hours, frame->mDate.minutes, (int)frame->mDate.seconds, m_StationParam.SITELONG);
                         newFits.kCTYPE1 = "RA---ARC";
                         newFits.kCTYPE2 = "DEC--ARC";
                         newFits.kEQUINOX = 2000.0;
 
-                        switch(img->mFormat) {
+                        switch(frame->mFormat) {
 
                             case CamPixFmt::MONO12 :
 
                                 {
 
                                     // Convert unsigned short type image in short type image.
-                                    shared_ptr<cv::Mat> newMat = make_shared<cv::Mat>(img->Image->rows, img->Image->cols, CV_16SC1, cv::Scalar(0));
+                                    shared_ptr<cv::Mat> newMat = make_shared<cv::Mat>(frame->Image->rows, frame->Image->cols, CV_16SC1, cv::Scalar(0));
 
                                     // Set bzero and bscale for print unsigned short value in soft visualization.
                                     newFits.kBZERO = 32768;
@@ -860,12 +871,12 @@ void AcqThread::saveImageCaptured(shared_ptr<Frame> img, int imgNum, ImgFormat o
                                     unsigned short *ptr = NULL;
                                     short *ptr2 = NULL;
 
-                                    for(int i = 0; i < img->Image->rows; i++){
+                                    for(int i = 0; i < frame->Image->rows; i++){
 
-                                        ptr = img->Image->ptr<unsigned short>(i);
+                                        ptr = frame->Image->ptr<unsigned short>(i);
                                         ptr2 = newMat->ptr<short>(i);
 
-                                        for(int j = 0; j < img->Image->cols; j++){
+                                        for(int j = 0; j < frame->Image->cols; j++){
 
                                             if(ptr[j] - 32768 > 32767){
 
@@ -890,7 +901,7 @@ void AcqThread::saveImageCaptured(shared_ptr<Frame> img, int imgNum, ImgFormat o
 
                                 {
 
-                                   if(newFits.writeFits(img->Image, UC8, fileName))
+                                   if(newFits.writeFits(frame->Image, UC8, fileName))
                                         LOG_DEBUG << "AcqThread::saveImageCaptured;\t\t" << "Fits saved in : " << mOutputDataPath << fileName;
 
                                 }
@@ -1282,7 +1293,7 @@ bool AcqThread::prepareAcquisitionOnDevice(EAcquisitionMode mode)
                 }
                 case EAcquisitionMode::REGULAR: {
                     m_CurrentCameraSettings.Gain = m_CameraParam.regcap.ACQ_REGULAR_CFG.gain;
-                    m_CurrentCameraSettings.Exposure = m_CameraParam.ACQ_DAY_EXPOSURE;
+                    m_CurrentCameraSettings.Exposure = m_CameraParam.ACQ_NIGHT_EXPOSURE;
                     m_CurrentCameraSettings.FPS = 0;
                     m_CurrentCameraSettings.PixelFormat = m_CameraParam.regcap.ACQ_REGULAR_CFG.fmt;
                     break;

@@ -18,6 +18,7 @@
 #include "ECamPixFmt.h"
 
 #define CHIPSET_MODEL   "Sony IMX273 CMOS"
+#define MODEL           "Lucid PHX016S"
 #define PIXEL_SIZE_H    3.45   
 #define PIXEL_SIZE_W    3.45   
 #define MIN_GAIN        0
@@ -59,7 +60,6 @@ namespace freeture
                   
             uint64_t        m_PreviousMissingPacketCount=0;
         public :
-
             CameraLucidArena_PHX016S(CameraDescription, cameraParam);
 
             ~CameraLucidArena_PHX016S();
@@ -76,7 +76,7 @@ namespace freeture
 
             void grabCleanse() override;
 
-            bool grabImage(std::shared_ptr<Frame>  newFrame) override;
+            bool grabImage(std::shared_ptr<Frame> newFrame) override;
 
             void CopyFrame(std::shared_ptr<Frame>, const uint8_t*, size_t);
 
@@ -132,6 +132,12 @@ namespace freeture
             bool init() override;
 
             /// <summary>
+            /// Perform a device reset
+            /// </summary>
+            /// <returns></returns>
+            bool reset() override;
+
+            /// <summary>
             /// DEPRECATED USE INIT INSTEAD.
             /// 
             /// </summary>
@@ -163,6 +169,27 @@ namespace freeture
 
             double getMinExposureTime() override;
             double getTemperature() override;
+
+
+            /// <summary>
+            /// true if device is connected and running
+            /// </summary>
+            /// <returns></returns>
+            bool isConnected() override;
+
+            /// <summary>
+            /// perform a connection to the device
+            /// </summary>
+            /// <returns></returns>
+            bool connect() override;
+
+            /// <summary>
+           /// perform a disconnection from device
+           /// </summary>
+           /// <returns></returns>
+            bool disconnect() override;
+
+
         private:
             bool setDefaultFrameSize();
             bool setSingleShotMode();
@@ -175,6 +202,7 @@ namespace freeture
             void getStreamMissedPacketCount();
             bool checkSDKDevice();
             bool checkSDK();
+            std::string getModel() override;
             
     };
 }

@@ -156,13 +156,13 @@ namespace freeture
 
     public:
         void setLogThread(LogThread, thread_id_type, bool reset = false);
-        
+        static std::string getThreadId();
         static logger_type& get();
     };
 }
-
-#define LOG_DEBUG BOOST_LOG_CHANNEL_SEV( Logger::get(),"", trivial::debug)
-#define LOG_INFO  BOOST_LOG_CHANNEL_SEV( Logger::get(),"", trivial::info)
-#define LOG_WARNING  BOOST_LOG_CHANNEL_SEV( Logger::get(),"",trivial::warning)
-#define LOG_ERROR  BOOST_LOG_CHANNEL_SEV( Logger::get(),"",trivial::error)
-#define LOG_FATAL  BOOST_LOG_CHANNEL_SEV( Logger::get(),"",trivial::fatal)
+    
+#define LOG_DEBUG       BOOST_LOG_CHANNEL_SEV( Logger::get(),Logger::getThreadId(), trivial::debug)
+#define LOG_INFO        BOOST_LOG_CHANNEL_SEV( Logger::get(),Logger::getThreadId(), trivial::info)
+#define LOG_WARNING     BOOST_LOG_CHANNEL_SEV( Logger::get(),Logger::getThreadId(), trivial::warning)
+#define LOG_ERROR       BOOST_LOG_CHANNEL_SEV( Logger::get(),Logger::getThreadId(), trivial::error)
+#define LOG_FATAL       BOOST_LOG_CHANNEL_SEV( Logger::get(),Logger::getThreadId(), trivial::fatal)

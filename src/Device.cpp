@@ -162,6 +162,12 @@ bool Device::firstIinitializeCamera(string m_ConfigurationFilePath)
     return false;
 }
 
+string Device::getDeviceModel() {
+    LOG_DEBUG << "Device::getDeviceModel";
+
+    return m_Camera->getModel();
+
+}
 
 bool Device::getDeviceName() {
     LOG_DEBUG << "Device::getDeviceName";
@@ -450,4 +456,14 @@ double Device::getMinExposureTime()
 double Device::getTemperature()
 {
     return m_Camera->getTemperature();
+}
+
+bool Device::isConnected()
+{
+    return m_Camera->isConnected();
+}
+
+bool Device::connect()
+{
+    return m_Camera->connect();
 }

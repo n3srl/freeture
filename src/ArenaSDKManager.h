@@ -50,7 +50,7 @@ namespace freeture
         static bool setFloatValue(Arena::IDevice*, std::string, double);
         static bool setStringValue(Arena::IDevice*, std::string, std::string);
         static bool sendCommand(Arena::IDevice*, std::string);
-
+        static bool setIntegerValue(Arena::IDevice*, std::string, int);
 #if ARENA_TOOLS
         /// <summary>
         /// explores a node map

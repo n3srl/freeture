@@ -356,7 +356,7 @@ void DetThread::operator ()()
             LOG_INFO << "------------->> DETECTED EVENTS : " << mNbDetection << endl;
             LOG_INFO << "-----------------------------------------------" << endl;
 
-        }else {
+        } else {
 
             // Create Report for videos and frames in input.
             std::ofstream report;

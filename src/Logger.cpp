@@ -57,7 +57,8 @@ void freeture::Logger::addDefaultSink(string logger_name, string file_name, LogT
 
     if (hasThreadId(thread)) {
         string thread_id = getThreadId(thread);
-        m_Sink->set_filter(trivial::severity >= m_LogSeverityFilter && expr::attr<string>("ThreadTag")  == thread_id);
+       // m_Sink->set_filter(trivial::severity >= m_LogSeverityFilter && expr::attr<string>("ThreadTag")  == thread_id);
+        m_Sink->set_filter(trivial::severity >= m_LogSeverityFilter && expr::attr<std::string>("Channel") == getThreadId());
     }
     else
         m_Sink->set_filter(trivial::severity >= m_LogSeverityFilter);
@@ -111,6 +112,15 @@ void freeture::Logger::setLogThread(LogThread log_thread, thread_id_type thread_
             break;
         };
     }
+}
+
+string freeture::Logger::getThreadId()
+{
+    std::ostringstream oss;
+    oss << std::this_thread::get_id();
+    string threadIdStr = oss.str();
+
+    return threadIdStr;
 }
 
 void freeture::Logger::setSeverityLevel()

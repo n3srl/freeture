@@ -83,7 +83,7 @@ namespace freeture
         CamPixFmt           m_PixelFormat = CamPixFmt::UNDEFINED;   // Image format.
         bool                m_Streaming = false;                    //true if camera is streaming
         bool                m_ShiftBitsImage;                       // For example : bits are shifted for dmk's frames.
-
+        bool                m_Connected = false;
         /**
          * METRICS
          */
@@ -131,6 +131,12 @@ namespace freeture
         * @return Success status to prepare camera.
         */
         virtual bool grabInitialization() { return false; };
+
+        /// <summary>
+        /// Perform a device reset
+        /// </summary>
+        /// <returns></returns>
+        virtual bool reset() { return false; }
 
         /**
         * Run acquisition in continuous mode.
@@ -286,7 +292,7 @@ namespace freeture
 
         virtual double getMinExposureTime() { return std::numeric_limits<double>::quiet_NaN(); };
         virtual double getTemperature() { return std::numeric_limits<double>::quiet_NaN(); };
-
+        virtual std::string getModel() { return "Unspecified camera model"; };
         /**
         * Load next data set of frames.
         *
@@ -315,6 +321,30 @@ namespace freeture
         bool isGainAvailable() {
             LOG_DEBUG << "Camera::isGainAvailable";
             return m_GainAvailable;
+        }
+
+        /// <summary>
+        /// true if device is connected and running
+        /// </summary>
+        /// <returns></returns>
+        virtual bool isConnected() {
+            return m_Connected;
+        }
+
+        /// <summary>
+        /// perform a connection to the device
+        /// </summary>
+        /// <returns></returns>
+        virtual bool connect() {
+            return false;
+        }
+
+        /// <summary>
+       /// perform a disconnection from device
+       /// </summary>
+       /// <returns></returns>
+        virtual bool disconnect() {
+            return false;
         }
 
     };

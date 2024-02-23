@@ -28,7 +28,7 @@ CameraLucidArena_Scanner::CameraLucidArena_Scanner(CamSdkType sdk) : CameraScann
 
 CameraLucidArena_Scanner::~CameraLucidArena_Scanner()
 {
-
+    
 }
 
 /**
