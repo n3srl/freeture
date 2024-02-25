@@ -988,7 +988,7 @@ using namespace std;
 
     bool CameraLucidArena_PHX016S::acqStart()
     {
-        LOG_DEBUG << "CameraLucidArena_PHX016S::acqStart";
+        LOG_DEBUG << "CameraLucidArena_PHX016S::acqStart()";
 
         return acqStart(true);
     }
@@ -996,7 +996,7 @@ using namespace std;
     bool CameraLucidArena_PHX016S::acqStart(bool continuous)
     {
         try {
-            LOG_DEBUG << "CameraLucidArena_PHX016S::acqStart";
+            LOG_DEBUG << "CameraLucidArena_PHX016S::acqStart;" << "continuous=" << continuous ;
 
             if (!checkSDKDevice())
                 throw runtime_error("SDK not initialized");
@@ -1511,6 +1511,9 @@ using namespace std;
         ArenaSDKManager::exploreNodeMaps(m_ArenaDevice);
 #endif
 
+        // select user set 1
+        ArenaSDKManager::setStringValue(m_ArenaDevice, "UserSetSelector", "UserSet1");
+
         //this is an enumeration Off - Continuous
         //LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "ExposureAutoLowerLimit = Off";
         //ArenaSDKManager::setStringValue(m_ArenaDevice, "ExposureAutoLowerLimit", "Off");
@@ -1529,23 +1532,21 @@ using namespace std;
         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "GammaEnable = false";
         ArenaSDKManager::setBooleanValue(m_ArenaDevice, "GammaEnable", false);
 
-//         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "GevSCPSPacketSize = 1500";
-//         ArenaSDKManager::setIntegerValue(m_ArenaDevice, "GevSCPSPacketSize", 1500);
+         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "GevSCPSPacketSize = 1500";
+         ArenaSDKManager::setIntegerValue(m_ArenaDevice, "GevSCPSPacketSize", 1500);
 
         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "AcquisitionFrameRate = 0.1";
         ArenaSDKManager::setFloatValue(m_ArenaDevice, "AcquisitionFrameRate", 0.1);
         
 
-        // select user set 1
-        ArenaSDKManager::setStringValue(m_ArenaDevice, "UserSetSelector", "UserSet1");
-
-        // execute the save
-        LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "Send command: UserSetSave";
-        ArenaSDKManager::sendCommand(m_ArenaDevice, "UserSetSave");
         
         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "UserSetDefault = UserSet1";
         ArenaSDKManager::setStringValue(m_ArenaDevice, "UserSetDefault", "UserSet1");
 
+        // execute the save
+        LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "Send command: UserSetSave";
+        ArenaSDKManager::sendCommand(m_ArenaDevice, "UserSetSave");
+      
         return true;
     }
 

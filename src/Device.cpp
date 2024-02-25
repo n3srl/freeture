@@ -325,6 +325,7 @@ bool Device::startCamera(EAcquisitionMode mode) {
     case EAcquisitionMode::REGULAR: {
         if (!m_Camera->acqStart(false))
             return false;
+            break;
     }
     }
     return true;

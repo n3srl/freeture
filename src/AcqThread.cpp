@@ -1280,7 +1280,7 @@ bool AcqThread::prepareAcquisitionOnDevice(EAcquisitionMode mode)
             else {
                 LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "*************************** SET SUNRISE/SUNSET CAMERA SETTINGS";
                 LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "AUTO EXPOSURE   :  NO";
-                LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "DAYTIME         :  YES";
+                LOG_INFO << "AcqThread::prepareAcquisitionOnDevice  ;\t\t" << "DAYTIME         :  YES";
 
                 //SUNRISE AND SUNSET
                 switch (mode) {
@@ -1311,11 +1311,14 @@ bool AcqThread::prepareAcquisitionOnDevice(EAcquisitionMode mode)
     m_Device->CameraSetting = m_CurrentCameraSettings;
 
     // INIT CAMERA.
+    LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "Device->initializeCamera";
+
     if(!m_Device->initializeCamera())
         return false;
 
     // START CAMERA.
-    if(!m_Device->startCamera(mode))
+    LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "Device->startCamera";
+    if (!m_Device->startCamera(mode))
         return false;
 
     return true;
