@@ -1532,8 +1532,8 @@ using namespace std;
         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "GammaEnable = false";
         ArenaSDKManager::setBooleanValue(m_ArenaDevice, "GammaEnable", false);
 
-         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "GevSCPSPacketSize = 1500";
-         ArenaSDKManager::setIntegerValue(m_ArenaDevice, "GevSCPSPacketSize", 1500);
+         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "DeviceStreamChannelPacketSize = 1500";
+         ArenaSDKManager::setIntegerValue(m_ArenaDevice, "DeviceStreamChannelPacketSize", 1500);
 
         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "AcquisitionFrameRate = 0.1";
         ArenaSDKManager::setFloatValue(m_ArenaDevice, "AcquisitionFrameRate", 0.1);
