@@ -1441,10 +1441,11 @@ void AcqThread::regularAcquisition_ThreadLoop()
             LOG_DEBUG << "AcqThread::operator();" << "operator();" << "It's time to check if need to run a regular capture.";
             if ((m_CurrentTimeMode == m_CameraParam.regcap.ACQ_REGULAR_MODE || m_CameraParam.regcap.ACQ_REGULAR_MODE == DAYNIGHT)) {
                 LOG_INFO << "AcqThread::operator();" << "============= Run regular acquisition because it is " << m_CurrentTimeMode << " and ACQ_REGULAR_MODE=" << m_CameraParam.regcap.ACQ_REGULAR_MODE << " =============";
+                // Reset reference time BEFORE the exposure in case a long exposure has been done.
+                m_LastRegularAcquisitionTimestamp = m_CurrentThreadLoopTime;
+
                 runRegularAcquisition();
 
-                // Reset reference time in case a long exposure has been done.
-                m_LastRegularAcquisitionTimestamp = m_CurrentThreadLoopTime;
             }
 
             if (m_CurrentAcquisitionMode != EAcquisitionMode::CONTINUOUS)
