@@ -62,7 +62,7 @@ bool ArenaSDKManager::setBooleanValue(Arena::IDevice* device, string feature, bo
 bool ArenaSDKManager::setIntegerValue(Arena::IDevice* device, string feature, int value)
 {
     try {
-        Arena::SetNodeValue<double>(device->GetNodeMap(), feature.c_str(), value);
+        Arena::SetNodeValue<int64_t>(device->GetNodeMap(), feature.c_str(), value);
         return true;
     }
     catch (GenICam::GenericException& ge)
