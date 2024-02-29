@@ -153,7 +153,7 @@ CfgParam::CfgParam( string cfgFilePath)
             loadFramesParam();
             loadCamParam();
 
-        }else{
+        } else {
             m_EMsg.push_back("Fail to load configuration file.");
             LOG_ERROR << "Fail to load configuration file." << endl;
         }

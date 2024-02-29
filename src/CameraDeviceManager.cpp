@@ -18,7 +18,7 @@ mutex CameraDeviceManager::m_Mutex;
 
 CameraDeviceManager::CameraDeviceManager() 
 {
-    LOG_DEBUG << "CameraDeviceManager::CameraDeviceManager;" <<"Initialize available scanners...";
+    LOG_DEBUG << "CameraDeviceManager::CameraDeviceManager;" << "Initialize available scanners...";
 
     initScanners();
 

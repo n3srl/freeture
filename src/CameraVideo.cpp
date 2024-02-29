@@ -98,16 +98,8 @@ bool CameraVideo::loadNextDataSet(std::string &location){
 
         mCap = cv::VideoCapture(mVideoList.at(mVideoID));
 
-        if(!mCap.isOpened()){
-
-            LOG_ERROR << std::endl;
+        if(!mCap.isOpened())
              return false;
-
-        }else{
-
-            LOG_INFO << std::endl;
-
-        }
 
         mFrameHeight = mCap.get(cv::CAP_PROP_FRAME_HEIGHT);
 

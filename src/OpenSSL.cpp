@@ -31,10 +31,12 @@
 * \version 1.0
 * \date    30/05/2015
 */
+#include <string>
 
 #include "OpenSSL.h"
 
 using namespace freeture;
+using namespace std;
 
 OpenSSL::OpenSSL(int socket): ctx_(nullptr, SSL_CTX_free), ssl_(nullptr, SSL_free) {
 
@@ -42,21 +44,21 @@ OpenSSL::OpenSSL(int socket): ctx_(nullptr, SSL_CTX_free), ssl_(nullptr, SSL_fre
 
     ctx_ = decltype(ctx_ ) (SSL_CTX_new(SSLv23_client_method()), SSL_CTX_free);
     if(nullptr == ctx_) {
-        LOG_ERROR << "SSL_CTX_new failed : " << ERR_error_string(ERR_get_error(), errorBuf);
+        LOG_ERROR << "SSL_CTX_new failed : " << string(ERR_error_string(ERR_get_error(), errorBuf));
         throw "SSL_CTX_new failed.";
         //throw runtime_error(ERR_error_string(ERR_get_error(), errorBuf));
     }
 
     ssl_ = decltype(ssl_ ) (SSL_new(ctx_.get()), SSL_free);
     if(nullptr == ssl_) {
-        LOG_ERROR << "SSL_new failed : " << ERR_error_string(ERR_get_error(), errorBuf);
+        LOG_ERROR << "SSL_new failed : " << string(ERR_error_string(ERR_get_error(), errorBuf));
         throw "SSL_new failed.";
         //throw runtime_error(ERR_error_string(ERR_get_error(), errorBuf));
     }
 
     const int rstSetFd = SSL_set_fd(ssl_.get(), socket);
     if(0 == rstSetFd) {
-        LOG_ERROR << "SSL_set_fd failed : " << ERR_error_string(ERR_get_error(), errorBuf);
+        LOG_ERROR << "SSL_set_fd failed : " << string(ERR_error_string(ERR_get_error(), errorBuf));
         throw "SSL_set_fd failed.";
         //throw runtime_error(ERR_error_string(ERR_get_error(), errorBuf));
     }

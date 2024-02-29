@@ -234,7 +234,7 @@ bool StackThread::getRunStatus(){
 void StackThread::operator()(){
     m_ThreadID = std::this_thread::get_id();
 
-    Logger::GetLogger()->setLogThread(LogThread::STACK_THREAD, m_ThreadID);
+    Logger::Get().setLogThread(LogThread::STACK_THREAD, m_ThreadID);
 
     bool stop = false;
     isRunning = true;

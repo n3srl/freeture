@@ -28,7 +28,7 @@
 
 namespace freeture
 {
-    enum LogSeverityLevel
+    enum class LogSeverityLevel
     {
         normal,
         notification,

@@ -333,7 +333,7 @@ void AcqThread::operator()()
     // Obtain the attribute_value which holds the thread ID
     m_ThreadID = std::this_thread::get_id();
 
-    Logger::GetLogger()->setLogThread(LogThread::ACQUISITION_THREAD, m_ThreadID, true);
+    Logger::Get().setLogThread(LogThread::ACQUISITION_THREAD, m_ThreadID, true);
 
     bool stop = false;
 
@@ -561,7 +561,7 @@ void  AcqThread::runRegularAcquisition()
         setCameraSingleFrameMode(EAcquisitionMode::REGULAR);
     }
 
-    LOG_INFO << "AcqThread::runRegularAcquisition;\t\t" << "Taking shot";
+    LOG_INFO << "AcqThread::runRegularAcquisition;\t\t" "Taking shot";
     runImageCapture(EAcquisitionMode::REGULAR,
         m_CameraParam.regcap.ACQ_REGULAR_CFG.rep,
         m_CameraParam.regcap.ACQ_REGULAR_OUTPUT,

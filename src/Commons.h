@@ -18,5 +18,3 @@
 #endif
 
 #endif
-
-#define ARENA_SDK false    //Set this to true to use Arena SDK instead of aravis for LUCID cameras

@@ -185,7 +185,7 @@ void DetThread::interruptThread(){
 void DetThread::operator ()()
 {
     m_ThreadID = std::this_thread::get_id();
-    Logger::GetLogger()->setLogThread(LogThread::DETECTION_THRED, m_ThreadID);
+    Logger::Get().setLogThread(LogThread::DETECTION_THRED, m_ThreadID);
 
     mIsRunning = true;
     bool stopThread = false;

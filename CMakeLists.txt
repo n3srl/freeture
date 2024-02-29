@@ -247,6 +247,11 @@ set (CFITS_LIBARARIES
 
 
 
+#log4cpp
+
+set(Log4CPP_DIR "C:/local/log4cpp")
+set(Log4CPP_INCLUDE_DIRS "${Log4CPP_DIR}/include")
+set(Log4CPP_LIBARARY "${Log4CPP_DIR}/lib/log4cpp.lib")
 
 
 
@@ -366,8 +371,16 @@ set(SOURCES
 	src/ImgProcessing.h
 	src/LocalEvent.cpp
 	src/LocalEvent.h
-	src/Logger.cpp
+	
+	src/ILogger.h
 	src/Logger.h
+	src/Logger.cpp
+	src/Logger_Boost.h
+	src/Logger_Boost.cpp
+	src/Logger_Log4Cpp.h
+	src/Logger_Log4Cpp.cpp
+	src/Logger_Console.h
+
 	src/main.cpp
 	src/Mask.cpp
 	src/Mask.h
@@ -400,6 +413,7 @@ include_directories(
 	${Lucid_INCLUDE_DIRS}
 	${OpenSSL_INCLUDE_DIRS}
 	${CFITS_INCLUDE_DIRS}
+	${Log4CPP_INCLUDE_DIRS}
 	)
 
 add_executable(freeture ${SOURCES})
@@ -421,4 +435,5 @@ target_link_libraries (freeture
 	${OpenSSL_LIBARARIES}
 	${CFITS_LIBARARIES}
 	${Lucid_DLL}
+	${Log4CPP_LIBARARY}
 	)
