@@ -304,8 +304,16 @@ ELSE(${OperatingSystem} MATCHES "Windows")
 	#link_directories(${OPENSSL_LIBRARY_DIRS})
 	target_link_libraries(${EXE_NAME} ${ARENASDK_LIBRARIES})
 
-	
+	#log4cpp
+	message("> Searching log4cpp...")
+	find_package(log4cpp)
+	message ("log4cpp_FOUND : " ${log4cpp_FOUND})
+	message ("log4cpp_INCLUDE_DIR : " ${log4cpp_INCLUDE_DIRS})
+	message ("log4cpp_LIBRARIES : " ${log4cpp_LIBRARIES})
+	include_directories(${log4cpp_INCLUDE_DIRS})
+	target_link_libraries(${EXE_NAME} ${log4cpp_LIBRARIES})
 
+	
 	ENDIF(${OperatingSystem} MATCHES "Linux")
 ENDIF(${OperatingSystem} MATCHES "Windows")
 
