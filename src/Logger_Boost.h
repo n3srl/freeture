@@ -110,11 +110,13 @@ namespace freeture
     {
 
     public:
-        Logger_Boost(Logger*);
+        Logger_Boost(std::shared_ptr<Logger>);
 
         void init() override;
         void attach(LogThread, thread_id_type) override;
         void reset() override;
+        void flush(std::string message) override;
+        void apply() override {};
 
     private:
         std::string m_LogString = "%TimeStamp%;ThreadID: %ThreadID%;%Severity%;%Tag%; %Message%";

@@ -38,13 +38,13 @@ using namespace freeture;
 /// <param name="signum"></param>
 void Freeture::signalHandler(int signum)
 {
-    LOG_WARNING << "Freeture::signalHandler;" << "Received signal : " << signum;
+    LOG_WARNING << "Freeture::signalHandler;" << "Received signal : " << signum << endl;
     m_SigTermFlag = true;
 }
 
 void Freeture::handler(const boost::system::error_code& error, int signal_number)
 {
-    LOG_WARNING << "Freeture::signalHandler;" << "handling signal " << signal_number ;
+    LOG_WARNING << "Freeture::signalHandler;" << "handling signal " << signal_number << endl;
     m_SigTermFlag = true;
 }
 
@@ -142,14 +142,13 @@ void Freeture::selectMode( boost::program_options::variables_map& vm)
 
     if (m_CurrentRunMode == FreetureMode::UNKNOWN)
     {
-        LOG_INFO << "MODE " << m_FreetureCommandLineSettings.mode << " is not available. Correct modes are : " <<endl;
-        LOG_INFO << "[1] Check configuration file.";
-        LOG_INFO << "[2] Run continous acquisition.";
-        LOG_INFO << "[3] Run meteor detection.";
-        LOG_INFO << "[4] Run single capture.";
-        LOG_INFO << "[5] Clean logs.";
-
-        LOG_INFO << "Execute freeture command to see options." ;
+        LOG_INFO << "MODE " << m_FreetureCommandLineSettings.mode << " is not available. Correct modes are : " << endl;
+        LOG_INFO << "[1] Check configuration file." << endl;
+        LOG_INFO << "[2] Run continous acquisition." << endl;
+        LOG_INFO << "[3] Run meteor detection." << endl;
+        LOG_INFO << "[4] Run single capture." << endl;
+        LOG_INFO << "[5] Clean logs." << endl;
+        LOG_INFO << "Execute freeture command to see options." << endl;
     }
 }
 
@@ -158,7 +157,7 @@ void Freeture::selectMode( boost::program_options::variables_map& vm)
 /// </summary>
 void Freeture::printVersion()
 {
-    LOG_INFO << "Current version : " << string(VERSION) ;
+    LOG_INFO << "Current version : " << string(VERSION) << endl;
 }
 
 /// <summary>
@@ -166,7 +165,7 @@ void Freeture::printVersion()
 /// </summary>
 void Freeture::printHelp()
 {
-    LOG_INFO << *m_OptionsDescription;
+    LOG_INFO << *m_OptionsDescription << endl;
 }
 
 /// <summary>
@@ -262,7 +261,7 @@ void Freeture::fetchProgramOption()
     }
     catch(exception& e)
     {
-        LOG_ERROR << "Freeture::fetchProgramOption; "<<"Exception : " << e.what() ;
+        LOG_ERROR << "Freeture::fetchProgramOption; "<<"Exception : " << e.what() << endl;
         return;
     }
 
@@ -279,41 +278,41 @@ void Freeture::modeTest()
 {
     bool error = false;
 
-    LOG_INFO << "================================================";
-    LOG_INFO << "====== FREETURE - Test/Check configuration =====";
-    LOG_INFO << "================================================";
+    LOG_INFO << "================================================" << endl;
+    LOG_INFO << "====== FREETURE - Test/Check configuration =====" << endl;
+    LOG_INFO << "================================================" << endl;
 
     createDeviceManager();
 
 
     m_FreetureSettings->enableErrors = true;
 
-    LOG_INFO << "Testing configuration parameters...";
+    LOG_INFO << "Testing configuration parameters..." << endl;
 
     if (!m_FreetureSettings->allParamAreCorrect()) {
         error = true;
-        LOG_ERROR << "KO";
+        LOG_ERROR << "KO" << endl;
     }
     else
-        LOG_INFO << "OK";
+        LOG_INFO << "OK" << endl;
 
-    LOG_INFO << "SELECTING DEVICE, CAMERA_ID=" << m_FreetureSettings->getAllParam().DEVICE_ID << ", CAMERA_SERIAL=" << m_FreetureSettings->getAllParam().CAMERA_SERIAL << "...";
+    LOG_INFO << "SELECTING DEVICE, CAMERA_ID=" << m_FreetureSettings->getAllParam().DEVICE_ID << ", CAMERA_SERIAL=" << m_FreetureSettings->getAllParam().CAMERA_SERIAL << "..." << endl;
 
     if (!m_CameraDeviceManager->selectDevice(m_FreetureSettings->getAllParam()))
         throw runtime_error("Failed to select device.");
     else {
-        LOG_INFO << "OK";
+        LOG_INFO << "OK" << endl;
 
-        LOG_INFO << "Check input device configuration...";
+        LOG_INFO << "Check input device configuration..." << endl;
         if (!m_FreetureSettings->checkInputParam(m_CameraDeviceManager->getDevice()->getDeviceType()))
         {
             error = true;
-            LOG_ERROR << "KO";
+            LOG_ERROR << "KO" << endl;
         }
     }
 
     if (!error)
-        LOG_INFO << "OK";
+        LOG_INFO << "OK" << endl;
 }
 
 /// <summary>
@@ -324,9 +323,9 @@ void Freeture::modeTest()
 /// </summary>
 void Freeture::modeContinuousAcquisition()
 {
-    LOG_INFO << "================================================";
-    LOG_INFO << "========== FREETURE - Continuous mode ==========";
-    LOG_INFO << "================================================";
+    LOG_INFO << "================================================" << endl;
+    LOG_INFO << "========== FREETURE - Continuous mode ==========" << endl;
+    LOG_INFO << "================================================" << endl;
 
     createDeviceManager();
 
@@ -336,18 +335,18 @@ void Freeture::modeContinuousAcquisition()
     if (fstring == "")
         throw runtime_error(">> Pixel format specified not found.");
 
-    LOG_INFO << "------------------------------------------------";
-    LOG_INFO << "CAM ID    : " << m_FreetureCommandLineSettings.devID;
-    LOG_INFO << "FORMAT    : " << fstring;
-    LOG_INFO << "GAIN      : " << m_FreetureCommandLineSettings.gain;
-    LOG_INFO << "EXPOSURE  : " << m_FreetureCommandLineSettings.exp;
-    LOG_INFO << "------------------------------------------------";
+    LOG_INFO << "------------------------------------------------" << endl;
+    LOG_INFO << "CAM ID    : " << m_FreetureCommandLineSettings.devID << endl;
+    LOG_INFO << "FORMAT    : " << fstring << endl;
+    LOG_INFO << "GAIN      : " << m_FreetureCommandLineSettings.gain << endl;
+    LOG_INFO << "EXPOSURE  : " << m_FreetureCommandLineSettings.exp << endl;
+    LOG_INFO << "------------------------------------------------" << endl;
 
-    LOG_INFO << "SELECTING DEVICE, CAMERA_ID=" << m_FreetureSettings->getAllParam().DEVICE_ID << ", CAMERA_SERIAL=" << m_FreetureSettings->getAllParam().CAMERA_SERIAL << "...";
+    LOG_INFO << "SELECTING DEVICE, CAMERA_ID=" << m_FreetureSettings->getAllParam().DEVICE_ID << ", CAMERA_SERIAL=" << m_FreetureSettings->getAllParam().CAMERA_SERIAL << "..." << endl;
     if (!m_CameraDeviceManager->selectDevice(m_FreetureSettings->getAllParam()))
         throw runtime_error("Fail to select device.");
     else
-        LOG_INFO << "OK";
+        LOG_INFO << "OK" << endl;
 
     m_Device->setCameraSize(m_FreetureCommandLineSettings.startx, m_FreetureCommandLineSettings.starty, m_FreetureCommandLineSettings.acqWidth, m_FreetureCommandLineSettings.acqHeight);
 
@@ -371,7 +370,7 @@ void Freeture::modeContinuousAcquisition()
         double tacq = (double)cv::getTickCount();
         if (m_Device->runContinuousCapture(frame)) {
             tacq = (((double)cv::getTickCount() - tacq) / cv::getTickFrequency()) * 1000;
-            LOG_INFO << " >> [ TIME ACQ ] : " << tacq << " ms";
+            LOG_INFO << " >> [ TIME ACQ ] : " << tacq << " ms" << endl;
 
             if (m_FreetureCommandLineSettings.display) {
                 cv::imshow("FreeTure (ESC to stop)", *frame->Image.get());
@@ -407,9 +406,9 @@ void Freeture::modeMeteorDetection()
     boost::asio::signal_set signals(io_service, SIGINT);
     signals.async_wait(boost::bind(&Freeture::handler, this, boost::placeholders::_1, boost::placeholders::_2));
 
-    LOG_INFO << "================================================";
-    LOG_INFO << "======= FREETURE - Meteor detection mode =======";
-    LOG_INFO << "================================================";
+    LOG_INFO << "================================================" << endl;
+    LOG_INFO << "======= FREETURE - Meteor detection mode =======" << endl;
+    LOG_INFO << "================================================" << endl;
 
     createDeviceManager();
 
@@ -418,19 +417,19 @@ void Freeture::modeMeteorDetection()
     /// ------------------------------------------------------------------
 
     m_FreetureSettings->enableErrors = true;
-    LOG_INFO << "CHECKING FREETURE CONFIGURATOION...";
+    LOG_INFO << "CHECKING FREETURE CONFIGURATOION..." << endl;
 
     if (!m_FreetureSettings->allParamAreCorrect())
         throw runtime_error("Configuration file is not correct. Fail to launch detection mode.");
     else
-        LOG_INFO << "OK";
+        LOG_INFO << "OK" << endl;
 
-    LOG_INFO << "SELECTING DEVICE, CAMERA_ID=" << m_FreetureSettings->getAllParam().DEVICE_ID << ", CAMERA_SERIAL=" << m_FreetureSettings->getAllParam().CAMERA_SERIAL << "...";
+    LOG_INFO << "SELECTING DEVICE, CAMERA_ID=" << m_FreetureSettings->getAllParam().DEVICE_ID << ", CAMERA_SERIAL=" << m_FreetureSettings->getAllParam().CAMERA_SERIAL << "..." << endl;
 
     if (!m_CameraDeviceManager->selectDevice(m_FreetureSettings->getAllParam()))
         throw runtime_error("Failed to select device.");
     else
-        LOG_INFO << "OK";
+        LOG_INFO << "OK" << endl;
 
     /// ------------------------------------------------------------------
     /// ------------------------- SHARED RESSOURCES ----------------------
@@ -458,7 +457,7 @@ void Freeture::modeMeteorDetection()
 
         // Create detection thread.
         if (m_FreetureSettings->getDetParam().DET_ENABLED) {
-            LOG_INFO << "CREATE DETECTION THREAD...";
+            LOG_INFO << "CREATE DETECTION THREAD..." << endl;
 
             m_DetectionThread = std::make_shared<DetThread>(frameBuffer,
                 &frameBuffer_m,
@@ -471,14 +470,14 @@ void Freeture::modeMeteorDetection()
             if (!m_DetectionThread->startThread())
                 throw runtime_error("Fail to start detection thread.");
             else
-                LOG_INFO << "OK";
+                LOG_INFO << "OK" << endl;
         }
 
 
 
         // Create stack thread.
         if (m_FreetureSettings->getStackParam().STACK_ENABLED) {
-            LOG_INFO << "CREATE STACK THREAD....";
+            LOG_INFO << "CREATE STACK THREAD...." << endl;
 
             m_StackThread = std::make_shared< StackThread>(&signalStack,
                 &signalStack_m,
@@ -492,14 +491,14 @@ void Freeture::modeMeteorDetection()
             if (!m_StackThread->startThread())
                 throw runtime_error("Fail to start stack thread.");
             else {
-                LOG_INFO << "OK";
+                LOG_INFO << "OK" << endl;
 #ifdef LINUX
-                LOG_INFO << "This is the process ID : " << (unsigned long)getpid();
+                LOG_INFO << "This is the process ID : " << (unsigned long)getpid() << endl;
 #endif
             }
         }
 
-        LOG_INFO << "CREATE ACQUISITION THREAD...";
+        LOG_INFO << "CREATE ACQUISITION THREAD..." << endl;
         // Create acquisition thread.
         m_AcquisitionThread = std::make_shared<AcqThread>(frameBuffer,
             &frameBuffer_m,
@@ -521,10 +520,10 @@ void Freeture::modeMeteorDetection()
         }
         else
         {
-            LOG_INFO << "OK";
+            LOG_INFO << "OK" << endl;
 
 #ifdef LINUX
-            LOG_INFO << "This is the process ID : " << (unsigned long)getpid();
+            LOG_INFO << "This is the process ID : " << (unsigned long)getpid() << endl;
 #endif
 
             int cptTime = 0;
@@ -535,7 +534,7 @@ void Freeture::modeMeteorDetection()
             /// ------------------------------------------------------------------
             /// ----------------------------- MAIN LOOP --------------------------
             /// ------------------------------------------------------------------
-            LOG_INFO << "START MAIN LOOP... PRESS ESC TO ABORT";
+            LOG_INFO << "START MAIN LOOP... PRESS ESC TO ABORT" << endl;
 
             while (!m_SigTermFlag && !interruption)
             {
@@ -574,14 +573,14 @@ void Freeture::modeMeteorDetection()
 
                 if (m_DetectionThread != nullptr) {
                     if (!m_DetectionThread->getRunStatus()) {
-                        LOG_ERROR << "DetThread not running. Stopping the process ...";
+                        LOG_ERROR << "DetThread not running. Stopping the process ..." << endl;
                         break;
                     }
                 }
 
                 if (m_StackThread != nullptr) {
                     if (!m_StackThread->getRunStatus()) {
-                        LOG_ERROR << "StackThread not running. Stopping the process ...";
+                        LOG_ERROR << "StackThread not running. Stopping the process ..." << endl;
                         break;
                     }
                 }
@@ -590,12 +589,12 @@ void Freeture::modeMeteorDetection()
     }
     catch (exception& e) {
 
-        LOG_ERROR << e.what();
+        LOG_ERROR << e.what() << endl;
 
     }
     catch (const char* msg) {
 
-        LOG_ERROR << msg;
+        LOG_ERROR << msg << endl;
 
     }
 
@@ -621,9 +620,9 @@ void Freeture::modeMeteorDetection()
 /// </summary>
 void Freeture::modeSingleAcquisition()
 {
-    LOG_INFO << "================================================";
-    LOG_INFO << "======== FREETURE - Single acquisition =========";
-    LOG_INFO << "================================================";
+    LOG_INFO << "================================================" << endl;
+    LOG_INFO << "======== FREETURE - Single acquisition =========" << endl;
+    LOG_INFO << "================================================" << endl;
 
     createDeviceManager();
 
@@ -632,18 +631,18 @@ void Freeture::modeSingleAcquisition()
     if (fstring == "")
         throw runtime_error(">> Pixel format specified not found.");
 
-    LOG_INFO << "------------------------------------------------";
-    LOG_INFO << "CAM ID    : " << m_FreetureCommandLineSettings.devID;
-    LOG_INFO << "FORMAT    : " << fstring;
-    LOG_INFO << "GAIN      : " << m_FreetureCommandLineSettings.gain;
-    LOG_INFO << "EXPOSURE  : " << m_FreetureCommandLineSettings.exp;
+    LOG_INFO << "------------------------------------------------" << endl;
+    LOG_INFO << "CAM ID    : " << m_FreetureCommandLineSettings.devID << endl;
+    LOG_INFO << "FORMAT    : " << fstring << endl;
+    LOG_INFO << "GAIN      : " << m_FreetureCommandLineSettings.gain << endl;
+    LOG_INFO << "EXPOSURE  : " << m_FreetureCommandLineSettings.exp << endl;
 
     if (m_FreetureCommandLineSettings.acqWidth > 0 && m_FreetureCommandLineSettings.acqHeight > 0) LOG_INFO << "SIZE      : " << m_FreetureCommandLineSettings.acqWidth << "x" << m_FreetureCommandLineSettings.acqHeight;
     if (m_FreetureCommandLineSettings.startx > 0 || m_FreetureCommandLineSettings.starty > 0) LOG_INFO << "START X,Y : " << m_FreetureCommandLineSettings.startx << "," << m_FreetureCommandLineSettings.starty;
 
-    LOG_INFO << "SAVE PATH : " << m_FreetureCommandLineSettings.savePath;
-    LOG_INFO << "FILENAME  : " << m_FreetureCommandLineSettings.fileName;
-    LOG_INFO << "------------------------------------------------";
+    LOG_INFO << "SAVE PATH : " << m_FreetureCommandLineSettings.savePath << endl;
+    LOG_INFO << "FILENAME  : " << m_FreetureCommandLineSettings.fileName << endl;
+    LOG_INFO << "------------------------------------------------" << endl;
 
     /// ------------------------------------------------------------------
     /// ----------------------- MANAGE FILE NAME -------------------------
@@ -701,10 +700,10 @@ void Freeture::modeSingleAcquisition()
     frame->mHeight = m_FreetureCommandLineSettings.acqHeight != 0 ? m_FreetureCommandLineSettings.acqHeight : m_FreetureSettings->getCamParam().ACQ_HEIGHT;
     frame->mWidth = m_FreetureCommandLineSettings.acqWidth != 0 ? m_FreetureCommandLineSettings.acqWidth : m_FreetureSettings->getCamParam().ACQ_WIDTH;
 
-    LOG_INFO << "++++++++++++++++++++++++++ startx " << frame->mStartX;
-    LOG_INFO << "++++++++++++++++++++++++++ starty " << frame->mStartY;
-    LOG_INFO << "++++++++++++++++++++++++++ acqHeight " << frame->mHeight;
-    LOG_INFO << "++++++++++++++++++++++++++ acqWidth " << frame->mWidth;
+    LOG_INFO << "++++++++++++++++++++++++++ startx " << frame->mStartX << endl;
+    LOG_INFO << "++++++++++++++++++++++++++ starty " << frame->mStartY << endl;
+    LOG_INFO << "++++++++++++++++++++++++++ acqHeight " << frame->mHeight << endl;
+    LOG_INFO << "++++++++++++++++++++++++++ acqWidth " << frame->mWidth << endl;
 
     m_Device->setCameraGain(m_FreetureCommandLineSettings.gain);
     m_Device->setCameraExposureTime(m_FreetureCommandLineSettings.exp);
@@ -714,7 +713,7 @@ void Freeture::modeSingleAcquisition()
     }
 
 
-    LOG_INFO << ">> Single capture succeed.";
+    LOG_INFO << ">> Single capture succeed." << endl;
 
     /// ------------------------------------------------------------------
     /// ------------------- SAVE / DISPLAY CAPTURE -----------------------
@@ -725,7 +724,7 @@ void Freeture::modeSingleAcquisition()
         // Save the frame in BMP.
         if (m_FreetureCommandLineSettings.bmp) {
 
-            LOG_INFO << ">> Saving bmp file ...";
+            LOG_INFO << ">> Saving bmp file ..." << endl;
 
             cv::Mat temp1, newMat;
             frame->Image->copyTo(temp1);
@@ -739,14 +738,14 @@ void Freeture::modeSingleAcquisition()
             }
 
             SaveImg::saveBMP(newMat, m_FreetureCommandLineSettings.savePath + m_FreetureCommandLineSettings.fileName + "-" + Conversion::intToString(filenum));
-            LOG_INFO << ">> Bmp saved : " << m_FreetureCommandLineSettings.savePath << m_FreetureCommandLineSettings.fileName << "-" << Conversion::intToString(filenum) << ".bmp";
+            LOG_INFO << ">> Bmp saved : " << m_FreetureCommandLineSettings.savePath << m_FreetureCommandLineSettings.fileName << "-" << Conversion::intToString(filenum) << ".bmp" << endl;
 
         }
 
         // Save the frame in Fits 2D.
         if (m_FreetureCommandLineSettings.fits) {
 
-            LOG_INFO << ">> Saving fits file ...";
+            LOG_INFO << ">> Saving fits file ..." << endl;
 
             Fits fh;
             bool useCfg = false;
@@ -776,12 +775,12 @@ void Freeture::modeSingleAcquisition()
             if (frame->mFormat == CamPixFmt::MONO12) {
                 // Create FITS image with BITPIX = SHORT_IMG (16-bits signed integers), pixel with TSHORT (signed short)
                 if (newFits.writeFits(frame->Image, S16, m_FreetureCommandLineSettings.fileName + "-" + Conversion::intToString(filenum)))
-                    LOG_INFO << ">> Fits saved in : " << m_FreetureCommandLineSettings.savePath << m_FreetureCommandLineSettings.fileName << "-" << Conversion::intToString(filenum) << ".fit";
+                    LOG_INFO << ">> Fits saved in : " << m_FreetureCommandLineSettings.savePath << m_FreetureCommandLineSettings.fileName << "-" << Conversion::intToString(filenum) << ".fit" << endl;
             }
             else {
                 // Create FITS image with BITPIX = BYTE_IMG (8-bits unsigned integers), pixel with TBYTE (8-bit unsigned byte)
                 if (newFits.writeFits(frame->Image, UC8, m_FreetureCommandLineSettings.fileName + "-" + Conversion::intToString(filenum)))
-                    LOG_INFO << ">> Fits saved in : " << m_FreetureCommandLineSettings.savePath << m_FreetureCommandLineSettings.fileName << "-" << Conversion::intToString(filenum) << ".fit";
+                    LOG_INFO << ">> Fits saved in : " << m_FreetureCommandLineSettings.savePath << m_FreetureCommandLineSettings.fileName << "-" << Conversion::intToString(filenum) << ".fit" << endl;
 
             }
 
@@ -811,7 +810,7 @@ void Freeture::modeSingleAcquisition()
         // Display the frame in an opencv window
         if (m_FreetureCommandLineSettings.display) {
 
-            LOG_INFO << ">> Display single capture.";
+            LOG_INFO << ">> Display single capture." << endl;
 
             cv::Mat temp, temp1;
             frame->Image->copyTo(temp1);
@@ -841,18 +840,18 @@ void Freeture::modeSingleAcquisition()
 /// </summary>
 void Freeture::modeCleanLogs()
 {
-    LOG_INFO << "================================================";
-    LOG_INFO << "======== FREETURE - Clean logs         =========";
-    LOG_INFO << "================================================" ;
+    LOG_INFO << "================================================" << endl;
+    LOG_INFO << "======== FREETURE - Clean logs         =========" << endl;
+    LOG_INFO << "================================================" << endl;
 
     // Simply remove all log directory contents.
     boost::filesystem::path p(m_FreetureSettings->getLogParam().LOG_PATH);
 
     if(boost::filesystem::exists(p)){
         boost::filesystem::remove_all(p);
-        LOG_INFO << "Clean log completed." ;
+        LOG_INFO << "Clean log completed." << endl;
     }else {
-        LOG_INFO << "Log directory not found." ;
+        LOG_INFO << "Log directory not found." << endl;
     }
 }
 
@@ -868,24 +867,24 @@ void Freeture::Run()
 
         fetchProgramOption();
 
-        m_Logger = make_shared<Logger>(LogThread::FREETURE_THREAD, m_ThreadID, m_FreetureSettings->getLogParam().LOG_PATH, m_FreetureSettings->getLogParam().LOG_ARCHIVE_DAY, m_FreetureSettings->getLogParam().LOG_SIZE_LIMIT, m_FreetureSettings->getLogParam().LOG_SEVERITY);
+        m_Logger = Logger::Get(LogThread::FREETURE_THREAD, m_ThreadID, m_FreetureSettings->getLogParam().LOG_PATH, m_FreetureSettings->getLogParam().LOG_ARCHIVE_DAY, m_FreetureSettings->getLogParam().LOG_SIZE_LIMIT, m_FreetureSettings->getLogParam().LOG_SEVERITY);
         m_Logger->setLogThread(LogThread::FREETURE_THREAD, m_ThreadID);
 
-        LOG_INFO << "================================================" ;
-        LOG_INFO << "======        FREETURE - " << VERSION << "           ======= " ;
-        LOG_INFO << "================================================" ;
+        LOG_INFO << "================================================" << endl;
+        LOG_INFO << "======        FREETURE - " << VERSION << "           ======= " << endl;
+        LOG_INFO << "================================================" << endl;
 
 
         EParser<FreetureMode> mode_parser;
         string mode_string = mode_parser.getStringEnum(m_CurrentRunMode);
-        LOG_INFO << "FREETURE RUNNING MODE:\t" << mode_string;
+        LOG_INFO << "FREETURE RUNNING MODE:\t" << mode_string << endl;
 
         EParser<LogSeverityLevel> sev_parser;
         string sev_string = sev_parser.getStringEnum(m_FreetureSettings->getLogParam().LOG_SEVERITY);
-        LOG_INFO << "LOGGING MODE\t\t: " << sev_string;
-        LOG_INFO << "LOG PATH\t\t\t: " << m_FreetureSettings->getLogParam().LOG_PATH;
-        LOG_INFO << "LOG ARCHIVE\t\t: " << m_FreetureSettings->getLogParam().LOG_ARCHIVE_DAY<<"[days]";
-        LOG_INFO << "LOG SIZE LIMIT\t\t: " << m_FreetureSettings->getLogParam().LOG_SIZE_LIMIT << "[MB]";
+        LOG_INFO << "LOGGING MODE\t\t: " << sev_string << endl;
+        LOG_INFO << "LOG PATH\t\t\t: " << m_FreetureSettings->getLogParam().LOG_PATH << endl;
+        LOG_INFO << "LOG ARCHIVE\t\t: " << m_FreetureSettings->getLogParam().LOG_ARCHIVE_DAY<<"[days]" << endl;
+        LOG_INFO << "LOG SIZE LIMIT\t\t: " << m_FreetureSettings->getLogParam().LOG_SIZE_LIMIT << "[MB]" << endl;
 
 
 
@@ -939,10 +938,10 @@ void Freeture::Run()
         }
     }
     catch (exception& e) {
-        LOG_ERROR << e.what();
+        LOG_ERROR << e.what() << endl;
     }
     catch (...) {
-        LOG_ERROR << "An error occured.";
+        LOG_ERROR << "An error occured." << endl;
     }
 }
 
@@ -958,7 +957,7 @@ void Freeture::createDeviceManager()
     case FreetureMode::METEOR_DETECTION:
     case FreetureMode::SINGLE_ACQUISITION:
 
-        LOG_INFO << "SCANNING DEVICES...";
+        LOG_INFO << "SCANNING DEVICES..." << endl;
         m_CameraDeviceManager = CameraDeviceManager::Get();
 
         size_t device_count = m_CameraDeviceManager->getDeviceCount();
@@ -968,9 +967,9 @@ void Freeture::createDeviceManager()
         }
 
         if (device_count != 1)
-            LOG_INFO << "FOUND " << device_count << " DEVICES!";
+            LOG_INFO << "FOUND " << device_count << " DEVICES!" << endl;
         else
-            LOG_INFO << "FOUND " << device_count << " DEVICE!";
+            LOG_INFO << "FOUND " << device_count << " DEVICE!" << endl;
 
         m_Device = m_CameraDeviceManager->getDevice();
         return;

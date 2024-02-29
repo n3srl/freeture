@@ -130,14 +130,14 @@ DetThread::~DetThread(void){
 
     if(pDetMthd != NULL){
 
-        LOG_INFO << "Remove pDetMthd instance.";
+        LOG_INFO << "Remove pDetMthd instance." << endl;
         delete pDetMthd;
 
     }
 
     if (pThread!=NULL){
 
-        LOG_INFO<< "Remove detThread instance.";
+        LOG_INFO<< "Remove detThread instance." << endl;
         delete pThread;
 
     }
@@ -145,7 +145,7 @@ DetThread::~DetThread(void){
 
 bool DetThread::startThread(){
 
-    LOG_INFO<< "Creating detThread...";
+    LOG_INFO<< "Creating detThread..." << endl;
     pThread = new boost::thread(boost::ref(*this));
 
     return true;
@@ -153,7 +153,7 @@ bool DetThread::startThread(){
 
 void DetThread::stopThread(){
 
-    LOG_DEBUG << "DetThread::stopThread";
+    LOG_DEBUG << "DetThread::stopThread" << endl;
 
     // Signal the thread to stop (thread-safe)
     mMustStopMutex.lock();
@@ -163,7 +163,7 @@ void DetThread::stopThread(){
     // Wait for the thread to finish.
     while(pThread->timed_join(pt::seconds(2)) == false){
 
-        LOG_INFO << "Interrupting detThread...";
+        LOG_INFO << "Interrupting detThread..." << endl;
         pThread->interrupt();
     }
 }
@@ -182,10 +182,10 @@ void DetThread::interruptThread(){
 
 }
 
-void DetThread::operator ()()
+void DetThread::operator()()
 {
     m_ThreadID = std::this_thread::get_id();
-    Logger::Get().setLogThread(LogThread::DETECTION_THRED, m_ThreadID);
+    Logger::Get()->setLogThread(LogThread::DETECTION_THRED, m_ThreadID);
 
     mIsRunning = true;
     bool stopThread = false;
@@ -195,10 +195,9 @@ void DetThread::operator ()()
     // Reference date to count time to complete an event.
     string refDate;
 
-    LOG_INFO << "\n";
-    LOG_INFO << "==============================================";
-    LOG_INFO << "=========== Start detection thread ===========";
-    LOG_INFO << "==============================================";
+    LOG_INFO << "==============================================" << endl;
+    LOG_INFO << "=========== Start detection thread ===========" << endl;
+    LOG_INFO << "==============================================" << endl;
     string errorWhen = "NO";
     /// Thread loop.
     try{
@@ -209,7 +208,7 @@ void DetThread::operator ()()
                 
                 /// Wait new frame from AcqThread.
                 if (LOG_SPAM_FRAME_STATUS)
-                    LOG_DEBUG << "operator();" << "This is DETECTION THREAD waiting ACQUISTION THREAD for a new frame.";
+                    LOG_DEBUG << "operator();" << "This is DETECTION THREAD waiting ACQUISTION THREAD for a new frame." << endl;
 
                 boost::mutex::scoped_lock lock(*detSignal_mutex);
                 while (!(*detSignal)) detSignal_condition->wait(lock);
@@ -220,8 +219,8 @@ void DetThread::operator ()()
                 mForceToReset = false;
                 mInterruptionStatusMutex.lock();
                 if(mInterruptionStatus) {
-                    LOG_INFO<< "Interruption status : " << mInterruptionStatus;
-                    LOG_INFO<< "-> reset forced on detection method.";
+                    LOG_INFO<< "Interruption status : " << mInterruptionStatus << endl;
+                    LOG_INFO<< "-> reset forced on detection method." << endl;
                     mForceToReset = true;
                 }
                 mInterruptionStatusMutex.unlock();
@@ -262,7 +261,7 @@ void DetThread::operator ()()
                         }
                         } catch (exception& e)
                         {
-                            LOG_INFO<< "Frame is not valid" << e.what();
+                            LOG_INFO<< "Frame is not valid" << e.what() << endl;
                            
                         }
                         

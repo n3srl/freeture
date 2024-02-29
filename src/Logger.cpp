@@ -6,8 +6,9 @@
 using namespace std;
 using namespace freeture;
 
-ILogger* Logger::m_Instance;
-Logger* Logger::m_LoggerInstance;
+shared_ptr<ILogger> Logger::m_Instance;
+shared_ptr<Logger> Logger::m_LoggerInstance;
+mutex Logger::m_LoggerInstanceMutex;
 
 // src::sever
 Logger::Logger(LogThread thread, thread_id_type thread_id, std::string log_path_folder, int log_archive_days, int log_archive_limit_mb, LogSeverityLevel log_severity) :
@@ -17,19 +18,20 @@ Logger::Logger(LogThread thread, thread_id_type thread_id, std::string log_path_
     m_LogSeverityLevel(log_severity),
     m_LogMap()
 {
-    m_LoggerInstance = this;
-   
     if (m_Instance == nullptr) {
-
-
         if (USE_BOOST_LOG)
         {
-            m_Instance = new Logger_Boost(m_LoggerInstance);
+            m_Instance = make_shared<Logger_Boost>(m_LoggerInstance);
         }
         else
         {
-            m_Instance = new Logger_Log4Cpp(m_LoggerInstance);
+            m_Instance = make_shared<Logger_Log4Cpp>(m_LoggerInstance);
         }
+    }
+
+    if (m_Instance->logger == nullptr)
+    {
+        m_Instance->logger = m_LoggerInstance;
     }
 
     m_Instance->init();
@@ -60,20 +62,21 @@ string Logger::getThreadId()
 
 ILogger& Logger::GetLogger(LogSeverityLevel level)
 {
+
     if (m_Instance == nullptr)
     {
         if (USE_BOOST_LOG)
         {
-            m_Instance = new Logger_Boost(m_LoggerInstance);
+            m_Instance = make_shared<Logger_Boost>(m_LoggerInstance);
         }
         else
         {
-            m_Instance = new Logger_Log4Cpp(m_LoggerInstance);
+            m_Instance = make_shared<Logger_Log4Cpp>(m_LoggerInstance);
         }
     }
 
     m_Instance->level(level);
-    return *m_Instance;
+    return *m_Instance.get();
 }
 
 void Logger::setLogThread(LogThread log_thread, thread_id_type thread_id, bool reset_logger)
@@ -97,12 +100,32 @@ void Logger::setLogThread(LogThread log_thread, thread_id_type thread_id, bool r
 
 Logger::~Logger()
 {
-    delete m_Instance;
 }
 
-Logger& Logger::Get()
+shared_ptr<Logger> Logger::Get()
 {
-    return *m_LoggerInstance;
+    if (!m_LoggerInstance)
+        throw runtime_error("Logger is not initialized");
+
+    return m_LoggerInstance;
+}
+
+shared_ptr<Logger> Logger::Get(LogThread log_thread, thread_id_type thread_id, string log_path_folder, int log_archive_days, int log_archive_limit_mb, LogSeverityLevel log_severity)
+{
+    std::lock_guard<std::mutex> lock(m_LoggerInstanceMutex);
+
+    if (!m_LoggerInstance)
+    {
+        m_LoggerInstance = std::shared_ptr<Logger>(new Logger(log_thread, thread_id, log_path_folder, log_archive_days, log_archive_limit_mb, log_severity));
+    }
+    
+    if (m_Instance->logger == nullptr)
+    {
+        m_Instance->logger = m_LoggerInstance;
+        m_Instance->init();
+    }
+
+    return m_LoggerInstance;
 }
 
 freeture::LogSeverityLevel Logger::getLogSeverityLevel()
@@ -123,4 +146,18 @@ int Logger::getLogArchiveLimitMB()
 std::string Logger::getLogPathFolder()
 {
     return m_LogPathFolder;
+}
+
+LogThread Logger::getLogThread(thread_id_type thread_id)
+{
+    std::ostringstream oss;
+    oss << thread_id;
+    std::string threadIdStr = oss.str();
+    for (const auto& pair : m_LogMap) {
+        if (pair.second == threadIdStr) {
+            return pair.first;
+        }
+    }
+
+    return LogThread::UNDEFINED;
 }

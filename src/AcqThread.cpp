@@ -185,7 +185,7 @@ AcqThread::~AcqThread(void){
 }
 
 void AcqThread::stopThread(){
-    LOG_DEBUG << "AcqThread::stopThread";
+    LOG_DEBUG << "AcqThread::stopThread" << endl;
 
     mMustStopMutex.lock();
     mMustStop = true;
@@ -200,16 +200,16 @@ void AcqThread::stopThread(){
 bool AcqThread::setCameraSingleFrameMode(EAcquisitionMode mode)
 {
 
-    LOG_DEBUG << "AcqThread::setCameraSingleMode";
+    LOG_DEBUG << "AcqThread::setCameraSingleMode" << endl;
     if (m_Device->isStreaming())
         m_Device->stopCamera();
 
     m_Device->Setup(m_CameraParam, m_FramesParam, m_VideoParam);
 
-    LOG_DEBUG << "AcqThread::setCameraSingleMode;" << "Prepare single-frame acquisition.";
+    LOG_DEBUG << "AcqThread::setCameraSingleMode;" << "Prepare single-frame acquisition." << endl;
 
     if (!prepareAcquisitionOnDevice(mode)) {
-        LOG_DEBUG << "FAIL ON PREPARE AQ DEVICE";
+        LOG_DEBUG << "FAIL ON PREPARE AQ DEVICE" << endl;
         return false;
     }
 
@@ -225,7 +225,7 @@ bool AcqThread::setCameraSingleFrameMode(EAcquisitionMode mode)
 /// <returns></returns>
 bool AcqThread::setCameraInContinousMode()
 {
-    LOG_DEBUG << "AcqThread::setCameraInContinousMode";
+    LOG_DEBUG << "AcqThread::setCameraInContinousMode" << endl;
 
     if (m_Device->isStreaming())
         m_Device->stopCamera();
@@ -233,7 +233,7 @@ bool AcqThread::setCameraInContinousMode()
     m_Device->Setup(m_CameraParam, m_FramesParam, m_VideoParam);
 
     if(!prepareAcquisitionOnDevice(EAcquisitionMode::CONTINUOUS)) {
-        LOG_DEBUG << "FAIL ON PREPARE AQ DEVICE";
+        LOG_DEBUG << "FAIL ON PREPARE AQ DEVICE" << endl;
         return false;
     }
 
@@ -244,7 +244,7 @@ bool AcqThread::setCameraInContinousMode()
 
 bool AcqThread::startThread()
 {
-    LOG_DEBUG << "AcqThread::startThread";
+    LOG_DEBUG << "AcqThread::startThread" << endl;
     
     // Create acquisition thread.
     mThread = new boost::thread(boost::ref(*this));
@@ -260,7 +260,7 @@ bool AcqThread::getThreadStatus(){
 void AcqThread::startDetectionThread() 
 {
     if (pDetection != nullptr) {
-        LOG_DEBUG << "AcqThread::startDetectionThread; DETECTION THREAD START SIGNAL";
+        LOG_DEBUG << "AcqThread::startDetectionThread; DETECTION THREAD START SIGNAL" << endl;
         boost::mutex::scoped_lock lock2(*detSignal_mutex);
         *detSignal = true;
         detSignal_condition->notify_one();
@@ -272,14 +272,14 @@ void AcqThread::startDetectionThread()
 void AcqThread::stopDetectionThread()
 {
     if ( pDetection != nullptr ) {
-        LOG_DEBUG << "AcqThread::stopDetectionThread; DETECTION THREAD STOP SIGNAL";
+        LOG_DEBUG << "AcqThread::stopDetectionThread; DETECTION THREAD STOP SIGNAL" << endl;
 
         boost::mutex::scoped_lock lock(*detSignal_mutex);
         *detSignal = false;
         lock.unlock();
         
         // Force interruption.
-        LOG_DEBUG << "AcqThread::stopDetectionThread;" << "Sending interruption signal to detection process... ";
+        LOG_DEBUG << "AcqThread::stopDetectionThread;" << "Sending interruption signal to detection process... " << endl;
         pDetection->interruptThread();
     }
 }
@@ -288,7 +288,7 @@ void AcqThread::startStackThread()
 {
     if (pStack != nullptr)
     {
-        LOG_DEBUG << "AcqThread::startStackThread; STACK THREAD START SIGNAL";
+        LOG_DEBUG << "AcqThread::startStackThread; STACK THREAD START SIGNAL" << endl;
 
         boost::mutex::scoped_lock lock3(*stackSignal_mutex);
         *stackSignal = true;
@@ -302,21 +302,21 @@ void AcqThread::stopStackThread()
 {
     if (pStack != nullptr)
     {
-        LOG_DEBUG << "AcqThread::stopStackThread; STACK THREAD STOP SIGNAL";
+        LOG_DEBUG << "AcqThread::stopStackThread; STACK THREAD STOP SIGNAL" << endl;
 
         boost::mutex::scoped_lock lock(*stackSignal_mutex);
         *stackSignal = false;
         lock.unlock();
 
         // Force interruption.
-        LOG_DEBUG <<"AcqThread::stopStackThread;" << "Send interruption signal to stack ";
+        LOG_DEBUG <<"AcqThread::stopStackThread;" << "Send interruption signal to stack " << endl;
         pStack->interruptThread();
     }
 }
 
 void AcqThread::resetFrameBuffer()
 {
-    LOG_DEBUG << "AcqThread::resetFrameBuffer;" << "Cleaning frameBuffer...";
+    LOG_DEBUG << "AcqThread::resetFrameBuffer;" << "Cleaning frameBuffer..." << endl;
     boost::mutex::scoped_lock lock(*frameBuffer_mutex);
 
     frameBuffer.clear();
@@ -333,14 +333,14 @@ void AcqThread::operator()()
     // Obtain the attribute_value which holds the thread ID
     m_ThreadID = std::this_thread::get_id();
 
-    Logger::Get().setLogThread(LogThread::ACQUISITION_THREAD, m_ThreadID, true);
+    Logger::Get()->setLogThread(LogThread::ACQUISITION_THREAD, m_ThreadID, true);
 
     bool stop = false;
 
 
-    LOG_INFO << "AcqThread::operator();" << "==============================================";
-    LOG_INFO << "AcqThread::operator();" << "========== START ACQUISITION THREAD ==========";
-    LOG_INFO << "AcqThread::operator();" << "==============================================";
+    LOG_INFO << "AcqThread::operator();" << "==============================================" << endl;
+    LOG_INFO << "AcqThread::operator();" << "========== START ACQUISITION THREAD ==========" << endl;
+    LOG_INFO << "AcqThread::operator();" << "==============================================" << endl;
 
     try {
         // Search next acquisition according to the current time.
@@ -365,7 +365,7 @@ void AcqThread::operator()()
 
         previousTimeMode = getTimeMode(getNowInSeconds());
        
-        LOG_INFO << "CURRENT TIME MODE: " << time_mode_parser.getStringEnum(previousTimeMode);
+        LOG_INFO << "CURRENT TIME MODE: " << time_mode_parser.getStringEnum(previousTimeMode) << endl;
         //Initialize low frequency parameters
         m_CurrentCameraSettings.StartX = m_CameraParam.ACQ_STARTX;
         m_CurrentCameraSettings.StartY = m_CameraParam.ACQ_STARTY;
@@ -437,7 +437,7 @@ void AcqThread::operator()()
                 // If the date has changed, sun ephemeris must be updated.
                 if (m_PreviousThreadLoopTime.date() != boost::posix_time::microsec_clock::universal_time().date())
                 {
-                    LOG_INFO << "AcqThread::operator();" << "Date has changed. Former Date is " << m_PreviousThreadLoopTime.date() << ". New Date is " << m_CurrentThreadLoopTime.date() << ".";
+                    LOG_INFO << "AcqThread::operator();" << "Date has changed. Former Date is " << m_PreviousThreadLoopTime.date() << ". New Date is " << m_CurrentThreadLoopTime.date() << "." << endl;
                     computeSunTimes();
                 }
 
@@ -501,39 +501,39 @@ void AcqThread::operator()()
 
     }
     catch (const boost::thread_interrupted&) {
-        LOG_WARNING << "AcqThread::operator();" << "AcqThread ended.";
+        LOG_WARNING << "AcqThread::operator();" << "AcqThread ended." << endl;
     }
     catch (exception& e) {
-        LOG_ERROR << "AcqThread::operator();" << "An exception occured : " << e.what();
+        LOG_ERROR << "AcqThread::operator();" << "An exception occured : " << e.what() << endl;
     }
     catch (const char* msg) {
-        LOG_ERROR << "AcqThread::operator();" << msg;
+        LOG_ERROR << "AcqThread::operator();" << msg << endl;
     }
 
     m_Device->stopCamera();
 
     mThreadTerminated = true;
 
-    LOG_INFO << "AcqThread::operator();" << "Acquisition Thread TERMINATED";
+    LOG_INFO << "AcqThread::operator();" << "Acquisition Thread TERMINATED" << endl;
 }
 
 
 void  AcqThread::runScheduledAcquisition(TimeDate::Date mDate) {
-    LOG_INFO << "AcqThread::runScheduledAcquisition;\t\t" << "Run scheduled acquisition.";
+    LOG_INFO << "AcqThread::runScheduledAcquisition;\t\t" << "Run scheduled acquisition." << endl;
     m_RunnedScheduledAcquisition = true;
     //reset framebuffer because time passed, free memory
-    LOG_DEBUG << "AcqThread::runScheduledAcquisition;\t\t" << "Reset frame buffer";
+    LOG_DEBUG << "AcqThread::runScheduledAcquisition;\t\t" << "Reset frame buffer" << endl;
     resetFrameBuffer();
 
     CamPixFmt format;
     format = mNextAcq.fmt;
 
     if (m_CurrentAcquisitionMode != EAcquisitionMode::SCHEDULED) {
-        LOG_INFO << "AcqThread::runScheduledAcquisition;\t\t" << "Setting single-frame mode";
+        LOG_INFO << "AcqThread::runScheduledAcquisition;\t\t" << "Setting single-frame mode" << endl;
         setCameraSingleFrameMode(EAcquisitionMode::SCHEDULED);
     }
 
-    LOG_INFO << "AcqThread::runScheduledAcquisition;\t\t" << "Taking shot";
+    LOG_INFO << "AcqThread::runScheduledAcquisition;\t\t" << "Taking shot" << endl;
     runImageCapture(EAcquisitionMode::SCHEDULED,
         mNextAcq.rep,
         m_CameraParam.schcap.ACQ_SCHEDULE_OUTPUT,
@@ -550,18 +550,18 @@ void  AcqThread::runScheduledAcquisition(TimeDate::Date mDate) {
 
 void  AcqThread::runRegularAcquisition()
 {
-    LOG_INFO << "AcqThread::runRegularAcquisition;\t\t" << "Run regular acquisition.";
+    LOG_INFO << "AcqThread::runRegularAcquisition;\t\t" << "Run regular acquisition." << endl;
     m_RunnedRegularAcquisition = true;
     //reset framebuffer because time passed, free memory
-    LOG_DEBUG << "AcqThread::runRegularAcquisition;\t\t" << "Reset frame buffer";
+    LOG_DEBUG << "AcqThread::runRegularAcquisition;\t\t" << "Reset frame buffer" << endl;
     resetFrameBuffer();
 
     if (m_CurrentAcquisitionMode != EAcquisitionMode::REGULAR) {
-        LOG_INFO << "AcqThread::runRegularAcquisition;\t\t" << "Setting single-frame mode";
+        LOG_INFO << "AcqThread::runRegularAcquisition;\t\t" << "Setting single-frame mode" << endl;
         setCameraSingleFrameMode(EAcquisitionMode::REGULAR);
     }
 
-    LOG_INFO << "AcqThread::runRegularAcquisition;\t\t" "Taking shot";
+    LOG_INFO << "AcqThread::runRegularAcquisition;\t\t" "Taking shot" << endl;
     runImageCapture(EAcquisitionMode::REGULAR,
         m_CameraParam.regcap.ACQ_REGULAR_CFG.rep,
         m_CameraParam.regcap.ACQ_REGULAR_OUTPUT,
@@ -571,7 +571,7 @@ void  AcqThread::runRegularAcquisition()
 
 
 void AcqThread::selectNextAcquisitionSchedule(TimeDate::Date date) {
-    LOG_DEBUG << "AcqThread::selectNextAcquisitionSchedule";
+    LOG_DEBUG << "AcqThread::selectNextAcquisitionSchedule" << endl;
 
     if(m_CameraParam.schcap.ACQ_SCHEDULE.size() != 0){
 
@@ -617,7 +617,7 @@ bool AcqThread::buildAcquisitionDirectory(string YYYYMMDD){
     string finalPath = root + subDir;
 
     mOutputDataPath = finalPath;
-    LOG_INFO << "AcqThread::buildAcquisitionDirectory;\t\t" << "CompleteDataPath : " << mOutputDataPath;
+    LOG_INFO << "AcqThread::buildAcquisitionDirectory;\t\t" << "CompleteDataPath : " << mOutputDataPath << endl;
 
     path p(m_DataParam.DATA_PATH);
     path p1(root);
@@ -635,13 +635,13 @@ bool AcqThread::buildAcquisitionDirectory(string YYYYMMDD){
                 // If fail to create DATA_PATH/STATION_YYYYMMDD/captures/
                 if(!fs::create_directory(p2)){
 
-                    LOG_ERROR << "AcqThread::buildAcquisitionDirectory;\t\t" << "Unable to create captures directory : " << p2.string();
+                    LOG_ERROR << "AcqThread::buildAcquisitionDirectory;\t\t" << "Unable to create captures directory : " << p2.string() << endl;
                     return false;
 
                 // If success to create DATA_PATH/STATION_YYYYMMDD/captures/
                 }else{
 
-                    LOG_INFO << "AcqThread::buildAcquisitionDirectory;\t\t" << "Success to create captures directory : " << p2.string();
+                    LOG_INFO << "AcqThread::buildAcquisitionDirectory;\t\t" << "Success to create captures directory : " << p2.string() << endl;
                    return true;
 
                 }
@@ -653,24 +653,24 @@ bool AcqThread::buildAcquisitionDirectory(string YYYYMMDD){
             // If fail to create DATA_PATH/STATION_YYYYMMDD/
             if(!fs::create_directory(p1)){
 
-               LOG_ERROR << "AcqThread::buildAcquisitionDirectory;\t\t" << "Unable to create STATION_YYYYMMDD directory : " << p1.string();
+               LOG_ERROR << "AcqThread::buildAcquisitionDirectory;\t\t" << "Unable to create STATION_YYYYMMDD directory : " << p1.string() << endl;
                 return false;
 
             // If success to create DATA_PATH/STATION_YYYYMMDD/
             }else{
 
-                LOG_INFO << "AcqThread::buildAcquisitionDirectory;\t\t" << "Success to create STATION_YYYYMMDD directory : " << p1.string();
+                LOG_INFO << "AcqThread::buildAcquisitionDirectory;\t\t" << "Success to create STATION_YYYYMMDD directory : " << p1.string() << endl;
 
                 // If fail to create DATA_PATH/STATION_YYYYMMDD/stack/
                 if(!fs::create_directory(p2)){
 
-                    LOG_ERROR << "AcqThread::buildAcquisitionDirectory;\t\t" << "Unable to create captures directory : " << p2.string();
+                    LOG_ERROR << "AcqThread::buildAcquisitionDirectory;\t\t" << "Unable to create captures directory : " << p2.string() << endl;
                     return false;
 
                 // If success to create DATA_PATH/STATION_YYYYMMDD/stack/
                 }else{
 
-                    LOG_INFO << "AcqThread::buildAcquisitionDirectory;\t\t" << "Success to create captures directory : " << p2.string();
+                    LOG_INFO << "AcqThread::buildAcquisitionDirectory;\t\t" << "Success to create captures directory : " << p2.string() << endl;
                     return true;
 
                 }
@@ -683,35 +683,35 @@ bool AcqThread::buildAcquisitionDirectory(string YYYYMMDD){
         // If fail to create DATA_PATH
         if(!fs::create_directory(p)){
 
-          LOG_ERROR << "AcqThread::buildAcquisitionDirectory;\t\t" << "Unable to create DATA_PATH directory : " << p.string();
+          LOG_ERROR << "AcqThread::buildAcquisitionDirectory;\t\t" << "Unable to create DATA_PATH directory : " << p.string() << endl;
             return false;
 
         // If success to create DATA_PATH
         }else{
 
-            LOG_INFO << "AcqThread::buildAcquisitionDirectory;\t\t" << "Success to create DATA_PATH directory : " << p.string();
+            LOG_INFO << "AcqThread::buildAcquisitionDirectory;\t\t" << "Success to create DATA_PATH directory : " << p.string() << endl;
 
             // If fail to create DATA_PATH/STATION_YYYYMMDD/
             if(!fs::create_directory(p1)){
 
-                LOG_ERROR << "AcqThread::buildAcquisitionDirectory;\t\t" << "Unable to create STATION_YYYYMMDD directory : " << p1.string();
+                LOG_ERROR << "AcqThread::buildAcquisitionDirectory;\t\t" << "Unable to create STATION_YYYYMMDD directory : " << p1.string() << endl;
                 return false;
 
             // If success to create DATA_PATH/STATION_YYYYMMDD/
             }else{
 
-                LOG_INFO << "AcqThread::buildAcquisitionDirectory;\t\t" << "Success to create STATION_YYYYMMDD directory : " << p1.string();
+                LOG_INFO << "AcqThread::buildAcquisitionDirectory;\t\t" << "Success to create STATION_YYYYMMDD directory : " << p1.string() << endl;
 
                 // If fail to create DATA_PATH/STATION_YYYYMMDD/captures/
                 if(!fs::create_directory(p2)){
 
-                    LOG_ERROR << "AcqThread::buildAcquisitionDirectory;\t\t" << "Unable to create captures directory : " << p2.string();
+                    LOG_ERROR << "AcqThread::buildAcquisitionDirectory;\t\t" << "Unable to create captures directory : " << p2.string() << endl;
                     return false;
 
                 // If success to create DATA_PATH/STATION_YYYYMMDD/captures/
                 }else{
 
-                    LOG_INFO << "AcqThread::buildAcquisitionDirectory;\t\t" << "Success to create captures directory : " << p2.string();
+                    LOG_INFO << "AcqThread::buildAcquisitionDirectory;\t\t" << "Success to create captures directory : " << p2.string() << endl;
                     return true;
 
                 }
@@ -737,17 +737,17 @@ void AcqThread::runImageCapture(EAcquisitionMode mode,int imgNumber, ImgFormat i
     LOG_DEBUG << "AcqThread::runImageCapture";
 
     if (mode == EAcquisitionMode::REGULAR)
-        LOG_INFO << "AcqThread::runImageCapture;\t\t" << "Running regular capture ";
+        LOG_INFO << "AcqThread::runImageCapture;\t\t" << "Running regular capture " << endl;
 
     if (mode == EAcquisitionMode::SCHEDULED)
-        LOG_INFO << "AcqThread::runImageCapture;\t\t" << "Running scheduled capture ";
+        LOG_INFO << "AcqThread::runImageCapture;\t\t" << "Running scheduled capture " << endl;
 
     // Stop stack process.
-    LOG_DEBUG << "AcqThread::runImageCapture;\t\t" << "AcqThread::runImageCapture;" << "Stopping stack process";
+    LOG_DEBUG << "AcqThread::runImageCapture;\t\t" << "AcqThread::runImageCapture;" << "Stopping stack process" << endl;
     stopStackThread();
     // Stop detection process.
 
-    LOG_DEBUG << "AcqThread::runImageCapture;\t\t" << "AcqThread::runImageCapture;" << "Stopping detection process";
+    LOG_DEBUG << "AcqThread::runImageCapture;\t\t" << "AcqThread::runImageCapture;" << "Stopping detection process" << endl;
     stopDetectionThread();
 
     // Reset framebuffer.
@@ -755,27 +755,27 @@ void AcqThread::runImageCapture(EAcquisitionMode mode,int imgNumber, ImgFormat i
     
     for(int i = 0; i < imgNumber; i++) 
     {
-        LOG_INFO << "AcqThread::runImageCapture;\t\t" << "Prepare capture # " << i;
+        LOG_INFO << "AcqThread::runImageCapture;\t\t" << "Prepare capture # " << i << endl;
         // Configuration for single capture.
         shared_ptr<Frame> frame = make_shared<Frame>();
 
         ApplyCameraSettingsToFrame(frame);
 
         // Run single capture.
-        LOG_INFO << "AcqThread::runImageCapture;\t\t" << "Run single capture.";
+        LOG_INFO << "AcqThread::runImageCapture;\t\t" << "Run single capture." << endl;
         if(m_Device->runSingleCapture(frame)) {
-            LOG_INFO << "AcqThread::runImageCapture;\t\t" << "Single capture succeed !";
-            LOG_DEBUG << "AcqThread::runImageCapture;\t\t" << "AcqThread::runImageCapture;" << "Single capture succeed !";
+            LOG_INFO << "AcqThread::runImageCapture;\t\t" << "Single capture succeed !" << endl;
+            LOG_DEBUG << "AcqThread::runImageCapture;\t\t" << "AcqThread::runImageCapture;" << "Single capture succeed !" << endl;
             saveImageCaptured(frame, i, imgOutput, imgPrefix);
         } else {
-            LOG_ERROR << "AcqThread::runImageCapture;" << "Single capture failed !";
+            LOG_ERROR << "AcqThread::runImageCapture;" << "Single capture failed !" << endl;
         }
 
     }
 
     //boost::this_thread::sleep(boost::posix_time::millisec(5));
  
-    LOG_DEBUG << "AcqThread::runImageCapture;\t\t" << "Restarting camera in continuous mode...";
+    LOG_DEBUG << "AcqThread::runImageCapture;\t\t" << "Restarting camera in continuous mode..." << endl;
 
     if (!setCameraInContinousMode()) {
         throw runtime_error("Restart camera in continuous mode impossible");
@@ -784,7 +784,7 @@ void AcqThread::runImageCapture(EAcquisitionMode mode,int imgNumber, ImgFormat i
 }
 
 void AcqThread::saveImageCaptured(shared_ptr<Frame> frame, int imgNum, ImgFormat outputType, string imgPrefix) {
-    LOG_DEBUG << "AcqThread::saveImageCaptured;\t\t"<< "AcqThread: SAVING IMAGE CAPTURED";
+    LOG_DEBUG << "AcqThread::saveImageCaptured;\t\t"<< "AcqThread: SAVING IMAGE CAPTURED" << endl;
 
     if(frame->Image->data) {
 
@@ -891,7 +891,7 @@ void AcqThread::saveImageCaptured(shared_ptr<Frame> frame, int imgNum, ImgFormat
 
                                     // Create FITS image with BITPIX = SHORT_IMG (16-bits signed integers), pixel with TSHORT (signed short)
                                     if(newFits.writeFits(newMat, S16, fileName))
-                                        LOG_DEBUG << "AcqThread::saveImageCaptured;\t\t" << "Fits saved in : " << mOutputDataPath << fileName;
+                                        LOG_DEBUG << "AcqThread::saveImageCaptured;\t\t" << "Fits saved in : " << mOutputDataPath << fileName << endl;
 
                                 }
 
@@ -902,7 +902,7 @@ void AcqThread::saveImageCaptured(shared_ptr<Frame> frame, int imgNum, ImgFormat
                                 {
 
                                    if(newFits.writeFits(frame->Image, UC8, fileName))
-                                        LOG_DEBUG << "AcqThread::saveImageCaptured;\t\t" << "Fits saved in : " << mOutputDataPath << fileName;
+                                        LOG_DEBUG << "AcqThread::saveImageCaptured;\t\t" << "Fits saved in : " << mOutputDataPath << fileName << endl;
 
                                 }
 
@@ -933,7 +933,7 @@ int AcqThread::getTimeInSeconds(boost::posix_time::ptime time)
 }
 
 bool AcqThread::computeSunTimes() {
-    LOG_DEBUG << "AcqThread::computeSunTimes";
+    LOG_DEBUG << "AcqThread::computeSunTimes" << endl;
     
     int sunriseStartH = 0, sunriseStartM = 0, sunriseStopH = 0, sunriseStopM = 0,
         sunsetStartH = 0, sunsetStartM = 0, sunsetStopH = 0, sunsetStopM = 0;
@@ -950,10 +950,10 @@ bool AcqThread::computeSunTimes() {
     mCurrentDate = Conversion::intToString(intDate.at(0)) + month + day;
     mCurrentTime = intDate.at(3) * 3600 + intDate.at(4) * 60 + intDate.at(5);
 
-    LOG_DEBUG << "AcqThread::computeSunTimes;\t\t" << "LOCAL DATE      :  " << mCurrentDate;
+    LOG_DEBUG << "AcqThread::computeSunTimes;\t\t" << "LOCAL DATE      :  " << mCurrentDate << endl;
 
     if(m_CameraParam.ephem.EPHEMERIS_ENABLED) {
-        LOG_INFO << "COMPUTE SUN TIMES WITH EPHEMERIS";
+        LOG_INFO << "COMPUTE SUN TIMES WITH EPHEMERIS" << endl;
         Ephemeris ephem1 = Ephemeris(mCurrentDate, m_CameraParam.ephem.SUN_HORIZON_1, m_StationParam.SITELONG, m_StationParam.SITELAT);
 
         if(!ephem1.computeEphemeris(sunriseStartH, sunriseStartM,sunsetStopH, sunsetStopM)) {
@@ -971,7 +971,7 @@ bool AcqThread::computeSunTimes() {
         }
 
     }else {
-        LOG_INFO << "COMPUTE DEFAULT SUN TIMES";
+        LOG_INFO << "COMPUTE DEFAULT SUN TIMES" << endl;
         sunriseStartH = m_CameraParam.ephem.SUNRISE_TIME.at(0);
         sunriseStartM = m_CameraParam.ephem.SUNRISE_TIME.at(1);
 
@@ -1072,8 +1072,8 @@ bool AcqThread::computeSunTimes() {
 
     }
 
-    LOG_DEBUG << "AcqThread::computeSunTimes;\t\t" << "SUNRISE         :  " << sunriseStartH << "H" << sunriseStartM << " - " << sunriseStopH << "H" << sunriseStopM;
-    LOG_DEBUG << "AcqThread::computeSunTimes;\t\t" << "SUNSET          :  " << sunsetStartH << "H" << sunsetStartM << " - " << sunsetStopH << "H" << sunsetStopM;
+    LOG_DEBUG << "AcqThread::computeSunTimes;\t\t" << "SUNRISE         :  " << sunriseStartH << "H" << sunriseStartM << " - " << sunriseStopH << "H" << sunriseStopM << endl;
+    LOG_DEBUG << "AcqThread::computeSunTimes;\t\t" << "SUNSET          :  " << sunsetStartH << "H" << sunsetStartM << " - " << sunsetStopH << "H" << sunsetStopM << endl;
 
     mStartSunriseTime = sunriseStartH * 3600 + sunriseStartM * 60;
     mStopSunriseTime = sunriseStopH * 3600 + sunriseStopM * 60;
@@ -1186,7 +1186,7 @@ void AcqThread::ApplyCameraSettingsToFrame(shared_ptr<Frame> frame)
     if (!frame)
         throw runtime_error("Frame is null");
 
-    LOG_DEBUG << "AcqThread::ApplyCameraSettingsToFrame";
+    LOG_DEBUG << "AcqThread::ApplyCameraSettingsToFrame" << endl;
     frame->mExposure = m_CurrentCameraSettings.Exposure;
     
     frame->mFormat = m_CurrentCameraSettings.PixelFormat;
@@ -1206,11 +1206,11 @@ void AcqThread::ApplyCameraSettingsToFrame(shared_ptr<Frame> frame)
     frame->mStartX = m_CurrentCameraSettings.StartX;
     frame->mStartY = m_CurrentCameraSettings.StartY;
 
-    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Exposure time : " << frame->mExposure;
-    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Gain : " << frame->mGain;
+    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Exposure time : " << frame->mExposure << endl;
+    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Gain : " << frame->mGain << endl;
     EParser<CamPixFmt> format;
-    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Format : " << format.getStringEnum(frame->mFormat);
-    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "FPS : " << frame->mFps;
+    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Format : " << format.getStringEnum(frame->mFormat) << endl;
+    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "FPS : " << frame->mFps << endl;
 }
 
 bool AcqThread::prepareAcquisitionOnDevice(EAcquisitionMode mode)
@@ -1231,9 +1231,9 @@ bool AcqThread::prepareAcquisitionOnDevice(EAcquisitionMode mode)
         // CHECK SUNRISE AND SUNSET TIMES.
         if (isNight())
         {
-            LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "*************************** SET NIGHT CAMERA SETTINGS";
-            LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "AUTO EXPOSURE   :  NO";
-            LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "DAYTIME         :  NO";
+            LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "*************************** SET NIGHT CAMERA SETTINGS" << endl;
+            LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "AUTO EXPOSURE   :  NO" << endl;
+            LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "DAYTIME         :  NO" << endl;
 
             //taking parameters from current configuration object
             switch (mode) {
@@ -1256,9 +1256,9 @@ bool AcqThread::prepareAcquisitionOnDevice(EAcquisitionMode mode)
         else
         {
             if (isDay()) {
-                LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "*************************** SET DAY CAMERA SETTINGS";
-                LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "AUTO EXPOSURE   :  NO";
-                LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "DAYTIME         :  YES";
+                LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "*************************** SET DAY CAMERA SETTINGS" << endl;
+                LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "AUTO EXPOSURE   :  NO" << endl;
+                LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "DAYTIME         :  YES" << endl;
 
                 switch (mode) {
                 case EAcquisitionMode::CONTINUOUS: {
@@ -1278,9 +1278,9 @@ bool AcqThread::prepareAcquisitionOnDevice(EAcquisitionMode mode)
                 };
             }
             else {
-                LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "*************************** SET SUNRISE/SUNSET CAMERA SETTINGS";
-                LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "AUTO EXPOSURE   :  NO";
-                LOG_INFO << "AcqThread::prepareAcquisitionOnDevice  ;\t\t" << "DAYTIME         :  YES";
+                LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "*************************** SET SUNRISE/SUNSET CAMERA SETTINGS" << endl;
+                LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "AUTO EXPOSURE   :  NO" << endl;
+                LOG_INFO << "AcqThread::prepareAcquisitionOnDevice  ;\t\t" << "DAYTIME         :  YES" << endl;
 
                 //SUNRISE AND SUNSET
                 switch (mode) {
@@ -1303,21 +1303,21 @@ bool AcqThread::prepareAcquisitionOnDevice(EAcquisitionMode mode)
         }
     }
 
-    LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "EXPOSURE TIME   :  " << m_CurrentCameraSettings.Exposure;
-    LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "GAIN            :  " << m_CurrentCameraSettings.Gain;
-    LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "FPS             :  " << m_CurrentCameraSettings.FPS;
+    LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "EXPOSURE TIME   :  " << m_CurrentCameraSettings.Exposure << endl;
+    LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "GAIN            :  " << m_CurrentCameraSettings.Gain << endl;
+    LOG_INFO << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "FPS             :  " << m_CurrentCameraSettings.FPS << endl;
     
     //Set configuration to device
     m_Device->CameraSetting = m_CurrentCameraSettings;
 
     // INIT CAMERA.
-    LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "Device->initializeCamera";
+    LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "Device->initializeCamera" << endl;
 
     if(!m_Device->initializeCamera())
         return false;
 
     // START CAMERA.
-    LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "Device->startCamera";
+    LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice;\t\t" << "Device->startCamera" << endl;
     if (!m_Device->startCamera(mode))
         return false;
 
@@ -1341,7 +1341,7 @@ void AcqThread::metrics_ThreadLoop()
     m_FPS_Sum += m_CurrentFPS;
 
     if (m_CurrentFPS < 30)
-        LOG_WARNING << "FPS is below 30 " << m_CurrentFPS;
+        LOG_WARNING << "FPS is below 30 " << m_CurrentFPS << endl;
 
     if (m_FPS_metrics.size() >= m_CircularBufferSize)
         m_FPS_Sum -= m_FPS_metrics.front();
@@ -1374,7 +1374,7 @@ void AcqThread::scheduledAcquisition_ThreadLoop()
         if (next < 0) {
             next = 24l * 3600l - (m_CurrentTimeDate.hours * 3600 + m_CurrentTimeDate.minutes * 60 + m_CurrentTimeDate.seconds) + (mNextAcq.hours * 3600 + mNextAcq.min * 60 + mNextAcq.sec);
             if (LOG_SPAM_FRAME_STATUS)
-                LOG_DEBUG << "AcqThread::operator();" << "next : " << next;
+                LOG_DEBUG << "AcqThread::operator();" << "next : " << next << endl;
         }
 
         vector<int>tsch = TimeDate::HdecimalToHMS(next / 3600.0);
@@ -1418,7 +1418,7 @@ void AcqThread::scheduledAcquisition_ThreadLoop()
 
         if (m_CurrentAcquisitionMode != EAcquisitionMode::CONTINUOUS)
         {
-            LOG_INFO << "AcqThread::operator();" << "Set camera in continuous mode";
+            LOG_INFO << "AcqThread::operator();" << "Set camera in continuous mode" << endl;
             setCameraInContinousMode();
         }
     }
@@ -1438,9 +1438,9 @@ void AcqThread::regularAcquisition_ThreadLoop()
         // Check it's time to run a regular capture.
         if (secTime >= m_CameraParam.regcap.ACQ_REGULAR_CFG.interval)
         {
-            LOG_DEBUG << "AcqThread::operator();" << "operator();" << "It's time to check if need to run a regular capture.";
+            LOG_DEBUG << "AcqThread::operator();" << "operator();" << "It's time to check if need to run a regular capture." << endl;
             if ((m_CurrentTimeMode == m_CameraParam.regcap.ACQ_REGULAR_MODE || m_CameraParam.regcap.ACQ_REGULAR_MODE == DAYNIGHT)) {
-                LOG_INFO << "AcqThread::operator();" << "============= Run regular acquisition because it is " << m_CurrentTimeMode << " and ACQ_REGULAR_MODE=" << m_CameraParam.regcap.ACQ_REGULAR_MODE << " =============";
+                LOG_INFO << "AcqThread::operator();" << "============= Run regular acquisition because it is " << m_CurrentTimeMode << " and ACQ_REGULAR_MODE=" << m_CameraParam.regcap.ACQ_REGULAR_MODE << " =============" << endl;
                 // Reset reference time BEFORE the exposure in case a long exposure has been done.
                 m_LastRegularAcquisitionTimestamp = m_CurrentThreadLoopTime;
 
@@ -1450,7 +1450,7 @@ void AcqThread::regularAcquisition_ThreadLoop()
 
             if (m_CurrentAcquisitionMode != EAcquisitionMode::CONTINUOUS)
             {
-                LOG_INFO << "AcqThread::operator();" << "Set camera in continuous mode";
+                LOG_INFO << "AcqThread::operator();" << "Set camera in continuous mode" << endl;
                 setCameraInContinousMode();
             }
         }
@@ -1472,7 +1472,7 @@ void AcqThread::continuousAcquisition_ThreadLoop()
         m_CurrentFrame->mFrameNumber = mFrameNumber;
 
         if (LOG_SPAM_FRAME_STATUS)
-            LOG_INFO << "AcqThread::operator();" << "============= FRAME " << m_CurrentFrame->mFrameNumber << " ============= ";
+            LOG_INFO << "AcqThread::operator();" << "============= FRAME " << m_CurrentFrame->mFrameNumber << " ============= " << endl;
 
 
         switch (input_device_type) {
@@ -1573,14 +1573,14 @@ void AcqThread::continuousAcquisition_CAMERA()
         // Check TimeMode changing.
         // Notify detection thread.
         if (previousTimeMode != m_CurrentTimeMode && m_DetectionParam.DET_MODE != DAYNIGHT) {
-            LOG_INFO << "AcqThread::operator();" << "TimeMode has changed and Detection thread need to be stopped because it is " << time_mode_parser.getStringEnum(m_CurrentTimeMode) << " and DET_MODE =" << time_mode_parser.getStringEnum(m_StackParam.STACK_MODE);
+            LOG_INFO << "AcqThread::operator();" << "TimeMode has changed and Detection thread need to be stopped because it is " << time_mode_parser.getStringEnum(m_CurrentTimeMode) << " and DET_MODE =" << time_mode_parser.getStringEnum(m_StackParam.STACK_MODE) << endl;
             //stopDetectionThread();
             m_DetThread_IsRunning = false;
         }
         else if (m_DetectionParam.DET_MODE == m_CurrentTimeMode || m_DetectionParam.DET_MODE == DAYNIGHT) {
             if (!m_DetThread_IsRunning)
             {
-                LOG_INFO << "AcqThread::operator();" << "TimeMode has changed and Detection thread need to be started because it is " << time_mode_parser.getStringEnum(m_CurrentTimeMode) << " and STACK_MODE=" << time_mode_parser.getStringEnum(m_StackParam.STACK_MODE);
+                LOG_INFO << "AcqThread::operator();" << "TimeMode has changed and Detection thread need to be started because it is " << time_mode_parser.getStringEnum(m_CurrentTimeMode) << " and STACK_MODE=" << time_mode_parser.getStringEnum(m_StackParam.STACK_MODE) << endl;
                 //startDetectionThread();
                 m_DetThread_IsRunning = true;
             }
@@ -1591,14 +1591,14 @@ void AcqThread::continuousAcquisition_CAMERA()
         if (previousTimeMode != m_CurrentTimeMode && m_StackParam.STACK_MODE != DAYNIGHT) {
             if (m_StackThread_IsRunning)
             {
-                LOG_INFO << "AcqThread::operator();" << "TimeMode has changed and Stack thread need to be stopped because it is " << time_mode_parser.getStringEnum(m_CurrentTimeMode) << " and STACK_MODE=" << time_mode_parser.getStringEnum(m_StackParam.STACK_MODE);
+                LOG_INFO << "AcqThread::operator();" << "TimeMode has changed and Stack thread need to be stopped because it is " << time_mode_parser.getStringEnum(m_CurrentTimeMode) << " and STACK_MODE=" << time_mode_parser.getStringEnum(m_StackParam.STACK_MODE) << endl;
                 //stopStackThread();
                 m_StackThread_IsRunning = false;
             }
         }
         else if (m_StackParam.STACK_MODE == m_CurrentTimeMode || m_StackParam.STACK_MODE == DAYNIGHT) {
             if (!m_StackThread_IsRunning) {
-                LOG_INFO << "AcqThread::operator();" << "TimeMode has changed and Stack thread need to be started because it is " << time_mode_parser.getStringEnum(m_CurrentTimeMode) << " and STACK_MODE=" << time_mode_parser.getStringEnum(m_StackParam.STACK_MODE);
+                LOG_INFO << "AcqThread::operator();" << "TimeMode has changed and Stack thread need to be started because it is " << time_mode_parser.getStringEnum(m_CurrentTimeMode) << " and STACK_MODE=" << time_mode_parser.getStringEnum(m_StackParam.STACK_MODE) << endl;
                 //startStackThread();
                 m_StackThread_IsRunning = true;
             }

@@ -68,11 +68,11 @@ void CfgLoader::Clear()
 /// <returns></returns>
 bool CfgLoader::Load(const std::string& file) {
     try {
-        LOG_INFO << "Loading configuration file " << file << "...";
+        LOG_INFO << "Loading configuration file " << file << "..." << endl;
         std::ifstream in_file(file.c_str());
 
         if (!in_file.good()) {
-            LOG_ERROR << "CfgLoader::Load; file not found " << file;
+            LOG_ERROR << "CfgLoader::Load; file not found " << file << endl;
             return false;
         }
 
@@ -195,17 +195,17 @@ bool CfgLoader::Load(const std::string& file) {
             // You might need to handle different types specifically if necessary
             //mData[it.first] = value.type() == typeid(std::string) ? vm[it.first].as<std::string>() : std::to_string(vm[it.first].as<int>());
             mData[key] = value;
-            LOG_DEBUG << "CfgLoader::Load;" << key << "=" << value;
+            LOG_DEBUG << "CfgLoader::Load;" << key << "=" << value << endl;
 
         }
     }
     catch (exception& e) {
-        LOG_DEBUG << "CfgLoader::Load;" << e.what();
-        LOG_ERROR << "KO";
+        LOG_DEBUG << "CfgLoader::Load;" << e.what() << endl;
+        LOG_ERROR << "KO" << endl;
         return false;
     }
 
-    LOG_INFO << "OK";
+    LOG_INFO << "OK" << endl;
 
     return true;
 }

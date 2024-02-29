@@ -55,16 +55,31 @@ StackThread::StackThread(
     boost::condition_variable* fb_c,
     std::shared_ptr<CfgParam> cfg
 ) : 
-    m_ThreadID(), mThread(nullptr), mustStop(false), mustStopMutex(), isRunning(false),interruptionStatus(false),
-interruptionStatusMutex(), frameBuffer_condition(fb_c), frameBuffer_mutex(fb_m), frameBuffer(fb), stackSignal(sS), 
-stackSignal_mutex(sS_m), stackSignal_condition(sS_c), mstp(cfg->getStationParam()), mfkp(cfg->getFitskeysParam()),
-mdp(cfg->getDataParam()), msp(cfg->getStackParam()), mPixfmt(cfg->getCamParam().ACQ_FORMAT), completeDataPath("")
+    m_ThreadID(),
+    mThread(nullptr),
+    mustStop(false), 
+    mustStopMutex(),
+    isRunning(false),
+    interruptionStatus(false),
+    interruptionStatusMutex(),
+    frameBuffer_condition(fb_c),
+    frameBuffer_mutex(fb_m),
+    frameBuffer(fb),
+    stackSignal(sS), 
+    stackSignal_mutex(sS_m),
+    stackSignal_condition(sS_c),
+    mstp(cfg->getStationParam()),
+    mfkp(cfg->getFitskeysParam()),
+    mdp(cfg->getDataParam()),
+    msp(cfg->getStackParam()),
+    mPixfmt(cfg->getCamParam().ACQ_FORMAT), 
+    completeDataPath("")
 {
 }
 
 StackThread::~StackThread(void){
 
-    LOG_INFO << "Cleaning ressources and deleting StackThread...";
+    LOG_INFO << "Cleaning ressources and deleting StackThread..." << endl;
 
     if(mThread!=NULL)
         delete mThread;
@@ -73,7 +88,7 @@ StackThread::~StackThread(void){
 
 bool StackThread::startThread(){
 
-    LOG_INFO << "Creating StackThread...";
+    LOG_INFO << "Creating StackThread..." << endl;
     mThread = new boost::thread(boost::ref(*this));
     return true;
 }
@@ -98,7 +113,7 @@ bool StackThread::interruptThread(){
 
     interruptionStatusMutex.lock();
     interruptionStatus = true;
-    LOG_INFO << "StackThread interruption.";
+    LOG_INFO << "StackThread interruption." << endl;
     interruptionStatusMutex.unlock();
     return true;
 
@@ -117,7 +132,7 @@ bool StackThread::buildStackDataDirectory(TimeDate::Date date){
         return false;
 
 
-    LOG_INFO << "Stacks data path : " << completeDataPath;
+    LOG_INFO << "Stacks data path : " << completeDataPath << endl;
 
     path p(mdp.DATA_PATH);
     path p1(root);
@@ -135,13 +150,13 @@ bool StackThread::buildStackDataDirectory(TimeDate::Date date){
                 // If fail to create DATA_PATH/STATION_YYYYMMDD/stacks/
                 if(!fs::create_directory(p2)){
 
-                    LOG_ERROR << "Unable to create stacks directory : " << p2.string();
+                    LOG_ERROR << "Unable to create stacks directory : " << p2.string() << endl;
                     return false;
 
                 // If success to create DATA_PATH/STATION_YYYYMMDD/stacks/
                 }else{
 
-                   LOG_INFO << "Success to create stacks directory : " << p2.string();
+                   LOG_INFO << "Success to create stacks directory : " << p2.string() << endl;
                    return true;
 
                 }
@@ -153,24 +168,24 @@ bool StackThread::buildStackDataDirectory(TimeDate::Date date){
             // If fail to create DATA_PATH/STATION_YYYYMMDD/
             if(!fs::create_directory(p1)){
 
-                LOG_ERROR << "Unable to create STATION_YYYYMMDD directory : " << p1.string();
+                LOG_ERROR << "Unable to create STATION_YYYYMMDD directory : " << p1.string() << endl;
                 return false;
 
             // If success to create DATA_PATH/STATION_YYYYMMDD/
             }else{
 
-                LOG_INFO << "Success to create STATION_YYYYMMDD directory : " << p1.string();
+                LOG_INFO << "Success to create STATION_YYYYMMDD directory : " << p1.string() << endl;
 
                 // If fail to create DATA_PATH/STATION_YYYYMMDD/stacks/
                 if(!fs::create_directory(p2)){
 
-                    LOG_ERROR << "Unable to create stacks directory : " << p2.string();
+                    LOG_ERROR << "Unable to create stacks directory : " << p2.string() << endl;
                     return false;
 
                 // If success to create DATA_PATH/STATION_YYYYMMDD/stacks/
                 }else{
 
-                    LOG_INFO << "Success to create stacks directory : " << p2.string();
+                    LOG_INFO << "Success to create stacks directory : " << p2.string() << endl;
                     return true;
 
                 }
@@ -183,35 +198,35 @@ bool StackThread::buildStackDataDirectory(TimeDate::Date date){
         // If fail to create DATA_PATH
         if(!fs::create_directory(p)){
 
-            LOG_ERROR << "Unable to create DATA_PATH directory : " << p.string();
+            LOG_ERROR << "Unable to create DATA_PATH directory : " << p.string() << endl;
             return false;
 
         // If success to create DATA_PATH
         }else{
 
-            LOG_INFO << "Success to create DATA_PATH directory : " << p.string();
+            LOG_INFO << "Success to create DATA_PATH directory : " << p.string() << endl;
 
             // If fail to create DATA_PATH/STATION_YYYYMMDD/
             if(!fs::create_directory(p1)){
 
-                LOG_ERROR << "Unable to create STATION_YYYYMMDD directory : " << p1.string();
+                LOG_ERROR << "Unable to create STATION_YYYYMMDD directory : " << p1.string() << endl;
                 return false;
 
             // If success to create DATA_PATH/STATION_YYYYMMDD/
             }else{
 
-                LOG_INFO << "Success to create STATION_YYYYMMDD directory : " << p1.string();
+                LOG_INFO << "Success to create STATION_YYYYMMDD directory : " << p1.string() << endl;
 
                 // If fail to create DATA_PATH/STATION_YYYYMMDD/stacks/
                 if(!fs::create_directory(p2)){
 
-                    LOG_ERROR << "Unable to create stacks directory : " << p2.string();
+                    LOG_ERROR << "Unable to create stacks directory : " << p2.string() << endl;
                     return false;
 
                 // If success to create DATA_PATH/STATION_YYYYMMDD/stacks/
                 }else{
 
-                    LOG_INFO << "Success to create stacks directory : " << p2.string();
+                    LOG_INFO << "Success to create stacks directory : " << p2.string() << endl;
                     return true;
 
                 }
@@ -222,7 +237,8 @@ bool StackThread::buildStackDataDirectory(TimeDate::Date date){
     return true;
 }
 
-bool StackThread::getRunStatus(){
+bool StackThread::getRunStatus()
+{
 
     return isRunning;
 
@@ -233,16 +249,14 @@ bool StackThread::getRunStatus(){
 /// </summary>
 void StackThread::operator()(){
     m_ThreadID = std::this_thread::get_id();
-
-    Logger::Get().setLogThread(LogThread::STACK_THREAD, m_ThreadID);
+    Logger::Get()->setLogThread(LogThread::STACK_THREAD, m_ThreadID);
 
     bool stop = false;
     isRunning = true;
 
-    LOG_INFO << "\n";
-    LOG_INFO << "==============================================";
-    LOG_INFO << "============== Start stack thread ============";
-    LOG_INFO << "==============================================";
+    LOG_INFO << "==============================================" << endl;
+    LOG_INFO << "============== Start stack thread ============" << endl;
+    LOG_INFO << "==============================================" << endl;
 
     try {
         unsigned long interval = msp.STACK_INTERVAL * 1000;
@@ -254,9 +268,9 @@ void StackThread::operator()(){
 
                 // Thread is sleeping...
                 if (interval) {
-                    LOG_DEBUG << "operator();" << "Thread sleeping for " << interval << "[ms]";
+                    LOG_DEBUG << "operator();" << "Thread sleeping for " << interval << "[ms]" << endl;
                     boost::this_thread::sleep(boost::posix_time::millisec(interval));
-                    LOG_DEBUG << "operator();" << "Create a stack to accumulate n frames.";
+                    LOG_DEBUG << "operator();" << "Create a stack to accumulate n frames." << endl;
                 }
 
                 // Create a stack to accumulate n frames.
@@ -273,13 +287,13 @@ void StackThread::operator()(){
                 do {
                     /// Wait new frame from AcqThread.
                     if (LOG_SPAM_FRAME_STATUS)
-                        LOG_DEBUG << "operator();" << "This is STACK THREAD waiting ACQUISTION THREAD for a new frame.";
+                        LOG_DEBUG << "operator();" << "This is STACK THREAD waiting ACQUISTION THREAD for a new frame." << endl;
                     // Communication with AcqThread. Wait for a new frame.
                     boost::mutex::scoped_lock lock(*stackSignal_mutex);
                     while(!(*stackSignal)) stackSignal_condition->wait(lock);
                     *stackSignal = false;
                     lock.unlock();
-                    LOG_DEBUG << "operator();" << "Unlocked";
+                    LOG_DEBUG << "operator();" << "Unlocked" << endl;
 
 
                     double t = (double)cv::getTickCount();
@@ -294,9 +308,12 @@ void StackThread::operator()(){
 
                         // Fetch last frame grabbed.
                         boost::mutex::scoped_lock lock2(*frameBuffer_mutex);
-                        if(frameBuffer.size() == 0) {
-                            throw "SHARED CIRCULAR BUFFER SIZE = 0 -> STACK INTERRUPTION.";
+                        if(frameBuffer.size() == 0)
+                        {
+                            LOG_DEBUG << "operator();" << "frameBuffer.size() == 0"<<endl;
+                            continue;
                         }
+
                         shared_ptr<Frame> newFrame = frameBuffer.back();
                         lock2.unlock();
 
@@ -305,13 +322,13 @@ void StackThread::operator()(){
 
                         t = (((double)cv::getTickCount() - t)/ cv::getTickFrequency())*1000;
                         if (LOG_SPAM_FRAME_STATUS){
-                            LOG_INFO << "[ TIME STACK ] : " << setprecision(5) << fixed << t << " ms" ;
+                            LOG_INFO << "[ TIME STACK ] : " << setprecision(5) << fixed << t << " ms" << endl;
                         }
 
                     }else{
 
                         // Interruption is active.
-                        LOG_INFO << "Interruption status : " << forceToSave;
+                        LOG_INFO << "Interruption status : " << forceToSave << endl;
 
                         // Interruption operations terminated. Rest interruption signal.
                         interruptionStatusMutex.lock();
@@ -330,32 +347,32 @@ void StackThread::operator()(){
                     boost::posix_time::time_duration td = t2 - t1;
                     secTime = td.total_seconds();
                     if (LOG_SPAM_FRAME_STATUS)
-                        LOG_DEBUG << "operator();" << "NEXT STACK : " << (int)(msp.STACK_TIME - secTime) << "s";
+                        LOG_DEBUG << "operator();" << "NEXT STACK : " << (int)(msp.STACK_TIME - secTime) << "s" << endl;
 
                 } while(secTime <= msp.STACK_TIME);
 
                 // Stack finished. Save it.
-                LOG_DEBUG << "operator();" << "Stack finished. Save it.";
+                LOG_DEBUG << "operator();" << "Stack finished. Save it." << endl;
 
                 if(buildStackDataDirectory(frameStack.getDateFirstFrame())) {
 
                     if(!frameStack.saveStack(completeDataPath, msp.STACK_MTHD, msp.STACK_REDUCTION)){
 
-                        LOG_ERROR << "operator();" << "Fail to save stack.";
+                        LOG_ERROR << "operator();" << "Fail to save stack." << endl;
 
                     }
 
-                    LOG_INFO << "Stack saved : " << completeDataPath;
+                    LOG_INFO << "Stack saved : " << completeDataPath << endl;
 
                 }else{
 
-                    LOG_ERROR << "operator();" << "Fail to build stack directory. " << completeDataPath;
+                    LOG_ERROR << "operator();" << "Fail to build stack directory. " << completeDataPath << endl;
 
                 }
 
             } catch(const boost::thread_interrupted&) {
 
-                LOG_INFO << "operator();" << "Stack thread INTERRUPTED";
+                LOG_INFO << "operator();" << "Stack thread INTERRUPTED" << endl;
             }
 
             // Get the "must stop" state (thread-safe)
@@ -370,17 +387,17 @@ void StackThread::operator()(){
 
     }catch(const char * msg){
 
-        LOG_ERROR << "operator();" << msg;
+        LOG_ERROR << "operator();" << msg << endl;
 
     }catch(exception& e){
 
-        LOG_ERROR << "operator();" << e.what();
+        LOG_ERROR << "operator();" << e.what() << endl;
 
     }
 
     isRunning = false;
 
-    LOG_INFO << "StackThread ended.";
+    LOG_INFO << "StackThread ended." << endl;
 
 }
 

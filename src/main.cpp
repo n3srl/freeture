@@ -21,9 +21,13 @@ int main(int argc, const char ** argv)
         freeture_instance = make_shared<Freeture>(argc,argv);
         freeture_instance->Run();
     }
-    catch(...)
+    catch(exception& e)
     {
-        cout << "main;" << ">> Generic Error"  << endl;
+        cout << "main;" << e.what()  << endl;
+    }
+    catch (...)
+    {
+        cout << "main;" << "GENERIC ERROR";
     }
 
     return 0 ;

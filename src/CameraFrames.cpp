@@ -58,7 +58,7 @@ CameraFrames::CameraFrames( CameraDescription camera_descriptor, cameraParam set
     if(locationList.size()>0)
         mFramesDir = locationList;
     else
-        throw "No frames directory in input.";
+        throw runtime_error("No frames directory in input.");
 
     m_ExposureAvailable = false;
     m_GainAvailable = false;
@@ -266,8 +266,7 @@ bool CameraFrames::grabImage(Frame &img) {
                 fileFound = true;
 
                 LOG_DEBUG << "FILE:" << file->path().string() << endl;
-                LOG_INFO <<  "FILE:" << file->path().string();
-
+                
                 filename = file->path().string() ;
 
                 break;
@@ -280,18 +279,18 @@ bool CameraFrames::grabImage(Frame &img) {
     if(mFirstFrameNum > mLastFrameNum || !fileFound){
 
         mReadDataStatus = true;
-        LOG_INFO <<  "End read frames.";
+        LOG_INFO <<  "End read frames." << endl;
         return false;
 
     }else{
 
-        LOG_INFO <<  "Frame found.";
+        LOG_INFO <<  "Frame found." << endl;
 
         Fits2D newFits(filename);
         int bitpix;
 
         if(!newFits.readIntKeyword("BITPIX", bitpix)){
-            LOG_ERROR << " Fail to read fits keyword : BITPIX";
+            LOG_ERROR << " Fail to read fits keyword : BITPIX" << endl;
 
             return false;
         }

@@ -3,13 +3,15 @@
 #include <iostream>
 #include <sstream>
 #include <mutex>
+#include <memory>
 #include <string>
+#include <chrono>
+#include <iomanip>
 
 #include "ELogThread.h"
 #include "ELogSeverityLevel.h"
 
 using thread_id_type = std::thread::id;
-
 
 
 namespace freeture
@@ -18,17 +20,18 @@ namespace freeture
 
     class ILogger
     {
-    private:
+    protected:
         std::ostringstream m_Stream;
-        std::mutex mtx;
+        std::mutex m_StreamMutex;
         LogSeverityLevel m_LogLevel;
 
     public:
-        Logger* logger;
+        std::shared_ptr<Logger> logger;
 
-        ILogger(Logger* log) :
+        ILogger(std::shared_ptr<Logger> log) :
             logger(log),
-            m_LogLevel(LogSeverityLevel::normal)
+            m_LogLevel(LogSeverityLevel::normal),
+            m_Stream()
         {
         }
 
@@ -51,57 +54,21 @@ namespace freeture
         /// </summary>
         virtual void reset() = 0;
 
+        virtual void apply() = 0;
 
-        void log(const std::string& message) {
-            std::lock_guard<std::mutex> lock(mtx); // Ensure thread safety
-            m_Stream << message;
-        }
+        virtual void flush(std::string) = 0;
 
-        virtual void flush() {
-            if (m_Stream.str().empty()) return; // Don't flush empty streams
-            // Here you would typically decide where to output based on logLevel,
-            // For simplicity, we're just printing to std::cout
-
-            switch (m_LogLevel) {
-            case LogSeverityLevel::normal: {
-                std::cout << "DEBUG;";
-                break;
-            }
-            case LogSeverityLevel::notification: {
-                std::cout << "INFO;";
-                break;
-            }
-            case LogSeverityLevel::fail: {
-                std::cout << "ERROR;";
-                break;
-            }
-            case LogSeverityLevel::critical: {
-                std::cout << "CRITICAL ERROR;";
-                break;
-            }
-            case LogSeverityLevel::warning: {
-                std::cout << "WARNING;";
-                break;
-            }
-            };
-
-            std::cout << m_Stream.str() << std::endl;
-
-            m_Stream.str(""); // Clear the stream buffer
-            m_Stream.clear(); // Reset any error flags
-        }
 
         template<typename T>
         ILogger& operator<<(const T& value) {
-            std::lock_guard<std::mutex> lock(mtx); // Ensure thread safety
+            std::lock_guard<std::mutex> lock(m_StreamMutex); // Ensure thread safety
             m_Stream << value;
             return *this;
         }
 
-
         // Specialize for manipulators (e.g., std::endl)
         ILogger& operator<<(std::ostream& (*pf)(std::ostream&)) {
-            std::lock_guard<std::mutex> lock(mtx); // Ensure thread safety
+            std::lock_guard<std::mutex> lock(m_StreamMutex); // Ensure thread safety
             m_Stream << pf;
             if (pf == static_cast<std::ostream & (*)(std::ostream&)>(std::flush) ||
                 pf == static_cast<std::ostream & (*)(std::ostream&)>(std::endl)) {
@@ -111,14 +78,14 @@ namespace freeture
         }
 
         ILogger& ILogger::operator<<(const char* text) {
-            std::lock_guard<std::mutex> lock(mtx); // Ensure thread safety
+            std::lock_guard<std::mutex> lock(m_StreamMutex); // Ensure thread safety
             m_Stream << std::string(text);
             return *this;
         }
 
 
         ILogger& ILogger::operator<<(const std::string& text) {
-            std::lock_guard<std::mutex> lock(mtx); // Ensure thread safety
+            std::lock_guard<std::mutex> lock(m_StreamMutex); // Ensure thread safety
             m_Stream << text;
             return *this;
         }
@@ -126,6 +93,50 @@ namespace freeture
         void level(LogSeverityLevel level) {
             m_LogLevel = level;
         }
+
+
+        private:
+            void console_log(std::string message) {
+                // Get current time point
+                auto now = std::chrono::system_clock::now();
+                // Convert time point to system time_t to make it compatible with time functions
+                auto now_c = std::chrono::system_clock::to_time_t(now);
+
+                // Print the timestamp. Adjust the format as needed
+                std::cout << std::put_time(std::localtime(&now_c), "%Y-%m-%d %X; ");
+
+                switch (m_LogLevel) {
+                case LogSeverityLevel::critical:
+                    std::cout << "CRITICAL; ";
+                    break;
+                case LogSeverityLevel::fail:
+                    std::cout << "FAIL; ";
+                    break;
+                case LogSeverityLevel::normal:
+                    std::cout << "NORMAL; ";
+                    break;
+                case LogSeverityLevel::notification:
+                    std::cout << "NOTIFICATION; ";
+                    break;
+                case LogSeverityLevel::warning:
+                    std::cout << "WARNING; ";
+                    break;
+                }
+
+                std::cout << message;
+            }
+
+            /// <summary>
+            /// Call to flush stream
+            /// </summary>
+            void flush()
+            {
+                flush(m_Stream.str());
+                console_log(m_Stream.str());
+
+                m_Stream.str(""); // Clear the stream buffer
+                m_Stream.clear(); // Reset any error flags
+            }
 
     };
 }

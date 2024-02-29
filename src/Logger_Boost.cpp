@@ -23,7 +23,7 @@ logger_type freeture::Logger_Boost::m_LoggerInstance;
 // src::severity_channel_logger_mt< trivial::severity_level > freeture::Logger::m_StackThreadLogger;
 // src::severity_channel_logger_mt< trivial::severity_level > freeture::Logger::m_AcqThreadLogger;
 
-freeture::Logger_Boost::Logger_Boost(Logger* logger) :
+freeture::Logger_Boost::Logger_Boost(shared_ptr<Logger>  logger) :
     ILogger(logger)
 {
 }
@@ -60,6 +60,11 @@ void freeture::Logger_Boost::addDefaultSink(string logger_name, string file_name
 
 void freeture::Logger_Boost::reset() {
     logging::core::get()->remove_all_sinks();
+}
+
+void freeture::Logger_Boost::flush(std::string message)
+{
+
 }
 
 void freeture::Logger_Boost::attach(LogThread log_thread, thread_id_type thread_id)

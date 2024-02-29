@@ -104,7 +104,7 @@ DetectionTemporal::~DetectionTemporal() {
 
 void DetectionTemporal::resetDetection(bool loadNewDataSet){
 
-    LOG_DEBUG << "Clear global events list.";
+    LOG_DEBUG << "Clear global events list." << endl;
     mListGlobalEvents.clear();
     // Clear list of files to send by mail.
     debugFiles.clear();
@@ -761,7 +761,7 @@ bool DetectionTemporal::runDetection(Frame &c) {
                         if(maxtime) {
 
                             TimeDate::Date gedate = (*itGE).getDate();
-                            LOG_INFO << "# GE deleted because max time reached : ";
+                            LOG_INFO << "# GE deleted because max time reached : " << endl;
                                                        string m = "- (*itGE).getDate() : "
                                                                 + Conversion::numbering(4, gedate.year) + Conversion::intToString(gedate.year)
                                                                 + Conversion::numbering(2, gedate.month) + Conversion::intToString(gedate.month)
@@ -770,7 +770,7 @@ bool DetectionTemporal::runDetection(Frame &c) {
                                                                 + Conversion::numbering(2, gedate.minutes) + Conversion::intToString(gedate.minutes)
                                                                 + Conversion::numbering(2, gedate.seconds) + Conversion::intToString((int)gedate.seconds);
 
-                            LOG_INFO << m;
+                            LOG_INFO << m << endl;
 
                             LOG_INFO << "- c.mDate : "
                                                                 << Conversion::numbering(4, c.mDate.year) << Conversion::intToString(c.mDate.year)
@@ -778,10 +778,11 @@ bool DetectionTemporal::runDetection(Frame &c) {
                                                                 << Conversion::numbering(2, c.mDate.day) << Conversion::intToString(c.mDate.day) << "T"
                                                                 << Conversion::numbering(2, c.mDate.hours) << Conversion::intToString(c.mDate.hours)
                                                                 << Conversion::numbering(2, c.mDate.minutes) << Conversion::intToString(c.mDate.minutes)
-                                                                << Conversion::numbering(2, c.mDate.seconds) << Conversion::intToString((int)c.mDate.seconds);
+                                                                << Conversion::numbering(2, c.mDate.seconds) << Conversion::intToString((int)c.mDate.seconds)
+                                                                << endl;
 
-                            LOG_INFO << "- difftime in sec : " << nbsec;
-                            LOG_INFO << "- maxtime in sec : " << mdtp.DET_TIME_MAX;
+                            LOG_INFO << "- difftime in sec : " << nbsec << endl;
+                            LOG_INFO << "- maxtime in sec : " << mdtp.DET_TIME_MAX << endl;
 
                         }
 

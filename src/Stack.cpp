@@ -90,8 +90,7 @@ void Stack::addFrame(shared_ptr<Frame> i){
         }
 
     }catch(exception& e){
-        LOG_DEBUG << e.what() << endl;
-        LOG_ERROR << e.what() ;
+        LOG_ERROR << e.what() << endl;
     }
 
 }
@@ -104,21 +103,21 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
     double  julianCentury   = TimeDate::julianCentury(julianDate);
     double  sideralT        = TimeDate::localSideralTime_2(julianCentury, mDateFirstFrame.hours,  mDateFirstFrame.minutes, (int)mDateFirstFrame.seconds, mstp.SITELONG);
 
-    LOG_INFO << "Start create fits2D to save the stack.";
+    LOG_INFO << "Start create fits2D to save the stack." << endl;
 
     // Fits creation.
     Fits2D newFits(path);
     newFits.loadKeys(mfkp, mstp);
-    LOG_INFO << "Fits path : " << path;
+    LOG_INFO << "Fits path : " << path << endl;
     // Creation date of the fits file : YYYY-MM-DDTHH:MM:SS
     boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
-    LOG_INFO << "Setting Fits DATE (creation date) key : " << to_iso_extended_string(time);
+    LOG_INFO << "Setting Fits DATE (creation date) key : " << to_iso_extended_string(time) << endl;
     newFits.kDATE = to_iso_extended_string(time);
     // Frame exposure time (sec.)
-    LOG_INFO << "Setting fits ONTIME (Frame exposure time (sec.)) key : " << sumExpTime/1000000.0;
+    LOG_INFO << "Setting fits ONTIME (Frame exposure time (sec.)) key : " << sumExpTime/1000000.0 << endl;
     newFits.kONTIME = sumExpTime/1000000.0;
     // Detector gain
-    LOG_INFO << "Setting fits GAIN key : " << gainFirstFrame;
+    LOG_INFO << "Setting fits GAIN key : " << gainFirstFrame << endl;
     newFits.kGAINDB = gainFirstFrame;
     // Acquisition date of the first frame 'YYYY-MM-JJTHH:MM:SS.SS'
     newFits.kDATEOBS = TimeDate::getIsoExtendedFormatDate(mDateFirstFrame);
@@ -129,21 +128,21 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
         newFits.kEXPOSURE = expFirstFrame/1000000.0;
 
     // end obs. date - start obs. date (sec.)
-    LOG_INFO << "Setting fits ELAPTIME (end obs. date - start obs. date (sec.)) key : " << elapTime;
+    LOG_INFO << "Setting fits ELAPTIME (end obs. date - start obs. date (sec.)) key : " << elapTime << endl;
     newFits.kELAPTIME = elapTime;
     // Sideral time
-    LOG_INFO << "Setting fits CRVAL1 (sideraltime) key : " << sideralT;
+    LOG_INFO << "Setting fits CRVAL1 (sideraltime) key : " << sideralT << endl;
     newFits.kCRVAL1 = sideralT;
     // Fps
-    LOG_INFO << "Setting fits CD3_3 (fps) key : " << fps;
+    LOG_INFO << "Setting fits CD3_3 (fps) key : " << fps << endl;
     newFits.kCD3_3 = (double)fps;
     // Projection and reference system
-    LOG_INFO << "Setting fits DATEOBS key : RA---ARC";
+    LOG_INFO << "Setting fits DATEOBS key : RA---ARC" << endl;
     newFits.kCTYPE1 = "RA---ARC";
-    LOG_INFO << "Setting fits DATEOBS key : DEC--ARC";
+    LOG_INFO << "Setting fits DATEOBS key : DEC--ARC" << endl;
     newFits.kCTYPE2 = "DEC--ARC";
     // Equinox
-    LOG_INFO << "Setting fits DATEOBS key : 2000.0";
+    LOG_INFO << "Setting fits DATEOBS key : 2000.0" << endl;
     newFits.kEQUINOX = 2000.0;
 
     switch(stackMthd) {
@@ -152,7 +151,7 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
 
             {
 
-                LOG_INFO << "MEAN STACK MODE";
+                LOG_INFO << "MEAN STACK MODE" << endl;
 
                 // 'SINGLE' 'SUM' 'AVERAGE' ('MEDIAN')
                 newFits.kOBSMODE = "AVERAGE";
@@ -166,15 +165,15 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
                     case CamPixFmt::MONO12 :
 
                         {
-                        LOG_INFO << "Mono12 format";
+                        LOG_INFO << "Mono12 format" << endl;
 
                             shared_ptr<cv::Mat> newMat = make_shared<cv::Mat>(stack->rows,stack->cols, CV_16SC1, cv::Scalar(0));
 
-                            LOG_INFO << "Setting fits BZERO key : 32768";
+                            LOG_INFO << "Setting fits BZERO key : 32768" << endl;
                             newFits.kBZERO = 32768;
-                            LOG_INFO << "Setting fits BSCALE key : 1";
+                            LOG_INFO << "Setting fits BSCALE key : 1" << endl;
                             newFits.kBSCALE = 1;
-                            LOG_INFO << "Setting fits SATURATE key : 4095";
+                            LOG_INFO << "Setting fits SATURATE key : 4095" << endl;
                             newFits.kSATURATE = 4095;
 
 
@@ -199,7 +198,7 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
                                 }
                             }
 
-                            LOG_INFO << "Writing FITS signed short image.";
+                            LOG_INFO << "Writing FITS signed short image." << endl;
                             return newFits.writeFits(newMat, S16, "", mFitsCompressionMethod);
 
                         }
@@ -209,9 +208,9 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
                     default :
 
                         {
-                        LOG_INFO << "Mono8 format";
+                        LOG_INFO << "Mono8 format" << endl;
 
-                        LOG_INFO << "Setting fits SATURATE key : 255";
+                        LOG_INFO << "Setting fits SATURATE key : 255" << endl;
                             newFits.kSATURATE = 255;
 
                             shared_ptr<cv::Mat> newMat = make_shared<cv::Mat>(stack->rows,stack->cols, CV_8UC1, cv::Scalar(0));
@@ -232,7 +231,7 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
                             }
 
                             // Create FITS image with BITPIX = BYTE_IMG (8-bits unsigned integers), pixel with TBYTE (8-bit unsigned byte)
-                            LOG_INFO << "Writing FITS image with BITPIX = BYTE_IMG (8-bits unsigned integers), pixel with TBYTE (8-bit unsigned byte)";
+                            LOG_INFO << "Writing FITS image with BITPIX = BYTE_IMG (8-bits unsigned integers), pixel with TBYTE (8-bit unsigned byte)" << endl;
                             return newFits.writeFits(newMat, UC8, "" , mFitsCompressionMethod);
 
                         }
@@ -246,36 +245,36 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
         case SUM :
 
             {
-            LOG_INFO << "SUM STACK MODE";
+            LOG_INFO << "SUM STACK MODE" << endl;
 
                 // 'SINGLE' 'SUM' 'AVERAGE' ('MEDIAN')
                 newFits.kOBSMODE = "SUM";
 
 
                 if(format == CamPixFmt::MONO12){
-                    LOG_INFO << "Setting fits SATURATE key : 4095 * curFrames";
+                    LOG_INFO << "Setting fits SATURATE key : 4095 * curFrames" << endl;
                     newFits.kSATURATE = 4095 * curFrames;
                 }
                 else {
-                    LOG_INFO << "Setting fits SATURATE key : 255 * curFrames";
+                    LOG_INFO << "Setting fits SATURATE key : 255 * curFrames" << endl;
                     newFits.kSATURATE = 255 * curFrames;
                 }
 
                 if(stackReduction){
 
-                    LOG_INFO << "stackReduction option enabled";
+                    LOG_INFO << "stackReduction option enabled" << endl;
 
                     shared_ptr<cv::Mat> newMat = make_shared<cv::Mat>();
 
                     float bzero  = 0.0;
                     float bscale = 1.0;
 
-                    LOG_INFO << "Call reduction function.";
+                    LOG_INFO << "Call reduction function." << endl;
                     reductionByFactorDivision(bzero, bscale)->copyTo(*(newMat.get()));
 
-                    LOG_INFO << "Setting fits BZERO key : " << bzero;
+                    LOG_INFO << "Setting fits BZERO key : " << bzero << endl;
                     newFits.kBZERO = bzero;
-                    LOG_INFO << "Setting fits BSCALE key : " << bscale;
+                    LOG_INFO << "Setting fits BSCALE key : " << bscale << endl;
                     newFits.kBSCALE = bscale;
 
                     switch(format){
@@ -283,7 +282,7 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
                         case CamPixFmt::MONO12 :
 
                             {
-                            LOG_INFO << "Writting Fits signed short.";
+                            LOG_INFO << "Writting Fits signed short." << endl;
                                 return newFits.writeFits(newMat, S16, "", mFitsCompressionMethod);
 
                             }
@@ -293,7 +292,7 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
                         default :
 
                             {
-                            LOG_INFO << "Writting Fits unsigned char.";
+                            LOG_INFO << "Writting Fits unsigned char." << endl;
                                 return newFits.writeFits(newMat, UC8, "", mFitsCompressionMethod);
 
                             }
@@ -303,7 +302,7 @@ bool Stack::saveStack(string path, StackMeth stackMthd, bool stackReduction){
                 }else{
 
                     // Save fits in 32 bits.
-                    LOG_INFO << "Writting Fits 32 bits.";
+                    LOG_INFO << "Writting Fits 32 bits." << endl;
                     return newFits.writeFits(stack, F32, ""  );
 
                 }

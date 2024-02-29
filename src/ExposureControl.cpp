@@ -272,7 +272,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<c
                     // Compute Mean Sample Value
                     float msv = computeMSV();
 
-                    LOG_INFO << mNbFramesControlled << " -> EXP : " << exposureValue <<  " MSV : " << msv;
+                    LOG_INFO << mNbFramesControlled << " -> EXP : " << exposureValue <<  " MSV : " << msv << endl;
 
                     // If method has not been initialized
                     if(!autoExposureInitialized) {
@@ -296,12 +296,12 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<c
 
                         // Get minimum exposure time.
                         minCameraExposureValue = camera->getMinExposureTime();
-                        LOG_INFO << "Min EXP : " << minCameraExposureValue;
+                        LOG_INFO << "Min EXP : " << minCameraExposureValue << endl;
 
                         // Set maximum exposure time (us) according fps value.
                         if(fps > 0) maxCameraExposureValue = (int)((1.0/fps) * 1000000.0);
                         else throw "Fail to get FPS value from camera.";
-                        LOG_INFO << "Max EXP : " << maxCameraExposureValue;
+                        LOG_INFO << "Max EXP : " << maxCameraExposureValue << endl;
 
                         // Compute msv with the following exposure time
                         exposureValue = minCameraExposureValue;
@@ -310,7 +310,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<c
                         if(!camera->setCameraExposureTime(minCameraExposureValue))
                             throw "Fail to set exposure time in initialization.";
 
-                        LOG_INFO<< "Set EXP to : " << minCameraExposureValue;
+                        LOG_INFO<< "Set EXP to : " << minCameraExposureValue << endl;
                         expArray_1.push_back(minCameraExposureValue);
                         autoExposureInitialized = true;
 
@@ -322,7 +322,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<c
 
                         if(step1) {
 
-                            LOG_INFO << "STEP 1";
+                            LOG_INFO << "STEP 1" << endl;
 
                             msvArray_1.push_back(msv);
 
@@ -331,7 +331,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<c
 
                                 double delta = 1000;
 
-                                LOG_INFO << "STEP 1 : Incrementation by " << delta;
+                                LOG_INFO << "STEP 1 : Incrementation by " << delta << endl;
 
                                 if(exposureValue + delta > maxCameraExposureValue) {
 
@@ -353,12 +353,12 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<c
                                 if(!camera->setCameraExposureTime(exposureValue))
                                     throw "Fail to set exposure time in step 1 : incrementation";
 
-                                LOG_INFO << "Set EXP to : " << exposureValue;
+                                LOG_INFO << "Set EXP to : " << exposureValue << endl;
 
                             } else {
 
-                                LOG_INFO << "STEP 1 : Analyse msv";
-                                LOG_INFO << "MSV ARRAY1 SIZE : " << msvArray_1.size() << "EXP ARRAY1 SIZE " << expArray_1.size();
+                                LOG_INFO << "STEP 1 : Analyse msv" << endl;
+                                LOG_INFO << "MSV ARRAY1 SIZE : " << msvArray_1.size() << "EXP ARRAY1 SIZE " << expArray_1.size() << endl;
 
                                 // MSV too high (over exposition) -> set camera with minimum exposure time.
                                 if(msvArray_1.front() > 2.5) {
@@ -368,7 +368,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<c
                                     if(!camera->setCameraExposureTime(minCameraExposureValue))
                                         throw "Fail to set exposure time in step 1 : Analyse MSV > 2.5";
 
-                                    LOG_INFO  << "Set EXP to : " << exposureValue;
+                                    LOG_INFO  << "Set EXP to : " << exposureValue << endl;
 
                                 // MSV too low (under exposition) -> set camera with maximum exposure time.
                                 }else if(msvArray_1.back() < 2.5) {
@@ -378,7 +378,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<c
                                     if(!camera->setCameraExposureTime(maxCameraExposureValue))
                                         throw "Fail to set exposure time in step 1 : Analyse MSV < 2.5";
 
-                                    LOG_INFO << "Set EXP to : " << exposureValue;
+                                    LOG_INFO << "Set EXP to : " << exposureValue << endl;
 
                                 // Search best MSV and attached exposure time.
                                 }else {
@@ -404,12 +404,12 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<c
                                                 exposureValue = expMin_1;
                                                 expMax_2 = expMax_1;
 
-                                                LOG_INFO << "New interval found -> MSV[" << msvMin_1 << "-" << msvMax_1 << "] EXP[" << expMin_1 << "-" << expMax_1 << "]";
+                                                LOG_INFO << "New interval found -> MSV[" << msvMin_1 << "-" << msvMax_1 << "] EXP[" << expMin_1 << "-" << expMax_1 << "]" << endl;
 
                                                 if(!camera->setCameraExposureTime(exposureValue))
                                                     throw "Fail to set exposure time in step 1 : Analyse MSV : search";
 
-                                                LOG_INFO << "Set EXP to : " << exposureValue;
+                                                LOG_INFO << "Set EXP to : " << exposureValue << endl;
 
                                                 break;
 
@@ -436,7 +436,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<c
 
                         }else if(step2) {
 
-                            LOG_INFO << "STEP 2";
+                            LOG_INFO << "STEP 2" << endl;
 
                             msvArray_2.push_back(msv);
 
@@ -444,7 +444,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<c
 
                                 double delta = 30;
 
-                                LOG_INFO << "STEP 2 : Incrementation by " << delta;
+                                LOG_INFO << "STEP 2 : Incrementation by " << delta << endl;
 
                                 if(exposureValue + delta > expMax_1) {
 
@@ -462,12 +462,12 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<c
                                 if(!camera->setCameraExposureTime(exposureValue))
                                     throw "Fail to set exposure time in step 2 : incrementation";
 
-                                LOG_INFO << "Set EXP to : " << exposureValue;
+                                LOG_INFO << "Set EXP to : " << exposureValue << endl;
 
                             }else {
 
-                                LOG_INFO << "STEP 2 : Analyse msv";
-                                LOG_INFO << "MSV ARRAY2 SIZE : " << msvArray_2.size() << "EXP ARRAY2 SIZE " << expArray_2.size();
+                                LOG_INFO << "STEP 2 : Analyse msv" << endl;
+                                LOG_INFO << "MSV ARRAY2 SIZE : " << msvArray_2.size() << "EXP ARRAY2 SIZE " << expArray_2.size() << endl;
 
                                 // MSV too high (over exposition) -> set camera with minimum exposure time.
                                 if(msvArray_2.front() > 2.5) {
@@ -475,7 +475,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<c
                                     finalExposureTime = expMin_1;
                                     if(!camera->setCameraExposureTime(expMin_1))
                                         throw "Fail to set exposure time in step 2 : Analyse MSV > 2.5";
-                                    LOG_INFO << "Set EXP to : " << expMin_1;
+                                    LOG_INFO << "Set EXP to : " << expMin_1 << endl;
 
                                 // MSV too low (under exposition) -> set camera with maximum exposure time.
                                 }else if(msvArray_2.back() < 2.5) {
@@ -483,7 +483,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<c
                                     finalExposureTime = expMax_2;
                                     if(!camera->setCameraExposureTime(expMax_2))
                                         throw "Fail to set exposure time in step 2 : Analyse MSV < 2.5";
-                                    LOG_INFO << "Set EXP to : " << expMax_2;
+                                    LOG_INFO << "Set EXP to : " << expMax_2 << endl;
 
                                 // Search best MSV and attached exposure time.
                                 }else {
@@ -513,9 +513,9 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<c
 
                                                 if(!camera->setCameraExposureTime(exposureValue))
                                                     throw "Fail to set exposure time in step 2";
-                                                LOG_INFO << "Set EXP to : " << exposureValue;
+                                                LOG_INFO << "Set EXP to : " << exposureValue << endl;
 
-                                                LOG_INFO << "Interval choose -> MSV[" << msvMin_2 << "-" << msvMax_2 << "] EXP[" << expMin_2 << "-" << expMax_2 << "]";
+                                                LOG_INFO << "Interval choose -> MSV[" << msvMin_2 << "-" << msvMax_2 << "] EXP[" << expMin_2 << "-" << expMax_2 << "]" << endl;
 
                                                 break;
 
@@ -539,7 +539,7 @@ bool ExposureControl::controlExposureTime(freeture::Device *camera, shared_ptr<c
 
                                 }*/
 
-                                LOG_INFO << "FINAL EXPOSURE : " << finalExposureTime;
+                                LOG_INFO << "FINAL EXPOSURE : " << finalExposureTime << endl;
 
                             }
 

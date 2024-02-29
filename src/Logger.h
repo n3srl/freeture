@@ -24,24 +24,21 @@ namespace freeture
 {
     class Logger
     {
+        // Deleted copy constructor and assignment operator
+        Logger(const Logger&) = delete;
+        Logger& operator=(const Logger&) = delete;
 
     public:
 
-        /// <summary>
-        /// ctor
-        /// </summary>
-        /// <param name=""></param>
-        /// <param name=""></param>
-        /// <param name=""></param>
-        /// <param name=""></param>
-        /// <param name=""></param>
-        /// <param name=""></param>
-        Logger(LogThread, thread_id_type, std::string, int, int, LogSeverityLevel);
         //static std::shared_ptr<Logger> Get(std::string log_path_folder, int log_archive_days, int log_archive_limit_mb, LogSeverityLevel log_severity);
         ~Logger();
 
-        static Logger& Get();
+        static std::shared_ptr<Logger> m_LoggerInstance;
+        static std::mutex m_LoggerInstanceMutex;
+        static std::shared_ptr<Logger> Get(LogThread, thread_id_type, std::string, int, int, LogSeverityLevel);
+        static std::shared_ptr<Logger> Get();
 
+        
         /// <summary>
         /// Get the concrete logger
         /// </summary>
@@ -62,6 +59,7 @@ namespace freeture
         /// <returns></returns>
         bool hasThreadId(LogThread thread);
         
+        LogThread getLogThread(thread_id_type);
         /// <summary>
         /// return current thread id
         /// </summary>
@@ -118,10 +116,20 @@ namespace freeture
 
     private:
         /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name=""></param>
+        /// <param name=""></param>
+        /// <param name=""></param>
+        /// <param name=""></param>
+        /// <param name=""></param>
+        /// <param name=""></param>
+        Logger(LogThread, thread_id_type, std::string, int, int, LogSeverityLevel);
+
+        /// <summary>
         /// Concrete logger
         /// </summary>
-        static ILogger* m_Instance;
-        static Logger* m_LoggerInstance;
+        static std::shared_ptr <ILogger> m_Instance;
      
         /// <summary>
         /// LogThread - thread id map

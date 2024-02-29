@@ -159,31 +159,31 @@ CfgParam::CfgParam( string cfgFilePath)
         }
     }else{
         m_EMsg.push_back("Configuration file path not exists : " + cfgFilePath);
-        LOG_ERROR << "Configuration file path not exists : " << cfgFilePath;
+        LOG_ERROR << "Configuration file path not exists : " << cfgFilePath << endl;
     }
 }
 
 void CfgParam::setInitRequired(bool init)
 {
-    std::cout << "Set init req" << std::endl;
+    cout << "Set init req" << endl;
     FILE* ofile = fopen(FREETURE_WRITE_CONFIG_PATH, "w");
-    std::ifstream file(m_CfgFilePath);
+    ifstream file(m_CfgFilePath);
     if(!file.is_open())
     {
-        LOG_ERROR << "reset configuration file failed." << std::endl;
+        LOG_ERROR << "reset configuration file failed." << endl;
         return;
     }
 
-    std::string line;
+    string line;
     while (!file.eof())
     {
-        std::getline(file, line);
+        getline(file, line);
         size_t found = line.find("CAMERA_INIT = true");
-        if(found != std::string::npos)
+        if(found != string::npos)
         {
             line = "CAMERA_INIT = false";
         }
-        //std::cout << "Write line " << line << std::endl;
+        //cout << "Write line " << line << endl;
         line += '\n';
         fprintf(ofile, "%s", line.c_str());
     }
@@ -191,9 +191,9 @@ void CfgParam::setInitRequired(bool init)
     fclose(ofile);
     file.close();
     const char* newFileName = (m_CfgFilePath  + ".old").c_str();
-    std::rename(m_CfgFilePath.c_str(), newFileName);
-    std::rename(FREETURE_WRITE_CONFIG_PATH, m_CfgFilePath.c_str());
-    std::remove(newFileName);
+    rename(m_CfgFilePath.c_str(), newFileName);
+    rename(FREETURE_WRITE_CONFIG_PATH, m_CfgFilePath.c_str());
+    remove(newFileName);
     return;
 }
 
@@ -201,7 +201,7 @@ bool CfgParam::loadCameraInit()
 {
     bool error = false;
 
-    std::string defaultCameraConfigFile = "/freeture/cinit.cfg";
+    string defaultCameraConfigFile = "/freeture/cinit.cfg";
     bool cBool = false;
     if(!m_Cfg.Get("CAMERA_INIT", cBool))
     {
@@ -211,7 +211,7 @@ bool CfgParam::loadCameraInit()
         m_Param.CAMERA_INIT = cBool;
     } 
 
-    std::string cString = "";
+    string cString = "";
     if(!m_Cfg.Get("CAMERA_INIT_CONFIG", cString))
     {
         m_Param.CAMERA_INIT_CONFIG = defaultCameraConfigFile;
@@ -222,7 +222,7 @@ bool CfgParam::loadCameraInit()
     
     if(m_Param.CAMERA_INIT_CONFIG == "") m_Param.CAMERA_INIT_CONFIG = defaultCameraConfigFile;
 
-    std::string message;
+    string message;
     if(m_Param.CAMERA_INIT)
     {
 
@@ -232,34 +232,34 @@ bool CfgParam::loadCameraInit()
         } else 
         {
             m_EMsg.push_back("Error loading " FREETURE_CHECK_INIT_DONE);
-            LOG_ERROR << "CfgParam::loadCameraInit" << "Error loading " << FREETURE_CHECK_INIT_DONE;
+            LOG_ERROR << "CfgParam::loadCameraInit" << "Error loading " << FREETURE_CHECK_INIT_DONE << endl;
             error = false;
         }
 
         if(error)
         {
             setInitRequired(true);
-            std::remove(FREETURE_CHECK_INIT_DONE);
+            remove(FREETURE_CHECK_INIT_DONE);
         }
 
         message = "YES";
-        LOG_INFO   << "Camera init file " << m_Param.CAMERA_INIT_CONFIG << std::endl;
+        LOG_INFO   << "Camera init file " << m_Param.CAMERA_INIT_CONFIG << endl;
     } else 
     {
         message = "NO";
     }
 
 
-    LOG_INFO << "Need to init camera: " << message << std::endl;
+    LOG_INFO << "Need to init camera: " << message << endl;
     return error;
 }
 
 void CfgParam::loadCameraSerial()
 {
-    std::string cString;
+    string cString;
 
     bool failStringSerial = false;
-    std::string failmsg = " CAMERA_SERIAL : ";
+    string failmsg = " CAMERA_SERIAL : ";
 
     if(!m_Cfg.Get("CAMERA_SERIAL", cString))
     {
@@ -304,7 +304,7 @@ void CfgParam::loadDataParam() {
         if(!fs::exists(p)){
             try {
                 fs::create_directory(p);
-            } catch (std::exception &ex) {
+            } catch (exception &ex) {
                 m_Param.data.errormsg.push_back("DATA_PATH : Can't create Data Path directory: " + m_Param.data.DATA_PATH);
                 e = true;
             }
@@ -343,7 +343,7 @@ void CfgParam::loadLogParam() {
         if(!fs::exists(p)){
             try {
                 fs::create_directory(p);
-            } catch (std::exception &ex) {
+            } catch (exception &ex) {
                 m_Param.log.errormsg.push_back(" LOG_PATH : Can't create Log Path directory.");
                 e = true;
             }
@@ -369,7 +369,7 @@ void CfgParam::loadLogParam() {
 
     try {
         m_Param.log.LOG_SEVERITY = log_sev.parseEnum("LOG_SEVERITY", log_severity);
-    }catch (std::exception &ex) {
+    }catch (exception &ex) {
         m_Param.log.errormsg.push_back(" LOG_SEVERITY : " + string(ex.what()));
         e = true;
     }
@@ -505,7 +505,7 @@ void CfgParam::loadDetParam()
                 EParser<TimeMode> detMode;
                 m_Param.det.DET_MODE = detMode.parseEnum("DET_MODE", det_mode);
             }
-            catch (std::exception& ex) {
+            catch (exception& ex) {
                 error = true;
                 m_Param.det.errormsg.push_back(" DET_MODE : " + string(ex.what()));
             }
@@ -557,7 +557,7 @@ void CfgParam::loadDetParam()
                 EParser<DetMeth> detMthd;
                 m_Param.det.DET_METHOD = detMthd.parseEnum("DET_METHOD", det_mthd);
             }
-            catch (std::exception& ex) {
+            catch (exception& ex) {
                 error = true;
                 m_Param.det.errormsg.push_back(" DET_METHOD : " + string(ex.what()));
             }
@@ -593,7 +593,7 @@ void CfgParam::loadDetParam()
                 EParser<StackMeth> detSumMthd;
                 m_Param.det.DET_SUM_MTHD = detSumMthd.parseEnum("DET_SUM_MTHD", det_sum_mthd);
             }
-            catch (std::exception& ex) {
+            catch (exception& ex) {
                 error = true;
                 m_Param.det.errormsg.push_back(" DET_SUM_MTHD : " + string(ex.what()));
             }
@@ -638,7 +638,7 @@ void CfgParam::loadDetParam()
                         try {
                             fs::create_directory(p);
                         }
-                        catch (std::exception& ex) {
+                        catch (exception& ex) {
                             m_Param.det.errormsg.push_back(" DET_DEBUG_PATH : Can't create Debug Path. Debug Path must exist as DET_DEBUG_UPDATE_MASK is enabled.");
                             error = true;
                         }
@@ -748,7 +748,7 @@ void CfgParam::loadStackParam()
                 EParser<TimeMode> stackMode;
                 m_Param.st.STACK_MODE = stackMode.parseEnum("STACK_MODE", stack_mode);
             }
-            catch (std::exception& ex) {
+            catch (exception& ex) {
                 error = true;
                 m_Param.st.errormsg.push_back(" STACK_MODE : " + string(ex.what()));
             }
@@ -774,7 +774,7 @@ void CfgParam::loadStackParam()
                 EParser<StackMeth> stackMthd;
                 m_Param.st.STACK_MTHD = stackMthd.parseEnum("STACK_MTHD", stack_mthd);
             }
-            catch (std::exception& ex) {
+            catch (exception& ex) {
                 error = true;
                 m_Param.st.errormsg.push_back(" STACK_MTHD : " + string(ex.what()));
             }
@@ -960,7 +960,7 @@ void CfgParam::loadMailParam() {
                         m_Param.mail.MAIL_SMTP_PASSWORD = "";
                     }
 
-                }catch (std::exception &ex) {
+                }catch (exception &ex) {
                     e = true;
                     m_Param.mail.errormsg.push_back(" MAIL_CONNECTION_TYPE : " + string(ex.what()));
                 }
@@ -1151,7 +1151,7 @@ bool CfgParam::allParamAreCorrect()
         errorFound = true;
 
         if (enableErrors)
-            LOG_ERROR << "CfgParam::allParamAreCorrect;" << ">> Error. Configuration file not exists at " << m_CfgFilePath << " use -c to set a different location. ";
+            LOG_ERROR << "CfgParam::allParamAreCorrect;" << ">> Error. Configuration file not exists at " << m_CfgFilePath << " use -c to set a different location." << endl;
     }
 
 
@@ -1239,7 +1239,7 @@ void CfgParam::loadCamParam()
             EParser<CamPixFmt> camPixFmt;
             m_Param.camInput.ACQ_FORMAT = camPixFmt.parseEnum("ACQ_FORMAT", pixfmt);
         }
-        catch (std::exception& ex) {
+        catch (exception& ex) {
             m_Param.camInput.errormsg.push_back(" ACQ_FORMAT : " + string(ex.what()));
             error = true;
         }
@@ -1261,8 +1261,8 @@ void CfgParam::loadCamParam()
             }
             else {
 
-                if (acq_offset.find(",") != std::string::npos) {
-                    //std::cout << "++++++++++++++++++++++++++++++++++++++ FIND ACQ OFFSET " << acq_offset << std::endl;
+                if (acq_offset.find(",") != string::npos) {
+                    //cout << "++++++++++++++++++++++++++++++++++++++ FIND ACQ OFFSET " << acq_offset << endl;
                     string offsetx = acq_offset.substr(0, acq_offset.find(","));
                     string offsety = acq_offset.substr(acq_offset.find(",") + 1, string::npos);
                     int mStartX = atoi(offsetx.c_str());
@@ -1299,8 +1299,8 @@ void CfgParam::loadCamParam()
             }
             else {
 
-                if (acq_res_custome_size.find("x") != std::string::npos) {
-                    //std::cout << "++++++++++++++++++++++++++++++++++++++ FIND ACQ RES SIZE " << acq_res_custome_size << std::endl;
+                if (acq_res_custome_size.find("x") != string::npos) {
+                    //cout << "++++++++++++++++++++++++++++++++++++++ FIND ACQ RES SIZE " << acq_res_custome_size << endl;
                     string width = acq_res_custome_size.substr(0, acq_res_custome_size.find("x"));
                     string height = acq_res_custome_size.substr(acq_res_custome_size.find("x") + 1, string::npos);
                     int mSizeWidth = atoi(width.c_str());
@@ -1311,7 +1311,7 @@ void CfgParam::loadCamParam()
                         error = true;
                     }
                     else {
-                        //std::cout << "++++++++++++++++++++++++++++++++++++++ ACQ_HEIGHT " << mSizeHeight << std::endl;
+                        //cout << "++++++++++++++++++++++++++++++++++++++ ACQ_HEIGHT " << mSizeHeight << endl;
                         m_Param.camInput.ACQ_HEIGHT = mSizeHeight;
                     }
 
@@ -1374,7 +1374,7 @@ void CfgParam::loadCamParam()
 //             }
 //         }
 // 
-//         LOG_INFO << "EXP NIGHT " << m_Param.camInput.ACQ_NIGHT_EXPOSURE << std::endl;
+//         LOG_INFO << "EXP NIGHT " << m_Param.camInput.ACQ_NIGHT_EXPOSURE << endl;
 //     }
 
     //-------------------------------------------------------------------
@@ -1500,7 +1500,7 @@ void CfgParam::loadCamParam()
         }
         else {
 
-            if (sunrise_time.find(":") != std::string::npos) {
+            if (sunrise_time.find(":") != string::npos) {
 
                 typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
                 boost::char_separator<char> sep(":");
@@ -1539,7 +1539,7 @@ void CfgParam::loadCamParam()
         }
         else {
 
-            if (sunset_time.find(":") != std::string::npos) {
+            if (sunset_time.find(":") != string::npos) {
 
                 typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
                 boost::char_separator<char> sep(":");
@@ -1603,7 +1603,7 @@ void CfgParam::loadCamParam()
                     EParser<TimeMode> regMode;
                     m_Param.camInput.regcap.ACQ_REGULAR_MODE = regMode.parseEnum("ACQ_REGULAR_MODE", reg_mode);
                 }
-                catch (std::exception& ex) {
+                catch (exception& ex) {
                     error = true;
                     m_Param.camInput.errormsg.push_back(" ACQ_REGULAR_MODE : " + string(ex.what()));
                 }
@@ -1636,7 +1636,7 @@ void CfgParam::loadCamParam()
                         EParser<ImgFormat> imgOutput;
                         m_Param.camInput.regcap.ACQ_REGULAR_OUTPUT = imgOutput.parseEnum("ACQ_REGULAR_OUTPUT", img_output);
                     }
-                    catch (std::exception& ex) {
+                    catch (exception& ex) {
                         error = true;
                         m_Param.camInput.errormsg.push_back(" ACQ_REGULAR_OUTPUT : " + string(ex.what()));
                     }
@@ -1651,7 +1651,7 @@ void CfgParam::loadCamParam()
                 m_Param.camInput.errormsg.push_back(" ACQ_REGULAR_CFG : Fail to load value.");
             }
             else {
-                std::transform(regAcqParam.begin(), regAcqParam.end(), regAcqParam.begin(), ::toupper);
+                transform(regAcqParam.begin(), regAcqParam.end(), regAcqParam.begin(), ::toupper);
 
                 typedef boost::tokenizer<boost::char_separator<char> > tokenizer1;
                 boost::char_separator<char> sep1("HMSEGFN");
@@ -1748,7 +1748,7 @@ void CfgParam::loadCamParam()
                             EParser<ImgFormat> imgOutput;
                             m_Param.camInput.schcap.ACQ_SCHEDULE_OUTPUT = imgOutput.parseEnum("ACQ_SCHEDULE_OUTPUT", img_output);
                         }
-                        catch (std::exception& ex) {
+                        catch (exception& ex) {
                             error = true;
                             m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE_OUTPUT : " + string(ex.what()));
                         }
@@ -1773,7 +1773,7 @@ void CfgParam::loadCamParam()
 
                         for (tokenizer::iterator tok_iter = tokens.begin(); tok_iter != tokens.end(); ++tok_iter) {
                             string s = *tok_iter;
-                            std::transform(s.begin(), s.end(), s.begin(), ::toupper);
+                            transform(s.begin(), s.end(), s.begin(), ::toupper);
                             sch1.push_back(s);
                         }
 

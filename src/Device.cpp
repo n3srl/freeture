@@ -53,22 +53,22 @@ void printValues(cameraParam& cp, string log) {
     EParser<CamPixFmt> fmt;
     string val = fmt.getStringEnum(cp.ACQ_FORMAT);
 
-    LOG_DEBUG << log << "ACQ_FPS=" << cp.ACQ_FPS;
-    LOG_DEBUG << log << "ACQ_DAY_GAIN=" << cp.ACQ_DAY_GAIN;
-    LOG_DEBUG << log << "ACQ_DAY_EXPOSURE=" << cp.ACQ_DAY_EXPOSURE;
+    LOG_DEBUG << log << "ACQ_FPS=" << cp.ACQ_FPS << endl;
+    LOG_DEBUG << log << "ACQ_DAY_GAIN=" << cp.ACQ_DAY_GAIN << endl;
+    LOG_DEBUG << log << "ACQ_DAY_EXPOSURE=" << cp.ACQ_DAY_EXPOSURE << endl;
 
-    LOG_DEBUG << log << "ACQ_NIGHT_GAIN=" << cp.ACQ_NIGHT_GAIN;
-    LOG_DEBUG << log << "ACQ_NIGHT_EXPOSURE=" << cp.ACQ_NIGHT_EXPOSURE;
+    LOG_DEBUG << log << "ACQ_NIGHT_GAIN=" << cp.ACQ_NIGHT_GAIN << endl;
+    LOG_DEBUG << log << "ACQ_NIGHT_EXPOSURE=" << cp.ACQ_NIGHT_EXPOSURE << endl;
 
-    LOG_DEBUG << log << "ACQ_FORMAT= " << val;
+    LOG_DEBUG << log << "ACQ_FORMAT= " << val << endl;
 
-    LOG_DEBUG << log << "ACQ_RES_CUSTOM_SIZE=" << cp.ACQ_RES_CUSTOM_SIZE;
+    LOG_DEBUG << log << "ACQ_RES_CUSTOM_SIZE=" << cp.ACQ_RES_CUSTOM_SIZE << endl;
 
-    LOG_DEBUG << log << "ACQ_WIDTH=" << cp.ACQ_WIDTH;
-    LOG_DEBUG << log << "ACQ_HEIGHT=" << cp.ACQ_HEIGHT;
+    LOG_DEBUG << log << "ACQ_WIDTH=" << cp.ACQ_WIDTH << endl;
+    LOG_DEBUG << log << "ACQ_HEIGHT=" << cp.ACQ_HEIGHT << endl;
 
-    LOG_DEBUG << log << "ACQ_STARTX=" << cp.ACQ_STARTX;
-    LOG_DEBUG << log << "ACQ_STARTY=" << cp.ACQ_STARTY;
+    LOG_DEBUG << log << "ACQ_STARTX=" << cp.ACQ_STARTX << endl;
+    LOG_DEBUG << log << "ACQ_STARTY=" << cp.ACQ_STARTY << endl;
 }
 
 void printValues(CameraSettings& cp, string log)
@@ -76,15 +76,15 @@ void printValues(CameraSettings& cp, string log)
     EParser<CamPixFmt> fmt;
     string val = fmt.getStringEnum(cp.PixelFormat);
 
-    LOG_DEBUG << log << "PixelFormat= " << val;
-    LOG_DEBUG << log << "Gain=" << cp.Gain;
-    LOG_DEBUG << log << "FPS=" << cp.FPS;
-    LOG_DEBUG << log << "Exposure=" << cp.Exposure;
-    LOG_DEBUG << log << "CustomSize=" << cp.CustomSize;
-    LOG_DEBUG << log << "SizeWidth=" << cp.SizeWidth;
-    LOG_DEBUG << log << "SizeHeight=" << cp.SizeHeight;
-    LOG_DEBUG << log << "StartX=" << cp.StartX;
-    LOG_DEBUG << log << "StartY=" << cp.StartY;
+    LOG_DEBUG << log << "PixelFormat= " << val << endl;
+    LOG_DEBUG << log << "Gain=" << cp.Gain << endl;
+    LOG_DEBUG << log << "FPS=" << cp.FPS << endl;
+    LOG_DEBUG << log << "Exposure=" << cp.Exposure << endl;
+    LOG_DEBUG << log << "CustomSize=" << cp.CustomSize << endl;
+    LOG_DEBUG << log << "SizeWidth=" << cp.SizeWidth << endl;
+    LOG_DEBUG << log << "SizeHeight=" << cp.SizeHeight << endl;
+    LOG_DEBUG << log << "StartX=" << cp.StartX << endl;
+    LOG_DEBUG << log << "StartY=" << cp.StartY << endl;
 }
 
 

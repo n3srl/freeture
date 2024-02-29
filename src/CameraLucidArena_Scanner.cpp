@@ -18,6 +18,7 @@
 #include <GenICam.h>
 
 
+using namespace std;
 using namespace GenICam;
 using namespace freeture;
 
@@ -44,12 +45,12 @@ void CameraLucidArena_Scanner::UpdateCameraList()
 
         if (m_ArenaSDKSystem == nullptr) 
         {
-            LOG_ERROR << "CameraLucidArena_Scanner::UpdateCameraList; Arena::OpenSystem returned nullptr";
+            LOG_ERROR << "CameraLucidArena_Scanner::UpdateCameraList; Arena::OpenSystem returned nullptr" << endl;
             throw std::runtime_error("Arena::OpenSystem returned nullptr");
         }
 
-        LOG_INFO  << "CameraLucidArena_Scanner::UpdateCameraList; Arena SDK Version: " << Arena::GetVersion().c_str();
-        LOG_DEBUG << "CameraLucidArena_Scanner::UpdateCameraList; UpdateDevices";
+        LOG_INFO  << "CameraLucidArena_Scanner::UpdateCameraList; Arena SDK Version: " << Arena::GetVersion().c_str() << endl;
+        LOG_DEBUG << "CameraLucidArena_Scanner::UpdateCameraList; UpdateDevices" << endl;
 
         m_ArenaSDKSystem->UpdateDevices(DEFAULT_WAIT_TIME);
 
@@ -57,7 +58,7 @@ void CameraLucidArena_Scanner::UpdateCameraList()
 
         std::vector<Arena::DeviceInfo> deviceInfos = m_ArenaSDKSystem->GetDevices();
      
-        LOG_DEBUG << "CameraLucidArena_Scanner::UpdateCameraList; Found " << deviceInfos.size() << " candidates devices";
+        LOG_DEBUG << "CameraLucidArena_Scanner::UpdateCameraList; Found " << deviceInfos.size() << " candidates devices" << endl;
 
         for (int i = 0; i< deviceInfos.size(); i++)
         {
@@ -71,11 +72,11 @@ void CameraLucidArena_Scanner::UpdateCameraList()
             std::string s_addr = std::string(addr);
             std::string s_serial = std::string(serial);
 
-            LOG_DEBUG << "CameraLucidArena_Scanner::UpdateCameraList; #" <<i << " " << s_name;
+            LOG_DEBUG << "CameraLucidArena_Scanner::UpdateCameraList; #" <<i << " " << s_name << endl;
 
             if ( s_name.find ( "PHX016S" ) != std::string::npos || s_name.find("PHX032S") != std::string::npos)
             {
-                LOG_DEBUG << "CameraLucidArena_Scanner::UpdateCameraList; Phoenix camera found";
+                LOG_DEBUG << "CameraLucidArena_Scanner::UpdateCameraList; Phoenix camera found" << endl;
 
                 CameraDescription c;
 
@@ -93,6 +94,6 @@ void CameraLucidArena_Scanner::UpdateCameraList()
     }
     catch (std::exception& e)
     {
-        LOG_ERROR << "CameraLucidArena_Scanner::UpdateCameraList" << "Arena::OpenSystem failure ",e.what();
+        LOG_ERROR << "CameraLucidArena_Scanner::UpdateCameraList" << "Arena::OpenSystem failure " << e.what() << endl;
     }
 }

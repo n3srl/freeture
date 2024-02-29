@@ -18,11 +18,11 @@ mutex CameraDeviceManager::m_Mutex;
 
 CameraDeviceManager::CameraDeviceManager() 
 {
-    LOG_DEBUG << "CameraDeviceManager::CameraDeviceManager;" << "Initialize available scanners...";
+    LOG_DEBUG << "CameraDeviceManager::CameraDeviceManager;" << "Initialize available scanners..." << endl;
 
     initScanners();
 
-    LOG_DEBUG << "CameraDeviceManager::CameraDeviceManager;" << "Retrieve devices list...";
+    LOG_DEBUG << "CameraDeviceManager::CameraDeviceManager;" << "Retrieve devices list..." << endl;
 
     m_DeviceCount = -1;
 
@@ -33,15 +33,15 @@ CameraDeviceManager::CameraDeviceManager()
 
 bool CameraDeviceManager::createDevice()
 {
-    LOG_DEBUG << "CameraDeviceManager::createDevice";
+    LOG_DEBUG << "CameraDeviceManager::createDevice" << endl;
     m_Device = new Device();
 
-    LOG_DEBUG << "CameraDeviceManager::createDevice;"<< "Assign camera";
+    LOG_DEBUG << "CameraDeviceManager::createDevice;"<< "Assign camera" << endl;
     //assign camera
     m_Device->setCamera( m_Camera );
     
     //Setup with runtime values
-    LOG_DEBUG << "CameraDeviceManager::createDevice;" << "Setup with runtime values";
+    LOG_DEBUG << "CameraDeviceManager::createDevice;" << "Setup with runtime values" << endl;
     m_Device->Setup(m_SelectedRuntimeConfiguration.camInput, m_SelectedRuntimeConfiguration.framesInput, m_SelectedRuntimeConfiguration.vidInput);
 
     return  true;
@@ -49,14 +49,14 @@ bool CameraDeviceManager::createDevice()
 
 bool CameraDeviceManager::createCamera()
 {
-    LOG_DEBUG << "CameraDeviceManager::createCamera";
+    LOG_DEBUG << "CameraDeviceManager::createCamera" << endl;
     CameraDescription camera_description;
     bool found = false;
 
     //if serial is set
     if (!m_SelectedRuntimeConfiguration.CAMERA_SERIAL.empty()) 
     {
-        LOG_DEBUG << "LOADING CAMERA_SERIAL";
+        LOG_DEBUG << "LOADING CAMERA_SERIAL" << endl;
         for (const CameraDescription& camera : m_DevicesList) {
             if (camera.Serial == m_SelectedRuntimeConfiguration.CAMERA_SERIAL) {
                 camera_description = camera;
@@ -68,7 +68,7 @@ bool CameraDeviceManager::createCamera()
         //otherwise try to get with CAMERA ID
         if (m_SelectedRuntimeConfiguration.DEVICE_ID >= 0 && m_SelectedRuntimeConfiguration.DEVICE_ID <= m_DeviceCount - 1)
         {
-            LOG_DEBUG << "LOADING CAMERA_ID";
+            LOG_DEBUG << "LOADING CAMERA_ID" << endl;
             camera_description = m_DevicesList.at(m_SelectedRuntimeConfiguration.DEVICE_ID);
             found = true;
         }
@@ -76,37 +76,37 @@ bool CameraDeviceManager::createCamera()
 
     if (found)
     {
-        LOG_DEBUG << "CREATE CAMERA " + camera_description.Description;
+        LOG_DEBUG << "CREATE CAMERA " + camera_description.Description << endl;
         m_Camera = CameraFactory::createCamera(camera_description, m_SelectedRuntimeConfiguration);
 
         if (m_Camera == nullptr)
         {
             EParser<CamSdkType> parser;
-            LOG_DEBUG << "CameraDeviceManager::createCamera;" << "Factory fails to create the camera with SDK : " << parser.getStringEnum(camera_description.Sdk);
+            LOG_DEBUG << "CameraDeviceManager::createCamera;" << "Factory fails to create the camera with SDK : " << parser.getStringEnum(camera_description.Sdk) << endl;
             return false;
         }
 
         return true;
     }
     else 
-        LOG_ERROR << "No device with CAMERA_ID " << m_SelectedRuntimeConfiguration.DEVICE_ID << " nor CAMERA_SERIAL="<< m_SelectedRuntimeConfiguration.CAMERA_SERIAL;
+        LOG_ERROR << "No device with CAMERA_ID " << m_SelectedRuntimeConfiguration.DEVICE_ID << " nor CAMERA_SERIAL="<< m_SelectedRuntimeConfiguration.CAMERA_SERIAL << endl;
 
     return false;
 }
 
 Device* CameraDeviceManager::getDevice() {
-    LOG_DEBUG << "CameraDeviceManager::getDevice";
+    LOG_DEBUG << "CameraDeviceManager::getDevice" << endl;
     return m_Device;
 }
 
 int CameraDeviceManager::getCameraDeviceBySerial(string serial)
 {
-    LOG_DEBUG << "CameraDeviceManager::getCameraDeviceBySerial";
+    LOG_DEBUG << "CameraDeviceManager::getCameraDeviceBySerial" << endl;
     if(serial == "") {
-        LOG_DEBUG << "CameraDeviceManager::getCameraDeviceBySerial;"<< "CAMERA SERIAL IS MISSING DEVICE ID WILL BE USED " ;
+        LOG_DEBUG << "CameraDeviceManager::getCameraDeviceBySerial;"<< "CAMERA SERIAL IS MISSING DEVICE ID WILL BE USED " << endl;
         return -1;
     }
-    LOG_DEBUG << "CameraDeviceManager::getCameraDeviceBySerial;" << "LOOKING FOR CAMERA SERIAL " << serial ;
+    LOG_DEBUG << "CameraDeviceManager::getCameraDeviceBySerial;" << "LOOKING FOR CAMERA SERIAL " << serial << endl;
     for (int i = 0; i < m_DevicesList.size(); i++)
     {
         CameraDescription cameraDescrption = m_DevicesList.at(i);
@@ -126,13 +126,13 @@ bool CameraDeviceManager::selectDevice(parameters runtime_configuration)
             return true;
         else
         {
-            LOG_ERROR << "Device #" << m_SelectedDeviceID << " is already selected.";
+            LOG_ERROR << "Device #" << m_SelectedDeviceID << " is already selected." << endl;
             return false;
         }
     }
 
     if (m_DeviceCount < 0 || m_SelectedDeviceID >(m_DeviceCount - 1)) {
-        LOG_ERROR << "CameraDeviceManager::selectDevice;" << "CAMERA_ID's value not exist.";
+        LOG_ERROR << "CameraDeviceManager::selectDevice;" << "CAMERA_ID's value not exist." << endl;
         m_Selected = false;
         return false;
     }
@@ -145,14 +145,14 @@ bool CameraDeviceManager::selectDevice(parameters runtime_configuration)
 
     //create camera
     if (!createCamera()) {
-        LOG_ERROR << " CameraDeviceManager::selectDevice;" << "Error creating camera";
+        LOG_ERROR << " CameraDeviceManager::selectDevice;" << "Error creating camera" << endl;
         m_Selected = false;
         return false;
     }
 
     //create device
     if (!createDevice()) {
-        LOG_ERROR << " CameraDeviceManager::selectDevice;" << "Error creating device";
+        LOG_ERROR << " CameraDeviceManager::selectDevice;" << "Error creating device" << endl;
         m_Selected = false;
         return false;
     }
@@ -162,7 +162,7 @@ bool CameraDeviceManager::selectDevice(parameters runtime_configuration)
 
 CamSdkType CameraDeviceManager::getDeviceSdk(int id) {
 
-    LOG_DEBUG << "CameraDeviceManager::getDeviceSdk";
+    LOG_DEBUG << "CameraDeviceManager::getDeviceSdk" << endl;
 
     shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
     vector<CameraDescription> devices = m_CameraDeviceManager->getListDevice();
@@ -170,15 +170,15 @@ CamSdkType CameraDeviceManager::getDeviceSdk(int id) {
     if (id >= 0 && id <= (m_CameraDeviceManager->m_DeviceCount - 1)) {
         return devices.at(id).Sdk;
     }
-    LOG_DEBUG << "ERROR GETTING DEVICE SDK FOR CAMERA ID " << id << " NUM OF DEVICES " << (m_CameraDeviceManager->m_DeviceCount - 1) ;
+    LOG_DEBUG << "ERROR GETTING DEVICE SDK FOR CAMERA ID " << id << " NUM OF DEVICES " << (m_CameraDeviceManager->m_DeviceCount - 1) << endl;
 
     return CamSdkType::UNKNOWN;
 }
 
 vector<CameraDescription> CameraDeviceManager::getListDevice()
 {
-    LOG_DEBUG << "CameraDeviceManager::getListDevice";
-    LOG_DEBUG << "CameraDeviceManager::initScanners;"<< "Available scanners: " << m_AvailableScanners.size();
+    LOG_DEBUG << "CameraDeviceManager::getListDevice" << endl;
+    LOG_DEBUG << "CameraDeviceManager::initScanners;"<< "Available scanners: " << m_AvailableScanners.size() << endl;
 
     for (scanner_type scanner : m_AvailableScanners) 
     {
@@ -198,7 +198,7 @@ vector<CameraDescription> CameraDeviceManager::getListDevice()
 
 void CameraDeviceManager::mergeList(vector<CameraDescription>& Devices)
 {
-    LOG_DEBUG << "CameraDeviceManager::mergeList";
+    LOG_DEBUG << "CameraDeviceManager::mergeList" << endl;
 
     //foreach device found test if already exists. if not add to list
     for (int i = 0; i < Devices.size(); i++)
@@ -219,52 +219,52 @@ void CameraDeviceManager::mergeList(vector<CameraDescription>& Devices)
 
 void CameraDeviceManager::printDevicesList()
 {
-    LOG_DEBUG << "CameraDeviceManager::printDevicesList";
+    LOG_DEBUG << "CameraDeviceManager::printDevicesList" << endl;
 
     for (int i = 0; i < m_DevicesList.size(); i++)
     {
         CameraDescription cam = m_DevicesList[i];
-        LOG_INFO << "[CAMERA ID=" << cam.Id << "][CAMERA_SERIAL="<< cam.Serial<<"] - IP Address" << cam.Address << ", " << cam.Description;
+        LOG_INFO << "[CAMERA ID=" << cam.Id << "][CAMERA_SERIAL="<< cam.Serial<<"] - IP Address= " << cam.Address << " - " << cam.Description << endl;
     }
 }
 
 void CameraDeviceManager::initScanners()
 {
-    LOG_DEBUG << "CameraDeviceManager::initScanners";
+    LOG_DEBUG << "CameraDeviceManager::initScanners" << endl;
 
     scanner_type ptr;
 
     // PYLONGIGE
 #ifdef USE_PYLON
-    LOG_INFO << "PYLON SCANNER AVAILABLE";
+    LOG_INFO << "PYLON SCANNER AVAILABLE" << endl;
     ptr = CameraScanner::CreateScanner(CamSdkType::PYLONGIGE);
     assert(ptr != nullptr);
     m_AvailableScanners.push_back(ptr);
 #endif
 
 #ifdef USE_TISCAMERA
-    LOG_INFO << "TIS CAMERA SCANNER AVAILABLE";
+    LOG_INFO << "TIS CAMERA SCANNER AVAILABLE" << endl;
     ptr = CameraScanner::CreateScanner(CamSdkType::TIS);
     assert(ptr != nullptr);
     m_AvailableScanners.push_back(ptr);
 #endif
 
 #ifdef USE_VIDEOINPUT
-    LOG_INFO << "VIDEO INPUT SCANNER AVAILABLE";
+    LOG_INFO << "VIDEO INPUT SCANNER AVAILABLE" << endl;
     ptr = CameraScanner::CreateScanner(CamSdkType::VIDEOINPUT);
     assert(ptr != nullptr);
     m_AvailableScanners.push_back(ptr);
 #endif
 
 #ifdef USE_ARAVIS
-    LOG_INFO << "LUCID ARAVIS SCANNER AVAILABLE";
+    LOG_INFO << "LUCID ARAVIS SCANNER AVAILABLE" << endl;
     ptr = CameraScanner::CreateScanner(CamSdkType::LUCID_ARAVIS);
     assert(ptr != nullptr);
     m_AvailableScanners.push_back(ptr);
 #endif
 
 #ifdef USE_ARENA
-    LOG_INFO << "LUCID ARENA SCANNER AVAILABLE";
+    LOG_INFO << "LUCID ARENA SCANNER AVAILABLE" << endl;
     ptr =  CameraScanner::CreateScanner(CamSdkType::LUCID_ARENA);
     assert(ptr != nullptr);
     m_AvailableScanners.push_back(ptr);
@@ -272,14 +272,14 @@ void CameraDeviceManager::initScanners()
 
 #ifdef USE_ARAVIS
     // ARAVIS
-    LOG_INFO << "ARAVIS SCANNER AVAILABLE";
+    LOG_INFO << "ARAVIS SCANNER AVAILABLE" << endl;
     ptr = CameraScanner::CreateScanner(CamSdkType::ARAVIS);
     assert(ptr != nullptr);
     m_AvailableScanners.push_back(ptr);
 #endif
 
     if (m_AvailableScanners.size() == 0)
-        LOG_ERROR << "CameraDeviceManager::initScanners;" << "NO SCANNERS AVAILABLE!";
+        LOG_ERROR << "CameraDeviceManager::initScanners;" << "NO SCANNERS AVAILABLE!" << endl;
     else
         printDevicesList();
 /*

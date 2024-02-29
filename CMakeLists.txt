@@ -81,7 +81,7 @@ message (STATUS "Boost Configuration; Boost_DIR:  $ENV{Boost_DIR}" )
 message (STATUS "Boost Configuration; CMAKE_PREFIX_PATH:  ${CMAKE_PREFIX_PATH}" )
 
 
-find_package(Boost 1.82.0 REQUIRED COMPONENTS system thread filesystem log program_options) 
+find_package(Boost 1.82.0 REQUIRED COMPONENTS system thread filesystem log program_options iostreams) 
 
 
 message (STATUS "Boost Configuration; Boost_INCLUDE_DIRS:  ${Boost_INCLUDE_DIRS}" )
@@ -201,6 +201,8 @@ set(Lucid_DLL
 #"${Lucid_RELEASE}/swresample-3.dll"
 #"${Lucid_RELEASE}/XmlParser_MD_VC140_v3_3_LUCID.dll"
 )
+
+
 
 
 

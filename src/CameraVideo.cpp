@@ -38,8 +38,9 @@
 #include <boost/date_time.hpp>
 
 using namespace freeture;
+using namespace std;
 
-CameraVideo::CameraVideo(CameraDescription camera_descriptor, cameraParam settings , std::vector<std::string> videoList, bool verbose) :
+CameraVideo::CameraVideo(CameraDescription camera_descriptor, cameraParam settings , vector<string> videoList, bool verbose) :
     Camera(camera_descriptor, settings),
     mVideoID(0),
     mFrameWidth(0),
@@ -68,7 +69,7 @@ CameraVideo::~CameraVideo(void){
 bool CameraVideo::grabInitialization(){
 
     if(!mCap.isOpened()) {
-         LOG_ERROR << "Cannot open the video file";
+         LOG_ERROR << "Cannot open the video file" << endl;
          return false;
     }
 
@@ -90,11 +91,11 @@ bool CameraVideo::getDataSetStatus(){
         return true;
 }
 
-bool CameraVideo::loadNextDataSet(std::string &location){
+bool CameraVideo::loadNextDataSet(string &location){
 
     if(mVideoID != 0){
 
-       LOG_INFO << "Change video : " << mVideoID << " - Path : " << mVideoList.at(mVideoID) << std::endl;
+        LOG_INFO << "Change video : " << mVideoID << " - Path : " << mVideoList.at(mVideoID) << endl;
 
         mCap = cv::VideoCapture(mVideoList.at(mVideoID));
 

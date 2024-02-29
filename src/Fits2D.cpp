@@ -685,7 +685,7 @@ bool Fits2D::writeFits(shared_ptr<cv::Mat> img, ImgBitDepth imgType, std::string
 
             if(tab == NULL){
 
-                LOG_ERROR << "Fail to allocate unsigned char** array (NULL).";
+                LOG_ERROR << "Fail to allocate unsigned char** array (NULL)." << endl;
                 return false;
 
             }
@@ -694,7 +694,7 @@ bool Fits2D::writeFits(shared_ptr<cv::Mat> img, ImgBitDepth imgType, std::string
 
             if(tab[0] == NULL){
 
-                LOG_ERROR << "Fail to allocate unsigned char* array (NULL).";
+                LOG_ERROR << "Fail to allocate unsigned char* array (NULL)." << endl;
                 return false;
 
             }
@@ -759,7 +759,7 @@ bool Fits2D::writeFits(shared_ptr<cv::Mat> img, ImgBitDepth imgType, std::string
 
             if(tab == NULL){
 
-                LOG_ERROR << "Fail to allocate char** array (NULL).";
+                LOG_ERROR << "Fail to allocate char** array (NULL)." << endl;
                 return false;
 
             }
@@ -768,7 +768,7 @@ bool Fits2D::writeFits(shared_ptr<cv::Mat> img, ImgBitDepth imgType, std::string
 
             if(tab[0] == NULL){
 
-                LOG_ERROR << "Fail to allocate char* array (NULL).";
+                LOG_ERROR << "Fail to allocate char* array (NULL)." << endl;
                 return false;
 
             }
@@ -835,7 +835,7 @@ bool Fits2D::writeFits(shared_ptr<cv::Mat> img, ImgBitDepth imgType, std::string
 
             if(tab == NULL){
 
-                LOG_ERROR << "Fail to allocate unsigned short** array (NULL).";
+                LOG_ERROR << "Fail to allocate unsigned short** array (NULL)." << endl;
                 return false;
 
             }
@@ -844,7 +844,7 @@ bool Fits2D::writeFits(shared_ptr<cv::Mat> img, ImgBitDepth imgType, std::string
 
             if(tab[0] == NULL){
 
-                LOG_ERROR << "Fail to allocate unsigned short* array (NULL).";
+                LOG_ERROR << "Fail to allocate unsigned short* array (NULL)." << endl;
                 return false;
 
             }
@@ -950,7 +950,7 @@ bool Fits2D::writeFits(shared_ptr<cv::Mat> img, ImgBitDepth imgType, std::string
 
             if(tab == NULL){
 
-                LOG_ERROR << "Fail to allocate short** array (NULL).";
+                LOG_ERROR << "Fail to allocate short** array (NULL)." << endl;
                 return false;
 
             }
@@ -959,7 +959,7 @@ bool Fits2D::writeFits(shared_ptr<cv::Mat> img, ImgBitDepth imgType, std::string
 
             if(tab[0] == NULL){
 
-                LOG_ERROR << "Fail to allocate short* array (NULL).";
+                LOG_ERROR << "Fail to allocate short* array (NULL)." << endl;
                 return false;
 
             }
@@ -1027,7 +1027,7 @@ bool Fits2D::writeFits(shared_ptr<cv::Mat> img, ImgBitDepth imgType, std::string
 
             if(tab == NULL){
 
-                LOG_ERROR << "Fail to allocate float** array (NULL).";
+                LOG_ERROR << "Fail to allocate float** array (NULL)." << endl;
                 return false;
             }
 
@@ -1035,7 +1035,7 @@ bool Fits2D::writeFits(shared_ptr<cv::Mat> img, ImgBitDepth imgType, std::string
 
             if(tab[0] == NULL){
 
-                LOG_ERROR << "Fail to allocate float* array (NULL).";
+                LOG_ERROR << "Fail to allocate float* array (NULL)." << endl;
                 return false;
             }
 
@@ -1632,12 +1632,9 @@ void Fits2D::printerror(int status, std::string errorMsg){
         char status_str[200];
         fits_get_errstatus(status, status_str);
 
-        LOG_ERROR << errorMsg;
-        LOG_DEBUG << errorMsg << std::endl;
+        LOG_ERROR << errorMsg << endl;
         std::string str(status_str);
-        LOG_ERROR << "CFITSIO ERROR : " << status << " -> " << str;
-        LOG_DEBUG << "CFITSIO ERROR : " << status << " -> " << str << std::endl;
-
+        LOG_ERROR << "CFITSIO ERROR : " << status << " -> " << str << endl;
     }
 
 }
@@ -1649,8 +1646,6 @@ void Fits2D::printerror(int status){
         char status_str[200];
         fits_get_errstatus(status, status_str);
         std::string str(status_str);
-        LOG_ERROR << "CFITSIO ERROR : " << status << " -> " << str;
-        LOG_DEBUG << "CFITSIO ERROR : " << status << " -> " << str << std::endl;
-
+        LOG_ERROR << "CFITSIO ERROR : " << status << " -> " << str << endl;
     }
 }
