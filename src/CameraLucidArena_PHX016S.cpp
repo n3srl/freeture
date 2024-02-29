@@ -1332,7 +1332,8 @@ using namespace std;
     {
         try
         {
-            LOG_DEBUG << "CameraLucidArena_PHX016S::CopyFrame" << endl;
+            if (LOG_SPAM_FRAME_STATUS)
+                LOG_DEBUG << "CameraLucidArena_PHX016S::CopyFrame" << endl;
 
             frame->SetImage(u_buffer_data, buffer_size);
 
@@ -1754,19 +1755,27 @@ using namespace std;
         if (!checkSDK())
             throw runtime_error("SDK not initialized");
 
-        if (m_ArenaDevice != nullptr)
+        try
         {
-            
-            if (m_Streaming)
-                acqStop();
+            if (m_ArenaDevice != nullptr)
+            {
 
-            LOG_DEBUG << "CameraLucidArena_PHX016S::destroyDevice;" << "Deallocating Arena Device" << endl;
-            m_ArenaSDKSystem->DestroyDevice(m_ArenaDevice);
+                if (m_Streaming)
+                    acqStop();
 
+                LOG_DEBUG << "CameraLucidArena_PHX016S::destroyDevice;" << "Deallocating Arena Device" << endl;
+                m_ArenaSDKSystem->DestroyDevice(m_ArenaDevice);
+
+                m_Connected = false;
+                return true;
+            }
+        }
+        catch (...)
+        {
             m_Connected = false;
         }
 
-        return true;
+        return false;
     }
 
     bool CameraLucidArena_PHX016S::reset()

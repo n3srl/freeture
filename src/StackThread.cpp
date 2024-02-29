@@ -131,7 +131,7 @@ bool StackThread::buildStackDataDirectory(TimeDate::Date date){
     if(YYYYMMDD == "00000000")
         return false;
 
-
+    LOG_INFO << "================== STACK =====================" << endl;
     LOG_INFO << "Stacks data path : " << completeDataPath << endl;
 
     path p(mdp.DATA_PATH);
@@ -293,7 +293,9 @@ void StackThread::operator()(){
                     while(!(*stackSignal)) stackSignal_condition->wait(lock);
                     *stackSignal = false;
                     lock.unlock();
-                    LOG_DEBUG << "operator();" << "Unlocked" << endl;
+
+                    if (LOG_SPAM_FRAME_STATUS)
+                        LOG_DEBUG << "operator();" << "Unlocked" << endl;
 
 
                     double t = (double)cv::getTickCount();
@@ -321,9 +323,9 @@ void StackThread::operator()(){
                         frameStack.addFrame(newFrame);
 
                         t = (((double)cv::getTickCount() - t)/ cv::getTickFrequency())*1000;
-                        if (LOG_SPAM_FRAME_STATUS){
+                        if (LOG_SPAM_FRAME_STATUS)
                             LOG_INFO << "[ TIME STACK ] : " << setprecision(5) << fixed << t << " ms" << endl;
-                        }
+                        
 
                     }else{
 
@@ -363,6 +365,7 @@ void StackThread::operator()(){
                     }
 
                     LOG_INFO << "Stack saved : " << completeDataPath << endl;
+                    LOG_INFO << "==================  END  =====================" << endl;
 
                 }else{
 

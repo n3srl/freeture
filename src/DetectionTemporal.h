@@ -38,6 +38,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include <opencv2/opencv.hpp>
 
@@ -125,29 +126,29 @@ namespace freeture
 
         ~DetectionTemporal();
 
-        void initMethod(std::string cfgPath);
+        void initMethod(std::string cfgPath) {}
 
-        bool runDetection(Frame& c);
+        bool runDetection(std::shared_ptr<Frame> c) override;
 
-        void saveDetectionInfos(std::string p, int nbFramesAround);
+        void saveDetectionInfos(std::string p, int nbFramesAround) override;
 
-        void resetDetection(bool loadNewDataSet);
+        void resetDetection(bool loadNewDataSet) override;
 
-        void resetMask();
+        void resetMask() override;
 
-        int getEventFirstFrameNb() { return (*mGeToSave).getNumFirstFrame(); };
+        int getEventFirstFrameNb() override { return (*mGeToSave).getNumFirstFrame(); } ;
 
-        TimeDate::Date getEventDate() { return (*mGeToSave).getDate(); };
+        TimeDate::Date getEventDate() override { return (*mGeToSave).getDate(); };
 
-        int getEventLastFrameNb() { return (*mGeToSave).getNumLastFrame(); };
+        int getEventLastFrameNb() override { return (*mGeToSave).getNumLastFrame(); };
 
-        std::vector<std::string> getDebugFiles();
+        std::vector<std::string> getDebugFiles() override;
 
     private:
 
         void createDebugDirectories(bool cleanDebugDirectory);
 
-        int selectThreshold(cv::Mat i);
+        int selectThreshold(cv::Mat i) {}
 
         std::vector<cv::Scalar> getColorInEventMap(cv::Mat& eventMap, cv::Point roiCenter);
 

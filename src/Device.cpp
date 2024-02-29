@@ -284,7 +284,7 @@ bool Device::setCameraFPS() {
 //apply current configuration to the camera
 bool Device::initializeCamera() {
 
-    LOG_DEBUG << "Device::initializeCamera";
+   LOG_DEBUG << "Device::initializeCamera";
 
     printValues(CameraSetting, "Device::initializeCamera;");
 

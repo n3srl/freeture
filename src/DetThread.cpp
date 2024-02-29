@@ -189,7 +189,7 @@ void DetThread::operator()()
 
     mIsRunning = true;
     bool stopThread = false;
-   
+
     // Flag to indicate that an event must be complete with more frames.
     bool eventToComplete = false;
     // Reference date to count time to complete an event.
@@ -198,14 +198,16 @@ void DetThread::operator()()
     LOG_INFO << "==============================================" << endl;
     LOG_INFO << "=========== Start detection thread ===========" << endl;
     LOG_INFO << "==============================================" << endl;
+
+    LOG_INFO << "Waiting for meteors..." << endl;
     string errorWhen = "NO";
     /// Thread loop.
-    try{
+    try {
 
-        do{
+        do {
             double t = 0.0;
             try {
-                
+
                 /// Wait new frame from AcqThread.
                 if (LOG_SPAM_FRAME_STATUS)
                     LOG_DEBUG << "operator();" << "This is DETECTION THREAD waiting ACQUISTION THREAD for a new frame." << endl;
@@ -214,112 +216,123 @@ void DetThread::operator()()
                 while (!(*detSignal)) detSignal_condition->wait(lock);
                 *detSignal = false;
                 lock.unlock();
+                if (LOG_SPAM_FRAME_STATUS)
+                    LOG_DEBUG << "operator();" << "DETECTION THREAD unlocked" << endl;
 
                 // Check interruption signal from AcqThread.
                 mForceToReset = false;
                 mInterruptionStatusMutex.lock();
-                if(mInterruptionStatus) {
-                    LOG_INFO<< "Interruption status : " << mInterruptionStatus << endl;
-                    LOG_INFO<< "-> reset forced on detection method." << endl;
+                if (mInterruptionStatus) {
+                    LOG_INFO << "Interruption status : " << mInterruptionStatus << endl;
+                    LOG_INFO << "-> reset forced on detection method." << endl;
                     mForceToReset = true;
                 }
                 mInterruptionStatusMutex.unlock();
-                if(!mForceToReset)
+                if (!mForceToReset)
                 {
+                    if (LOG_SPAM_FRAME_STATUS)
+                        LOG_DEBUG << "operator();" << "!mForceToReset" << endl;
+
                     errorWhen = "!Force to reset";
                     // Fetch the last grabbed frame.
                     shared_ptr<Frame> lastFrame = make_shared<Frame>();
                     boost::mutex::scoped_lock lock2(*frameBuffer_mutex);
-                    if(frameBuffer.size() > 2) 
+                    if (frameBuffer.size() > 2)
                         lastFrame = frameBuffer.back();
-                    
+
                     lock2.unlock();
 
                     t = (double)cv::getTickCount();
 
                     if (lastFrame->Image)
-                    if(lastFrame->Image->data)
-                    {
-                        mFormat = lastFrame->mFormat;
-
-                        
-
-                        // Run detection process.
-                        try {
-                            if(pDetMthd->runDetection(lastFrame) && !eventToComplete){
-
-                            // Event detected.
-                            LOG_INFO<< "Event detected ! Waiting frames to complete the event..." << endl;
-                            eventToComplete = true;
-
-                            // Get a reference date.
-                            string currDate = to_simple_string(pt::microsec_clock::universal_time());
-                            refDate = currDate.substr(0, currDate.find("."));
-
-                            mNbDetection++;
-
-                        }
-                        } catch (exception& e)
+                        if (lastFrame->Image->data)
                         {
-                            LOG_INFO<< "Frame is not valid" << e.what() << endl;
-                           
-                        }
-                        
+                            mFormat = lastFrame->mFormat;
 
-                        // Wait frames to complete the detection.
-                        if(eventToComplete){
 
-                            string currDate = to_simple_string(pt::microsec_clock::universal_time());
-                            string nowDate = currDate.substr(0, currDate.find("."));
-                            pt::ptime t1(pt::time_from_string(refDate));
-                            pt::ptime t2(pt::time_from_string(nowDate));
-                            pt::time_duration td = t2 - t1;
 
-                            if(td.total_seconds() > mdtp.DET_TIME_AROUND) {
+                            // Run detection process.
+                            try 
+                            {
+                                if (pDetMthd->runDetection(lastFrame) && !eventToComplete)
+                                {
 
-                                LOG_INFO<< "Event completed." << endl;
+                                    // Event detected.
+                                    LOG_INFO << "Event detected ! Waiting frames to complete the event..." << endl;
+                                    eventToComplete = true;
 
-                                // Build event directory.
-                                mEventDate = pDetMthd->getEventDate();
-                                LOG_INFO<< "Building event directory..." << endl;
+                                    // Get a reference date.
+                                    string currDate = to_simple_string(pt::microsec_clock::universal_time());
+                                    refDate = currDate.substr(0, currDate.find("."));
 
-                                if(buildEventDataDirectory())
-                                    LOG_INFO<< "Success to build event directory." << endl;
-                                else
-                                   LOG_ERROR << "Fail to build event directory." << endl;
+                                    mNbDetection++;
 
-                                // Save event.
-                                LOG_INFO<< "Saving event..." << endl;
-                                pDetMthd->saveDetectionInfos(mEventPath, mNbFramesAround);
-                                boost::mutex::scoped_lock lock(*frameBuffer_mutex);
-                                if(!saveEventData(pDetMthd->getEventFirstFrameNb(), pDetMthd->getEventLastFrameNb()))
-                                    LOG_ERROR << "Error saving event data.";
-                                else
-                                    LOG_INFO<< "Success to save event !" << endl;
-
-                                lock.unlock();
-
-                                // Reset detection.
-                                LOG_INFO<< "Reset detection process." << endl;
-                                pDetMthd->resetDetection(false);
-                                eventToComplete = false;
-                                mNbFramesAround = 0;
+                                }
+                            }
+                            catch (exception& e)
+                            {
+                                LOG_ERROR << "Frame is not valid" << e.what() << endl;
 
                             }
 
-                            mNbFramesAround++;
-                        }
-                    }
 
-                    t = (((double)cv::getTickCount() - t)/ cv::getTickFrequency())*1000;
+                            // Wait frames to complete the detection.
+                            if (eventToComplete) {
+
+                                string currDate = to_simple_string(pt::microsec_clock::universal_time());
+                                string nowDate = currDate.substr(0, currDate.find("."));
+                                pt::ptime t1(pt::time_from_string(refDate));
+                                pt::ptime t2(pt::time_from_string(nowDate));
+                                pt::time_duration td = t2 - t1;
+
+                                if (td.total_seconds() > mdtp.DET_TIME_AROUND) {
+
+                                    LOG_INFO << "Event completed." << endl;
+
+                                    // Build event directory.
+                                    mEventDate = pDetMthd->getEventDate();
+                                    LOG_INFO << "Building event directory..." << endl;
+
+                                    if (buildEventDataDirectory())
+                                        LOG_INFO << "Success to build event directory." << endl;
+                                    else
+                                        LOG_ERROR << "Fail to build event directory." << endl;
+
+                                    // Save event.
+                                    LOG_INFO << "Saving event..." << endl;
+                                    pDetMthd->saveDetectionInfos(mEventPath, mNbFramesAround);
+                                    boost::mutex::scoped_lock lock(*frameBuffer_mutex);
+                                    if (!saveEventData(pDetMthd->getEventFirstFrameNb(), pDetMthd->getEventLastFrameNb()))
+                                        LOG_ERROR << "Error saving event data.";
+                                    else
+                                        LOG_INFO << "Success to save event !" << endl;
+
+                                    lock.unlock();
+
+                                    // Reset detection.
+                                    LOG_INFO << "Reset detection process." << endl;
+                                    pDetMthd->resetDetection(false);
+                                    eventToComplete = false;
+                                    mNbFramesAround = 0;
+
+                                }
+
+                                mNbFramesAround++;
+                            }
+                        }
+
+                    t = (((double)cv::getTickCount() - t) / cv::getTickFrequency()) * 1000;
+
                     if (LOG_SPAM_FRAME_STATUS)
-                    {
                         LOG_DEBUG << " [ TIME DET ] : " << setprecision(3) << fixed << t << " ms " << endl;
-                    }
-                }else{
+                }
+                else {
+                    if (LOG_SPAM_FRAME_STATUS)
+                        LOG_DEBUG << "operator();" << "mForceToReset" << endl;
+
                     errorWhen = "Force to reset";
                     // reset method
-                    if(pDetMthd != NULL)
+                    if (pDetMthd != NULL)
                         pDetMthd->resetDetection(false);
 
                     eventToComplete = false;
@@ -331,11 +344,13 @@ void DetThread::operator()()
 
                 }
 
-            }catch(const boost::thread_interrupted&){
+            }
+            catch (const boost::thread_interrupted&) {
 
                 LOG_WARNING << "Detection Thread INTERRUPTED";
 
-            } catch(exception& e)
+            }
+            catch (exception& e)
             {
                 LOG_ERROR << errorWhen << " An error occured in internal try. See log for details.";
                 LOG_ERROR << e.what();
@@ -345,17 +360,18 @@ void DetThread::operator()()
             stopThread = mMustStop;
             mMustStopMutex.unlock();
 
-            NodeExporterMetrics::GetInstance(mstp.STATION_NAME).UpdateMetrics(mNbDetection,t);
-            NodeExporterMetrics::GetInstance(mstp.STATION_NAME).WriteMetrics();
-        }while(!stopThread);
+            //             NodeExporterMetrics::GetInstance(mstp.STATION_NAME).UpdateMetrics(mNbDetection,t);
+            //             NodeExporterMetrics::GetInstance(mstp.STATION_NAME).WriteMetrics();
+        } while (!stopThread);
 
-        if(mDetectionResults.size() == 0) {
+        if (mDetectionResults.size() == 0) {
 
             LOG_INFO << "-----------------------------------------------" << endl;
             LOG_INFO << "------------->> DETECTED EVENTS : " << mNbDetection << endl;
             LOG_INFO << "-----------------------------------------------" << endl;
 
-        } else {
+        }
+        else {
 
             // Create Report for videos and frames in input.
             std::ofstream report;
@@ -364,11 +380,11 @@ void DetThread::operator()()
 
             LOG_INFO << "--------------- DETECTION REPORT --------------" << endl;
 
-            for(int i = 0; i < mDetectionResults.size(); i++) {
+            for (int i = 0; i < mDetectionResults.size(); i++) {
                 report << mDetectionResults.at(i).first << "------> " << mDetectionResults.at(i).second << "\n";
                 cout << "- DATASET " << i << " : ";
 
-                if(mDetectionResults.at(i).second > 1)
+                if (mDetectionResults.at(i).second > 1)
                     cout << mDetectionResults.at(i).second << " events" << endl;
                 else
                     cout << mDetectionResults.at(i).second << " event" << endl;
@@ -380,7 +396,8 @@ void DetThread::operator()()
 
         }
 
-    }catch(const char * msg){
+    }
+    catch (const char* msg) {
         LOG_ERROR << msg;
     }
     catch (exception& e) {

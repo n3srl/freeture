@@ -57,14 +57,14 @@ void DetectionTemplate::createDebugDirectories(bool cleanDebugDirectory) {
 
 }
 
-bool DetectionTemplate::runDetection(Frame &c) {
+bool DetectionTemplate::runDetection(std::shared_ptr<Frame> c) {
     
     cv::Mat currImg;
 
     if(mdtp.DET_DOWNSAMPLE_ENABLED)
-        pyrDown(*c.Image.get(), currImg, cv::Size(c.Image->cols / 2, c.Image->rows / 2));
+        pyrDown(*c->Image.get(), currImg, cv::Size(c->Image->cols / 2, c->Image->rows / 2));
     else
-        c.Image->copyTo(currImg);
+        c->Image->copyTo(currImg);
 
     // --------------------------------
     //          OPERATIONS

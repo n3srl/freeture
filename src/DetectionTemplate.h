@@ -37,6 +37,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "Detection.h"
 #include "SParam.h"
@@ -106,21 +107,21 @@ namespace freeture
 
         ~DetectionTemplate();
 
-        void initMethod(std::string cfgPath);
+        void initMethod(std::string cfgPath) {};
 
-        bool runDetection(Frame& c);
+        bool runDetection(std::shared_ptr<Frame> c) override;
 
-        void saveDetectionInfos(std::string p, int nbFramesAround);
+        void saveDetectionInfos(std::string p, int nbFramesAround) override;
 
-        void resetDetection(bool loadNewDataSet);
+        void resetDetection(bool loadNewDataSet) override;
 
-        void resetMask();
+        void resetMask() override;
 
-        int getEventFirstFrameNb();
+        int getEventFirstFrameNb() override;
 
-        TimeDate::Date getEventDate();
+        TimeDate::Date getEventDate() override;
 
-        int getEventLastFrameNb();
+        int getEventLastFrameNb() override;
 
     private:
 

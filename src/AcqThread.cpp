@@ -260,7 +260,8 @@ bool AcqThread::getThreadStatus(){
 void AcqThread::startDetectionThread() 
 {
     if (pDetection != nullptr) {
-        LOG_DEBUG << "AcqThread::startDetectionThread; DETECTION THREAD START SIGNAL" << endl;
+        if (LOG_SPAM_FRAME_STATUS)
+            LOG_DEBUG << "AcqThread::startDetectionThread; DETECTION THREAD START SIGNAL" << endl;
         boost::mutex::scoped_lock lock2(*detSignal_mutex);
         *detSignal = true;
         detSignal_condition->notify_one();
@@ -288,7 +289,8 @@ void AcqThread::startStackThread()
 {
     if (pStack != nullptr)
     {
-        LOG_DEBUG << "AcqThread::startStackThread; STACK THREAD START SIGNAL" << endl;
+        if (LOG_SPAM_FRAME_STATUS)
+            LOG_DEBUG << "AcqThread::startStackThread; STACK THREAD START SIGNAL" << endl;
 
         boost::mutex::scoped_lock lock3(*stackSignal_mutex);
         *stackSignal = true;
@@ -1185,8 +1187,10 @@ void AcqThread::ApplyCameraSettingsToFrame(shared_ptr<Frame> frame)
 {
     if (!frame)
         throw runtime_error("Frame is null");
+    
+    if (LOG_SPAM_FRAME_STATUS)
+        LOG_DEBUG << "AcqThread::ApplyCameraSettingsToFrame" << endl;
 
-    LOG_DEBUG << "AcqThread::ApplyCameraSettingsToFrame" << endl;
     frame->mExposure = m_CurrentCameraSettings.Exposure;
     
     frame->mFormat = m_CurrentCameraSettings.PixelFormat;
@@ -1206,11 +1210,14 @@ void AcqThread::ApplyCameraSettingsToFrame(shared_ptr<Frame> frame)
     frame->mStartX = m_CurrentCameraSettings.StartX;
     frame->mStartY = m_CurrentCameraSettings.StartY;
 
-    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Exposure time : " << frame->mExposure << endl;
-    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Gain : " << frame->mGain << endl;
-    EParser<CamPixFmt> format;
-    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Format : " << format.getStringEnum(frame->mFormat) << endl;
-    LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "FPS : " << frame->mFps << endl;
+    if (LOG_SPAM_FRAME_STATUS)
+    {
+        LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Exposure time : " << frame->mExposure << endl;
+        LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Gain : " << frame->mGain << endl;
+        EParser<CamPixFmt> format;
+        LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "Format : " << format.getStringEnum(frame->mFormat) << endl;
+        LOG_INFO << "AcqThread::ApplyCameraSettingsToFrame;\t\t" << "FPS : " << frame->mFps << endl;
+    }
 }
 
 bool AcqThread::prepareAcquisitionOnDevice(EAcquisitionMode mode)
@@ -1340,8 +1347,8 @@ void AcqThread::metrics_ThreadLoop()
 
     m_FPS_Sum += m_CurrentFPS;
 
-    if (m_CurrentFPS < 30)
-        LOG_WARNING << "FPS is below 30 " << m_CurrentFPS << endl;
+    if (m_CurrentFPS < 29)
+        LOG_WARNING << "FPS is below 29 " << m_CurrentFPS << endl;
 
     if (m_FPS_metrics.size() >= m_CircularBufferSize)
         m_FPS_Sum -= m_FPS_metrics.front();
