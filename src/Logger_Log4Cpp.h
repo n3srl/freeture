@@ -17,11 +17,11 @@
 #include "ELogSeverityLevel.h"
 
 #ifdef LINUX
-using namespace log4cpp_GenICam;
+namespace log4cpp_freeture = log4cpp_GenICam;
 #endif
 
 #ifndef LINUX
-using namespace log4cpp;
+namespace log4cpp_freeture = log4cpp;
 #endif
 
 namespace freeture
@@ -41,13 +41,13 @@ namespace freeture
         bool m_Init = false;
         std::mutex m_RecordMutex;
 
-        Category* m_AcqThreadCategory;
-        Category* m_StackThreadCategory;
-        Category* m_FreetureCategory;
-        Category* m_DetThreadCategory;
+        log4cpp_freeture::Category* m_AcqThreadCategory;
+        log4cpp_freeture::Category* m_StackThreadCategory;
+        log4cpp_freeture::Category* m_FreetureCategory;
+        log4cpp_freeture::Category* m_DetThreadCategory;
 
         void fetchCategories();
-        Category& getCategory();
+        log4cpp_freeture::Category& getCategory();
         void updateAppenderConfiguration(std::string);
         void setRootLogLevel(int);
         void logDebug(const std::string&);

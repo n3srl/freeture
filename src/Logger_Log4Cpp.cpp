@@ -19,6 +19,7 @@
 
 using namespace std;
 using namespace freeture;
+using namespace log4cpp_freeture;
 
 void Logger_Log4Cpp::updateAppenderConfiguration(string appender_name) {
     // Assume "A1" is the name of the RollingFileAppender
