@@ -23,7 +23,7 @@ using namespace log4cpp_freeture;
 
 void Logger_Log4Cpp::updateAppenderConfiguration(string appender_name) {
     // Assume "A1" is the name of the RollingFileAppender
-    Appender* appender = log4cpp::Category::getRoot().getAppender(appender_name);
+    Appender* appender = Category::getRoot().getAppender(appender_name);
     RollingFileAppender* rollingFileAppender = dynamic_cast<RollingFileAppender*>(appender);
 
     if (rollingFileAppender != nullptr)
@@ -162,7 +162,7 @@ void Logger_Log4Cpp::logWarning(const std::string& message)
     category.warn(message);
 }
 
-log4cpp::Category& Logger_Log4Cpp::getCategory()
+Category& Logger_Log4Cpp::getCategory()
 {
     auto threadId = std::this_thread::get_id();
 
