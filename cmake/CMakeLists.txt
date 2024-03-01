@@ -309,6 +309,9 @@ ELSE(${OperatingSystem} MATCHES "Windows")
 	find_package(PkgConfig)
 	pkg_check_modules(LOG4CPP REQUIRED log4cpp)
 	
+	set(LOG4CPP_INCLUDE_DIRS "/usr/include/")
+	set(LOG4CPP_LIBRARIES "/usr/lib/x86_64-linux-gnu/liblog4cpp.so")
+
 	message ("log4cpp_FOUND : " ${LOG4CPP_FOUND})
 	message ("log4cpp_INCLUDE_DIR : " ${LOG4CPP_INCLUDE_DIRS})
 	message ("log4cpp_LIBRARIES : " ${LOG4CPP_LIBRARIES})
