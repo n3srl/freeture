@@ -306,12 +306,15 @@ ELSE(${OperatingSystem} MATCHES "Windows")
 
 	#log4cpp
 	message("> Searching log4cpp...")
-	find_package(log4cpp)
-	message ("log4cpp_FOUND : " ${log4cpp_FOUND})
-	message ("log4cpp_INCLUDE_DIR : " ${log4cpp_INCLUDE_DIRS})
-	message ("log4cpp_LIBRARIES : " ${log4cpp_LIBRARIES})
-	include_directories(${log4cpp_INCLUDE_DIRS})
-	target_link_libraries(${EXE_NAME} ${log4cpp_LIBRARIES})
+	find_package(PkgConfig)
+	pkg_check_modules(LOG4CPP REQUIRED log4cpp)
+	
+	message ("log4cpp_FOUND : " ${LOG4CPP_FOUND})
+	message ("log4cpp_INCLUDE_DIR : " ${LOG4CPP_INCLUDE_DIRS})
+	message ("log4cpp_LIBRARIES : " ${LOG4CPP_LIBRARIES})
+	
+	include_directories(${LOG4CPP_INCLUDE_DIRS})
+	target_link_libraries(${EXE_NAME} ${LOG4CPP_LIBRARIES})
 
 	
 	ENDIF(${OperatingSystem} MATCHES "Linux")
