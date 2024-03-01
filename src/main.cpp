@@ -7,7 +7,6 @@
 #include <memory>
 
 #include "Freeture.h"
-#include "Logger.h"
 
 using namespace freeture;
 using namespace std;

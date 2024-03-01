@@ -10,7 +10,6 @@
 
 #include <iostream>
 
-#include "Logger.h"
 
 #ifdef LINUX
 

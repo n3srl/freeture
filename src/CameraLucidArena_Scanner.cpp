@@ -10,8 +10,6 @@
 
 #include <iostream>
 
-#include "Logger.h"
-
 
 #include "ArenaSDKManager.h"
 #include <ArenaApi.h>

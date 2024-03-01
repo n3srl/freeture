@@ -13,8 +13,6 @@
 #include "DetThread.h"
 #include "StackThread.h"
 
-#include "Logger.h"
-
 #include <boost/thread/thread.hpp>
 #include <boost/thread/condition_variable.hpp>
 #include <boost/circular_buffer.hpp>

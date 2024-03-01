@@ -41,7 +41,6 @@
 #include "CameraScanner.h"
 #include "Conversion.h"
 #include "Fits2D.h"
-#include "Logger.h"
 
 namespace fs = boost::filesystem;
 using namespace std;

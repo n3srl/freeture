@@ -36,7 +36,6 @@
 #include <opencv2/imgcodecs.hpp>
 
 #include "Constants.h"
-#include "Logger.h"
 
 using namespace freeture;
 using namespace std;

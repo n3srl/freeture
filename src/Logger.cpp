@@ -1,4 +1,5 @@
 #include "Logger.h"
+
 #include "Logger_Boost.h"
 #include "Logger_Log4Cpp.h"
 #include "Logger_Console.h"

@@ -36,7 +36,6 @@
 #include <ostream>
 
 #include "ExposureControl.h"
-#include "Logger.h"
 #include "Conversion.h"
 #include "SaveImg.h"
 #include "Device.h"

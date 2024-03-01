@@ -3,7 +3,6 @@
 #include <memory>
 
 #include "SParam.h"
-#include "Logger.h"
 #include "CameraVideo.h"
 #include "CameraFrames.h"
 #include "CameraScanner.h"

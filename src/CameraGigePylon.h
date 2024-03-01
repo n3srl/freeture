@@ -50,10 +50,7 @@
     #include "Camera.h"
     #include "ECamPixFmt.h"
     #include "EParser.h"
-    #include <boost/log/common.hpp>
-    #include <boost/log/attributes.hpp>
-    #include <boost/log/sources/logger.hpp>
-    #include <boost/log/core.hpp>
+
     #include "ELogSeverityLevel.h"
 
     #include <pylon/PylonIncludes.h>

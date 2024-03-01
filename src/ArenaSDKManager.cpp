@@ -1,8 +1,6 @@
 #include "ArenaSDKManager.h"
 #include <iomanip>
 
-#include "Logger.h"
-
 using namespace freeture;
 using namespace std;
 

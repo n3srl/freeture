@@ -35,7 +35,6 @@
 
 #include "Mask.h"
 #include "Frame.h"
-#include "Logger.h"
 
 using namespace std;
 using namespace freeture;

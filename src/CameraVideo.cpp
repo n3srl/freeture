@@ -34,7 +34,6 @@
 */
 
 #include "CameraVideo.h"
-#include "Logger.h"
 #include <boost/date_time.hpp>
 
 using namespace freeture;

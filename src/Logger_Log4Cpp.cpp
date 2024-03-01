@@ -5,8 +5,6 @@
 #include <string>  // For std::string
 #include <iostream> // For std::cout, used in the logging examples
 
-#include "Logger.h"
-
 #include <log4cpp/Category.hh>
 #include <log4cpp/Appender.hh>
 #include <log4cpp/FileAppender.hh>
@@ -18,7 +16,9 @@
 
 using namespace std;
 using namespace freeture;
-using namespace log4cpp;
+#ifdef LINUX
+namespace log4cpp = log4cpp_GenICam;
+#endif
 
 void Logger_Log4Cpp::updateAppenderConfiguration(string appender_name) {
     // Assume "A1" is the name of the RollingFileAppender
@@ -108,7 +108,7 @@ void Logger_Log4Cpp::init()
     try {
         preprocessAndLoadConfiguration(logger->getLogPathFolder() + "log4cpp.properties");
         // Initialize Log4cpp here, potentially loading configuration from a file
-        PropertyConfigurator::configure(logger->getLogPathFolder() + "freeture_log4cpp.properties");
+        log4cpp::PropertyConfigurator::configure(logger->getLogPathFolder() + "freeture_log4cpp.properties");
 
         apply();
         fetchCategories();

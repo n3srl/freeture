@@ -38,7 +38,6 @@
 #include "SParam.h"
 
 #include "CameraFirstInit.h"
-#include "Logger.h"
 #include "EParser.h"
 #include "Conversion.h"
 #include "Fits2D.h"

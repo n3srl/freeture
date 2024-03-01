@@ -47,7 +47,6 @@
 
 #include "CameraScanner.h"
 #include "Frame.h"
-#include "Logger.h"
 
 namespace freeture
 {

@@ -41,8 +41,6 @@
 
 #include <string>
 
-#include "Logger.h"
-
 #include <boost/program_options.hpp>
 #include <boost/any.hpp>
 

@@ -39,7 +39,6 @@
 
 #include "Camera.h"
 
-#include "Logger.h"
 #include "EParser.h"
 #include "ECamSdkType.h"
 #include "CameraDeviceManager.h"

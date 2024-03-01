@@ -47,7 +47,6 @@
 #include "SParam.h"
 #include "TimeDate.h"
 #include "Frame.h"
-#include "Logger.h"
 
 // #include "SMTPClient.h"
 // #include <iterator>

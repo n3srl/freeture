@@ -45,24 +45,6 @@
 
 #include "fitsio.h"
 
-// 
-//
-// #include <boost/log/common.hpp>
-// #include <boost/log/expressions.hpp>
-// #include <boost/log/utility/setup/file.hpp>
-// #include <boost/log/utility/setup/console.hpp>
-// #include <boost/log/utility/setup/common_attributes.hpp>
-// #include <boost/log/attributes/named_scope.hpp>
-// #include <boost/log/attributes.hpp>
-// #include <boost/log/sinks.hpp>
-// #include <boost/log/sources/logger.hpp>
-// #include <boost/log/core.hpp>
-// #include "ELogSeverityLevel.h"
-// #include "CfgLoader.h"
-// #include "TimeDate.h"
-// #include "Fits.h"
-// #include "ECamPixFmt.h"
-
 namespace freeture
 {
     class Fits3D : public Fits {

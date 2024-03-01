@@ -40,7 +40,6 @@
 #include "TimeDate.h"
 #include "EParser.h"
 #include "Frame.h"
-#include "Logger.h"
 #include "Conversion.h"
 #include "TimeDate.h"
 

@@ -38,7 +38,6 @@
 
 #include <boost/filesystem.hpp>
 
-#include "Logger.h"
 #include "Mask.h"
 #include "ImgProcessing.h"
 #include "SaveImg.h"

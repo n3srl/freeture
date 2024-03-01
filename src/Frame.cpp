@@ -36,7 +36,6 @@
 
 #include "Frame.h"
 #include "ECamPixFmt.h"
-#include "Logger.h"
 
 using namespace freeture;
 

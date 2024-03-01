@@ -12,7 +12,6 @@
 #include <opencv2/opencv.hpp>
 #include <boost/date_time.hpp>
 
-#include "Logger.h"
 #include "TimeDate.h"
 #include "EParser.h"
 #include "Frame.h"

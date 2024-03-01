@@ -3,7 +3,6 @@
 #include <string>
 
 #include "CameraLucidArena_Scanner.h"
-#include "Logger.h"
 
 #ifdef LINUX
 
