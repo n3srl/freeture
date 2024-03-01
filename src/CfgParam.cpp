@@ -167,7 +167,7 @@ void CfgParam::setInitRequired(bool init)
 {
     cout << "Set init req" << endl;
     FILE* ofile = fopen(FREETURE_WRITE_CONFIG_PATH, "w");
-    ifstream file(m_CfgFilePath);
+    std::ifstream file(m_CfgFilePath);
     if(!file.is_open())
     {
         LOG_ERROR << "reset configuration file failed." << endl;
