@@ -16,13 +16,7 @@
 #include "ILogger.h"
 #include "ELogSeverityLevel.h"
 
-#ifdef LINUX
-namespace log4cpp_freeture = log4cpp_GenICam;
-#endif
-
-#ifndef LINUX
 namespace log4cpp_freeture = log4cpp;
-#endif
 
 namespace freeture
 {
