@@ -38,6 +38,7 @@
 
 #include <memory>
 #include <string>
+#include <thread>
 
 #include <boost/thread/thread.hpp>
 #include <boost/thread/condition_variable.hpp>
