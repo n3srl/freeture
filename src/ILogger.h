@@ -77,14 +77,14 @@ namespace freeture
             return *this;
         }
 
-        ILogger& ILogger::operator<<(const char* text) {
+        ILogger& operator<<(const char* text) {
             std::lock_guard<std::mutex> lock(m_StreamMutex); // Ensure thread safety
             m_Stream << std::string(text);
             return *this;
         }
 
 
-        ILogger& ILogger::operator<<(const std::string& text) {
+        ILogger& operator<<(const std::string& text) {
             std::lock_guard<std::mutex> lock(m_StreamMutex); // Ensure thread safety
             m_Stream << text;
             return *this;
