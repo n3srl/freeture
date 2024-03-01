@@ -7,6 +7,7 @@
 
 #include "Logger.h"
 
+#include <log4cpp/Category.hh>
 #include <log4cpp/Appender.hh>
 #include <log4cpp/FileAppender.hh>
 #include <log4cpp/PropertyConfigurator.hh>
@@ -120,34 +121,34 @@ void Logger_Log4Cpp::init()
 }
 
 void Logger_Log4Cpp::logDebug(const std::string& message) {
-    Category& category = getCategory();
+    log4cpp::Category& category = getCategory();
     
     category.debug(message);
 }
 
 void Logger_Log4Cpp::logNotification(const std::string& message) {
-    Category& category = getCategory();
+    log4cpp::Category& category = getCategory();
     
     category.info(message);
 }
 
 void Logger_Log4Cpp::logCritical(const std::string& message)
 {
-    Category& category = getCategory();
+    log4cpp::Category& category = getCategory();
 
     category.error(message);
 }
 
 void Logger_Log4Cpp::logFail(const std::string& message)
 {
-    Category& category = getCategory();
+    log4cpp::Category& category = getCategory();
 
     category.error(message);
 }
 
 void Logger_Log4Cpp::logNormal(const std::string& message)
 {
-    Category& category = getCategory();
+    log4cpp::Category& category = getCategory();
 
     category.debug(message);
 }
@@ -155,12 +156,12 @@ void Logger_Log4Cpp::logNormal(const std::string& message)
 
 void Logger_Log4Cpp::logWarning(const std::string& message)
 {
-    Category& category = getCategory();
+    log4cpp::Category& category = getCategory();
 
     category.warn(message);
 }
 
-Category& Logger_Log4Cpp::getCategory()
+log4cpp::Category& Logger_Log4Cpp::getCategory()
 {
     auto threadId = std::this_thread::get_id();
 
@@ -189,10 +190,10 @@ void Logger_Log4Cpp::fetchCategories()
 {
     std::lock_guard<std::mutex> guard(m_RecordMutex);
     
-    m_AcqThreadCategory     = &Category::getInstance("ACQ_THREAD");
-    m_StackThreadCategory   = &Category::getInstance("STACK_THREAD");
-    m_FreetureCategory      = &Category::getInstance("FREETURE");
-    m_DetThreadCategory     = &Category::getInstance("DET_THREAD");
+    m_AcqThreadCategory     = &log4cpp::Category::getInstance("ACQ_THREAD");
+    m_StackThreadCategory   = &log4cpp::Category::getInstance("STACK_THREAD");
+    m_FreetureCategory      = &log4cpp::Category::getInstance("FREETURE");
+    m_DetThreadCategory     = &log4cpp::Category::getInstance("DET_THREAD");
 }
 
 

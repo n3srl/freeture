@@ -8,6 +8,8 @@
 */
 #include "CameraLucidArena_PHX016S.h"
 
+#include "Logger.h"
+
 #include <cstring>
 #include <time.h>
 #include <algorithm>
@@ -19,7 +21,6 @@
 #include <ArenaApi.h>
 #include <SaveApi.h>
 
-#include "Logger.h"
 #include "ELogSeverityLevel.h"
 #include "EParser.h"
 #include "Frame.h"

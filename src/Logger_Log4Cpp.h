@@ -9,11 +9,13 @@
 
 #include <mutex>
 #include <unordered_map>
-#include <log4cpp/Category.hh>
 
 #include "ILogger.h"
 #include "ELogSeverityLevel.h"
 
+namespace log4cpp {
+    class Category;
+}
 
 namespace freeture
 {
@@ -40,7 +42,7 @@ namespace freeture
         void fetchCategories();
         log4cpp::Category& getCategory();
         void updateAppenderConfiguration(std::string);
-        void setRootLogLevel(log4cpp::Priority::Value);
+        void setRootLogLevel(int);
         void logDebug(const std::string&);
         void logNotification(const std::string&);
         void logWarning(const std::string&);
