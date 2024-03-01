@@ -112,7 +112,7 @@ else(NOT CFITSIO_FOUND)
 endif(CFITSIO_FOUND)
 #------------------------------------------------
 # Find required packages according to the platform.
-IF(${OperatingSystem} MATCHES "Windows")
+if(${OperatingSystem} MATCHES "Windows")
 	message("windows!")
 
 	# Boost Library.
@@ -193,9 +193,8 @@ IF(${OperatingSystem} MATCHES "Windows")
 	include_directories(${OPENSSL_INCLUDE_DIR})
 	link_directories(${OPENSSL_LIBRARY})
 	target_link_libraries( ${EXE_NAME} ${OPENSSL_LIBRARIES} )
-
-ELSE(${OperatingSystem} MATCHES "Windows")
-	IF(${OperatingSystem} MATCHES "Linux")
+	
+elseif( ${OperatingSystem} MATCHES "Linux" )
 
 
 	# Not include Pylon for Basler Cameras on Windows.
@@ -304,6 +303,7 @@ ELSE(${OperatingSystem} MATCHES "Windows")
 	#link_directories(${OPENSSL_LIBRARY_DIRS})
 	target_link_libraries(${EXE_NAME} ${ARENASDK_LIBRARIES})
 
+
 	#log4cpp
 	message("> Searching log4cpp...")
 	find_package(PkgConfig)
@@ -318,10 +318,8 @@ ELSE(${OperatingSystem} MATCHES "Windows")
 
 	target_include_directories(${EXE_NAME} PRIVATE ${LOG4CPP_INCLUDE_DIRS})
 	target_link_libraries(${EXE_NAME} ${LOG4CPP_LIBRARIES})
+endif()
 
-	
-	ENDIF(${OperatingSystem} MATCHES "Linux")
-ENDIF(${OperatingSystem} MATCHES "Windows")
 
 if (TIS_FOUND) 
 	message ( STATUS "Tis cameras available" )
