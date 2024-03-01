@@ -61,6 +61,9 @@
  *
  */
 #include "AcqThread.h"
+
+#include "Logger.h"
+
 #include <memory>
 
 #include "DetThread.h"

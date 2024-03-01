@@ -7,7 +7,7 @@
 *
 */
 #include "CameraLucidArena_PHX016S.h"
-
+#include "Logger.h"
 
 #include <cstring>
 #include <time.h>

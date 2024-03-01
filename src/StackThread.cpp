@@ -35,6 +35,8 @@
 //header refactoring ok
 #include "StackThread.h"
 
+#include "Logger.h"
+
 #include "CfgParam.h"
 
 #include "NodeExporterMetrics.h"

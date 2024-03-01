@@ -1,4 +1,5 @@
 #include "Logger_Boost.h"
+#include "Logger.h"
 
 #include <boost/log/expressions/keyword_fwd.hpp>
 #include <boost/log/expressions/is_keyword_descriptor.hpp>

@@ -37,6 +37,8 @@
 
 #include "CfgLoader.h"
 
+#include "Logger.h"
+
 #include "CommonConfig.h"
 
 #include <string>

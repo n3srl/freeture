@@ -8,6 +8,8 @@
 */
 #include "CameraGigeAravis_Scanner.h"
 
+#include "Logger.h"
+
 #include <iostream>
 
 

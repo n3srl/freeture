@@ -37,6 +37,8 @@
 
 #include "CameraGigeAravis.h"
 
+#include "Logger.h"
+
 #include <iostream>
 #include <fstream>
 #include <boost/date_time/posix_time/time_formatters.hpp>

@@ -9,6 +9,8 @@
 
 #include "Commons.h"
 
+#include "Logger.h"
+
 #include <opencv2/opencv.hpp>
 #include <boost/date_time.hpp>
 

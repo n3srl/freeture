@@ -36,6 +36,8 @@
 
 #include "DetectionTemporal.h"
 
+#include "Logger.h"
+
 #include <boost/filesystem.hpp>
 
 #include "Mask.h"

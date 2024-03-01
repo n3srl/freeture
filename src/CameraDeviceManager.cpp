@@ -1,4 +1,5 @@
 #include "CameraDeviceManager.h"
+#include "Logger.h"
 
 #include "Conversion.h"
 #include "EParser.h"

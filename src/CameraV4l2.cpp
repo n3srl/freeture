@@ -35,6 +35,8 @@
 
 #include "CameraV4l2.h"
 
+#include "Logger.h"
+
 #include <boost/date_time.hpp>
 
 #include "TimeDate.h"

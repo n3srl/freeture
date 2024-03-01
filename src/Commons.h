@@ -18,6 +18,3 @@
 #endif
 
 #endif
-
-
-#include "Logger.h"

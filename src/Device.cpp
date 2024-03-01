@@ -35,6 +35,8 @@
 */
 #include "Device.h"
 
+#include "Logger.h"
+
 #include <boost/filesystem.hpp>
 
 #include "Camera.h"

@@ -10,12 +10,19 @@
 #include <mutex>
 #include <unordered_map>
 
+#include <log4cpp/Category.hh>
+#include <log4cpp/Priority.hh>
+
 #include "ILogger.h"
 #include "ELogSeverityLevel.h"
 
-namespace log4cpp {
-    class Category;
-}
+#ifdef LINUX
+using namespace log4cpp_GenICam;
+#endif
+
+#ifndef LINUX
+using namespace log4cpp;
+#endif
 
 namespace freeture
 {
@@ -34,13 +41,13 @@ namespace freeture
         bool m_Init = false;
         std::mutex m_RecordMutex;
 
-        log4cpp::Category* m_AcqThreadCategory;
-        log4cpp::Category* m_StackThreadCategory;
-        log4cpp::Category* m_FreetureCategory;
-        log4cpp::Category* m_DetThreadCategory;
+        Category* m_AcqThreadCategory;
+        Category* m_StackThreadCategory;
+        Category* m_FreetureCategory;
+        Category* m_DetThreadCategory;
 
         void fetchCategories();
-        log4cpp::Category& getCategory();
+        Category& getCategory();
         void updateAppenderConfiguration(std::string);
         void setRootLogLevel(int);
         void logDebug(const std::string&);

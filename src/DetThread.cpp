@@ -35,6 +35,8 @@
 */
 #include "DetThread.h"
 
+#include "Logger.h"
+
 #include <iostream>
 
 #include <boost/filesystem.hpp>

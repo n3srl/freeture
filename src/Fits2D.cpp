@@ -35,6 +35,9 @@
 */
 
 #include "Fits2D.h"
+
+#include "Logger.h"
+
 #include "TimeDate.h"
 
 #include <boost/date_time.hpp>

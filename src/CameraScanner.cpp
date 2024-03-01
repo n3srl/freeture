@@ -1,5 +1,7 @@
 #include "CameraScanner.h"
 
+#include "Logger.h"
+
 #include <string>
 
 #include "CameraLucidArena_Scanner.h"

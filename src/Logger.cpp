@@ -2,7 +2,7 @@
 
 #include "Logger_Boost.h"
 #include "Logger_Log4Cpp.h"
-#include "Logger_Console.h"
+
 
 using namespace std;
 using namespace freeture;

@@ -33,6 +33,8 @@
 */
 #include "DetectionTemplate.h"
 
+#include "Logger.h"
+
 #include "Mask.h"
 #include "Frame.h"
 

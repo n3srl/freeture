@@ -35,6 +35,7 @@
 
 #include "Fits3D.h"
 
+#include "Logger.h"
 
 using namespace freeture;
 using namespace std;

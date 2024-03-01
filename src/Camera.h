@@ -38,6 +38,8 @@
 //headers refactoring ok
 #include "Commons.h"
 
+#include "Logger.h"
+
 #include <string>
 
 #include "ICameraFab.h"

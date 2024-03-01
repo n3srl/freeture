@@ -34,6 +34,7 @@
 */
 //header refactoring ok
 #include "Stack.h"
+#include "Logger.h"
 
 #include <boost/date_time.hpp>
 

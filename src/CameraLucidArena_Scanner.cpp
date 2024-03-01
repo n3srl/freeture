@@ -8,6 +8,8 @@
 */
 #include "CameraLucidArena_Scanner.h"
 
+#include "Logger.h"
+
 #include <iostream>
 
 

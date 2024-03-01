@@ -6,6 +6,7 @@
 * \date    11/02/2024
 */
 #include "Commons.h"
+
 #include "ILogger.h"
 
 #include <thread>
@@ -13,7 +14,6 @@
 #include <memory>
 #include <mutex>
 #include <map>
-
 
 #include "ELogSeverityLevel.h"
 #include "ELogThread.h"

@@ -35,6 +35,8 @@
 //header refactoring ok
 #include "CameraFrames.h"
 
+#include "Logger.h"
+
 #include <boost/filesystem.hpp>
 #include <boost/date_time.hpp>
 

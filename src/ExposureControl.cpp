@@ -35,6 +35,8 @@
 */
 #include <ostream>
 
+#include "Logger.h"
+
 #include "ExposureControl.h"
 #include "Conversion.h"
 #include "SaveImg.h"

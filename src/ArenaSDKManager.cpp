@@ -1,4 +1,5 @@
 #include "ArenaSDKManager.h"
+#include "Logger.h"
 #include <iomanip>
 
 using namespace freeture;

@@ -5,6 +5,7 @@
 * \date    03/22/2023
 */
 #include <memory>
+#include <iostream>
 
 #include "Freeture.h"
 

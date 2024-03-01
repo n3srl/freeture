@@ -33,8 +33,10 @@
 * \date    19/03/2018
 * \brief   Frame grabbed from a camera or other input video source.
 */
-
 #include "Frame.h"
+
+#include "Logger.h"
+
 #include "ECamPixFmt.h"
 
 using namespace freeture;

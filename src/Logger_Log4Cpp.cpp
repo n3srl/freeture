@@ -1,5 +1,8 @@
 #include "Logger_Log4Cpp.h"
 
+#include "Logger.h"
+
+
 #include <fstream> // For std::ifstream and std::ofstream
 #include <sstream> // For std::istringstream (if needed)
 #include <string>  // For std::string
@@ -16,14 +19,11 @@
 
 using namespace std;
 using namespace freeture;
-#ifdef LINUX
-namespace log4cpp = log4cpp_GenICam;
-#endif
 
 void Logger_Log4Cpp::updateAppenderConfiguration(string appender_name) {
     // Assume "A1" is the name of the RollingFileAppender
-    log4cpp::Appender* appender = log4cpp::Category::getRoot().getAppender(appender_name);
-    log4cpp::RollingFileAppender* rollingFileAppender = dynamic_cast<log4cpp::RollingFileAppender*>(appender);
+    Appender* appender = log4cpp::Category::getRoot().getAppender(appender_name);
+    RollingFileAppender* rollingFileAppender = dynamic_cast<RollingFileAppender*>(appender);
 
     if (rollingFileAppender != nullptr)
     {
@@ -32,8 +32,8 @@ void Logger_Log4Cpp::updateAppenderConfiguration(string appender_name) {
     }
 }
 
-void Logger_Log4Cpp::setRootLogLevel(log4cpp::Priority::Value level) {
-    log4cpp::Category& root = log4cpp::Category::getRoot();
+void Logger_Log4Cpp::setRootLogLevel(Priority::Value level) {
+    Category& root = Category::getRoot();
     root.setPriority(level);
 }
 
@@ -52,19 +52,19 @@ void Logger_Log4Cpp::apply() {
 
     switch (logger->getLogSeverityLevel()) {
     case LogSeverityLevel::critical:
-        setRootLogLevel(log4cpp::Priority::CRIT);
+        setRootLogLevel(Priority::CRIT);
         break;
     case LogSeverityLevel::fail:
-        setRootLogLevel(log4cpp::Priority::ERROR);
+        setRootLogLevel(Priority::ERROR);
         break;
     case LogSeverityLevel::normal:
-        setRootLogLevel(log4cpp::Priority::DEBUG);
+        setRootLogLevel(Priority::DEBUG);
         break;
     case LogSeverityLevel::notification:
-        setRootLogLevel(log4cpp::Priority::INFO);
+        setRootLogLevel(Priority::INFO);
         break;
     case LogSeverityLevel::warning:
-        setRootLogLevel(log4cpp::Priority::WARN);
+        setRootLogLevel(Priority::WARN);
         break;
     };
 }
@@ -108,7 +108,7 @@ void Logger_Log4Cpp::init()
     try {
         preprocessAndLoadConfiguration(logger->getLogPathFolder() + "log4cpp.properties");
         // Initialize Log4cpp here, potentially loading configuration from a file
-        log4cpp::PropertyConfigurator::configure(logger->getLogPathFolder() + "freeture_log4cpp.properties");
+        PropertyConfigurator::configure(logger->getLogPathFolder() + "freeture_log4cpp.properties");
 
         apply();
         fetchCategories();
@@ -121,34 +121,34 @@ void Logger_Log4Cpp::init()
 }
 
 void Logger_Log4Cpp::logDebug(const std::string& message) {
-    log4cpp::Category& category = getCategory();
+    Category& category = getCategory();
     
     category.debug(message);
 }
 
 void Logger_Log4Cpp::logNotification(const std::string& message) {
-    log4cpp::Category& category = getCategory();
+    Category& category = getCategory();
     
     category.info(message);
 }
 
 void Logger_Log4Cpp::logCritical(const std::string& message)
 {
-    log4cpp::Category& category = getCategory();
+    Category& category = getCategory();
 
     category.error(message);
 }
 
 void Logger_Log4Cpp::logFail(const std::string& message)
 {
-    log4cpp::Category& category = getCategory();
+    Category& category = getCategory();
 
     category.error(message);
 }
 
 void Logger_Log4Cpp::logNormal(const std::string& message)
 {
-    log4cpp::Category& category = getCategory();
+    Category& category = getCategory();
 
     category.debug(message);
 }
@@ -156,7 +156,7 @@ void Logger_Log4Cpp::logNormal(const std::string& message)
 
 void Logger_Log4Cpp::logWarning(const std::string& message)
 {
-    log4cpp::Category& category = getCategory();
+    Category& category = getCategory();
 
     category.warn(message);
 }
@@ -190,10 +190,10 @@ void Logger_Log4Cpp::fetchCategories()
 {
     std::lock_guard<std::mutex> guard(m_RecordMutex);
     
-    m_AcqThreadCategory     = &log4cpp::Category::getInstance("ACQ_THREAD");
-    m_StackThreadCategory   = &log4cpp::Category::getInstance("STACK_THREAD");
-    m_FreetureCategory      = &log4cpp::Category::getInstance("FREETURE");
-    m_DetThreadCategory     = &log4cpp::Category::getInstance("DET_THREAD");
+    m_AcqThreadCategory     = &Category::getInstance("ACQ_THREAD");
+    m_StackThreadCategory   = &Category::getInstance("STACK_THREAD");
+    m_FreetureCategory      = &Category::getInstance("FREETURE");
+    m_DetThreadCategory     = &Category::getInstance("DET_THREAD");
 }
 
 

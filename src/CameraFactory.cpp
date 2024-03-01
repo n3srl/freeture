@@ -1,5 +1,7 @@
 #include "CameraFactory.h"
 
+#include "Logger.h"
+
 #include <memory>
 
 #include "SParam.h"

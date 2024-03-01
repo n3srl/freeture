@@ -30,6 +30,7 @@
 *
 *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
+#include "Logger.h"
 
 #include <boost/filesystem.hpp>
 #include <boost/tokenizer.hpp>

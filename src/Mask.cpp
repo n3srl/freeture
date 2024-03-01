@@ -33,9 +33,11 @@
 */
 #include "Mask.h"
 
+#include "Logger.h"
+
 #include <opencv2/imgcodecs.hpp>
 
-#include "Constants.h"
+
 
 using namespace freeture;
 using namespace std;
