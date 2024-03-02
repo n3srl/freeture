@@ -316,7 +316,7 @@ elseif( ${OperatingSystem} MATCHES "Linux" )
 	message ("log4cpp_INCLUDE_DIR : " ${LOG4CPP_INCLUDE_DIRS})
 	message ("log4cpp_LIBRARIES : " ${LOG4CPP_LIBRARIES})
 
-	target_include_directories(${EXE_NAME} PRIVATE ${LOG4CPP_INCLUDE_DIRS})
+	include_directories(${LOG4CPP_INCLUDE_DIRS})
 	target_link_libraries(${EXE_NAME} ${LOG4CPP_LIBRARIES})
 endif()
 
