@@ -418,6 +418,24 @@ void AcqThread::operator()()
                 // Detect day or night.
                 m_CurrentTimeMode = getTimeMode(m_CurrentTimeInSeconds);
 
+                if (m_CurrentTimeMode != previousTimeMode) {
+                    switch (m_CurrentTimeMode) {
+                    case TimeMode::DAY:
+                        LOG_INFO << "AcqThread::operator();" << "Running on DAY";
+                        break;
+                    case TimeMode::NIGHT:
+                        LOG_INFO << "AcqThread::operator();" << "Running on NIGHT";
+                        break;
+                    case TimeMode::SUNRISE:
+                        LOG_INFO << "AcqThread::operator();" << "Running on SUNRISE";
+                        break;
+                    case TimeMode::SUNSET:
+                        LOG_INFO << "AcqThread::operator();" << "Running on SUNSET";
+                        break;
+                    }
+                }
+               
+
                 tacq_metric = (double)cv::getTickCount();
 
                 //check if device is connected.

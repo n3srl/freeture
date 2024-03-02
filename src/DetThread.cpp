@@ -816,7 +816,9 @@ bool DetThread::saveEventData(int firstEvPosInFB, int lastEvPosInFB){
 
     if(mdtp.DET_SAVE_SUM_WITH_HIST_EQUALIZATION) {
 
-        shared_ptr<cv::Mat> s,s1, eqHist;
+        shared_ptr<cv::Mat> s, eqHist;
+
+        eqHist = make_shared<cv::Mat>();
 
         float bzero  = 0.0;
         float bscale = 1.0;

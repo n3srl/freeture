@@ -101,13 +101,13 @@ namespace freeture
     class DetectionTemporal : public Detection {
 
     private:
-        std::vector<GlobalEvent>             mListGlobalEvents;      // List of global events (Events spread on several frames).
+        std::vector<std::shared_ptr<GlobalEvent>>  mListGlobalEvents;      // List of global events (Events spread on several frames).
         std::vector<cv::Point>                   mSubdivisionPos;        // Position (origin in top left) of 64 subdivisions.
         std::vector<cv::Scalar>                  mListColors;            // One color per local event.
         cv::Mat                             mLocalMask;             // Mask used to remove isolated white pixels.
         bool                            mSubdivisionStatus;     // If subdivisions positions have been computed.
         cv::Mat                             mPrevThresholdedMap;
-        std::vector<GlobalEvent>::iterator   mGeToSave;              // Global event to save.
+        std::shared_ptr<GlobalEvent>   mGeToSave;              // Global event to save.
         int                             mRoiSize[2];
         int                             mImgNum;                // Current frame number.
         cv::Mat                             mPrevFrame;             // Previous frame.

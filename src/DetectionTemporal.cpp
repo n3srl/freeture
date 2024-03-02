@@ -616,7 +616,7 @@ bool DetectionTemporal::runDetection(std::shared_ptr<Frame> c) {
             // If attached, check the positive-negative couple of the global event.
 
             // Iterator on list of global event.
-            vector<GlobalEvent>::iterator itGE;
+            vector<shared_ptr<GlobalEvent>>::iterator itGE;
 
             tStep3 = (double)cv::getTickCount();
 
@@ -625,14 +625,15 @@ bool DetectionTemporal::runDetection(std::shared_ptr<Frame> c) {
             while(itLE != listLocalEvents.end()) {
 
                 bool LELinked = false;
-                vector<GlobalEvent>::iterator itGESelected;
+                vector<shared_ptr<GlobalEvent>>::iterator itGESelected;
                 bool GESelected = false;
 
                 (*itLE).setNumFrame(c->mFrameNumber);
 
                 for(itGE = mListGlobalEvents.begin(); itGE != mListGlobalEvents.end(); ++itGE){
+                    shared_ptr<GlobalEvent> global_event = (*itGE);
 
-                    cv::Mat res = (*itLE).getMap() & (*itGE).getMapEvent();
+                    cv::Mat res = (*itLE).getMap() & global_event->getMapEvent();
 
                     if(cv::countNonZero(res) > 0){
 
@@ -644,11 +645,10 @@ bool DetectionTemporal::runDetection(std::shared_ptr<Frame> c) {
                             //LOG_DEBUG << "The current LE has found a possible global event."<< endl;
 
                             // Choose the older global event.
-                            if((*itGE).getAge() > (*itGESelected).getAge()){
+                            if(global_event->getAge() > (*itGESelected)->getAge()){
 
                                 //LOG_DEBUG << "Choose the older global event."<< endl;
                                 itGESelected = itGE;
-
                             }
 
                         }else{
@@ -669,27 +669,27 @@ bool DetectionTemporal::runDetection(std::shared_ptr<Frame> c) {
 
                     //LOG_DEBUG << "Add current LE to an existing GE ... "<< endl;
                     // Add LE.
-                    (*itGESelected).addLE((*itLE));
+                    (*itGESelected)->addLE((*itLE));
                     //LOG_DEBUG << "Flag to indicate that a local event has been added ... "<< endl;
                     // Flag to indicate that a local event has been added.
-                    (*itGESelected).setNewLEStatus(true);
+                    (*itGESelected)->setNewLEStatus(true);
                     //LOG_DEBUG << "reset age of the last local event received by the global event.... "<< endl;
                     // reset age of the last local event received by the global event.
-                    (*itGESelected).setAgeLastElem(0);
+                    (*itGESelected)->setAgeLastElem(0);
 
                 }else{
 
                     // The current LE has not been linked. It became a new GE.
-                    if(mListGlobalEvents.size() < mdtp.temporal.DET_GE_MAX){
+                    if(mListGlobalEvents.size() < mdtp.temporal.DET_GE_MAX) {
 
                         //LOG_DEBUG << "Selecting last available color ... "<< endl;
                         cv::Scalar geColor = cv::Scalar(255,255,255);//availableGeColor.back();
                         //LOG_DEBUG << "Deleting last available color ... "<< endl;
                         //availableGeColor.pop_back();
                         //LOG_DEBUG << "Creating new GE ... "<< endl;
-                        GlobalEvent newGE(c->mDate, c->mFrameNumber, currImg.rows, currImg.cols, geColor);
+                        shared_ptr<GlobalEvent> newGE = make_shared<GlobalEvent>(c->mDate, c->mFrameNumber, currImg.rows, currImg.cols, geColor);
                         //LOG_DEBUG << "Adding current LE ... "<< endl;
-                        newGE.addLE((*itLE));
+                        newGE->addLE((*itLE));
                         //LOG_DEBUG << "Pushing new LE to GE list  ... "<< endl;
                         //Add the new globalEvent to the globalEvent's list
                         mListGlobalEvents.push_back(newGE);
@@ -713,104 +713,106 @@ bool DetectionTemporal::runDetection(std::shared_ptr<Frame> c) {
 
             // Loop global event list to check their characteristics.
             while(itGE != mListGlobalEvents.end()) {
+                shared_ptr<GlobalEvent> global_event = (*itGE);
 
-                (*itGE).setAge((*itGE).getAge() + 1); // Increment age.
+                global_event->setAge(global_event->getAge() + 1); // Increment age.
 
                 // If the current global event has not received any new local event.
-                if(!(*itGE).getNewLEStatus()){
+                if(!global_event->getNewLEStatus()){
 
-                    (*itGE).setAgeLastElem((*itGE).getAgeLastElem()+1);  // Increment its "Without any new local event age"
+                    global_event->setAgeLastElem(global_event->getAgeLastElem()+1);  // Increment its "Without any new local event age"
 
                 }else{
 
-                    (*itGE).setNumLastFrame(c->mFrameNumber);
-                    (*itGE).setNewLEStatus(false);
+                    global_event->setNumLastFrame(c->mFrameNumber);
+                    global_event->setNewLEStatus(false);
                 }
 
                 string msgGe = "";
 
                 // CASE 1 : FINISHED EVENT.
-                if((*itGE).getAgeLastElem() > 5){
+                if(global_event->getAgeLastElem() > 5) 
+                {
 
                     // Linear profil ? Minimum duration respected ?
-                    if((*itGE).LEList.size() >= 5
-                        && (*itGE).continuousGoodPos(4, msgGe)
-                        && (*itGE).ratioFramesDist(msgGe)
-                        && (*itGE).negPosClusterFilter(msgGe)){
+                    if(global_event->LEList.size() >= 5
+                        && global_event->continuousGoodPos(4, msgGe)
+                        && global_event->ratioFramesDist(msgGe)
+                        && global_event->negPosClusterFilter(msgGe)){
 
-                        mGeToSave = itGE;
+                        mGeToSave = global_event;
                         saveSignal = true;
                         break;
 
-                    }else{
+                    } else {
                         itGE = mListGlobalEvents.erase(itGE); // Delete the event.
+                       
                     }
 
                 // CASE 2 : NOT FINISHED EVENT.
-                }else{
-
-                    int nbsec = TimeDate::secBetweenTwoDates((*itGE).getDate(), c->mDate);
+                }
+                else 
+                {
+                    int nbsec = TimeDate::secBetweenTwoDates(global_event->getDate(), c->mDate);
                     bool maxtime = false;
                     if(nbsec > mdtp.DET_TIME_MAX)
                         maxtime = true;
 
                     // Check some characteristics : Too long event ? not linear ?
                     if( maxtime
-                        || (!(*itGE).getLinearStatus()
-                        && !(*itGE).continuousGoodPos(5,msgGe))
-                        || (!(*itGE).getLinearStatus()
-                        && (*itGE).continuousBadPos((int)(*itGE).getAge()/2))){
+                        || (!global_event->getLinearStatus()
+                        && !global_event->continuousGoodPos(5,msgGe))
+                        || (!global_event->getLinearStatus()
+                        && global_event->continuousBadPos((int)global_event->getAge()/2))){
 
-                        if (!(*itGE).getLinearStatus() && !(*itGE).continuousGoodPos(5, msgGe))
+                        if (!global_event->getLinearStatus() && !global_event->continuousGoodPos(5, msgGe))
                             LOG_DEBUG << "Event discarded because not linear even if good positioned" << endl;
                        
-                        if (!(*itGE).getLinearStatus() && (*itGE).continuousBadPos((int)(*itGE).getAge() / 2))
+                        if (!global_event->getLinearStatus() && global_event->continuousBadPos((int)global_event->getAge() / 2))
                             LOG_DEBUG << "Event discarded because not linear and bad positioned" << endl;
+
+                        if(maxtime) {
+                                TimeDate::Date gedate = global_event->getDate();
+                                LOG_INFO << "# GE deleted because max time reached : " << endl;
+                                string m = "- global_event.getDate() : "
+                                    + Conversion::numbering(4, gedate.year) + Conversion::intToString(gedate.year)
+                                    + Conversion::numbering(2, gedate.month) + Conversion::intToString(gedate.month)
+                                    + Conversion::numbering(2, gedate.day) + Conversion::intToString(gedate.day) + "T"
+                                    + Conversion::numbering(2, gedate.hours) + Conversion::intToString(gedate.hours)
+                                    + Conversion::numbering(2, gedate.minutes) + Conversion::intToString(gedate.minutes)
+                                    + Conversion::numbering(2, gedate.seconds) + Conversion::intToString((int)gedate.seconds);
+
+                                LOG_INFO << m << endl;
+
+                                LOG_INFO << "- c.mDate : "
+                                    << Conversion::numbering(4, c->mDate.year) << Conversion::intToString(c->mDate.year)
+                                    << Conversion::numbering(2, c->mDate.month) << Conversion::intToString(c->mDate.month)
+                                    << Conversion::numbering(2, c->mDate.day) << Conversion::intToString(c->mDate.day) << "T"
+                                    << Conversion::numbering(2, c->mDate.hours) << Conversion::intToString(c->mDate.hours)
+                                    << Conversion::numbering(2, c->mDate.minutes) << Conversion::intToString(c->mDate.minutes)
+                                    << Conversion::numbering(2, c->mDate.seconds) << Conversion::intToString((int)c->mDate.seconds)
+                                    << endl;
+
+                                LOG_INFO << "- difftime in sec : " << nbsec << endl;
+                                LOG_INFO << "- maxtime in sec : " << mdtp.DET_TIME_MAX << endl;
+                        }
 
                         itGE = mListGlobalEvents.erase(itGE); // Delete the event.
 
-                        if(maxtime) {
-
-                            TimeDate::Date gedate = (*itGE).getDate();
-                            LOG_INFO << "# GE deleted because max time reached : " << endl;
-                                                       string m = "- (*itGE).getDate() : "
-                                                                + Conversion::numbering(4, gedate.year) + Conversion::intToString(gedate.year)
-                                                                + Conversion::numbering(2, gedate.month) + Conversion::intToString(gedate.month)
-                                                                + Conversion::numbering(2, gedate.day) + Conversion::intToString(gedate.day) + "T"
-                                                                + Conversion::numbering(2, gedate.hours) + Conversion::intToString(gedate.hours)
-                                                                + Conversion::numbering(2, gedate.minutes) + Conversion::intToString(gedate.minutes)
-                                                                + Conversion::numbering(2, gedate.seconds) + Conversion::intToString((int)gedate.seconds);
-
-                            LOG_INFO << m << endl;
-
-                            LOG_INFO << "- c.mDate : "
-                                                                << Conversion::numbering(4, c->mDate.year) << Conversion::intToString(c->mDate.year)
-                                                                << Conversion::numbering(2, c->mDate.month) << Conversion::intToString(c->mDate.month)
-                                                                << Conversion::numbering(2, c->mDate.day) << Conversion::intToString(c->mDate.day) << "T"
-                                                                << Conversion::numbering(2, c->mDate.hours) << Conversion::intToString(c->mDate.hours)
-                                                                << Conversion::numbering(2, c->mDate.minutes) << Conversion::intToString(c->mDate.minutes)
-                                                                << Conversion::numbering(2, c->mDate.seconds) << Conversion::intToString((int)c->mDate.seconds)
-                                                                << endl;
-
-                            LOG_INFO << "- difftime in sec : " << nbsec << endl;
-                            LOG_INFO << "- maxtime in sec : " << mdtp.DET_TIME_MAX << endl;
-
-                        }
-
                     // Let the GE alive.
-                    }else if(c->mFrameRemaining < 10 && c->mFrameRemaining != 0){
+                    }else if(c->mFrameRemaining < 10 && c->mFrameRemaining != 0) {
 
-                        if((*itGE).LEList.size() >= 5 && (*itGE).continuousGoodPos(4,msgGe) && (*itGE).ratioFramesDist(msgGe)&& (*itGE).negPosClusterFilter(msgGe)){
+                        if(global_event->LEList.size() >= 5 && global_event->continuousGoodPos(4,msgGe) && global_event->ratioFramesDist(msgGe)&& global_event->negPosClusterFilter(msgGe)){
 
-                            mGeToSave = itGE;
+                            mGeToSave = global_event;
                             saveSignal = true;
                             break;
 
-                        }else{
+                        } else{
                             itGE = mListGlobalEvents.erase(itGE); // Delete the event.
                         }
 
-                    }else{
+                    } else {
                         ++itGE; // Do nothing to the current GE, check the following one.
                     }
                 }
