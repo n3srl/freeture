@@ -4,7 +4,7 @@
 #define FREETURE_CONFIG_H
 
 #define VERSION "@VERSION@"
-#define CFG_PATH "@CFG_PATH@"
+#define DEFAULT_CFG_PATH "@CFG_PATH@"
 
 #cmakedefine WINDOWS
 #cmakedefine LINUX
