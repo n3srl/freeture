@@ -11,6 +11,7 @@ namespace freeture {
         CLEAN_LOGS,
         LIST_DEVICES,
         LIST_FORMATS,
+        PRINT_TEST_SCHEDULE,
         UNKNOWN
     };
 }

@@ -22,5 +22,13 @@ struct FreetureSettings {
     bool        bmp = false;
     bool        fits = false;
     bool        sendbymail = false;
-    std::string configurationFilePath = std::string(CFG_PATH) + "configuration.cfg";
+    std::string configurationFilePath = std::string(DEFAULT_CFG_PATH) + "configuration.cfg";
+    
+    int         timestep=10;
+    int         gainstep = 1;
+    int         starthour = 0;
+    int         endhour = 24;
+    int         startgain = 0;
+    int         endgain = 24;
+
 };

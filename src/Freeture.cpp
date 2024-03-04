@@ -47,11 +47,55 @@ void Freeture::handler(const boost::system::error_code& error, int signal_number
 }
 
 
-freeture::Freeture::Freeture(int argc, const char** argv) :
-    m_FreetureSettings(std::make_shared<CfgParam>(m_FreetureCommandLineSettings.configurationFilePath))
+void Freeture::printTestSchedule()
+{
+    LOG_WARNING << "Freeture::printTestSchedule";
+    vector<string> string_list;
+    tm time = {};
+    time.tm_year = 124; // L'anno 2024 (gli anni in tm sono conteggiati a partire dal 1900)
+    time.tm_mday = 1;   // Il primo del mese
+
+    for (int hour = m_FreetureCommandLineSettings.starthour ; hour < m_FreetureCommandLineSettings.endhour; ++hour) {
+        for (int min = 0; min < 60; min += m_FreetureCommandLineSettings.timestep) {
+            time.tm_hour = hour;
+            time.tm_min = min;
+            time.tm_sec = 0;
+
+            // Loop per ogni guadagno da 0 a 24 con step di 4
+            for (int gain = m_FreetureCommandLineSettings.startgain; gain <= m_FreetureCommandLineSettings.endgain; gain += m_FreetureCommandLineSettings.gainstep) {
+                ostringstream oss;
+                oss << put_time(&time, "%Hh%Mm%Ss");
+                // Formatta il valore double come una stringa senza parte decimale
+                oss << fixed << setprecision(0) << m_FreetureCommandLineSettings.exp;
+                oss << "e" << gain << "g" << "1f1n";
+                string_list.push_back(oss.str());
+                
+                if (time.tm_sec + 30 >= 60) {
+                    time.tm_min++;
+                    time.tm_sec = 0;
+                }
+                else {
+                    time.tm_sec += 30;
+                }
+            }
+        }
+    }
+
+    // Stampa delle stringhe generate
+    for (const auto& str : string_list) {
+        cout << str << ",";
+    }
+    cout << endl;
+}
+
+
+freeture::Freeture::Freeture(int argc, const char** argv)
 {
     m_Argc=argc;
     m_Argv=argv;
+
+    fetchProgramOption();
+
 }
 
 /// <summary>
@@ -65,80 +109,69 @@ void Freeture::selectMode( boost::program_options::variables_map& vm)
     switch(m_FreetureCommandLineSettings.mode)
     {
         case 1:
-        {
             m_CurrentRunMode = FreetureMode::TEST_CONFIGURATION;
-        }
-        break;
+            break;
         case 2 :
-        {
             m_CurrentRunMode = FreetureMode::CONTINUOUS_ACQUISITION;
-        }
-        break;
+            break;
         case 3:
-        {
             m_CurrentRunMode = FreetureMode::METEOR_DETECTION;
-        }
-        break;
+            break;
         case 4 :
-        {
             m_CurrentRunMode = FreetureMode::SINGLE_ACQUISITION;
-        }
-        break;
+            break;
         case 5:
-        {
             m_CurrentRunMode = FreetureMode::CLEAN_LOGS;
-        }
+            break;
+    }
+
+    switch (m_CurrentRunMode) {
+    case FreetureMode::METEOR_DETECTION:
+    case FreetureMode::SINGLE_ACQUISITION:
+    case FreetureMode::CONTINUOUS_ACQUISITION:
+    {
+
+        // Cam id.
+        if (vm.count("id")) m_FreetureCommandLineSettings.devID = vm["id"].as<int>();
+
+        // Path where to save files.
+        if (vm.count("savepath")) m_FreetureCommandLineSettings.savePath = vm["savepath"].as<string>();
+
+        // Acquisition pixel format.
+        if (vm.count("format")) m_FreetureCommandLineSettings.acqFormat = vm["format"].as<int>();
+
+        // Crop start x
+        if (vm.count("startx")) m_FreetureCommandLineSettings.startx = vm["startx"].as<int>();
+
+        // Crop start y
+        if (vm.count("starty")) m_FreetureCommandLineSettings.starty = vm["starty"].as<int>();
+
+        // Cam width size
+        if (vm.count("width")) m_FreetureCommandLineSettings.acqWidth = vm["width"].as<int>();
+
+        // Cam height size
+        if (vm.count("height")) m_FreetureCommandLineSettings.acqHeight = vm["height"].as<int>();
+
+        // Gain value.
+        if (vm.count("gain")) m_FreetureCommandLineSettings.gain = vm["gain"].as<int>();
+
+        // Exposure value.
+        if (vm.count("exposure")) m_FreetureCommandLineSettings.exp = vm["exposure"].as<double>();
+
+        // Filename.
+        if (vm.count("filename")) m_FreetureCommandLineSettings.fileName = vm["filename"].as<string>();
+
+        if (vm.count("display")) m_FreetureCommandLineSettings.display = true;
+
+        if (vm.count("bmp")) m_FreetureCommandLineSettings.bmp = true;
+
+        if (vm.count("fits")) m_FreetureCommandLineSettings.fits = true;
+
+        // Send fits by mail if configuration file is correct.
+        if (vm.count("sendbymail")) m_FreetureCommandLineSettings.sendbymail = true;
         break;
     }
-
-    if (
-        m_CurrentRunMode == FreetureMode::METEOR_DETECTION ||
-        m_CurrentRunMode == FreetureMode::SINGLE_ACQUISITION ||
-        m_CurrentRunMode == FreetureMode::CONTINUOUS_ACQUISITION
-    )
-    {
-        
-            // Cam id.
-            if(vm.count("id")) m_FreetureCommandLineSettings.devID = vm["id"].as<int>();
-
-            // Path where to save files.
-            if(vm.count("savepath")) m_FreetureCommandLineSettings.savePath = vm["savepath"].as<string>();
-
-            // Acquisition pixel format.
-            if(vm.count("format")) m_FreetureCommandLineSettings.acqFormat = vm["format"].as<int>();
-
-            // Crop start x
-            if(vm.count("startx")) m_FreetureCommandLineSettings.startx = vm["startx"].as<int>();
-
-            // Crop start y
-            if(vm.count("starty")) m_FreetureCommandLineSettings.starty = vm["starty"].as<int>();
-
-            // Cam width size
-            if(vm.count("width")) m_FreetureCommandLineSettings.acqWidth = vm["width"].as<int>();
-
-            // Cam height size
-            if(vm.count("height")) m_FreetureCommandLineSettings.acqHeight = vm["height"].as<int>();
-
-            // Gain value.
-            if(vm.count("gain")) m_FreetureCommandLineSettings.gain = vm["gain"].as<int>();
-
-            // Exposure value.
-            if(vm.count("exposure")) m_FreetureCommandLineSettings.exp = vm["exposure"].as<double>();
-
-            // Filename.
-            if(vm.count("filename")) m_FreetureCommandLineSettings.fileName = vm["filename"].as<string>();
-
-            if(vm.count("display")) m_FreetureCommandLineSettings.display = true;
-
-            if(vm.count("bmp")) m_FreetureCommandLineSettings.bmp = true;
-
-            if(vm.count("fits")) m_FreetureCommandLineSettings.fits = true;
-
-            // Send fits by mail if configuration file is correct.
-            if(vm.count("sendbymail")) m_FreetureCommandLineSettings.sendbymail = true;
-    }
-
-    if (m_CurrentRunMode == FreetureMode::UNKNOWN)
+    case FreetureMode::UNKNOWN:
     {
         LOG_INFO << "MODE " << m_FreetureCommandLineSettings.mode << " is not available. Correct modes are : " << endl;
         LOG_INFO << "[1] Check configuration file." << endl;
@@ -146,7 +179,10 @@ void Freeture::selectMode( boost::program_options::variables_map& vm)
         LOG_INFO << "[3] Run meteor detection." << endl;
         LOG_INFO << "[4] Run single capture." << endl;
         LOG_INFO << "[5] Clean logs." << endl;
+        LOG_INFO << "[6] Print schedule list." << endl;
         LOG_INFO << "Execute freeture command to see options." << endl;
+        break;
+    }
     }
 }
 
@@ -193,27 +229,35 @@ void Freeture::fetchProgramOption()
     m_OptionsDescription = new po::options_description("FreeTure options");
 
     m_OptionsDescription->add_options()
-      ("help,h",                                                                                        "Print FreeTure help.")
-      ("mode,m",        po::value<int>(),                                                               "FreeTure modes :\n- MODE 1 : Check configuration file.\n- MODE 2 : Continuous acquisition.\n- MODE 3 : Meteor detection.\n- MODE 4 : Single acquisition.\n- MODE 5 : Clean logs.")
-      ("time,t",        po::value<int>(),                                                               "Execution time (s) of meteor detection mode.")
-      ("startx",        po::value<int>(),                                                               "Crop starting x (from left to right): only for aravis cameras yet.")
-      ("starty",        po::value<int>(),                                                               "Crop starting y (from top to bottom): only for aravis cameras yet.")
-      ("width",         po::value<int>(),                                                               "Image width.")
-      ("height",        po::value<int>(),                                                               "Image height.")
-      ("cfg,c",         po::value<string>()->default_value(string(CFG_PATH) + "configuration.cfg"),     "Configuration file's path.")
-      ("format,f",      po::value<int>()->default_value(0),                                             "Index of pixel format.")
-      ("bmp",                                                                                           "Save .bmp.")
-      ("fits",                                                                                          "Save fits2D.")
-      ("gain,g",        po::value<int>(),                                                               "Define gain.")
-      ("exposure,e",    po::value<double>(),                                                            "Define exposure.")
-      ("version,v",                                                                                     "Print FreeTure version.")
-      ("display",                                                                                       "Display the grabbed frame.")
-      ("listdevices,l",                                                                                 "List connected devices.")
-      ("listformats",                                                                                   "List device's available pixel formats.")
-      ("id,d",          po::value<int>(),                                                               "Camera to use. List devices to get IDs.")
-      ("filename,n",    po::value<string>()->default_value("snap"),                                     "Name to use when a single frame is captured.")
-      ("sendbymail,s",                                                                                  "Send single capture by mail. Require -c option.")
-      ("savepath,p",    po::value<string>()->default_value("./"),                                       "Save path.");
+        ("help,h", "Print FreeTure help.")
+        ("mode,m", po::value<int>(), "FreeTure modes :\n- MODE 1 : Check configuration file.\n- MODE 2 : Continuous acquisition.\n- MODE 3 : Meteor detection.\n- MODE 4 : Single acquisition.\n- MODE 5 : Clean logs.")
+        ("time,t", po::value<int>(), "Execution time (s) of meteor detection mode.")
+        ("startx", po::value<int>(), "Crop starting x (from left to right): only for aravis cameras yet.")
+        ("starty", po::value<int>(), "Crop starting y (from top to bottom): only for aravis cameras yet.")
+        ("width", po::value<int>(), "Image width.")
+        ("height", po::value<int>(), "Image height.")
+        ("cfg,c", po::value<string>()->default_value(string(DEFAULT_CFG_PATH) + "configuration.cfg"), "Configuration file path.")
+        ("format,f", po::value<int>()->default_value(0), "Index of pixel format.")
+        ("bmp", "Save .bmp.")
+        ("fits", "Save fits2D.")
+        ("gain,g", po::value<int>(), "Define gain.")
+        ("exposure,e", po::value<double>(), "Define exposure.")
+        ("version,v", "Print FreeTure version.")
+        ("display", "Display the grabbed frame.")
+        ("listdevices,l", "List connected devices.")
+        ("listformats", "List device's available pixel formats.")
+        ("id,d", po::value<int>(), "Camera to use. List devices to get IDs.")
+        ("filename,n", po::value<string>()->default_value("snap"), "Name to use when a single frame is captured.")
+        ("sendbymail,s", "Send single capture by mail. Require -c option.")
+        ("savepath,p", po::value<string>()->default_value("./"), "Save path.")
+        ("testschedule", "Generate test schedule list eg. freeture --testschedule --timestep 10 --starthour 0  --endhour 24 --startgain 0 --endgain 24 --gainstep 4 -e 5000000")
+        
+        ("timestep", po::value<int>(), "Time step used to generate scheduled capture list. [min] *** UNCHECKED ***")
+        ("gainstep", po::value<int>(), "Gain step used to generate scheduled capture list. [#] *** UNCHECKED ***")
+        ("starthour", po::value<int>(), "Start hour used to generate scheduled capture list. [0-24] *** UNCHECKED ***")
+        ("endhour", po::value<int>(), "End hour used to generate scheduled capture list. [0-24] *** UNCHECKED ***")
+        ("startgain", po::value<int>(), "Start gain used to generate scheduled capture list. [0-N] *** UNCHECKED ***")
+        ("endgain", po::value<int>(), "End gain used to generate scheduled capture list. [0-N] *** UNCHECKED ***");
 
     po::variables_map vm;
 
@@ -243,19 +287,34 @@ void Freeture::fetchProgramOption()
         else if(vm.count("mode"))
         {
             m_FreetureCommandLineSettings.mode = vm["mode"].as<int>();
-
-            if(vm.count("cfg")) 
-                m_FreetureCommandLineSettings.configurationFilePath = vm["cfg"].as<string>();
-
+          
             if(vm.count("time"))
                 m_FreetureCommandLineSettings.executionTime = vm["time"].as<int>();
 
             selectMode(vm);
         }
+        else if (vm.count("testschedule"))
+        {
+            m_CurrentRunMode = FreetureMode::PRINT_TEST_SCHEDULE;
+
+            if (vm.count("timestep"))  m_FreetureCommandLineSettings.timestep = vm["timestep"].as<int>();
+            if (vm.count("gainstep"))  m_FreetureCommandLineSettings.gainstep = vm["gainstep"].as<int>();
+            if (vm.count("starthour")) m_FreetureCommandLineSettings.starthour = vm["starthour"].as<int>();
+            if (vm.count("endhour"))   m_FreetureCommandLineSettings.endhour = vm["endhour"].as<int>();
+            if (vm.count("startgain")) m_FreetureCommandLineSettings.startgain = vm["startgain"].as<int>();
+            if (vm.count("endgain"))   m_FreetureCommandLineSettings.endgain = vm["endgain"].as<int>();
+            if (vm.count("exposure"))  m_FreetureCommandLineSettings.exp = vm["exposure"].as<double>();
+        }
         else
         {
             m_CurrentRunMode = FreetureMode::PRINT_HELP;
         }
+
+        if (vm.count("cfg"))
+        {
+            m_FreetureCommandLineSettings.configurationFilePath = vm["cfg"].as<string>();
+        }
+        
     }
     catch(exception& e)
     {
@@ -863,7 +922,7 @@ void Freeture::Run()
     try {
         m_ThreadID = std::this_thread::get_id();
 
-        fetchProgramOption();
+        m_FreetureSettings = std::make_shared<CfgParam>(m_FreetureCommandLineSettings.configurationFilePath);
 
         m_Logger = Logger::Get(LogThread::FREETURE_THREAD, m_ThreadID, m_FreetureSettings->getLogParam().LOG_PATH, m_FreetureSettings->getLogParam().LOG_ARCHIVE_DAY, m_FreetureSettings->getLogParam().LOG_SIZE_LIMIT, m_FreetureSettings->getLogParam().LOG_SEVERITY);
         m_Logger->setLogThread(LogThread::FREETURE_THREAD, m_ThreadID);
@@ -931,6 +990,11 @@ void Freeture::Run()
         case FreetureMode::CLEAN_LOGS:
         {
             modeCleanLogs();
+            break;
+        }
+        case FreetureMode::PRINT_TEST_SCHEDULE:
+        {
+            printTestSchedule();
             break;
         }
         }

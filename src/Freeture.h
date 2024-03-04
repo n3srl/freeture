@@ -56,6 +56,7 @@ namespace freeture
 
             void printHelp();
             void printVersion();
+            void printTestSchedule();
 
             void selectListDevices();
             void selectListFormats();

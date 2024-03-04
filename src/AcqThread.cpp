@@ -168,7 +168,7 @@ AcqThread::AcqThread(boost::circular_buffer<shared_ptr<Frame>>& fb,
     exposureControlActive(false)
   
 {
-    LOG_DEBUG << "AcqThread::AcqThread";
+    LOG_DEBUG << "AcqThread::AcqThread" << endl;
     shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
     m_Device                 = m_CameraDeviceManager->getDevice();
     
@@ -398,7 +398,7 @@ void AcqThread::operator()()
             m_PreviousThreadLoopTime = m_LastRegularAcquisitionTimestamp = m_CurrentThreadLoopTime = boost::posix_time::microsec_clock::universal_time();
 
             if (!setCameraInContinousMode()) {
-                LOG_ERROR << "AcqThread::operator();" << "Cannot set continuous camera mode";
+                LOG_ERROR << "AcqThread::operator();" << "Cannot set continuous camera mode" << endl;
                 break;
             }
 
@@ -421,16 +421,16 @@ void AcqThread::operator()()
                 if (m_CurrentTimeMode != previousTimeMode) {
                     switch (m_CurrentTimeMode) {
                     case TimeMode::DAY:
-                        LOG_INFO << "AcqThread::operator();" << "Running on DAY";
+                        LOG_INFO << "AcqThread::operator();" << "Running on DAY" << endl;
                         break;
                     case TimeMode::NIGHT:
-                        LOG_INFO << "AcqThread::operator();" << "Running on NIGHT";
+                        LOG_INFO << "AcqThread::operator();" << "Running on NIGHT" << endl;
                         break;
                     case TimeMode::SUNRISE:
-                        LOG_INFO << "AcqThread::operator();" << "Running on SUNRISE";
+                        LOG_INFO << "AcqThread::operator();" << "Running on SUNRISE" << endl;
                         break;
                     case TimeMode::SUNSET:
-                        LOG_INFO << "AcqThread::operator();" << "Running on SUNSET";
+                        LOG_INFO << "AcqThread::operator();" << "Running on SUNSET" << endl;
                         break;
                     }
                 }
@@ -440,9 +440,9 @@ void AcqThread::operator()()
 
                 //check if device is connected.
                 if (!m_Device->isConnected()) {
-                    LOG_ERROR << "DEVICE IS NOT CONNECTED ANYMORE";
+                    LOG_ERROR << "DEVICE IS NOT CONNECTED ANYMORE" << endl;
                     if (!m_Device->connect()) {
-                        LOG_ERROR << "CONNECTION FAILED WAITING 1s";
+                        LOG_ERROR << "CONNECTION FAILED WAITING 1s" << endl;
                         boost::this_thread::sleep(boost::posix_time::millisec(1000));
                         continue;
                     }
@@ -474,7 +474,7 @@ void AcqThread::operator()()
                         nextSunrise = TimeDate::HdecimalToHMS(((24 * 3600 - m_CurrentTimeInSeconds) + mStartSunriseTime) / 3600.0);
                     if (LOG_SPAM_FRAME_STATUS)
                         if (nextSunrise.size() > 0)
-                            LOG_DEBUG << "AcqThread::operator();" << "NEXT SUNRISE : " << nextSunrise.at(0) << "h" << nextSunrise.at(1) << "m" << nextSunrise.at(2) << "s";
+                            LOG_DEBUG << "AcqThread::operator();" << "NEXT SUNRISE : " << nextSunrise.at(0) << "h" << nextSunrise.at(1) << "m" << nextSunrise.at(2) << "s" << endl;
                 }
 
                 // Print time before sunset.
@@ -484,7 +484,7 @@ void AcqThread::operator()()
                     nextSunset = TimeDate::HdecimalToHMS((mStartSunsetTime - m_CurrentTimeInSeconds) / 3600.0);
                     if (LOG_SPAM_FRAME_STATUS)
                         if (nextSunset.size() > 0)
-                            LOG_DEBUG << "AcqThread::operator();" << "NEXT SUNSET : " << nextSunset.at(0) << "h" << nextSunset.at(1) << "m" << nextSunset.at(2) << "s";
+                            LOG_DEBUG << "AcqThread::operator();" << "NEXT SUNSET : " << nextSunset.at(0) << "h" << nextSunset.at(1) << "m" << nextSunset.at(2) << "s" << endl;
                 }
 
 
@@ -632,7 +632,7 @@ void AcqThread::selectNextAcquisitionSchedule(TimeDate::Date date) {
 }
 
 bool AcqThread::buildAcquisitionDirectory(string YYYYMMDD){
-    LOG_DEBUG << "AcqThread::buildAcquisitionDirectory";
+    LOG_DEBUG << "AcqThread::buildAcquisitionDirectory" << endl;
 
     string root = m_DataParam.DATA_PATH + m_StationParam.STATION_NAME + "_" + YYYYMMDD +"/";
 
@@ -757,7 +757,7 @@ bool AcqThread::buildAcquisitionDirectory(string YYYYMMDD){
 /// <param name="imgOutput"></param>
 /// <param name="imgPrefix"></param>
 void AcqThread::runImageCapture(EAcquisitionMode mode,int imgNumber, ImgFormat imgOutput, string imgPrefix) {
-    LOG_DEBUG << "AcqThread::runImageCapture";
+    LOG_DEBUG << "AcqThread::runImageCapture" << endl;
 
     if (mode == EAcquisitionMode::REGULAR)
         LOG_INFO << "AcqThread::runImageCapture;\t\t" << "Running regular capture " << endl;
@@ -894,7 +894,7 @@ void AcqThread::saveImageCaptured(shared_ptr<Frame> frame, int imgNum, ImgFormat
                                     unsigned short *ptr = NULL;
                                     short *ptr2 = NULL;
 
-                                    for(int i = 0; i < frame->Image->rows; i++){
+                                    for(int i = 0; i < frame->Image->rows; i++) {
 
                                         ptr = frame->Image->ptr<unsigned short>(i);
                                         ptr2 = newMat->ptr<short>(i);
@@ -1243,7 +1243,7 @@ void AcqThread::ApplyCameraSettingsToFrame(shared_ptr<Frame> frame)
 
 bool AcqThread::prepareAcquisitionOnDevice(EAcquisitionMode mode)
 {
-    LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice";
+    LOG_DEBUG << "AcqThread::prepareAcquisitionOnDevice" << endl;
 
     // Get Sunrise start/stop, Sunset start/stop. ---
     computeSunTimes();
