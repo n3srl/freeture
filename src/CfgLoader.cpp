@@ -117,6 +117,7 @@ bool CfgLoader::Load(const std::string& file) {
             ("ACQ_REGULAR_PRFX", po::value<std::string>()->default_value(DEFAULT_ACQ_REGULAR_PRFX), "Captured image prefix.")
             ("ACQ_REGULAR_OUTPUT", po::value<std::string>()->default_value(DEFAULT_ACQ_REGULAR_OUTPUT), "Captured image format. [JPEG] | [FITS]")
             ("ACQ_SCHEDULE_ENABLED", po::value<std::string>()->default_value(DEFAULT_ACQ_SCHEDULE_ENABLED), "Enable scheduled acquisition. If enabled, ACQ_REGULAR_ENABLED has to be disabled.")
+            ("ACQ_SCHEDULE_PRFX", po::value<std::string>()->default_value(DEFAULT_ACQ_SCHEDULE_PRFX), "Schedule captured image prefix")
             ("ACQ_SCHEDULE", po::value<std::string>()->default_value(DEFAULT_ACQ_SCHEDULE), "Schedule (UT). Format is: .h.m.s.e.g.f.n where \".\" is a number) (e = exposure, g = gain, f = format index, n =repetition)")
             ("ACQ_SCHEDULE_OUTPUT", po::value<std::string>()->default_value(DEFAULT_ACQ_SCHEDULE_OUTPUT), "Captured image format. [JPEG] | [FITS]")
             ("DET_ENABLED", po::value<std::string>()->default_value(DEFAULT_DET_ENABLED), "Enable detection process.")

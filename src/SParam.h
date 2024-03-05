@@ -199,6 +199,7 @@ namespace freeture
         struct scheduledCaptures {
             bool        ACQ_SCHEDULE_ENABLED;
             ImgFormat   ACQ_SCHEDULE_OUTPUT;
+            std::string ACQ_SCHEDULE_PRFX;
             std::vector<scheduleParam> ACQ_SCHEDULE;
         };
         scheduledCaptures schcap;   

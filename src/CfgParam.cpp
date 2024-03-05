@@ -1752,12 +1752,17 @@ void CfgParam::loadCamParam()
                             error = true;
                             m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE_OUTPUT : " + string(ex.what()));
                         }
+
+                        if (!m_Cfg.Get("ACQ_SCHEDULE_PRFX", m_Param.camInput.schcap.ACQ_SCHEDULE_PRFX))
+                        {
+                            m_Param.camInput.schcap.ACQ_SCHEDULE_PRFX = "SCHEDULED";
+                        }
                     }
                 }
 
                 //-------------------------------------------------------------------
-
                 {
+
                     string sACQ_SCHEDULE;
                     if (!m_Cfg.Get("ACQ_SCHEDULE", sACQ_SCHEDULE)) {
                         error = true;

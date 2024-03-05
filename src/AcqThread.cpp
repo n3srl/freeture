@@ -560,7 +560,7 @@ void  AcqThread::runScheduledAcquisition(TimeDate::Date mDate) {
     runImageCapture(EAcquisitionMode::SCHEDULED,
         mNextAcq.rep,
         m_CameraParam.schcap.ACQ_SCHEDULE_OUTPUT,
-        "");
+        m_CameraParam.schcap.ACQ_SCHEDULE_PRFX);
 
 //     LOG_INFO << "AcqThread::runScheduledAcquisition;\t\t" << "Saving image";
 //     saveImageCaptured(frame, 0, m_CameraParam.regcap.ACQ_REGULAR_OUTPUT, m_CameraParam.regcap.ACQ_REGULAR_PRFX + "_reg");
