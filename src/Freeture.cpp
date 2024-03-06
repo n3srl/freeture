@@ -70,12 +70,12 @@ void Freeture::printTestSchedule()
                 oss << "e" << gain << "g" << "1f1n";
                 string_list.push_back(oss.str());
                 
-                if (time.tm_sec + 30 >= 60) {
+                if (time.tm_sec + m_FreetureCommandLineSettings.waitdelay >= 60) {
                     time.tm_min++;
                     time.tm_sec = 0;
                 }
                 else {
-                    time.tm_sec += 30;
+                    time.tm_sec += m_FreetureCommandLineSettings.waitdelay;
                 }
             }
         }
@@ -250,8 +250,9 @@ void Freeture::fetchProgramOption()
         ("filename,n", po::value<string>()->default_value("snap"), "Name to use when a single frame is captured.")
         ("sendbymail,s", "Send single capture by mail. Require -c option.")
         ("savepath,p", po::value<string>()->default_value("./"), "Save path.")
-        ("testschedule", "Generate test schedule list eg. freeture --testschedule --timestep 10 --starthour 0  --endhour 24 --startgain 0 --endgain 24 --gainstep 4 -e 5000000")
-        
+        ("testschedule", "Generate test schedule list eg. freeture --testschedule --timestep 10 --starthour 0  --endhour 24 --startgain 0 --endgain 24 --gainstep 4 -e 5000000 --waitdelay 40")
+
+        ("waitdelay", po::value<int>(), "Time waited between scheduled captures of the same gain [s] *** UNCHECKED ***")
         ("timestep", po::value<int>(), "Time step used to generate scheduled capture list. [min] *** UNCHECKED ***")
         ("gainstep", po::value<int>(), "Gain step used to generate scheduled capture list. [#] *** UNCHECKED ***")
         ("starthour", po::value<int>(), "Start hour used to generate scheduled capture list. [0-24] *** UNCHECKED ***")
@@ -303,6 +304,8 @@ void Freeture::fetchProgramOption()
             if (vm.count("endhour"))   m_FreetureCommandLineSettings.endhour = vm["endhour"].as<int>();
             if (vm.count("startgain")) m_FreetureCommandLineSettings.startgain = vm["startgain"].as<int>();
             if (vm.count("endgain"))   m_FreetureCommandLineSettings.endgain = vm["endgain"].as<int>();
+            if (vm.count("waitdelay"))   m_FreetureCommandLineSettings.waitdelay = vm["waitdelay"].as<int>();
+            
             if (vm.count("exposure"))  m_FreetureCommandLineSettings.exp = vm["exposure"].as<double>();
         }
         else

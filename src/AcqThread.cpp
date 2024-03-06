@@ -458,10 +458,13 @@ void AcqThread::operator()()
                 //CALCULATE SUN EPHEMERYS
 
                 // If the date has changed, sun ephemeris must be updated.
-                if (m_PreviousThreadLoopTime.date() != boost::posix_time::microsec_clock::universal_time().date())
+                if (m_PreviousThreadLoopTime.date() != m_CurrentThreadLoopTime.date())
                 {
                     LOG_INFO << "AcqThread::operator();" << "Date has changed. Former Date is " << m_PreviousThreadLoopTime.date() << ". New Date is " << m_CurrentThreadLoopTime.date() << "." << endl;
+
                     computeSunTimes();
+
+                    m_PreviousThreadLoopTime = m_CurrentThreadLoopTime;
                 }
 
                 // Print time before sunrise.

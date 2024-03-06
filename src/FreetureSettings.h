@@ -30,5 +30,6 @@ struct FreetureSettings {
     int         endhour = 24;
     int         startgain = 0;
     int         endgain = 24;
+    int         waitdelay = 30;
 
 };
