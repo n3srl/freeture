@@ -236,7 +236,7 @@ namespace freeture
 
         static unsigned long getTimeDateToSeconds(TimeDate::Date);
 
-        static unsigned long TimeDate::getTimeDateToSeconds(boost::posix_time::ptime);
+        static unsigned long getTimeDateToSeconds(boost::posix_time::ptime);
 
     };
 }
