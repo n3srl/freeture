@@ -182,6 +182,7 @@ Category& Logger_Log4Cpp::getCategory()
 
     case LogThread::UNDEFINED:
     case LogThread::FREETURE_THREAD:
+    default:
         return *m_FreetureCategory;
     }
 }

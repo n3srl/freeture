@@ -148,7 +148,7 @@ namespace freeture
 
         void createDebugDirectories(bool cleanDebugDirectory);
 
-        int selectThreshold(cv::Mat i) {}
+        int selectThreshold(cv::Mat i) { return 0; }
 
         std::vector<cv::Scalar> getColorInEventMap(cv::Mat& eventMap, cv::Point roiCenter);
 
