@@ -71,19 +71,40 @@ namespace freeture
 
         /**
         * Constructor.
-        *
+        * Initializes a Stack instance with parameters related to FITS compression, FITS keys, 
+        * and station parameters. This setup suggests that every stack is associated with specific 
+        * imaging parameters and metadata that will likely be included in the FITS file header upon saving.
         */
         Stack(std::string fitsCompression, fitskeysParam fkp, stationParam stp);
+        
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param name="other"></param>
+        Stack(const Stack& other);
+        Stack& operator=(const Stack& other);
+
+        /// <summary>
+        /// Move constructor
+        /// </summary>
+        Stack(Stack&& other) noexcept;
+        Stack& operator=(Stack&& other) noexcept;
 
         /**
         * Destructor.
-        *
+        * Cleans up the resources. Since you're using std::shared_ptr for managing the cv::Mat object,
+        * explicit cleanup in the destructor is not necessary for the cv::Mat object unless there are other resources
+        * that need explicit release.
         */
         ~Stack(void);
 
         /**
         * Add a frame to the stack.
         *
+        * Adds a frame to the stack. This method likely involves some operations to combine the incoming 
+        * frame with the existing stack, such as averaging or summing pixel values. The exact implementation
+        * depends on how you intend to "stack" these frames (e.g., for noise reduction, exposure stacking, etc.).
+        * 
         * @param i Frame to add.
         */
         void addFrame(std::shared_ptr<Frame> i);
@@ -91,12 +112,21 @@ namespace freeture
         /**
         * Get Date of the first frame of the stack.
         *
+        * These methods provide access to specific metadata about the stack, such as the date of the
+        * first frame added and the total number of frames. This information could be useful for analysis,
+        * logging, or inclusion in the FITS header
+        * 
         * @return Date.
         */
         TimeDate::Date getDateFirstFrame() { return mDateFirstFrame; };
 
         /**
         * Save stack.
+        * 
+        * Saves the stack to a file, presumably in the FITS format given the context.
+        * This method would involve constructing the FITS header using the metadata from the
+        * frames and the stack parameters, applying any final processing or reduction to the stack, 
+        * and writing the result to a file.
         *
         * @param fitsHeader fits keywords.
         * @param path Location where to save the stack.

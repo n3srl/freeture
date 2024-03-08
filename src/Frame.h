@@ -35,6 +35,7 @@
 * \brief   Image container.
 */
 #include "Commons.h"
+#include <memory>
 #include <cstdint>
 #include <string>
 
@@ -52,7 +53,10 @@ namespace freeture
         size_t                      mSize;
     public:
 
-        TimeDate::Date              mDate;               // Acquisition date.
+        /// <summary>
+        /// This is the start acquisition date.
+        /// </summary>
+        TimeDate::Date              mDate;               
         double                      mExposure;           // Camera's exposure value used to grab the frame.
         int                         mGain;               // Camera's gain value used to grab the frame.
         CamPixFmt                   mFormat;             // Pixel format.
@@ -69,6 +73,12 @@ namespace freeture
         std::shared_ptr<cv::Mat>    Image;                // Frame's image data.
 
         Frame(cv::Mat capImg, int g, double e, std::string acquisitionDate);
+
+        Frame(const Frame& other); // Copy constructor
+        Frame(Frame&& other) noexcept; //Move constructor
+
+        Frame& operator=(const Frame& other); //Copy operator
+        Frame& operator=(Frame&& other) noexcept; //Move operator
 
         Frame();
 

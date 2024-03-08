@@ -55,11 +55,11 @@ using namespace freeture;
      mFps(0),
      mStartX(0),
      mStartY(0),
-     mWidth(0),
-     mHeight(0),
-     Image()
+     mWidth(capImg.cols),
+     mHeight(capImg.rows),
+     Image(std::make_shared<cv::Mat>(capImg.clone())) // Deep copy of capImg
  {
-     capImg.copyTo(*Image.get());
+   
  }
 
 Frame::Frame():
@@ -80,6 +80,63 @@ Frame::Frame():
     mHeight(0),
     Image()
 {
+}
+
+Frame::Frame(const Frame& other) 
+    :
+        mSize(other.mSize),
+        mDate(other.mDate),
+        mExposure(other.mExposure),
+        mGain(other.mGain),
+        mFormat(other.mFormat),
+        mFileName(other.mFileName),
+        mFrameNumber(other.mFrameNumber),
+        mFrameRemaining(other.mFrameRemaining),
+        mSaturatedValue(other.mSaturatedValue),
+        mFps(other.mFps),
+        mStartX(other.mStartX),
+        mStartY(other.mStartY),
+        mWidth(other.mWidth),
+        mHeight(other.mHeight)
+{
+    if (other.Image) {
+        Image = std::make_shared<cv::Mat>(other.Image->clone());
+    }
+    else {
+        Image = std::make_shared<cv::Mat>();
+    }
+
+    if (other.mDataBuffer) {
+        mDataBuffer = new uint8_t[other.mSize];
+        std::copy(other.mDataBuffer, other.mDataBuffer + other.mSize, mDataBuffer);
+    }
+    else {
+        mDataBuffer = nullptr;
+    }
+}
+
+Frame::Frame(Frame&& other) noexcept
+    :
+    Image(std::move(other.Image)), // Transfer ownership of the shared_ptr
+    mDataBuffer(other.mDataBuffer), // Transfer the raw pointer
+    mSize(other.mSize), // Copy the size
+    // Copy or move other members as needed
+    mDate(std::move(other.mDate)),
+    mExposure(other.mExposure),
+    mGain(other.mGain),
+    mFormat(other.mFormat),
+    mFileName(std::move(other.mFileName)),
+    mFrameNumber(other.mFrameNumber),
+    mFrameRemaining(other.mFrameRemaining),
+    mSaturatedValue(other.mSaturatedValue),
+    mFps(other.mFps),
+    mStartX(other.mStartX),
+    mStartY(other.mStartY),
+    mWidth(other.mWidth),
+    mHeight(other.mHeight)
+{
+    other.mDataBuffer = nullptr; // Ensure the source object doesn't delete the data
+    other.mSize = 0; // Reset size in the source object
 }
 
 Frame::~Frame()
@@ -137,4 +194,75 @@ uint8_t* Frame::getData()
 //     memset(new_buffer, 0xCD, mSize);
 //     memcpy(mDataBuffer, new_buffer, mSize);
     return mDataBuffer;
+}
+
+Frame& Frame::operator=(const Frame& other)
+{
+    if (this != &other) // protect against invalid self-assignment
+    { 
+        // Deep copy of Image
+        if (other.Image) {
+            Image = std::make_shared<cv::Mat>(other.Image->clone());
+        }
+        else {
+            Image = std::make_shared<cv::Mat>();
+        }
+
+        // Deep copy of mDataBuffer
+        if (mDataBuffer) {
+            delete[] mDataBuffer;
+            mDataBuffer = nullptr;
+            mSize = 0;
+        }
+
+        if (other.mDataBuffer && other.mSize > 0) {
+            mDataBuffer = new uint8_t[other.mSize];
+            std::copy(other.mDataBuffer, other.mDataBuffer + other.mSize, mDataBuffer);
+            mSize = other.mSize;
+        }
+
+        // Copying simple fields
+        mDate = other.mDate;
+        mExposure = other.mExposure;
+        mGain = other.mGain;
+        mFormat = other.mFormat;
+        mFileName = other.mFileName;
+        mFrameNumber = other.mFrameNumber;
+        mFrameRemaining = other.mFrameRemaining;
+        mSaturatedValue = other.mSaturatedValue;
+        mFps = other.mFps;
+        mStartX = other.mStartX;
+        mStartY = other.mStartY;
+        mWidth = other.mWidth;
+        mHeight = other.mHeight;
+    }
+    return *this;
+}
+
+Frame& Frame::operator=(Frame&& other) noexcept {
+    if (this != &other) { // Prevent self-assignment
+        Image = std::move(other.Image); // Transfer ownership of the shared_ptr
+        delete[] mDataBuffer; // Free existing buffer
+        mDataBuffer = other.mDataBuffer; // Transfer the raw pointer
+        mSize = other.mSize; // Copy the size
+        // Move or copy other members as needed
+        mDate = std::move(other.mDate);
+        mExposure = other.mExposure;
+        mGain = other.mGain;
+        mFormat = other.mFormat;
+        mFileName = std::move(other.mFileName);
+        mFrameNumber = other.mFrameNumber;
+        mFrameRemaining = other.mFrameRemaining;
+        mSaturatedValue = other.mSaturatedValue;
+        mFps = other.mFps;
+        mStartX = other.mStartX;
+        mStartY = other.mStartY;
+        mWidth = other.mWidth;
+        mHeight = other.mHeight;
+
+        // Reset the moved-from object to a valid state
+        other.mDataBuffer = nullptr;
+        other.mSize = 0;
+    }
+    return *this;
 }

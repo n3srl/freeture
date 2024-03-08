@@ -86,7 +86,28 @@ namespace freeture
                     seconds = static_cast<double>(timePart.seconds()) + static_cast<double>(timePart.fractional_seconds()) / 1000000.0; // Add microseconds converted to seconds
                 }
             }
+
+            /// <summary>
+            /// Conversion operator to boost::posix_time::ptime
+            /// </summary>
+            /// <returns></returns>
+            operator boost::posix_time::ptime() const {
+                // Construct a boost::gregorian::date object
+                boost::gregorian::date datePart(year, month, day);
+
+                // Calculate total microseconds for the time part
+                long totalMicroseconds = static_cast<long>(seconds * 1000000.0);
+                int microsec = totalMicroseconds % 1000000;
+                int sec = static_cast<int>(seconds) % 60; // Extract seconds
+
+                // Construct a boost::posix_time::time_duration object
+                boost::posix_time::time_duration timePart(hours, minutes, sec, microsec);
+
+                // Combine the date and time parts to construct a ptime object
+                return boost::posix_time::ptime(datePart, timePart);
+            }
         };
+
 
         /**
         * Get local date time in UT
@@ -216,5 +237,6 @@ namespace freeture
         static unsigned long getTimeDateToSeconds(TimeDate::Date);
 
         static unsigned long TimeDate::getTimeDateToSeconds(boost::posix_time::ptime);
+
     };
 }

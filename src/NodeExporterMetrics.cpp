@@ -26,6 +26,12 @@ NodeExporterMetrics::~NodeExporterMetrics()
         delete m_Instance;
 }
 
+void NodeExporterMetrics::UpdateMetrics(double AcqFPS, double Temperature)
+{
+    m_AcqFPS = AcqFPS;
+    m_Temperature = Temperature;
+}
+
 void NodeExporterMetrics::UpdateMetrics(int DetNbDetection, double DetTime)
 {
     m_DetNbDetection = DetNbDetection;

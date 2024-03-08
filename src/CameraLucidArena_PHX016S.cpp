@@ -53,7 +53,8 @@ using namespace std;
      */
     CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S()
     {
-        try {
+        try 
+        {
             LOG_DEBUG << "CameraLucidArena_PHX016S::~CameraLucidArena_PHX016S" << endl;
             destroyDevice();
         }
@@ -922,6 +923,8 @@ using namespace std;
                 throw runtime_error("SDK not initialized");
 
 
+            newFrame->mDate = TimeDate::Date(boost::posix_time::microsec_clock::universal_time());
+
             Arena::IImage* pOriginalImage = m_ArenaDevice->GetImage(IMAGE_TIMEOUT);
 
             if (!pOriginalImage->HasImageData()) {
@@ -931,8 +934,6 @@ using namespace std;
             if (pOriginalImage->HasChunkData()) {
                 LOG_ERROR << "Image has data chunk" << endl;
             }
-
-            newFrame->mDate = TimeDate::Date(boost::posix_time::microsec_clock::universal_time());
 
             Arena::IImage* pCopiedImage = Arena::ImageFactory::Create(pOriginalImage->GetData(),
                 pOriginalImage->GetPayloadSize(), pOriginalImage->GetWidth(),
@@ -1010,7 +1011,7 @@ using namespace std;
                 //    packet resend is requested and this information is used to retrieve
                 //    and redeliver the missing packet in the correct order.
 
-                LOG_INFO << "CameraLucidArena_PHX016S::grabInitialization;" << "Disable stream packet resend" << endl;
+                LOG_INFO << "CameraLucidArena_PHX016S::acqStart;" << "Disable stream packet resend" << endl;
                 Arena::SetNodeValue<bool>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamPacketResendEnable", false);
 
                 // Set acquisition mode
@@ -1033,7 +1034,7 @@ using namespace std;
                 //    packet resend is requested and this information is used to retrieve
                 //    and redeliver the missing packet in the correct order.
 
-                LOG_INFO << "CameraLucidArena_PHX016S::grabInitialization;" << "Enable stream packet resend" << endl;
+                LOG_INFO << "CameraLucidArena_PHX016S::acqStart;" << "Enable stream packet resend" << endl;
                 Arena::SetNodeValue<bool>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamPacketResendEnable", true);
 
                 LOG_INFO << "CameraLucidArena_PHX016S::acqStart;" << "Set camera to SINGLEFRAME" << endl;
@@ -1533,12 +1534,27 @@ using namespace std;
         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "GammaEnable = false";
         ArenaSDKManager::setBooleanValue(m_ArenaDevice, "GammaEnable", false);
 
-        LOG_INFO << "CameraLucidArena_PHX016S::grabInitialization;" << "Enable stream to auto negotiate packet size" << endl;
-        Arena::SetNodeValue<bool>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamAutoNegotiatePacketSize", false);
+        LOG_INFO << "CameraLucidArena_PHX016S::initOnce;" << "Enable stream to auto negotiate packet size" << endl;
+        Arena::SetNodeValue<bool>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamAutoNegotiatePacketSize", AUTONEGOTIATE_PACKET_SIZE);
 
-        LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "DeviceStreamChannelPacketSize = 1500" << endl;
-        ArenaSDKManager::setIntegerValue(m_ArenaDevice, "DeviceStreamChannelPacketSize", 1500);
+        if (!AUTONEGOTIATE_PACKET_SIZE) {
+            LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "DeviceStreamChannelPacketSize = "<< DEFAULT_PACKET_SIZE << endl;
+            ArenaSDKManager::setIntegerValue(m_ArenaDevice, "DeviceStreamChannelPacketSize", DEFAULT_PACKET_SIZE);
+        }
+        else
+        {
+            // Set buffer handling mode
+            //    Set buffer handling mode before starting the stream. Starting the
+            //    stream requires the buffer handling mode to be set beforehand. The
+            //    buffer handling mode determines the order and behavior of buffers in
+            //    the underlying stream engine. Setting the buffer handling mode to
+            //    'NewestOnly' ensures the most recent image is delivered, even if it
+            //    means skipping frames.
 
+            LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "Set buffer handling mode to 'NewestOnly'" << endl;
+            Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamBufferHandlingMode", "NewestOnly");
+        }
+      
         LOG_DEBUG << "CameraLucidArena_PHX016S::initOnce;" << "AcquisitionFrameRate = 0.1" << endl;
         ArenaSDKManager::setFloatValue(m_ArenaDevice, "AcquisitionFrameRate", 0.1);
         
@@ -1600,18 +1616,6 @@ using namespace std;
 
             try {
             
-              
-                // Set buffer handling mode
-                //    Set buffer handling mode before starting the stream. Starting the
-                //    stream requires the buffer handling mode to be set beforehand. The
-                //    buffer handling mode determines the order and behavior of buffers in
-                //    the underlying stream engine. Setting the buffer handling mode to
-                //    'NewestOnly' ensures the most recent image is delivered, even if it
-                //    means skipping frames.
-
-                LOG_DEBUG << "CameraLucidArena_PHX016S::grabInitialization;" << "Set buffer handling mode to 'NewestOnly'" << endl;
-                Arena::SetNodeValue<GenICam::gcstring>(m_ArenaDevice->GetTLStreamNodeMap(), "StreamBufferHandlingMode", "NewestOnly");
-
                 // Enable stream auto negotiate packet size
                 //    Setting the stream packet size is done before starting the stream.
                 //    Setting the stream to automatically negotiate packet size instructs
@@ -1806,7 +1810,7 @@ using namespace std;
     {
         bool destroyed, created;
 
-        destroyed = destroyDevice();
+        //destroyed = destroyDevice();
         created = createDevice();
 
         return m_Connected;

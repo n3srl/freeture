@@ -42,6 +42,8 @@
 
 #include <boost/thread/thread.hpp>
 #include <boost/thread/condition_variable.hpp>
+#include <boost/thread/future.hpp>
+
 #include <boost/circular_buffer.hpp>
 
 #include "EParser.h"
@@ -68,9 +70,7 @@ namespace freeture
         std::thread::id m_ThreadID;
 
         //COMMON THREADS ATTRIBUTES
-        boost::posix_time::ptime m_CurrentThreadLoopTime;
-        boost::posix_time::ptime m_PreviousThreadLoopTime;
-
+ 
         boost::mutex        mMustStopMutex;
         boost::thread*      mThread;                     // Acquisition thread.
         bool                mMustStop;              // Signal to stop thread.
@@ -106,13 +106,24 @@ namespace freeture
         boost::posix_time::ptime        m_LastMetricTimestamp;
         int                             mDeviceID;              // Index of the device to use.
         size_t                          mNextAcqIndex;
-        unsigned long                   mStartSunriseTime;      // In seconds.
-        unsigned long                   mStopSunriseTime;       // In seconds.
-        unsigned long                   mStartSunsetTime;       // In seconds.
-        unsigned long                   mStopSunsetTime;        // In seconds.
-        unsigned long                   mCurrentTime;           // In seconds.
+        long                            mStartSunriseTime;      // In seconds. CAN BE NEGATIVE
+        long                            mStopSunriseTime;       // In seconds. CAN BE NEGATIVE
+        long                            mStartSunsetTime;       // In seconds. CAN BE NEGATIVE
+        long                            mStopSunsetTime;        // In seconds. CAN BE NEGATIVE
+        
         unsigned long long              mFrameNumber;           // frame #
         bool                            cleanStatus = false;
+
+
+        boost::posix_time::ptime m_CurrentThreadLoopTime;
+        boost::posix_time::ptime m_PreviousThreadLoopTime;
+
+        boost::posix_time::ptime m_RegularAcquisitionTime;   //used to store the current value used to trigger the capture. 
+        boost::posix_time::ptime m_ScheduledAcquisitionTime; //used to store the current value used to trigger the capture. 
+
+        unsigned long            mCurrentTime;           // m_CurrentThreadLoopTime but in seconds.
+      
+
 
         // Parameters from configuration file.
         scheduleParam       mNextAcq;               // Next scheduled acquisition.
@@ -132,18 +143,18 @@ namespace freeture
 
         boost::circular_buffer<double>  m_FPS_metrics;
 
+
+        //metrics management
         double m_CurrentFPS = 0.0;
-        double tacq_metric = 0.0;
+        double t_FPS_metric = 0.0;
         double m_FPS_Sum = 0.0;
 
-        std::vector<int> nextSunset;
-        std::vector<int> nextSunrise;
-
         size_t m_CircularBufferSize;
-        TimeMode m_CurrentTimeMode;
-        int m_CurrentTimeInSeconds = 0;
-        std::shared_ptr<Frame> m_CurrentFrame;
-        TimeMode previousTimeMode;
+        std::shared_ptr<Frame> m_CurrentFrame;                  // current captured frame pointer
+
+        TimeMode m_CurrentTimeMode;                             // Used to start/stop stack/detection thread on time mode changes
+        TimeMode m_PreviousTimeMode;                            // Used to start/stop stack/detection thread on time mode changes
+
         EParser<TimeMode> time_mode_parser;
         bool m_RunnedRegularAcquisition = false;
         bool m_RunnedScheduledAcquisition = false;
@@ -154,6 +165,7 @@ namespace freeture
         bool exposureControlStatus = false;
         bool exposureControlActive = false;
 
+        boost::future<bool> m_SaveOperationFuture;
     public:
 
         AcqThread(boost::circular_buffer<std::shared_ptr<Frame>>&,
@@ -171,6 +183,12 @@ namespace freeture
         );
 
         ~AcqThread(void);
+
+
+        //AUTOEXPOSURE
+        void initAutoexposure();
+
+        void resetTimeMode();
 
         //COMMON THREAD METHODS
         void operator()();
@@ -200,16 +218,24 @@ namespace freeture
 
         TimeMode getCurrentTimeMode();
 
+        void updateTimeMode();
         TimeMode getTimeMode(unsigned long);
 
+        bool connectionCheck();
         unsigned long getNowInSeconds();
 
         unsigned long getTimeInSeconds(boost::posix_time::ptime);
 
+        void updateCurrentTimeAndDate();
         void setCurrentTimeAndDate(boost::posix_time::ptime);
 
-        void AcqThread::setCurrentTimeDateAndSeconds(boost::posix_time::ptime);
+        void updateTimeReferences();
+        void updateCurrentTimeDateAndSeconds();
+        void setCurrentTimeDateAndSeconds(boost::posix_time::ptime);
 
+        bool selectNextDataSet();
+
+        void resetTimeReferences();
         /// <summary>
         /// unlock condition variable for detection thread and notify_one
         /// </summary>
@@ -239,21 +265,22 @@ namespace freeture
         void resetFrameBuffer();
 
     private:
-
         void regularAcquisition_ThreadLoop();
         void scheduledAcquisition_ThreadLoop();
         void continuousAcquisition_ThreadLoop();
         void metrics_ThreadLoop();
+        void metrics_reset();
 
         void continuousAcquisition_VIDEO();
         void continuousAcquisition_CAMERA();
 
         //internal device management
 
-        bool runNextRegularAcquisition();
+        bool selectNextRegularAcquisition();
 
         void resetContinuousMode();
-
+        void resetSingleMode();
+        void initializeLowFrequencyCameraSettings();
         bool setCameraInContinousMode();
 
         bool setCameraSingleFrameMode(EAcquisitionMode mode);

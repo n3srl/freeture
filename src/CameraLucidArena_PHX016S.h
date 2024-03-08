@@ -18,6 +18,9 @@
 #include "Camera.h"
 #include "ECamPixFmt.h"
 
+#define AUTONEGOTIATE_PACKET_SIZE true
+#define DEFAULT_PACKET_SIZE 1500
+
 #define CHIPSET_MODEL   "Sony IMX273 CMOS"
 #define MODEL           "Lucid PHX016S"
 #define PIXEL_SIZE_H    3.45   

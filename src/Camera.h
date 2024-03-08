@@ -301,26 +301,26 @@ namespace freeture
         */
         virtual bool loadNextDataSet(std::string& location) { location = ""; return true; };
 
-        virtual void test() { LOG_DEBUG << "Camera::test"; };
+        virtual void test() { LOG_DEBUG << "Camera::test" << std::endl; };
 
         virtual bool FirstInitializeCamera(std::string) {
-            LOG_DEBUG << "Camera::FirstInitializeCamera; Inizialize camera done";
+            LOG_DEBUG << "Camera::FirstInitializeCamera; Inizialize camera done" << std::endl;
             return true;
         };
 
         virtual bool isStreaming()
         {
-            LOG_DEBUG << "Camera::IsStreaming";
+            LOG_DEBUG << "Camera::IsStreaming" << std::endl;
             return m_Streaming;
         }
 
         bool isExposureAvailable() {
-            LOG_DEBUG << "Camera::isExposureAvailable";
+            LOG_DEBUG << "Camera::isExposureAvailable" << std::endl;
             return m_ExposureAvailable;
         }
 
         bool isGainAvailable() {
-            LOG_DEBUG << "Camera::isGainAvailable";
+            LOG_DEBUG << "Camera::isGainAvailable" << std::endl;
             return m_GainAvailable;
         }
 

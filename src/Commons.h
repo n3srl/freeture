@@ -4,6 +4,8 @@
 #include "Constants.h"
 #include "PlatformSwitches.h"
 
+#define BOOST_THREAD_PROVIDES_FUTURE
+
 #ifdef LINUX
     #define BOOST_LOG_DYN_LINK 1
 #endif

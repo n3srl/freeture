@@ -41,6 +41,9 @@ namespace freeture
         //metrics from DetThread
         void UpdateMetrics(int, double);
 
+        //metrics from AcqThread
+        void UpdateMetrics(double, double);
+
         void UpdateMetrics(std::string, std::string);
 
         //write metrics to file

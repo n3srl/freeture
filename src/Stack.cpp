@@ -52,6 +52,99 @@ sumExpTime(0.0), gainFirstFrame(0), expFirstFrame(0), fps(0), format(CamPixFmt::
     mstp = stp;
 }
 
+
+// Copy constructor
+Stack::Stack(const Stack& other)
+    :
+    stack(other.stack), // Shallow copy, std::shared_ptr does this naturally
+    curFrames(other.curFrames),
+    gainFirstFrame(other.gainFirstFrame),
+    expFirstFrame(other.expFirstFrame),
+    mDateFirstFrame(other.mDateFirstFrame),
+    mDateLastFrame(other.mDateLastFrame),
+    fps(other.fps),
+    format(other.format),
+    varExpTime(other.varExpTime),
+    sumExpTime(other.sumExpTime),
+    mFitsCompressionMethod(other.mFitsCompressionMethod),
+    mstp(other.mstp),
+    mfkp(other.mfkp) {}
+
+Stack& Stack::operator=(const Stack& other) {
+    if (this != &other) {
+        stack = other.stack; // Shallow copy
+        curFrames = other.curFrames;
+        gainFirstFrame = other.gainFirstFrame;
+        expFirstFrame = other.expFirstFrame;
+        mDateFirstFrame = other.mDateFirstFrame;
+        mDateLastFrame = other.mDateLastFrame;
+        fps = other.fps;
+        format = other.format;
+        varExpTime = other.varExpTime;
+        sumExpTime = other.sumExpTime;
+        mFitsCompressionMethod = other.mFitsCompressionMethod;
+        mstp = other.mstp;
+        mfkp = other.mfkp;
+    }
+    return *this;
+}
+
+// Move constructor
+Stack::Stack(Stack&& other) noexcept
+    : stack(std::move(other.stack)),
+    curFrames(other.curFrames),
+    gainFirstFrame(other.gainFirstFrame),
+    expFirstFrame(other.expFirstFrame),
+    mDateFirstFrame(std::move(other.mDateFirstFrame)),
+    mDateLastFrame(std::move(other.mDateLastFrame)),
+    fps(other.fps),
+    format(other.format),
+    varExpTime(other.varExpTime),
+    sumExpTime(other.sumExpTime),
+    mFitsCompressionMethod(std::move(other.mFitsCompressionMethod)),
+    mstp(std::move(other.mstp)),
+    mfkp(std::move(other.mfkp)) {
+    // Optionally reset primitive types of the moved-from object
+    other.curFrames = 0;
+    other.gainFirstFrame = 0;
+    other.expFirstFrame = 0;
+    other.fps = 0;
+    other.format = CamPixFmt::UNDEFINED; // Assume UNKNOWN is a default or invalid value
+    other.varExpTime = false;
+    other.sumExpTime = 0.0;
+}
+
+
+Stack& Stack::operator=(Stack&& other) noexcept {
+    if (this != &other) {
+        stack = std::move(other.stack);
+        curFrames = other.curFrames;
+        gainFirstFrame = other.gainFirstFrame;
+        expFirstFrame = other.expFirstFrame;
+        mDateFirstFrame = std::move(other.mDateFirstFrame);
+        mDateLastFrame = std::move(other.mDateLastFrame);
+        fps = other.fps;
+        format = other.format;
+        varExpTime = other.varExpTime;
+        sumExpTime = other.sumExpTime;
+        mFitsCompressionMethod = std::move(other.mFitsCompressionMethod);
+        mstp = std::move(other.mstp);
+        mfkp = std::move(other.mfkp);
+
+        // Optionally reset primitive types of the moved-from object
+        other.curFrames = 0;
+        other.gainFirstFrame = 0;
+        other.expFirstFrame = 0;
+        other.fps = 0;
+        other.format = CamPixFmt::UNDEFINED; // Assume UNKNOWN is a default or invalid value
+        other.varExpTime = false;
+        other.sumExpTime = 0.0;
+    }
+    return *this;
+}
+
+
+
 Stack::~Stack(){}
 
 void Stack::addFrame(shared_ptr<Frame> i)

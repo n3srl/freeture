@@ -4,6 +4,7 @@ namespace freeture {
     enum class EAcquisitionMode {
         REGULAR,
         SCHEDULED,
-        CONTINUOUS
+        CONTINUOUS,
+        UNDEFINED
     };
 }

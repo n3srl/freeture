@@ -359,7 +359,7 @@ void StackThread::operator()(){
                 // Stack finished. NEED TO BE saved ASYNC!!.
                 LOG_DEBUG << "operator();" << "Stack finished. Save it async." << endl;
 
-                auto saveOperation = boost::async(boost::launch::async, [&]() -> bool {
+                auto saveOperation = boost::async(boost::launch::async, [=]() -> bool {
                    
                     if (buildStackDataDirectory(current_stack->getDateFirstFrame())) {
 
