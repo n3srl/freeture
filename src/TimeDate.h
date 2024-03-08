@@ -42,6 +42,12 @@
 
 namespace freeture
 {
+    struct Time {
+        int hour;
+        int minute;
+        int second;
+    };
+
     class TimeDate {
 
     public:
@@ -205,8 +211,10 @@ namespace freeture
         /**
         * Get seconds between two dates
         */
-        static int secBetweenTwoDates(Date d1, Date d2);
+        static long secBetweenTwoDates(Date d1, Date d2);
 
+        static unsigned long getTimeDateToSeconds(TimeDate::Date);
+
+        static unsigned long TimeDate::getTimeDateToSeconds(boost::posix_time::ptime);
     };
-
 }

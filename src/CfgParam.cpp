@@ -1803,17 +1803,17 @@ void CfgParam::loadCamParam()
                                     status = false;
                                     m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE : In " + sch1.at(i) + ". Hours can't have the value <" + Conversion::intToString(spa.hours) + ">.\nAvailable range is from 0 to 23.");
                                 }
-                                spa.min = atoi(sp.at(1).c_str());
-                                if (spa.min < 0 || spa.min >= 60) {
+                                spa.minutes = atoi(sp.at(1).c_str());
+                                if (spa.minutes < 0 || spa.minutes >= 60) {
                                     error = true;
                                     status = false;
-                                    m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE : In " + sch1.at(i) + ". Minutes can't have the value <" + Conversion::intToString(spa.min) + ">.\nAvailable range is from 0 to 59.");
+                                    m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE : In " + sch1.at(i) + ". Minutes can't have the value <" + Conversion::intToString(spa.minutes) + ">.\nAvailable range is from 0 to 59.");
                                 }
-                                spa.sec = atoi(sp.at(2).c_str());
-                                if (spa.sec < 0 || spa.sec >= 60) {
+                                spa.seconds = atoi(sp.at(2).c_str());
+                                if (spa.seconds < 0 || spa.seconds >= 60) {
                                     error = true;
                                     status = false;
-                                    m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE : In " + sch1.at(i) + ". Seconds can't have the value <" + Conversion::intToString(spa.sec) + ">.\nAvailable range is from 0 to 59.");
+                                    m_Param.camInput.errormsg.push_back(" ACQ_SCHEDULE : In " + sch1.at(i) + ". Seconds can't have the value <" + Conversion::intToString(spa.seconds) + ">.\nAvailable range is from 0 to 59.");
                                 }
                                 spa.exp = atoi(sp.at(3).c_str());
 
@@ -1882,8 +1882,8 @@ void CfgParam::loadCamParam()
                                     if (!init) {
 
                                         minH = (*it).hours;
-                                        minM = (*it).min;
-                                        minS = (*it).sec;
+                                        minM = (*it).minutes;
+                                        minS = (*it).seconds;
                                         it_select = it;
                                         init = true;
 
@@ -1893,28 +1893,28 @@ void CfgParam::loadCamParam()
                                         if ((*it).hours < minH) {
 
                                             minH = (*it).hours;
-                                            minM = (*it).min;
-                                            minS = (*it).sec;
+                                            minM = (*it).minutes;
+                                            minS = (*it).seconds;
                                             it_select = it;
 
                                         }
                                         else if ((*it).hours == minH) {
 
-                                            if ((*it).min < minM) {
+                                            if ((*it).minutes < minM) {
 
                                                 minH = (*it).hours;
-                                                minM = (*it).min;
-                                                minS = (*it).sec;
+                                                minM = (*it).minutes;
+                                                minS = (*it).seconds;
                                                 it_select = it;
 
                                             }
-                                            else if ((*it).min == minM) {
+                                            else if ((*it).minutes == minM) {
 
-                                                if ((*it).sec < minS) {
+                                                if ((*it).seconds < minS) {
 
                                                     minH = (*it).hours;
-                                                    minM = (*it).min;
-                                                    minS = (*it).sec;
+                                                    minM = (*it).minutes;
+                                                    minS = (*it).seconds;
                                                     it_select = it;
 
                                                 }

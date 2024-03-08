@@ -54,13 +54,15 @@ sumExpTime(0.0), gainFirstFrame(0), expFirstFrame(0), fps(0), format(CamPixFmt::
 
 Stack::~Stack(){}
 
-void Stack::addFrame(shared_ptr<Frame> i){
+void Stack::addFrame(shared_ptr<Frame> i)
+{
 
     try{
 
         if(TimeDate::getYYYYMMDD(i->mDate) != "00000000") {
 
-            if(curFrames == 0){
+            if(curFrames == 0)
+            {
 
                 cv::Mat zero_mat = cv::Mat::zeros(i->Image->rows, i->Image->cols, CV_32FC1);
                     

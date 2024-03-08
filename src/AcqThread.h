@@ -95,6 +95,7 @@ namespace freeture
 
         // ACQ THREAD ATTRIBUTES
         Device*                         m_Device;               // Device used for acquisition.
+        bool                            m_ConnectionLost;       // Device connection is lost.
         ExposureControl*                pExpCtrl;               // Pointer on exposure time control object while sunrise and sunset.
         std::shared_ptr<DetThread>      pDetection;             // Pointer on detection thread in order to stop it or reset it when a regular capture occurs.
         std::shared_ptr<StackThread>    pStack;                 // Pointer on stack thread in order to save and reset a stack when a regular capture occurs.
@@ -104,12 +105,12 @@ namespace freeture
         boost::posix_time::ptime        m_LastRegularAcquisitionTimestamp;
         boost::posix_time::ptime        m_LastMetricTimestamp;
         int                             mDeviceID;              // Index of the device to use.
-        int                             mNextAcqIndex;
-        int                             mStartSunriseTime;      // In seconds.
-        int                             mStopSunriseTime;       // In seconds.
-        int                             mStartSunsetTime;       // In seconds.
-        int                             mStopSunsetTime;        // In seconds.
-        int                             mCurrentTime;           // In seconds.
+        size_t                          mNextAcqIndex;
+        unsigned long                   mStartSunriseTime;      // In seconds.
+        unsigned long                   mStopSunriseTime;       // In seconds.
+        unsigned long                   mStartSunsetTime;       // In seconds.
+        unsigned long                   mStopSunsetTime;        // In seconds.
+        unsigned long                   mCurrentTime;           // In seconds.
         unsigned long long              mFrameNumber;           // frame #
         bool                            cleanStatus = false;
 
@@ -181,13 +182,13 @@ namespace freeture
         // Return activity status.
         bool getThreadStatus();
 
-        bool isNight(int);
+        bool isNight(unsigned long);
 
-        bool isDay(int);
+        bool isDay(unsigned long);
 
-        bool isSunset(int);
+        bool isSunset(unsigned long);
 
-        bool isSunrise(int);
+        bool isSunrise(unsigned long);
 
         bool isNight();
 
@@ -199,11 +200,15 @@ namespace freeture
 
         TimeMode getCurrentTimeMode();
 
-        TimeMode getTimeMode(int);
+        TimeMode getTimeMode(unsigned long);
 
-        int getNowInSeconds();
+        unsigned long getNowInSeconds();
 
-        int getTimeInSeconds(boost::posix_time::ptime);
+        unsigned long getTimeInSeconds(boost::posix_time::ptime);
+
+        void setCurrentTimeAndDate(boost::posix_time::ptime);
+
+        void AcqThread::setCurrentTimeDateAndSeconds(boost::posix_time::ptime);
 
         /// <summary>
         /// unlock condition variable for detection thread and notify_one
@@ -244,11 +249,16 @@ namespace freeture
         void continuousAcquisition_CAMERA();
 
         //internal device management
+
+        bool runNextRegularAcquisition();
+
+        void resetContinuousMode();
+
         bool setCameraInContinousMode();
 
         bool setCameraSingleFrameMode(EAcquisitionMode mode);
 
-        void runScheduledAcquisition(TimeDate::Date);
+        void runScheduledAcquisition();
       
         void runRegularAcquisition();
 
@@ -256,16 +266,18 @@ namespace freeture
         bool computeSunTimes();
 
         // Build the directory where the data will be saved.
-        bool buildAcquisitionDirectory(std::string YYYYMMDD);
+        bool buildAcquisitionDirectory(std::string);
 
         // Analyse the scheduled acquisition list to find the next one according to the current time.
-        void selectNextAcquisitionSchedule(TimeDate::Date date);
+        void selectNextAcquisitionSchedule();
+
+        void selectFirstScheduledAcquisition();
 
         // Save a capture on disk.
-        void saveImageCaptured(std::shared_ptr<Frame> img, int imgNum, ImgFormat outputType, std::string imgPrefix);
+        void saveImageCaptured(std::shared_ptr<Frame>, int, ImgFormat, std::string);
 
         // Run a regular or scheduled acquisition.
-        void runImageCapture(EAcquisitionMode mode, int imgNumber, ImgFormat imgOutput, std::string imgPrefix);
+        void runImageCapture(EAcquisitionMode, int, ImgFormat, std::string);
 
         /// <summary>
         /// Prepare the device for a continuous or single-frame acquisition.

@@ -98,6 +98,8 @@ namespace freeture
 
         std::string completeDataPath;
 
+        boost::posix_time::ptime m_StackStartTime;
+        unsigned long m_WaitBetweenStacksInterval;
     public:
 
         StackThread(bool*,

@@ -35,6 +35,8 @@
 //header refactoring ok
 #include "StackThread.h"
 
+#include <memory>
+
 #include "Logger.h"
 
 #include "CfgParam.h"
@@ -43,7 +45,7 @@
 #include "Stack.h"
 
 #include <boost/date_time.hpp>
-
+#include <boost/thread/future.hpp>
 
 using namespace freeture;
 using namespace std;
@@ -75,7 +77,8 @@ StackThread::StackThread(
     mdp(cfg->getDataParam()),
     msp(cfg->getStackParam()),
     mPixfmt(cfg->getCamParam().ACQ_FORMAT), 
-    completeDataPath("")
+    completeDataPath(""),
+    m_WaitBetweenStacksInterval(cfg->getStackParam().STACK_INTERVAL * 1000UL)
 {
 }
 
@@ -261,76 +264,77 @@ void StackThread::operator()(){
     LOG_INFO << "==============================================" << endl;
 
     try {
-        unsigned long interval = msp.STACK_INTERVAL * 1000;
-        do {
-            string cDate ="";
-            try {
+        string dateDelimiter = ".";
+        unsigned long secTime = 0;
 
+        // First reference date. OUTSIDE LOOP
+        m_StackStartTime = boost::posix_time::microsec_clock::universal_time();
 
+        // MAIN STACK LOOP
+        do
+        {
+            LOG_INFO << "============== New Stack ============" << endl;
 
-                // Thread is sleeping...
-                if (interval) {
-                    LOG_DEBUG << "operator();" << "Thread sleeping for " << interval << "[ms]" << endl;
-                    boost::this_thread::sleep(boost::posix_time::millisec(interval));
-                    LOG_DEBUG << "operator();" << "Create a stack to accumulate n frames." << endl;
-                }
+            m_StackStartTime = boost::posix_time::microsec_clock::universal_time();
 
-                // Create a stack to accumulate n frames.
-                Stack frameStack = Stack(mdp.FITS_COMPRESSION_METHOD, mfkp, mstp);
+            try
+            {
+                // Create a new stack to accumulate n frames.
+                shared_ptr<Stack> frameStack = make_shared<Stack>(mdp.FITS_COMPRESSION_METHOD, mfkp, mstp);
+                shared_ptr<Stack> current_stack = frameStack;
 
-                // First reference date.
-                boost::posix_time::ptime time = boost::posix_time::microsec_clock::universal_time();
-                cDate = to_simple_string(time);
-                string dateDelimiter = ".";
-                string refDate = cDate.substr(0, cDate.find(dateDelimiter));
-
-                long secTime = 0;
-
-                do {
+                //STACK FRAMES
+                do
+                {
                     /// Wait new frame from AcqThread.
                     if (LOG_SPAM_FRAME_STATUS)
                         LOG_DEBUG << "operator();" << "This is STACK THREAD waiting ACQUISTION THREAD for a new frame." << endl;
+
                     // Communication with AcqThread. Wait for a new frame.
                     boost::mutex::scoped_lock lock(*stackSignal_mutex);
-                    while(!(*stackSignal)) stackSignal_condition->wait(lock);
+                    while (!(*stackSignal)) stackSignal_condition->wait(lock);
                     *stackSignal = false;
                     lock.unlock();
 
                     if (LOG_SPAM_FRAME_STATUS)
                         LOG_DEBUG << "operator();" << "Unlocked" << endl;
 
-
                     double t = (double)cv::getTickCount();
 
                     // Check interruption signal from AcqThread.
                     bool forceToSave = false;
+
                     interruptionStatusMutex.lock();
-                    if(interruptionStatus) forceToSave = true;
+
+                    if (interruptionStatus)
+                        forceToSave = true;
+
                     interruptionStatusMutex.unlock();
 
-                    if(!forceToSave){
-
+                    if (!forceToSave)
+                    {
                         // Fetch last frame grabbed.
                         boost::mutex::scoped_lock lock2(*frameBuffer_mutex);
-                        if(frameBuffer.size() == 0)
+                        if (frameBuffer.size() == 0)
                         {
-                            LOG_DEBUG << "operator();" << "frameBuffer.size() == 0"<<endl;
-                            continue;
+                            LOG_DEBUG << "operator();" << "frameBuffer.size() == 0" << endl;
                         }
+                        else
+                        {
+                            //copy pointer
+                            shared_ptr<Frame> newFrame = frameBuffer.back();
+                            lock2.unlock();
 
-                        shared_ptr<Frame> newFrame = frameBuffer.back();
-                        lock2.unlock();
+                            // Add the new frame to the stack.
+                            frameStack->addFrame(newFrame);
 
-                        // Add the new frame to the stack.
-                        frameStack.addFrame(newFrame);
-
-                        t = (((double)cv::getTickCount() - t)/ cv::getTickFrequency())*1000;
-                        if (LOG_SPAM_FRAME_STATUS)
-                            LOG_INFO << "[ TIME STACK ] : " << setprecision(5) << fixed << t << " ms" << endl;
-                        
-
-                    }else{
-
+                            t = (((double)cv::getTickCount() - t) / cv::getTickFrequency()) * 1000;
+                            if (LOG_SPAM_FRAME_STATUS)
+                                LOG_INFO << "[ TIME STACK ] : " << setprecision(5) << fixed << t << " ms" << endl;
+                        }
+                    }
+                    else
+                    {
                         // Interruption is active.
                         LOG_INFO << "Interruption status : " << forceToSave << endl;
 
@@ -340,54 +344,58 @@ void StackThread::operator()(){
                         interruptionStatusMutex.unlock();
 
                         break;
-
                     }
 
-                    time = boost::posix_time::microsec_clock::universal_time();
-                    cDate = to_simple_string(time);
-                    string nowDate = cDate.substr(0, cDate.find(dateDelimiter));
-                    boost::posix_time::ptime t1(boost::posix_time::time_from_string(refDate));
-                    boost::posix_time::ptime t2(boost::posix_time::time_from_string(nowDate));
-                    boost::posix_time::time_duration td = t2 - t1;
-                    secTime = td.total_seconds();
+                    boost::posix_time::time_duration time_elapsed = boost::posix_time::microsec_clock::universal_time() - m_StackStartTime;
+
+                    secTime = time_elapsed.total_seconds();
+
                     if (LOG_SPAM_FRAME_STATUS)
                         LOG_DEBUG << "operator();" << "NEXT STACK : " << (int)(msp.STACK_TIME - secTime) << "s" << endl;
 
-                } while(secTime <= msp.STACK_TIME);
+                } while (secTime <= msp.STACK_TIME);
 
-                // Stack finished. Save it.
-                LOG_DEBUG << "operator();" << "Stack finished. Save it." << endl;
 
-                if(buildStackDataDirectory(frameStack.getDateFirstFrame())) {
+                // Stack finished. NEED TO BE saved ASYNC!!.
+                LOG_DEBUG << "operator();" << "Stack finished. Save it async." << endl;
 
-                    if(!frameStack.saveStack(completeDataPath, msp.STACK_MTHD, msp.STACK_REDUCTION)){
+                auto saveOperation = boost::async(boost::launch::async, [&]() -> bool {
+                   
+                    if (buildStackDataDirectory(current_stack->getDateFirstFrame())) {
 
-                        LOG_ERROR << "operator();" << "Fail to save stack." << endl;
+                        if (!current_stack->saveStack(completeDataPath, msp.STACK_MTHD, msp.STACK_REDUCTION)) {
 
+                            LOG_ERROR << "operator();" << "Fail to save stack." << endl;
+                            return false;
+                        }
+
+                        LOG_INFO << "Stack saved : " << completeDataPath << endl;
+                        LOG_INFO << "==================  END  =====================" << endl;
+                        return true;
                     }
-
-                    LOG_INFO << "Stack saved : " << completeDataPath << endl;
-                    LOG_INFO << "==================  END  =====================" << endl;
-
-                }else{
-
-                    LOG_ERROR << "operator();" << "Fail to build stack directory. " << completeDataPath << endl;
-
+                    else {
+                        LOG_ERROR << "operator();" << "Fail to build stack directory. " << completeDataPath << endl;
+                        return false;
+                    }
+                    });
+                // Thread is sleeping... if 0 thread not sleep but stacks AFTER TAKING stack
+                if (m_WaitBetweenStacksInterval)
+                {
+                    LOG_DEBUG << "operator();" << "Thread sleeping for " << m_WaitBetweenStacksInterval << "[ms]" << endl;
+                    boost::this_thread::sleep(boost::posix_time::millisec(m_WaitBetweenStacksInterval));
+                    LOG_DEBUG << "operator();" << "Create a stack to accumulate n frames." << endl;
                 }
-
-            } catch(const boost::thread_interrupted&) {
-
+            }
+            catch(const boost::thread_interrupted&) 
+            {
                 LOG_INFO << "operator();" << "Stack thread INTERRUPTED" << endl;
             }
+
 
             // Get the "must stop" state (thread-safe)
             mustStopMutex.lock();
             stop = mustStop;
             mustStopMutex.unlock();
-
-            NodeExporterMetrics::GetInstance(mstp.STATION_NAME).UpdateMetrics(completeDataPath,cDate);
-            NodeExporterMetrics::GetInstance(mstp.STATION_NAME).WriteMetrics();
-
         } while(!stop);
 
     }catch(const char * msg){

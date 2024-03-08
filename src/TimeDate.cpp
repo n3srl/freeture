@@ -62,6 +62,17 @@ string freeture::TimeDate::localDateTime(::boost::posix_time::ptime pt, string f
 
 }
 
+
+unsigned long TimeDate::getTimeDateToSeconds(boost::posix_time::ptime date)
+{
+    return date.time_of_day().hours() * 3600UL + date.time_of_day().minutes() * 60UL + date.time_of_day().seconds();
+}
+
+unsigned long TimeDate::getTimeDateToSeconds(TimeDate::Date date)
+{
+    return date.hours * 3600UL + date.minutes * 60UL + date.seconds;
+}
+
 string TimeDate::getCurrentDateYYYYMMDD() {
 
 
@@ -461,7 +472,7 @@ string TimeDate::getYYYYMMDDThhmmss(string date){
 
 }
 
-int TimeDate::secBetweenTwoDates(Date d1, Date d2) {
+long TimeDate::secBetweenTwoDates(Date d1, Date d2) {
 
     string sd2 =    Conversion::numbering(4,d2.year) + Conversion::intToString(d2.year) +
                     Conversion::numbering(2,d2.month) + Conversion::intToString(d2.month) +
@@ -481,5 +492,4 @@ int TimeDate::secBetweenTwoDates(Date d1, Date d2) {
     boost::posix_time::ptime t2(boost::posix_time::from_iso_string(sd2));
     boost::posix_time::time_duration td = t2 - t1;
     return td.total_seconds();
-
 }

@@ -139,8 +139,8 @@ namespace freeture
 
     struct scheduleParam {
         int hours = DEFAULT_CANARIN;
-        int min = DEFAULT_CANARIN;
-        int sec = DEFAULT_CANARIN;
+        int minutes = DEFAULT_CANARIN;
+        int seconds = DEFAULT_CANARIN;
         int exp = DEFAULT_CANARIN;
         int gain = DEFAULT_CANARIN;
         int rep = DEFAULT_CANARIN;
@@ -183,7 +183,7 @@ namespace freeture
         struct regularCaptures {
             bool        ACQ_REGULAR_ENABLED;
             TimeMode    ACQ_REGULAR_MODE;
-            std::string      ACQ_REGULAR_PRFX;
+            std::string ACQ_REGULAR_PRFX;
             ImgFormat   ACQ_REGULAR_OUTPUT;
             struct regularParam {
                 int interval = DEFAULT_CANARIN;
