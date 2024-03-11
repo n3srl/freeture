@@ -60,19 +60,21 @@ void Freeture::printTestSchedule()
             time.tm_hour = hour;
             time.tm_min = min;
             time.tm_sec = 0;
-
+            double exp = m_FreetureCommandLineSettings.exp;
             // Loop per ogni guadagno da 0 a 24 con step di 4
             for (int gain = m_FreetureCommandLineSettings.startgain; gain <= m_FreetureCommandLineSettings.endgain; gain += m_FreetureCommandLineSettings.gainstep) {
                 ostringstream oss;
                 oss << put_time(&time, "%Hh%Mm%Ss");
                 // Formatta il valore double come una stringa senza parte decimale
-                oss << fixed << setprecision(0) << m_FreetureCommandLineSettings.exp;
+                oss << fixed << setprecision(0) << exp;
                 oss << "e" << gain << "g" << "1f1n";
                 string_list.push_back(oss.str());
-                
+                oss.clear();
+
                 if (time.tm_sec + m_FreetureCommandLineSettings.waitdelay >= 60) {
+                    int difference = time.tm_sec + m_FreetureCommandLineSettings.waitdelay - 60;
                     time.tm_min++;
-                    time.tm_sec = 0;
+                    time.tm_sec = difference;
                 }
                 else {
                     time.tm_sec += m_FreetureCommandLineSettings.waitdelay;
