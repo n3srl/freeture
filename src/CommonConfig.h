@@ -79,6 +79,7 @@
 #define DEFAULT_FITS_COMPRESSION            "false"
 #define DEFAULT_FITS_COMPRESSION_METHOD     "[compress]"
 #define DEFAULT_STATION_NAME                "DEFAULT"
+#define DEFAULT_STATION_CODE                "DEFAULT"
 #define DEFAULT_TELESCOP                    "DEFAULT"
 #define DEFAULT_OBSERVER                    "Novati Andrea"
 #define DEFAULT_INSTRUMENT                  "PRISMA-CAMERA"

@@ -131,7 +131,8 @@ CfgParam::CfgParam( string cfgFilePath)
 
     m_Param.mail.MAIL_DETECTION_ENABLED = false;
 
-    m_Param.station.STATION_NAME = "STATION";
+    m_Param.station.STATION_NAME = "DEFAULT";
+    m_Param.station.STATION_CODE = "DEFAULT";
     m_Param.station.SITEELEV = 0.0;
     m_Param.station.SITELAT = 0.0;
     m_Param.station.SITELONG = 0.0;
@@ -793,9 +794,14 @@ void CfgParam::loadStationParam() {
 
     bool e = false;
 
-    if(!m_Cfg.Get("STATION_NAME", m_Param.station.STATION_NAME)) {
+    if (!m_Cfg.Get("STATION_NAME", m_Param.station.STATION_NAME)) {
         e = true;
         m_Param.station.errormsg.push_back(" STATION_NAME : Fail to load value.");
+    }
+
+    if (!m_Cfg.Get("STATION_CODE", m_Param.station.STATION_CODE)) {
+        e = true;
+        m_Param.station.errormsg.push_back(" STATION_CODE : Fail to load value.");
     }
 
     if(!m_Cfg.Get("TELESCOP", m_Param.station.TELESCOP)) {

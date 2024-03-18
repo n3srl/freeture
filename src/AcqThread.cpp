@@ -1125,7 +1125,7 @@ void AcqThread::saveImageCaptured(shared_ptr<Frame> source_frame, int imgNum, Im
 bool AcqThread::buildAcquisitionDirectory(string YYYYMMDD) {
     LOG_DEBUG << "AcqThread::buildAcquisitionDirectory" << endl;
 
-    string root = m_DataParam.DATA_PATH + m_StationParam.STATION_NAME + "_" + YYYYMMDD + "/";
+    string root = m_DataParam.DATA_PATH + m_StationParam.STATION_CODE + "_" + YYYYMMDD + "/";
 
     string subDir = "captures/";
     string finalPath = root + subDir;
@@ -1589,9 +1589,9 @@ void AcqThread::metrics_ThreadLoop()
 
         temperature = m_Device->getTemperature();
 
-        NodeExporterMetrics::GetInstance(m_StationParam.STATION_NAME).UpdateMetrics(fps_floating_average, t_FPS_metric, temperature);
-        NodeExporterMetrics::GetInstance(m_StationParam.STATION_NAME).UpdateMetrics(mStartSunriseTime, mStopSunriseTime, mStartSunsetTime, mStopSunsetTime);
-        NodeExporterMetrics::GetInstance(m_StationParam.STATION_NAME).WriteMetrics();
+        NodeExporterMetrics::GetInstance(m_StationParam.STATION_CODE).UpdateMetrics(fps_floating_average, t_FPS_metric, temperature);
+        NodeExporterMetrics::GetInstance(m_StationParam.STATION_CODE).UpdateMetrics(mStartSunriseTime, mStopSunriseTime, mStartSunsetTime, mStopSunsetTime);
+        NodeExporterMetrics::GetInstance(m_StationParam.STATION_CODE).WriteMetrics();
     }
 }
 
@@ -1601,7 +1601,7 @@ void AcqThread::metrics_ThreadLoop()
 
 unsigned long scheduleParamToSeconds(scheduleParam t)
 {
-    return t.hours * 3600 + t.minutes * 60 + t.seconds;
+    return t.hours * 3600UL + t.minutes * 60UL + t.seconds;
 }
 
 

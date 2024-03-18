@@ -157,6 +157,7 @@ bool CfgLoader::Load(const std::string& file) {
             ("FITS_COMPRESSION", po::value<std::string>()->default_value(DEFAULT_FITS_COMPRESSION), "Enable compression (Experimental. Original fitskeys will be lost)")
             ("FITS_COMPRESSION_METHOD", po::value<std::string>()->default_value(DEFAULT_FITS_COMPRESSION_METHOD), "Specify cfitsio compression method by enclosing its parameters in square brackets.")
             ("STATION_NAME", po::value<std::string>()->default_value(DEFAULT_STATION_NAME), "Name of the station.")
+            ("STATION_CODE", po::value<std::string>()->default_value(DEFAULT_STATION_CODE), "Code of the station.")
             ("TELESCOP", po::value<std::string>()->default_value(DEFAULT_TELESCOP), "Station name.")
             ("OBSERVER", po::value<std::string>()->default_value(DEFAULT_OBSERVER), "Person in charge.")
             ("INSTRUMENT", po::value<std::string>()->default_value(DEFAULT_INSTRUMENT), "Instrument name.")

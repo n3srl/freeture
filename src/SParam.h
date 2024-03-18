@@ -272,6 +272,7 @@ namespace freeture
     // ******************************************************
 
     struct stationParam {
+        std::string STATION_CODE;
         std::string STATION_NAME;
         std::string TELESCOP;
         std::string OBSERVER;
