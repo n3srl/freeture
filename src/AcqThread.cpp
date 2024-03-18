@@ -59,6 +59,7 @@
  *  of continuously acquiring images from a camera, adjusting settings in real-time based on environmental changes,
  *  and coordinating with other components of the system for the detection and stacking of transient events.
  *
+ * \author  BSIT, Andrea Novati - N3 S.r.l. (Significant Refactoring)
  */
 #include "AcqThread.h"
 

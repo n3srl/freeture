@@ -27,7 +27,9 @@
 
 /**
 * \file    AcqSchedule.h
+* \author  BSIT, Andrea Novati - N3 S.r.l. (Significant Refactoring)
 * \author  Yoan Audureau -- GEOPS-UPSUD
+* \brief   Defines the AcqSchedule class for managing acquisition schedules.
 * \version 1.0
 * \date    19/06/2014
 * \brief

@@ -1,6 +1,6 @@
 /**
 * \file    main.cpp
-* \author  Andrea Novati
+* \author  BSIT, Andrea Novati - N3 S.r.l. (Significant Refactoring)
 * \version 1.0
 * \date    03/22/2023
 */

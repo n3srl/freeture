@@ -26,7 +26,8 @@
 *%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
 /**
-* \file     AcqSchedule.cpp
+* \file    AcqSchedule.cpp
+* \author  BSIT, Andrea Novati - N3 S.r.l. (Significant Refactoring)
 * \author  Yoan Audureau -- GEOPS-UPSUD
 * \version 1.0
 * \date    19/06/2014
