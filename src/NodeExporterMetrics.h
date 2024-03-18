@@ -16,8 +16,10 @@ namespace freeture
         double m_AcqTime;
         double m_Temperature;
 
-        std::vector<int>* m_NextSunrise = nullptr;
-        std::vector<int>* m_NextSunset = nullptr;
+        long m_StartSunriseTime;
+        long m_StopSunriseTime;
+        long m_StartSunsetTime;
+        long m_StopSunsetTime;
 
         bool m_Writing = false;
         static NodeExporterMetrics* m_Instance;
@@ -25,8 +27,9 @@ namespace freeture
 
         std::string m_CompleteDataPath="";
         std::string m_cDate = "";
+        std::string m_StationName = "";
     public:
-        std::string OutputPath = "/freeture/freeture_metric";
+        std::string OutputPath = DEFAULT_METRICS_OUTPUT_FILE;
 
         NodeExporterMetrics(NodeExporterMetrics& other) = delete;
         void operator=(const NodeExporterMetrics&) = delete;
@@ -36,13 +39,13 @@ namespace freeture
         virtual ~NodeExporterMetrics();
 
         //metrics from AcqThread
-        void UpdateMetrics(double, double,double, std::vector<int>*, std::vector<int>*);
+        void UpdateMetrics(long, long, long, long);
 
         //metrics from DetThread
         void UpdateMetrics(int, double);
 
         //metrics from AcqThread
-        void UpdateMetrics(double, double);
+        void UpdateMetrics(double,double, double);
 
         void UpdateMetrics(std::string, std::string);
 

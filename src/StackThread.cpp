@@ -266,6 +266,7 @@ void StackThread::operator()(){
     try {
         string dateDelimiter = ".";
         unsigned long secTime = 0;
+        unsigned long stack_time = (unsigned long)abs(msp.STACK_TIME) * 1000UL;
 
         // First reference date. OUTSIDE LOOP
         m_StackStartTime = boost::posix_time::microsec_clock::universal_time();
@@ -275,13 +276,15 @@ void StackThread::operator()(){
         {
             LOG_INFO << "============== New Stack ============" << endl;
 
-            m_StackStartTime = boost::posix_time::microsec_clock::universal_time();
-
             try
             {
                 // Create a new stack to accumulate n frames.
                 shared_ptr<Stack> frameStack = make_shared<Stack>(mdp.FITS_COMPRESSION_METHOD, mfkp, mstp);
                 shared_ptr<Stack> current_stack = frameStack;
+
+                //need to be initialized here because in real usage no one know how long pass between stop old staking and passing from 
+                //this code point, and staking is an active process from the present. so this initialize the very first frame.
+                m_StackStartTime = boost::posix_time::microsec_clock::universal_time();
 
                 //STACK FRAMES
                 do
@@ -348,16 +351,17 @@ void StackThread::operator()(){
 
                     boost::posix_time::time_duration time_elapsed = boost::posix_time::microsec_clock::universal_time() - m_StackStartTime;
 
-                    secTime = time_elapsed.total_seconds();
+                    secTime = time_elapsed.total_milliseconds();
 
                     if (LOG_SPAM_FRAME_STATUS)
-                        LOG_DEBUG << "operator();" << "NEXT STACK : " << (int)(msp.STACK_TIME - secTime) << "s" << endl;
+                        LOG_DEBUG << "operator();" << "NEXT STACK : " << (int)(stack_time - secTime) << "s" << endl;
 
-                } while (secTime <= msp.STACK_TIME);
+                } while (secTime <= stack_time );
 
 
                 // Stack finished. NEED TO BE saved ASYNC!!.
                 LOG_DEBUG << "operator();" << "Stack finished. Save it async." << endl;
+                
 
                 auto saveOperation = boost::async(boost::launch::async, [=]() -> bool {
                    

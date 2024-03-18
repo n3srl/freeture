@@ -1554,7 +1554,6 @@ void AcqThread::metrics_ThreadLoop()
     m_CurrentFPS = (1.0 / (t_FPS_metric / 1000.0));
 
 
-    m_LastMetricTimestamp = m_CurrentThreadLoopTime;
 
     //if runned a scheduled or regular acquisition, jump this fps value. is not valid.
     if (m_RunnedScheduledAcquisition || m_RunnedRegularAcquisition)
@@ -1580,6 +1579,7 @@ void AcqThread::metrics_ThreadLoop()
 
     if (secTime > METRICS_ACQUISITION_TIME)
     {
+        m_LastMetricTimestamp = m_CurrentThreadLoopTime;
 
         fps_floating_average = m_FPS_Sum / (m_FPS_metrics.size());
 
@@ -1588,7 +1588,8 @@ void AcqThread::metrics_ThreadLoop()
 
         temperature = m_Device->getTemperature();
 
-        NodeExporterMetrics::GetInstance(m_StationParam.STATION_NAME).UpdateMetrics(fps_floating_average, temperature);
+        NodeExporterMetrics::GetInstance(m_StationParam.STATION_NAME).UpdateMetrics(fps_floating_average, t_FPS_metric, temperature);
+        NodeExporterMetrics::GetInstance(m_StationParam.STATION_NAME).UpdateMetrics(mStartSunriseTime, mStopSunriseTime, mStartSunsetTime, mStopSunsetTime);
         NodeExporterMetrics::GetInstance(m_StationParam.STATION_NAME).WriteMetrics();
     }
 }
