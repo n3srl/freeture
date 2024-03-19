@@ -479,7 +479,7 @@ void Freeture::modeMeteorDetection()
     /// ------------------------------------------------------------------
 
     m_FreetureSettings->enableErrors = true;
-    LOG_INFO << "CHECKING FREETURE CONFIGURATOION..." << endl;
+    LOG_INFO << "CHECKING FREETURE CONFIGURATION..." << endl;
 
     if (!m_FreetureSettings->allParamAreCorrect())
         throw runtime_error("Configuration file is not correct. Fail to launch detection mode.");

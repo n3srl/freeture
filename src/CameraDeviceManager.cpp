@@ -257,8 +257,15 @@ void CameraDeviceManager::initScanners()
 #endif
 
 #ifdef USE_ARAVIS
+    //LUCID ARAVIS
     LOG_INFO << "LUCID ARAVIS SCANNER AVAILABLE" << endl;
     ptr = CameraScanner::CreateScanner(CamSdkType::LUCID_ARAVIS);
+    assert(ptr != nullptr);
+    m_AvailableScanners.push_back(ptr);
+
+    // ARAVIS
+    LOG_INFO << "ARAVIS SCANNER AVAILABLE" << endl;
+    ptr = CameraScanner::CreateScanner(CamSdkType::ARAVIS);
     assert(ptr != nullptr);
     m_AvailableScanners.push_back(ptr);
 #endif
@@ -266,14 +273,6 @@ void CameraDeviceManager::initScanners()
 #ifdef USE_ARENA
     LOG_INFO << "LUCID ARENA SCANNER AVAILABLE" << endl;
     ptr =  CameraScanner::CreateScanner(CamSdkType::LUCID_ARENA);
-    assert(ptr != nullptr);
-    m_AvailableScanners.push_back(ptr);
-#endif
-
-#ifdef USE_ARAVIS
-    // ARAVIS
-    LOG_INFO << "ARAVIS SCANNER AVAILABLE" << endl;
-    ptr = CameraScanner::CreateScanner(CamSdkType::ARAVIS);
     assert(ptr != nullptr);
     m_AvailableScanners.push_back(ptr);
 #endif
