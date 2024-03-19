@@ -50,3 +50,11 @@ include(FindPackageHandleStandardArgs)
 # if all listed variables are TRUE
 find_package_handle_standard_args(Aravis  DEFAULT_MSG
   aravis_LIBRARIES aravis_INCLUDE_DIR)
+  
+  
+  # Check if both include directory and library were found
+if(aravis_INCLUDE_DIR AND aravis_LIBRARIES)
+    set(ARAVIS_FOUND TRUE)
+else()
+    set(ARAVIS_FOUND FALSE)
+endif()
