@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <cmath>
 
 #include "NodeExporterMetrics.h"
 #include "Base64.h"
