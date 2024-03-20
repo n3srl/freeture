@@ -2,6 +2,7 @@
 #include "CameraFirstInit.h"
 
 #define DEFAULT_CAMERA_INIT_CONFIG          FREETURE_WRITE_CONFIG_PATH
+#define DEFAULT_CAMERA_SDK                  "UNKNOWN"
 #define DEFAULT_CAMERA_ID                   "0"
 #define DEFAULT_CAMERA_SERIAL               ""
 #define DEFAULT_CAMERA_INIT                 ""

@@ -57,11 +57,28 @@ bool CameraDeviceManager::createCamera()
     if (!m_SelectedRuntimeConfiguration.CAMERA_SERIAL.empty()) 
     {
         LOG_DEBUG << "LOADING CAMERA_SERIAL" << endl;
+
         for (const CameraDescription& camera : m_DevicesList) {
-            if (camera.Serial == m_SelectedRuntimeConfiguration.CAMERA_SERIAL) {
-                camera_description = camera;
-                found = true;
-                break;
+
+            if (!m_SelectedRuntimeConfiguration.CAMERA_SDK.empty())
+            {
+                EParser<CamSdkType> eparser;
+                CamSdkType selected_sdk = eparser.parseEnum(m_SelectedRuntimeConfiguration.CAMERA_SDK);
+
+                if (camera_description.Sdk == selected_sdk)
+                    if (camera.Serial == m_SelectedRuntimeConfiguration.CAMERA_SERIAL)
+                    {
+                        camera_description = camera;
+                        found = true;
+                        break;
+                    }
+            }
+            else {
+                if (camera.Serial == m_SelectedRuntimeConfiguration.CAMERA_SERIAL) {
+                    camera_description = camera;
+                    found = true;
+                    break;
+                }
             }
         }
     } else 
@@ -89,7 +106,7 @@ bool CameraDeviceManager::createCamera()
         return true;
     }
     else 
-        LOG_ERROR << "No device with CAMERA_ID " << m_SelectedRuntimeConfiguration.DEVICE_ID << " nor CAMERA_SERIAL="<< m_SelectedRuntimeConfiguration.CAMERA_SERIAL << endl;
+        LOG_ERROR << "No device with CAMERA_SDK " << m_SelectedRuntimeConfiguration.CAMERA_SDK << ", CAMERA_ID " << m_SelectedRuntimeConfiguration.DEVICE_ID << " nor CAMERA_SERIAL="<< m_SelectedRuntimeConfiguration.CAMERA_SERIAL << endl;
 
     return false;
 }

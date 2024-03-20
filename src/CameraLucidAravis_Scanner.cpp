@@ -3,6 +3,7 @@
 
 #include "Logger.h"
 
+#ifdef LINUX
 #ifdef USE_ARAVIS
 
 #include "arv.h"
@@ -74,4 +75,5 @@ void CameraLucidAravis_Scanner::UpdateCameraList()
     }
 }
 
+#endif
 #endif

@@ -358,7 +358,7 @@ void Freeture::modeTest()
     else
         LOG_INFO << "OK" << endl;
 
-    LOG_INFO << "SELECTING DEVICE, CAMERA_ID=" << m_FreetureSettings->getAllParam().DEVICE_ID << ", CAMERA_SERIAL=" << m_FreetureSettings->getAllParam().CAMERA_SERIAL << "..." << endl;
+    LOG_INFO << "SELECTING DEVICE, CAMERA_SDK " << m_FreetureSettings->getAllParam().CAMERA_SDK << ", CAMERA_ID=" << m_FreetureSettings->getAllParam().DEVICE_ID << ", CAMERA_SERIAL=" << m_FreetureSettings->getAllParam().CAMERA_SERIAL << "..." << endl;
 
     if (!m_CameraDeviceManager->selectDevice(m_FreetureSettings->getAllParam()))
         throw runtime_error("Failed to select device.");
@@ -404,7 +404,7 @@ void Freeture::modeContinuousAcquisition()
     LOG_INFO << "EXPOSURE  : " << m_FreetureCommandLineSettings.exp << endl;
     LOG_INFO << "------------------------------------------------" << endl;
 
-    LOG_INFO << "SELECTING DEVICE, CAMERA_ID=" << m_FreetureSettings->getAllParam().DEVICE_ID << ", CAMERA_SERIAL=" << m_FreetureSettings->getAllParam().CAMERA_SERIAL << "..." << endl;
+    LOG_INFO << "SELECTING DEVICE, CAMERA_SDK " << m_FreetureSettings->getAllParam().CAMERA_SDK << ", CAMERA_ID=" << m_FreetureSettings->getAllParam().DEVICE_ID << ", CAMERA_SERIAL=" << m_FreetureSettings->getAllParam().CAMERA_SERIAL << "..." << endl;
     if (!m_CameraDeviceManager->selectDevice(m_FreetureSettings->getAllParam()))
         throw runtime_error("Fail to select device.");
     else
@@ -486,7 +486,7 @@ void Freeture::modeMeteorDetection()
     else
         LOG_INFO << "OK" << endl;
 
-    LOG_INFO << "SELECTING DEVICE, CAMERA_ID=" << m_FreetureSettings->getAllParam().DEVICE_ID << ", CAMERA_SERIAL=" << m_FreetureSettings->getAllParam().CAMERA_SERIAL << "..." << endl;
+    LOG_INFO << "SELECTING DEVICE, CAMERA_SDK "<< m_FreetureSettings->getAllParam().CAMERA_SDK <<", CAMERA_ID=" << m_FreetureSettings->getAllParam().DEVICE_ID << ", CAMERA_SERIAL=" << m_FreetureSettings->getAllParam().CAMERA_SERIAL << "..." << endl;
 
     if (!m_CameraDeviceManager->selectDevice(m_FreetureSettings->getAllParam()))
         throw runtime_error("Failed to select device.");

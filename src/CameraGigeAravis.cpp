@@ -47,7 +47,8 @@
 #include "EParser.h"
 #include "CameraFirstInit.h"
 
-#ifdef USE_ARAVIS && LINUX
+#ifdef LINUX
+#ifdef USE_ARAVIS 
 
 using namespace freeture;
 using namespace std;
@@ -1177,4 +1178,5 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
         return true;
     }
 
+#endif
 #endif

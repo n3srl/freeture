@@ -269,6 +269,14 @@ void CfgParam::loadCameraSerial()
     }
 
     m_Param.CAMERA_SERIAL = cString;
+
+    if (!m_Cfg.Get("CAMERA_SDK", cString))
+    {
+        failStringSerial = true;
+        failmsg += "Fail to get camera SDK, DeviceId or camera serial will be used for camera selection";
+    }
+
+    m_Param.CAMERA_SDK = cString;
 }
 
 void CfgParam::loadDeviceID() {

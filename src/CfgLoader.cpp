@@ -79,6 +79,7 @@ bool CfgLoader::Load(const std::string& file) {
         po::options_description settings("Settings");
 
         settings.add_options()
+            ("CAMERA_SDK", po::value<std::string>()->default_value(DEFAULT_CAMERA_SDK), "SDK used to load device: [ARAVIS] | [LUCID_ARENA] | [PYLONGIGE] | [TIS] | [VIDEOFILE] | [FRAMESDIR] | [V4L2] | [VIDEOINPUT] ")
             ("CAMERA_ID", po::value<std::string>()->default_value(DEFAULT_CAMERA_ID), "Identification number of the camera to use. Use \"freeture -l\" command to list available devices.")
             ("CAMERA_SERIAL", po::value<std::string>()->default_value(DEFAULT_CAMERA_SERIAL), "")
             ("CAMERA_INIT", po::value<std::string>()->default_value(DEFAULT_CAMERA_INIT), "")

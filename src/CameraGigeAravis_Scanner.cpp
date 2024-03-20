@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-
+#ifdef LINUX
 #ifdef USE_ARAVIS
 
 #include "arv.h"
@@ -87,4 +87,5 @@ void CameraGigeAravis_Scanner::UpdateCameraList()
 }
 
 
+#endif
 #endif

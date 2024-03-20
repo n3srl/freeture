@@ -313,6 +313,7 @@ namespace freeture
     struct parameters {
         //std::pair<std::pair<int, bool>,std::string> DEVICE_ID; // Pair : <value, status>
         int             DEVICE_ID;
+        std::string     CAMERA_SDK;
         std::string     CAMERA_SERIAL;
         bool            CAMERA_INIT;
         std::string     CAMERA_INIT_CONFIG;

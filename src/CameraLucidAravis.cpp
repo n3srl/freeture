@@ -21,8 +21,8 @@
 using namespace freeture;
 using namespace std;
 
-
-#ifdef USE_ARAVIS && LINUX
+#ifdef LINUX
+#ifdef USE_ARAVIS
 
 #include "CameraLucidAravis.h"
 #include "CameraLucidAravis.h"
@@ -1312,4 +1312,5 @@ void CameraLucidAravis::getAvailablePixelFormats() {
         return 31;
     }
 
+#endif
 #endif
