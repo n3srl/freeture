@@ -13,7 +13,7 @@
 #include <iostream>
 
 
-#ifdef LINUX
+#ifdef USE_ARAVIS
 
 #include "arv.h"
 #include "arvinterface.h"
@@ -54,32 +54,37 @@ void CameraGigeAravis_Scanner::UpdateCameraList()
 
             int nb = arv_interface_get_n_devices(interface);
             LOG_DEBUG << "CameraGigeAravis_Scanner::UpdateCameraList" << "Devices detected: " << nb;
+            std::string delimiter = "-";
 
             for (int i = 0; i < nb; i++)
             {
                 CameraDescription c;
 
+               
                 //const char* str = arv_get_device_id(i);
                 const char* str = arv_interface_get_device_id(interface, i);
                 const char* addr = arv_interface_get_device_address(interface, i);
 
-                //LOG_DEBUG <<"CameraGigeAravis_Scanner::UpdateCameraList","\t- ", str," ",addr);
-
                 string s = str;
                 string a = addr;
 
-                c.Id = i;
+                //extract serial number from name
+                size_t pos = s.rfind(delimiter);
+                string serialNumber = input.substr(pos + 1);
+
                 c.Description = "NAME[" + s + "] SDK[ARAVIS] IP: " + a;
                 c.DeviceId = string(str);
                 c.Address = string(addr);
                 c.Interface = j;
+                c.Serial = serialNumber;
                 c.Sdk = CamSdkType::ARAVIS;
+                c.DeviceType = InputDeviceType::CAMERA;
+
                 Devices.push_back(c);
             }
         }
     }
 }
-
 
 
 #endif

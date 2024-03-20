@@ -3,9 +3,7 @@
 
 #include "Logger.h"
 
-#ifdef LINUX
-
-
+#ifdef USE_ARAVIS
 
 #include "arv.h"
 #include "arvinterface.h"
@@ -35,53 +33,45 @@ void CameraLucidAravis_Scanner::UpdateCameraList()
 
     for (int j = 0; j < ni; j++)
     {
-
         const char* name = arv_get_interface_id(j);
 
-        if (strcmp(name, "GigEVision") == 0) {
+        if (strcmp(name, "GigEVision") == 0)
+        {
             interface = arv_gv_interface_get_instance();
             arv_interface_update_device_list(interface);
             //int nb = arv_get_n_devices();
 
             int nb = arv_interface_get_n_devices(interface);
+            std::string delimiter = "-";
 
-            for (int i = 0; i < nb; i++) {
+            for (int i = 0; i < nb; i++)
+            {
                 CameraDescription c;
+
 
                 //const char* str = arv_get_device_id(i);
                 const char* str = arv_interface_get_device_id(interface, i);
                 const char* addr = arv_interface_get_device_address(interface, i);
+
                 string s = str;
-                string t = "Lucid";
-                if (s.find(t) != string::npos)
-                {
+                string a = addr;
 
-                    c.Id = i;
-                    c.Description = "NAME[" + s + "] SDK[LUCIDARAVIS] IP: " + addr;
-                    c.DeviceId = string(str);
-                    c.Address = string(addr);
-                    c.Interface = j;
-                    c.Sdk = CamSdkType::LUCID_ARAVIS;
+                //extract serial number from name
+                size_t pos = s.rfind(delimiter);
+                string serialNumber = input.substr(pos + 1);
 
-                    Devices.push_back(c);
-                }
-                t = "Machine";
-                if (s.find(t) != string::npos)
-                {
+                c.Description = "NAME[" + s + "] SDK[LUCIDARAVIS] IP: " + addr;
+                c.DeviceId = string(str);
+                c.Address = string(addr);
+                c.Interface = j;
+                c.Serial = serialNumber;
+                c.Sdk = CamSdkType::LUCID_ARAVIS;
+                c.DeviceType = InputDeviceType::CAMERA;
 
-                    c.Id = i;
-                    c.Description = "NAME[" + s + "] SDK[LUCIDARAVIS] IP: " + addr;
-                    c.DeviceId = string(str);
-                    c.Address = string(addr);
-                    c.Interface = j;
-                    c.Sdk = CamSdkType::LUCID_ARAVIS;
-
-                    Devices.push_back(c);
-                }
+                Devices.push_back(c);
             }
         }
     }
 }
-
 
 #endif

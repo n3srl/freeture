@@ -47,7 +47,7 @@
 #include "EParser.h"
 #include "CameraFirstInit.h"
 
-#ifdef LINUX
+#ifdef USE_ARAVIS && LINUX
 
 using namespace freeture;
 using namespace std;

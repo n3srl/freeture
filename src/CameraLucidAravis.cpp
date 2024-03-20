@@ -21,7 +21,8 @@
 using namespace freeture;
 using namespace std;
 
-#ifdef LINUX
+
+#ifdef USE_ARAVIS && LINUX
 
 #include "CameraLucidAravis.h"
 #include "CameraLucidAravis.h"
