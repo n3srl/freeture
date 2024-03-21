@@ -74,7 +74,6 @@ void CameraGigeAravis_Scanner::UpdateCameraList()
 
                 c.Description = "NAME[" + s + "] SDK[ARAVIS] IP[ " + a + "]";
 
-                c.DeviceId = string(str);
                 c.Address = string(addr);
                 c.Interface = j;
                 c.Serial = serialNumber;

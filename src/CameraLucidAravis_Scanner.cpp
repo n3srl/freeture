@@ -62,7 +62,6 @@ void CameraLucidAravis_Scanner::UpdateCameraList()
                 string serialNumber = s.substr(pos + 1);
 
                 c.Description = "NAME[" + s + "] SDK[LUCIDARAVIS] IP[" + addr + "]";
-                c.DeviceId = string(str);
                 c.Address = string(addr);
                 c.Interface = j;
                 c.Serial = serialNumber;
