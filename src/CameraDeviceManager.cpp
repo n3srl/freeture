@@ -65,7 +65,7 @@ bool CameraDeviceManager::createCamera()
                 EParser<CamSdkType> eparser;
                 CamSdkType selected_sdk = eparser.parseEnum(m_SelectedRuntimeConfiguration.CAMERA_SDK);
 
-                if (camera_description.Sdk == selected_sdk)
+                if (camera.Sdk == selected_sdk)
                     if (camera.Serial == m_SelectedRuntimeConfiguration.CAMERA_SERIAL)
                     {
                         camera_description = camera;
