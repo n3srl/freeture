@@ -24,7 +24,7 @@ namespace freeture
         int Interface = 0;
 
         std::string Description = "";
-        std::string DeviceId = "";
+        int DeviceId = 0;
         std::string Address = "";
         std::string Serial = "";
 
