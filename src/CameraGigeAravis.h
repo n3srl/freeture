@@ -87,8 +87,6 @@ namespace freeture
 
         bool createDevice() override;
 
-        bool createDevice(int);
-
         bool destroyDevice() override;
 
         void grabCleanse();

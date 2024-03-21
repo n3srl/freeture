@@ -46,7 +46,6 @@ namespace freeture
         CameraLucidAravis(CameraDescription, cameraParam );
         ~CameraLucidAravis();
 
-        bool createDevice(int id);
         bool recreateDevice(int);
 
         void grabCleanse();
@@ -95,6 +94,10 @@ namespace freeture
 
         void getAvailablePixelFormats();
 
+
+        bool createDevice() override;
+
+        bool destroyDevice() override;
 
         //ABSTRACT FACTORY METHODS
         /// <summary>

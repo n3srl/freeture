@@ -25,8 +25,6 @@ using namespace std;
 #ifdef USE_ARAVIS
 
 #include "CameraLucidAravis.h"
-#include "CameraLucidAravis.h"
-
 
 void CheckAravisError(GError** gError)
 {
@@ -78,8 +76,11 @@ CameraLucidAravis::~CameraLucidAravis()
 
 }
 
-bool CameraLucidAravis::createDevice(int id) {
+bool CameraLucidAravis::createDevice()
+{
     LOG_DEBUG << "CameraLucidAravis::createDevice" << endl;
+
+    int id = camera_descriptor.DeviceId;
 
     string deviceName;
 
@@ -102,6 +103,12 @@ bool CameraLucidAravis::createDevice(int id) {
 
     getFPSBounds(m_MinFPS,m_MaxFPS);
     setFPS(m_MinFPS);
+
+    return true;
+}
+
+bool freeture::CameraLucidAravis::destroyDevice()
+{
 
     return true;
 }

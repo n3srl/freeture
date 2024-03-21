@@ -52,6 +52,7 @@ bool CameraDeviceManager::createCamera()
     LOG_DEBUG << "CameraDeviceManager::createCamera" << endl;
     CameraDescription camera_description;
     bool found = false;
+    camera_description.DeviceId = m_SelectedRuntimeConfiguration.DEVICE_ID;
 
     //if serial is set
     if (!m_SelectedRuntimeConfiguration.CAMERA_SERIAL.empty()) 
