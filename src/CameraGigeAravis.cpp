@@ -77,7 +77,7 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
     {
         LOG_DEBUG << "CameraGigeAravis::createDevice" << endl;
 
-        int id = = camera_descriptor.DeviceId;
+        int id = m_CameraDescriptor.DeviceId;
 
         string deviceName;
         if(!getDeviceNameById(id, deviceName))
@@ -95,11 +95,6 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
 
         delete error;
 
-        return true;
-    }
-
-    bool CameraGigeAravis::createDevice()
-    {
         return true;
     }
 

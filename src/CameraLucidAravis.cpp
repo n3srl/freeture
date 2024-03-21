@@ -80,7 +80,7 @@ bool CameraLucidAravis::createDevice()
 {
     LOG_DEBUG << "CameraLucidAravis::createDevice" << endl;
 
-    int id = camera_descriptor.DeviceId;
+    int id = m_CameraDescriptor.DeviceId;
 
     string deviceName;
 
