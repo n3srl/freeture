@@ -32,7 +32,7 @@ CameraGigeAravis_Scanner::~CameraGigeAravis_Scanner()
 
 void CameraGigeAravis_Scanner::UpdateCameraList()
 {
-    LOG_DEBUG << "CameraGigeAravis_Scanner::UpdateCameraList";
+    LOG_DEBUG << "CameraGigeAravis_Scanner::UpdateCameraList"<<endl;
 
     ArvInterface* interface;
 
@@ -43,7 +43,7 @@ void CameraGigeAravis_Scanner::UpdateCameraList()
     for (int j = 0; j < ni; j++)
     {
         const char* name = arv_get_interface_id(j);
-        LOG_DEBUG << "CameraGigeAravis_Scanner::UpdateCameraList" << name;
+        LOG_DEBUG << "CameraGigeAravis_Scanner::UpdateCameraList" << name << endl;
 
         if (strcmp(name, "GigEVision") == 0)
         {
@@ -53,7 +53,7 @@ void CameraGigeAravis_Scanner::UpdateCameraList()
             //int nb = arv_get_n_devices();
 
             int nb = arv_interface_get_n_devices(interface);
-            LOG_DEBUG << "CameraGigeAravis_Scanner::UpdateCameraList" << "Devices detected: " << nb;
+            LOG_DEBUG << "CameraGigeAravis_Scanner::UpdateCameraList" << "Devices detected: " << nb << endl;
             std::string delimiter = "-";
 
             for (int i = 0; i < nb; i++)
@@ -72,7 +72,8 @@ void CameraGigeAravis_Scanner::UpdateCameraList()
                 size_t pos = s.rfind(delimiter);
                 string serialNumber = s.substr(pos + 1);
 
-                c.Description = "NAME[" + s + "] SDK[ARAVIS] IP: " + a;
+                c.Description = "NAME[" + s + "] SDK[ARAVIS] IP[ " + a + "]";
+
                 c.DeviceId = string(str);
                 c.Address = string(addr);
                 c.Interface = j;

@@ -25,7 +25,7 @@ CameraLucidAravis_Scanner::~CameraLucidAravis_Scanner()
 
 void CameraLucidAravis_Scanner::UpdateCameraList()
 {
-    LOG_DEBUG << "CameraLucidAravis_Scanner::UpdateCameraList";
+    LOG_DEBUG << "CameraLucidAravis_Scanner::UpdateCameraList" << endl;
     ArvInterface* interface;
 
     //arv_update_device_list();
@@ -61,7 +61,7 @@ void CameraLucidAravis_Scanner::UpdateCameraList()
                 size_t pos = s.rfind(delimiter);
                 string serialNumber = s.substr(pos + 1);
 
-                c.Description = "NAME[" + s + "] SDK[LUCIDARAVIS] IP: " + addr;
+                c.Description = "NAME[" + s + "] SDK[LUCIDARAVIS] IP[" + addr + "]";
                 c.DeviceId = string(str);
                 c.Address = string(addr);
                 c.Interface = j;

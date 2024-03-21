@@ -17,8 +17,10 @@
 
 #ifdef LINUX
 #include "CameraV4l2.h"
+#ifdef USE_ARAVIS
 #include "CameraGigeAravis.h"
 #include "CameraLucidAravis.h"
+#endif
 #endif
 
 #ifdef VIDEOINPUT
@@ -39,37 +41,27 @@ using namespace std;
 Camera* CameraFactory::createCamera(CameraDescription camera_descriptor, parameters& runtime_configuration)
 {
     try {
-        LOG_DEBUG << "CameraFactory::createCamera";
+        LOG_DEBUG << "CameraFactory::createCamera" << endl;
         Camera* camera;
-        // shared_ptr<CameraDeviceManager> m_CameraDeviceManager = CameraDeviceManager::Get();
-        //     Device* device = m_CameraDeviceManager->getDevice();
-        // 
-        //     if (device->mCam != nullptr)
-        //     {
-        //         LOG_ERROR << "CameraFactory::createCamera;" << "MEMORY LEAKING";
-        //         assert(device->mCam != nullptr);
-        //         free(device->mCam);
-        // 
-        //         return false;
-        //     }
+        
         switch (camera_descriptor.Sdk)
         {
         case CamSdkType::VIDEOFILE:
         {
-            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: VIDEOFILE";
+            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: VIDEOFILE" << endl;
             camera = new CameraVideo(camera_descriptor, runtime_configuration.camInput, runtime_configuration.vidInput.INPUT_VIDEO_PATH, true);
             break;
         }
         case CamSdkType::FRAMESDIR:
         {
-            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: FRAMESDIR";
+            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: FRAMESDIR" << endl;
             // Create camera using pre-recorded fits2D in input.
             camera = new CameraFrames(camera_descriptor, runtime_configuration.camInput, runtime_configuration.framesInput.INPUT_FRAMES_DIRECTORY_PATH, 1, true);
             break;
         }
         case CamSdkType::V4L2:
         {
-            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: V4L2";
+            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: V4L2" << endl;
 #ifdef LINUX
             camera = new CameraV4l2(camera_descriptor, runtime_configuration.camInput);
 #endif
@@ -78,7 +70,7 @@ Camera* CameraFactory::createCamera(CameraDescription camera_descriptor, paramet
         case CamSdkType::VIDEOINPUT:
 
         {
-            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: VIDEOINPUT";
+            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: VIDEOINPUT" << endl;
 #ifdef VIDEOINPUT
             camera = new CameraWindows(camera_descriptor, runtime_configuration.camInput);
 #endif
@@ -86,23 +78,27 @@ Camera* CameraFactory::createCamera(CameraDescription camera_descriptor, paramet
         }
         case CamSdkType::ARAVIS:
         {
-            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: ARAVIS";
+            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: ARAVIS" << endl;
 #ifdef LINUX
+#ifdef USE_ARAVIS
             camera = new CameraGigeAravis(camera_descriptor, runtime_configuration.camInput);
+#endif
 #endif
             break;
         }
         case CamSdkType::LUCID_ARAVIS:
         {
-            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: LUCID_ARAVIS";
+            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: LUCID_ARAVIS" << endl;
 #ifdef LINUX
-            camera = new CameraGigeAravis(camera_descriptor, runtime_configuration.camInput);
+#ifdef USE_ARAVIS
+            camera = new CameraLucidAravis(camera_descriptor, runtime_configuration.camInput);
+#endif
 #endif
             break;
         }
         case CamSdkType::LUCID_ARENA:
         {
-            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: LUCID_ARENA";
+            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: LUCID_ARENA" << endl;
 
 #ifdef USE_ARENA
             switch (camera_descriptor.Model) {
@@ -116,7 +112,7 @@ Camera* CameraFactory::createCamera(CameraDescription camera_descriptor, paramet
         }
         case CamSdkType::PYLONGIGE:
         {
-            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: PYLONGIGE";
+            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: PYLONGIGE" << endl;
 #ifdef USE_PYLON
             camera = new CameraGigePylon(camera_descriptor, runtime_configuration.camInput);
 #endif
@@ -125,7 +121,7 @@ Camera* CameraFactory::createCamera(CameraDescription camera_descriptor, paramet
         }
         case CamSdkType::TIS:
         {
-            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: TIS";
+            LOG_DEBUG << "CameraFactory::createCamera;" << "SDK: TIS" << endl;
 #ifdef TISCAMERA
             camera = new CameraGigeTis(camera_descriptor, runtime_configuration.camInput);
 #endif
@@ -136,41 +132,41 @@ Camera* CameraFactory::createCamera(CameraDescription camera_descriptor, paramet
 
         if (camera == nullptr)
         {
-            LOG_ERROR << "CameraFactory::createCamera;" << "Failed to create camera";
+            LOG_ERROR << "CameraFactory::createCamera;" << "Failed to create camera" << endl;
             return nullptr;
         }
 
 
         if (!camera->initSDK())
         {
-            LOG_ERROR << "CameraFactory::createCamera;" << "Failed to init SDK";
+            LOG_ERROR << "CameraFactory::createCamera;" << "Failed to init SDK" << endl;
             delete camera;
             return nullptr;
         }
         else {
 
             if (!camera->createDevice()) {
-                LOG_ERROR << "CameraFactory::createCamera;" << "Failed to create device";
+                LOG_ERROR << "CameraFactory::createCamera;" << "Failed to create device" << endl;
                 delete camera;
                 return nullptr;
             }
             else {
                 if (!camera->initOnce())
                 {
-                    LOG_ERROR << "CameraFactory::createCamera;" << "Failed to init once the device";
+                    LOG_ERROR << "CameraFactory::createCamera;" << "Failed to init once the device" << endl;
                     camera->reset();
                     delete camera;
                     return nullptr;
                 }
                 else if (!camera->init()) {
-                    LOG_ERROR << "CameraFactory::createCamera;" << "Failed to init device";
+                    LOG_ERROR << "CameraFactory::createCamera;" << "Failed to init device" << endl;
                     camera->reset();
                     delete camera;
                     return nullptr;
                 }
                 else if (!camera->grabInitialization())
                 {
-                    LOG_ERROR << "CameraFactory::createCamera;" << "Failed the grab initialization";
+                    LOG_ERROR << "CameraFactory::createCamera;" << "Failed the grab initialization" << endl;
                     camera->reset();
                     delete camera;
                     return nullptr;
@@ -181,7 +177,7 @@ Camera* CameraFactory::createCamera(CameraDescription camera_descriptor, paramet
                 if (camera->configurationCheck(runtime_configuration))
                     camera->configure(runtime_configuration);
                 else
-                    LOG_WARNING << "CameraFactory::createCamera;" << "The configuration failed - the camera may be operate inconsistently";
+                    LOG_WARNING << "CameraFactory::createCamera;" << "The configuration failed - the camera may be operate inconsistently" << endl;
 
                 return camera;
             }
@@ -189,7 +185,7 @@ Camera* CameraFactory::createCamera(CameraDescription camera_descriptor, paramet
     }
     catch (...) 
     {
-        LOG_ERROR << "CameraFactory::createCamera;" << "Error creting camera see log for full description";
+        LOG_ERROR << "CameraFactory::createCamera;" << "Error creting camera see log for full description" << endl;
     }
 
     return nullptr;

@@ -62,6 +62,8 @@ bool CameraDeviceManager::createCamera()
 
             if (!m_SelectedRuntimeConfiguration.CAMERA_SDK.empty())
             {
+                LOG_DEBUG << "LOADING CAMERA_SDK" << endl;
+
                 EParser<CamSdkType> eparser;
                 CamSdkType selected_sdk = eparser.parseEnum(m_SelectedRuntimeConfiguration.CAMERA_SDK);
 

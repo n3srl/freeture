@@ -62,8 +62,9 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
     m_GainAvailable = true;
 }
 
-    CameraGigeAravis::~CameraGigeAravis(){
-
+    CameraGigeAravis::~CameraGigeAravis()
+    {
+        LOG_DEBUG << "CameraGigeAravis::~CameraGigeAravis" << endl;
         if(stream != nullptr)
             g_object_unref(stream);
 
@@ -72,19 +73,19 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
 
     }
 
-    bool CameraGigeAravis::createDevice(int id){
+    bool CameraGigeAravis::createDevice(int id)
+    {
         string deviceName;
-
+        LOG_DEBUG << "CameraGigeAravis::createDevice" << endl;
         if(!getDeviceNameById(id, deviceName))
             return false;
 
         camera = arv_camera_new(deviceName.c_str(),&error);
-        LOG_ERROR  <<  "ERROR";
 
         if(camera == nullptr)
         {
 
-            LOG_ERROR << "Fail to connect the camera.";
+            LOG_ERROR << "CameraGigeAravis::createDevice" << "Fail to connect the camera." << endl;
             return false;
 
         }
@@ -99,51 +100,42 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
         return true;
     }
 
-    bool CameraGigeAravis::setSize(int startx, int starty, int width, int height, bool customSize) {
+    bool CameraGigeAravis::setSize(int startx, int starty, int width, int height, bool customSize)
+    {
         int sensor_width, sensor_height;
         arv_camera_get_sensor_size(camera, &sensor_width, &sensor_height, &error);
         if(customSize) {
 
             if(width > sensor_width) 
             {
-                LOG_DEBUG << width << " Bigger than the sensor width => width set to " << sensor_width;
+                LOG_DEBUG << width << " Bigger than the sensor width => width set to " << sensor_width << endl;
                 width = sensor_width;
             }
             if(height > sensor_height)
             {
-                LOG_DEBUG << height << " Bigger than the sensor height => height set to " << sensor_height;
+                LOG_DEBUG << height << " Bigger than the sensor height => height set to " << sensor_height << endl;
                 height = sensor_height;
             }
 
             arv_camera_set_region(camera, startx, starty, width, height,&error);
-            LOG_ERROR  <<  "ERROR";
 
             arv_camera_get_region (camera, &m_StartX, &m_StartY, &m_Width, &m_Height,&error);
-            LOG_ERROR  <<  "ERROR";
 
-            LOG_DEBUG << "Camera region size : " << m_Width << "x" << m_Height;
+            LOG_DEBUG << "Camera region size : " << m_Width << "x" << m_Height << endl;
             if (arv_device_get_feature(arv_camera_get_device(camera), "OffsetX")) {
-                LOG_DEBUG << "Starting from : " << m_StartX << "," << m_StartY;
+                LOG_DEBUG << "Starting from : " << m_StartX << "," << m_StartY << endl;
             } else {
-                LOG_WARNING << "OffsetX, OffsetY are not available: cannot set offset.";
+                LOG_WARNING << "OffsetX, OffsetY are not available: cannot set offset." << endl;
             }
 
 
         // Default is maximum size
         } else {
+            LOG_DEBUG << "Camera sensor size : " << sensor_width << "x" << sensor_height << endl;
 
-            
-
-            
-            LOG_ERROR  <<  "ERROR";
-
-            LOG_DEBUG << "Camera sensor size : " << sensor_width << "x" << sensor_height;
-
-            arv_camera_set_region(camera, 0, 0,sensor_width,sensor_height,&error);
-            LOG_ERROR  <<  "ERROR";
-
-            arv_camera_get_region (camera, nullptr, nullptr, &m_Width, &m_Height,&error);
-            LOG_ERROR  <<  "ERROR";
+            arv_camera_set_region(camera, 0, 0, sensor_width, sensor_height, &error);
+            arv_camera_get_region (camera, nullptr, nullptr, &m_Width, &m_Height, &error);
+           
         }
 
         return true;
@@ -166,73 +158,69 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
             }
         }
 
-       LOG_ERROR << "Fail to retrieve camera with this ID.";
+        LOG_ERROR << "Fail to retrieve camera with this ID." << endl;
         return false;
-
     }
 
 
 
     bool CameraGigeAravis::grabInitialization()
     {
+        LOG_DEBUG <<"CameraGigeAravis::grabInitialization;" << "Camera payload : " << payload << endl;
+
         frameCounter = 0;
 
         payload = arv_camera_get_payload (camera, &error);
-        LOG_ERROR  <<  "ERROR";
 
-        LOG_DEBUG << "Camera payload : " << payload;
+        LOG_DEBUG << "CameraGigeAravis::grabInitialization;" << "Camera payload : " << payload << endl;
 
         pixFormat = arv_camera_get_pixel_format(camera, &error);
-        LOG_ERROR  <<  "ERROR";
 
         arv_camera_get_exposure_time_bounds (camera, &m_MinExposure, &m_MaxExposure, &error);
-        LOG_ERROR  <<  "ERROR";
-
-        LOG_DEBUG << "Camera exposure bound min : " << m_MinExposure;
-        LOG_DEBUG << "Camera exposure bound max : " << m_MaxExposure;
+        
+        LOG_DEBUG << "CameraGigeAravis::grabInitialization;" << "Camera exposure bound min : " << m_MinExposure << endl;
+        LOG_DEBUG << "CameraGigeAravis::grabInitialization;" << "Camera exposure bound max : " << m_MaxExposure << endl;
 
         arv_camera_get_gain_bounds (camera, &m_MinGain, &m_MaxGain, &error);
-        LOG_DEBUG << "Camera gain bound min : " << m_MinGain;
-        LOG_DEBUG << "Camera gain bound max : " << m_MaxGain;
+        LOG_DEBUG << "CameraGigeAravis::grabInitialization;" << "Camera gain bound min : " << m_MinGain << endl;
+        LOG_DEBUG << "CameraGigeAravis::grabInitialization;" << "Camera gain bound max : " << m_MaxGain << endl;
 
-        LOG_DEBUG << "Camera frame rate : " << m_FPS;
+        LOG_DEBUG << "CameraGigeAravis::grabInitialization;" << "Camera frame rate : " << m_FPS<<endl;
 
         capsString = arv_pixel_format_to_gst_caps_string(pixFormat);
-        LOG_DEBUG << "Camera format : " << capsString;
+        LOG_DEBUG << "Camera format : " << capsString << endl;
 
         m_Gain = arv_camera_get_gain(camera,&error);
-        LOG_DEBUG << "Camera gain : " << m_Gain;
+        LOG_DEBUG << "Camera gain : " << m_Gain << endl;
 
         m_ExposureTime = arv_camera_get_exposure_time(camera, &error);
 
-        LOG_DEBUG << "Camera exposure : " << m_ExposureTime;
+        LOG_DEBUG << "Camera exposure : " << m_ExposureTime << endl;
       
-        LOG_DEBUG << "DEVICE SELECTED : " << arv_camera_get_device_id(camera,&error);
+        LOG_DEBUG << "DEVICE SELECTED : " << arv_camera_get_device_id(camera,&error) << endl;
 
-        LOG_DEBUG << "DEVICE NAME     : " << arv_camera_get_model_name(camera,&error);
+        LOG_DEBUG << "DEVICE NAME     : " << arv_camera_get_model_name(camera,&error) << endl;
 
-        LOG_DEBUG << "DEVICE VENDOR   : " << arv_camera_get_vendor_name(camera,&error);
+        LOG_DEBUG << "DEVICE VENDOR   : " << arv_camera_get_vendor_name(camera,&error) << endl;
 
-        LOG_DEBUG << "PAYLOAD         : " << payload;
-        LOG_DEBUG << "Start X         : " << m_StartX                             
-             << "Start Y         : " << m_StartY;
+        LOG_DEBUG << "PAYLOAD         : " << payload << endl;
+        LOG_DEBUG << "Start X         : " << m_StartX
+            << "Start Y         : " << m_StartY << endl;
         LOG_DEBUG << "Width           : " << m_Width                               
-             << "Height          : " << m_Height;
-        LOG_DEBUG << "Exp Range       : [" << m_MinExposure << " - " << m_MaxExposure   << "]";
+             << "Height          : " << m_Height << endl;
+        LOG_DEBUG << "Exp Range       : [" << m_MinExposure << " - " << m_MaxExposure   << "]" << endl;
         LOG_DEBUG << "Exp             : " << m_ExposureTime;
-        LOG_DEBUG << "Gain Range      : [" << m_MinGain        << " - " << m_MaxGain << "]";
-        LOG_DEBUG << "Gain            : " << m_Gain;
-        LOG_DEBUG << "Fps             : " << m_FPS;
-        LOG_DEBUG << "Type            : " << capsString;
-
-        LOG_DEBUG;
+        LOG_DEBUG << "Gain Range      : [" << m_MinGain        << " - " << m_MaxGain << "]" << endl;
+        LOG_DEBUG << "Gain            : " << m_Gain << endl;
+        LOG_DEBUG << "Fps             : " << m_FPS << endl;
+        LOG_DEBUG << "Type            : " << capsString << endl;
 
         // Create a new stream object. Open stream on Camera.
         stream = arv_camera_create_stream(camera, nullptr, nullptr,&error);
 
         if(stream == nullptr){
 
-           LOG_ERROR << "Fail to create stream with arv_camera_create_stream()";
+           LOG_ERROR << "Fail to create stream with arv_camera_create_stream()" << endl;
             return false;
 
         }
@@ -309,8 +297,6 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
         for (int i = 0; i < 50; i++)
             arv_stream_push_buffer(stream, arv_buffer_new(payload, nullptr));
 
-
-
         return true;
     }
 
@@ -318,17 +304,14 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
 
     bool CameraGigeAravis::acqStart()
     {
-        LOG_DEBUG << "Set camera to CONTINUOUS MODE";
+        LOG_DEBUG << "Set camera to CONTINUOUS MODE" << endl;
         arv_camera_set_acquisition_mode(camera, ARV_ACQUISITION_MODE_CONTINUOUS,&error);
-        LOG_ERROR  <<  "ERROR";
-
-        LOG_DEBUG << "Set camera TriggerMode to Off";
+        
+        LOG_DEBUG << "Set camera TriggerMode to Off" << endl;
         arv_device_set_string_feature_value(arv_camera_get_device (camera), "TriggerMode" , "Off", &error);
-        LOG_ERROR  <<  "ERROR";
-
-        LOG_DEBUG << "Start acquisition on camera";
+        
+        LOG_DEBUG << "Start acquisition on camera" << endl;
         arv_camera_start_acquisition(camera, &error);
-        LOG_ERROR  <<  "ERROR";
 
         return true;
     }
@@ -341,21 +324,20 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
         //LOG_DEBUG << "Failures          = " << (unsigned long long) nbFailures;
         //LOG_DEBUG << "Underruns         = " << (unsigned long long) nbUnderruns ;
 
-        LOG_DEBUG << "Completed buffers = " << (unsigned long long) nbCompletedBuffers;
-        LOG_DEBUG << "Failures          = " << (unsigned long long) nbFailures;
-        LOG_DEBUG << "Underruns         = " << (unsigned long long) nbUnderruns;
+        LOG_DEBUG << "Completed buffers = " << (unsigned long long) nbCompletedBuffers << endl;
+        LOG_DEBUG << "Failures          = " << (unsigned long long) nbFailures << endl;
+        LOG_DEBUG << "Underruns         = " << (unsigned long long) nbUnderruns << endl;
 
-        LOG_DEBUG << "Stopping acquisition...";
+        LOG_DEBUG << "Stopping acquisition..." << endl;
         arv_camera_stop_acquisition(camera, &error);
-        LOG_ERROR  <<  "ERROR";
+        
+        LOG_DEBUG << "Acquisition stopped." << endl;
 
-        LOG_DEBUG << "Acquisition stopped.";
-
-        LOG_DEBUG << "Unreferencing stream.";
+        LOG_DEBUG << "Unreferencing stream." << endl;
         g_object_unref(stream);
         stream = nullptr;
 
-        LOG_DEBUG << "Unreferencing camera.";
+        LOG_DEBUG << "Unreferencing camera." << endl;
         g_object_unref(camera);
         camera = nullptr;
 
@@ -451,28 +433,28 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
                     switch(arv_buffer_get_status(arv_buffer)){
 
                         case 0 :
-                            LOG_DEBUG << "ARV_BUFFER_STATUS_SUCCESS : the buffer contains a valid image";
+                            LOG_DEBUG << "ARV_BUFFER_STATUS_SUCCESS : the buffer contains a valid image" << endl;
                             break;
                         case 1 :
-                            LOG_DEBUG << "ARV_BUFFER_STATUS_CLEARED: the buffer is cleared";
+                            LOG_DEBUG << "ARV_BUFFER_STATUS_CLEARED: the buffer is cleared" << endl;
                             break;
                         case 2 :
-                            LOG_DEBUG << "ARV_BUFFER_STATUS_TIMEOUT: timeout was reached before all packets are received";
+                            LOG_DEBUG << "ARV_BUFFER_STATUS_TIMEOUT: timeout was reached before all packets are received" << endl;
                             break;
                         case 3 :
-                            LOG_DEBUG << "ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets";
+                            LOG_DEBUG << "ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets" << endl;
                             break;
                         case 4 :
-                            LOG_DEBUG << "ARV_BUFFER_STATUS_WRONG_PACKET_ID: stream has packet with wrong id";
+                            LOG_DEBUG << "ARV_BUFFER_STATUS_WRONG_PACKET_ID: stream has packet with wrong id" << endl;
                             break;
                         case 5 :
-                            LOG_DEBUG << "ARV_BUFFER_STATUS_SIZE_MISMATCH: the received image didn't fit in the buffer data space";
+                            LOG_DEBUG << "ARV_BUFFER_STATUS_SIZE_MISMATCH: the received image didn't fit in the buffer data space" << endl;
                             break;
                         case 6 :
-                            LOG_DEBUG << "ARV_BUFFER_STATUS_FILLING: the image is currently being filled";
+                            LOG_DEBUG << "ARV_BUFFER_STATUS_FILLING: the image is currently being filled" << endl;
                             break;
                         case 7 :
-                            LOG_DEBUG << "ARV_BUFFER_STATUS_ABORTED: the filling was aborted before completion";
+                            LOG_DEBUG << "ARV_BUFFER_STATUS_ABORTED: the filling was aborted before completion" << endl;
                             break;
 
                     }
@@ -496,20 +478,20 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
         GError* error;
 
         bool res = false;
-        LOG_DEBUG << "ARAVIS CREATE DEVICE";
+        LOG_DEBUG << "ARAVIS CREATE DEVICE" << endl;
         if(!createDevice())
             return false;
-        LOG_DEBUG << "ARAVIS DEVICE CREATED";
+        LOG_DEBUG << "ARAVIS DEVICE CREATED" << endl;
 
         if(!setPixelFormat(frame->mFormat))
             return false;
-        LOG_DEBUG << "ARAVIS PIXEL FORMAT OK";
+        LOG_DEBUG << "ARAVIS PIXEL FORMAT OK" << endl;
         if(!setExposureTime(frame->mExposure))
             return false;
-        LOG_DEBUG << "ARAVIS EXP OK";
+        LOG_DEBUG << "ARAVIS EXP OK" << endl;
         if(!setGain(frame->mGain))
             return false;
-        LOG_DEBUG << "ARAVIS GAIN OK";
+        LOG_DEBUG << "ARAVIS GAIN OK" << endl;
         if(frame->mWidth > 0 && frame->mHeight > 0) {
 
             setFrameSize(frame->mStartX, frame->mStartY, frame->mWidth, frame->mHeight,1);
@@ -527,7 +509,7 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
             arv_camera_get_region (camera, nullptr, nullptr, &m_Width, &m_Height, &error);
         }
 
-        LOG_DEBUG << "ARAVIS FRAME OK";
+        LOG_DEBUG << "ARAVIS FRAME OK" << endl;
 
         payload = arv_camera_get_payload (camera, &error);
 
@@ -546,23 +528,21 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
         m_Gain    = arv_camera_get_gain(camera, &error);
         m_ExposureTime     = arv_camera_get_exposure_time(camera, &error);
 
-        LOG_DEBUG;
 
-        LOG_DEBUG << "DEVICE SELECTED : " << arv_camera_get_device_id(camera, &error);
-        LOG_DEBUG << "DEVICE NAME     : " << arv_camera_get_model_name(camera, &error);
-        LOG_DEBUG << "DEVICE VENDOR   : " << arv_camera_get_vendor_name(camera, &error);
-        LOG_DEBUG << "PAYLOAD         : " << payload;
-        LOG_DEBUG << "Start X         : " << m_StartX << "Start Y         : " << m_StartY;
-        LOG_DEBUG << "Width           : " << m_Width  << "Height          : " << m_Height;
-        LOG_DEBUG << "Exp Range       : [" << m_MinExposure    << " - " << m_MaxExposure   << "]";
-        LOG_DEBUG << "Exp             : " << m_ExposureTime;
-        LOG_DEBUG << "Gain Range      : [" << m_MinGain        << " - " << m_MaxGain       << "]";
-        LOG_DEBUG << "Gain            : " << m_Gain;
-        LOG_DEBUG << "Fps             : " << m_FPS;
-        LOG_DEBUG << "Type            : " << capsString;
+        LOG_DEBUG << "DEVICE SELECTED : " << arv_camera_get_device_id(camera, &error) << endl;
+        LOG_DEBUG << "DEVICE NAME     : " << arv_camera_get_model_name(camera, &error) << endl;
+        LOG_DEBUG << "DEVICE VENDOR   : " << arv_camera_get_vendor_name(camera, &error) << endl;
+        LOG_DEBUG << "PAYLOAD         : " << payload << endl;
+        LOG_DEBUG << "Start X         : " << m_StartX << "Start Y         : " << m_StartY << endl;
+        LOG_DEBUG << "Width           : " << m_Width  << "Height          : " << m_Height << endl;
+        LOG_DEBUG << "Exp Range       : [" << m_MinExposure    << " - " << m_MaxExposure   << "]" << endl;
+        LOG_DEBUG << "Exp             : " << m_ExposureTime << endl;
+        LOG_DEBUG << "Gain Range      : [" << m_MinGain        << " - " << m_MaxGain       << "]" << endl;
+        LOG_DEBUG << "Gain            : " << m_Gain << endl;
+        LOG_DEBUG << "Fps             : " << m_FPS << endl;
+        LOG_DEBUG << "Type            : " << capsString << endl;
 
-        LOG_DEBUG;
-
+        
         if(arv_camera_is_gv_device (camera)) {
 
             // http://www.baslerweb.com/media/documents/AW00064902000%20Control%20Packet%20Timing%20With%20Delays.pdf
@@ -625,7 +605,7 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
             char *buffer_data;
             size_t buffer_size;
 
-            LOG_DEBUG << ">> Acquisition in progress... (Please wait)";
+            LOG_DEBUG << ">> Acquisition in progress... (Please wait)" << endl;
 
             if (arv_buffer != nullptr){
 
@@ -669,38 +649,36 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
                     switch(arv_buffer_get_status(arv_buffer)){
 
                         case 0 :
-                            LOG_DEBUG << "ARV_BUFFER_STATUS_SUCCESS : the buffer contains a valid image";
+                            LOG_DEBUG << "ARV_BUFFER_STATUS_SUCCESS : the buffer contains a valid image" << endl;
                             break;
 
                         case 1 :
-                            LOG_DEBUG << "ARV_BUFFER_STATUS_CLEARED: the buffer is cleared";
+                            LOG_DEBUG << "ARV_BUFFER_STATUS_CLEARED: the buffer is cleared" << endl;
                             break;
 
                         case 2 :
-                            LOG_DEBUG << "ARV_BUFFER_STATUS_TIMEOUT: timeout was reached before all packets are received";
+                            LOG_DEBUG << "ARV_BUFFER_STATUS_TIMEOUT: timeout was reached before all packets are received" << endl;
                             break;
 
                         case 3 :
-                            LOG_DEBUG << "ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets";
+                            LOG_DEBUG << "ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets" << endl;
                             break;
 
                         case 4 :
-                            LOG_DEBUG << "ARV_BUFFER_STATUS_WRONG_PACKET_ID: stream has packet with wrong id";
+                            LOG_DEBUG << "ARV_BUFFER_STATUS_WRONG_PACKET_ID: stream has packet with wrong id" << endl;
                             break;
 
                         case 5 :
-                            LOG_DEBUG << "ARV_BUFFER_STATUS_SIZE_MISMATCH: the received image didn't fit in the buffer data space";
+                            LOG_DEBUG << "ARV_BUFFER_STATUS_SIZE_MISMATCH: the received image didn't fit in the buffer data space" << endl;
                             break;
 
                         case 6 :
-                            LOG_DEBUG << "ARV_BUFFER_STATUS_FILLING: the image is currently being filled";
+                            LOG_DEBUG << "ARV_BUFFER_STATUS_FILLING: the image is currently being filled" << endl;
                             break;
 
                         case 7 :
-                            LOG_DEBUG << "ARV_BUFFER_STATUS_ABORTED: the filling was aborted before completion";
+                            LOG_DEBUG << "ARV_BUFFER_STATUS_ABORTED: the filling was aborted before completion" << endl;
                             break;
-
-
                     }
 
                     res = false;
@@ -709,14 +687,14 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
 
                 arv_stream_push_buffer(stream, arv_buffer);
            } else {
-                LOG_ERROR << "Fail to pop buffer from stream.";
+                LOG_ERROR << "Fail to pop buffer from stream." << endl;
                 res = false;
            }
 
             arv_stream_get_statistics(stream, &nbCompletedBuffers, &nbFailures, &nbUnderruns);
 
-            LOG_DEBUG << ">> Completed buffers = " << (unsigned long long) nbCompletedBuffers;
-            LOG_DEBUG << ">> Failures          = " << (unsigned long long) nbFailures;
+            LOG_DEBUG << ">> Completed buffers = " << (unsigned long long) nbCompletedBuffers << endl;
+            LOG_DEBUG << ">> Failures          = " << (unsigned long long) nbFailures << endl;
             //LOG_DEBUG << ">> Underruns         = " << (unsigned long long) nbUnderruns ;
 
             // Stop acquisition.
@@ -794,18 +772,18 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
 
                 // Compare found pixel formats to currently formats supported by freeture
 
-                LOG_DEBUG  <<  ">> Available pixel formats :";
+                LOG_DEBUG  <<  ">> Available pixel formats :" << endl;
                 EParser<CamPixFmt> fmt;
 
                 for( int i = 0; i != pixfmt.size(); i++ ) {
 
                     if(fmt.isEnumValue(pixfmt.at(i))) {
 
-                        LOG_DEBUG << "Found " << pixfmt.at(i) ;
+                        LOG_DEBUG << "Found " << pixfmt.at(i) << endl;
 
                     }
                     else {
-                        LOG_DEBUG << "Not Found " << pixfmt.at(i);
+                        LOG_DEBUG << "Not Found " << pixfmt.at(i) << endl;
                     }
 
                 }
@@ -946,7 +924,7 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
                 arv_camera_set_exposure_time(camera, val, &error);
             } else {
 
-                LOG_DEBUG << "> Exposure value (" << val << ") is not in range [ " << expMin << " - " << expMax << " ]";
+                LOG_DEBUG << "> Exposure value (" << val << ") is not in range [ " << expMin << " - " << expMax << " ]" << endl;
                 
                 return false;
 
@@ -972,7 +950,7 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
                 m_Gain = val;
                 arv_camera_set_gain (camera, (double)val,&error);
             } else {
-                LOG_ERROR << "> Gain value (" << val << ") is not in range [ " << gMin << " - " << gMax << " ]";
+                LOG_ERROR << "> Gain value (" << val << ") is not in range [ " << gMin << " - " << gMax << " ]" << endl;
                 return false;
 
             }
@@ -989,13 +967,11 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
 
         if (camera != nullptr){
             arv_camera_set_frame_rate(camera, fps, &error);
-            LOG_ERROR  <<  "ERROR";
-
+            
             double setfps = arv_camera_get_frame_rate(camera, &error);
-            LOG_ERROR  <<  "ERROR";
-
+            
             if (setfps!=fps) {
-                LOG_WARNING << "> Frame rate value (" << fps << ") can't be set! Please check genicam features.";
+                LOG_WARNING << "> Frame rate value (" << fps << ") can't be set! Please check genicam features." << endl;
             }
             m_FPS = fps;
 
@@ -1016,20 +992,17 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
             case CamPixFmt::MONO8 :
                     {
                         arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_8,&error);
-                        LOG_ERROR  <<  "ERROR";
                     }
                     break;
 
                 case CamPixFmt::MONO12 :
                     {
                         arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_12,&error);
-                        LOG_ERROR  <<  "ERROR";
                     }
                     break;
                 case CamPixFmt::MONO16 :
                     {
                         arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_16,&error);
-                        LOG_ERROR  <<  "ERROR";
                     }
                     break;
             }
@@ -1047,16 +1020,14 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
             if(customSize) {
           
                 if (arv_device_get_feature(arv_camera_get_device(camera), "OffsetX")) {
-                    LOG_DEBUG << "Starting from : " << startx << "," << starty;
+                    LOG_DEBUG << "Starting from : " << startx << "," << starty << endl;
                 } else {
-                    LOG_WARNING << "OffsetX, OffsetY are not available: cannot set offset.";
+                    LOG_WARNING << "OffsetX, OffsetY are not available: cannot set offset." << endl;
                 }
 
                 arv_camera_set_region(camera, startx, starty, width, height,&error);
-                LOG_ERROR  <<  "ERROR";
 
                 arv_camera_get_region (camera, &m_StartX, &m_StartY, &width, &height,&error);
-                LOG_ERROR  <<  "ERROR";
 
             // Default is maximum size
             } else {
@@ -1064,7 +1035,7 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
                 int sensor_width, sensor_height;
 
                 arv_camera_get_sensor_size(camera, &sensor_width, &sensor_height, &error);
-                LOG_DEBUG << "Camera sensor size : " << sensor_width << "x" << sensor_height;
+                LOG_DEBUG << "Camera sensor size : " << sensor_width << "x" << sensor_height << endl;
               
                 arv_camera_get_region (camera, nullptr, nullptr, &width, &height,&error);
             }
@@ -1075,7 +1046,7 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
 
     bool CameraGigeAravis::FirstInitializeCamera(string cPath)
     {
-        LOG_DEBUG << "CameraGigeAravis::FirstInitializeCamera(\"" << cPath << "\")";
+        LOG_DEBUG << "CameraGigeAravis::FirstInitializeCamera(\"" << cPath << "\")" << endl;
         if (camera != nullptr)
         {
             ArvDevice* arv_device = arv_camera_get_device(camera);
@@ -1083,7 +1054,7 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
             ifstream file(cPath);
             if(!file.is_open())
             {
-                LOG_ERROR << "Error opening file " << cPath;
+                LOG_ERROR << "Error opening file " << cPath << endl;
                 return false;
             }
 
@@ -1099,7 +1070,7 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
 
                 if(line.find('=') < 2) 
                 {
-                    LOG_DEBUG << "Line " << line << " cannot be parsed";
+                    LOG_DEBUG << "Line " << line << " cannot be parsed" << endl;
                     continue;
                 }
                 
@@ -1109,24 +1080,24 @@ CameraGigeAravis::CameraGigeAravis(CameraDescription description, cameraParam se
                 }
 
                 
-                LOG_DEBUG << "Applining init " << line;
+                LOG_DEBUG << "Applining init " << line << endl;
                 const char* feature = line_data[0].c_str(); 
                 if(line_data[2] == "bool")
                 {
                     bool value = line_data[1] == "true";
                     arv_device_set_boolean_feature_value(arv_device, feature, value, &error);
-                    LOG_ERROR  <<  "ERROR";
+                    LOG_ERROR  <<  "ERROR" << endl;
                 } else if(line_data[2] == "string")
                 {
                     const char* value = line_data[1].c_str();
                     arv_device_set_string_feature_value(arv_device, feature, value, &error);
-                    LOG_ERROR  <<  "ERROR";
+                    LOG_ERROR  <<  "ERROR" << endl;
                 }
                 else if(line_data[2] == "float")
                 {
                     float value = stof(line_data[1]);
                     arv_device_set_float_feature_value(arv_device, feature, value, &error);
-                    LOG_ERROR  <<  "ERROR";
+                    LOG_ERROR  <<  "ERROR" << endl;
                 }
                 this_thread::sleep_for(chrono::milliseconds(1500));
             }

@@ -81,7 +81,7 @@ void CameraLucidArena_Scanner::UpdateCameraList()
 
                 CameraDescription c;
 
-                c.Description = "NAME[" + s_name + "] SDK[ARENASDK] IP: " + s_addr;
+                c.Description = "NAME[" + s_name + "] SDK[ARENASDK] IP[" + s_addr + "]";
                 c.DeviceId = s_name;
                 c.Address = s_addr;
                 c.Interface = 0;

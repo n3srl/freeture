@@ -72,14 +72,14 @@ CameraLucidAravis::~CameraLucidAravis()
 
     if (camera != nullptr)
     {
-        LOG_DEBUG << "Unreferencing camera.";
+        LOG_DEBUG << "Unreferencing camera." << endl;
         g_object_unref(camera);
     }
 
 }
 
 bool CameraLucidAravis::createDevice(int id) {
-    LOG_DEBUG << "CameraLucidAravis::createDevice";
+    LOG_DEBUG << "CameraLucidAravis::createDevice" << endl;
 
     string deviceName;
 
@@ -88,7 +88,7 @@ bool CameraLucidAravis::createDevice(int id) {
 
     if (camera == nullptr)
     {
-        LOG_DEBUG << "CameraLucidAravis::createDevice: Instancing arv_camera_new";
+        LOG_DEBUG << "CameraLucidAravis::createDevice: Instancing arv_camera_new" << endl;
         camera = arv_camera_new(deviceName.c_str(), &error);
 
         CheckAravisError(&error);
@@ -96,7 +96,7 @@ bool CameraLucidAravis::createDevice(int id) {
 
     if (camera == nullptr)
     {
-        LOG_ERROR << "Fail to connect the camera.";
+        LOG_ERROR << "Fail to connect the camera." << endl;
         return false;
     }
 
@@ -107,7 +107,7 @@ bool CameraLucidAravis::createDevice(int id) {
 }
 
 bool CameraLucidAravis::recreateDevice(int id) {
-    LOG_DEBUG << "CameraLucidAravis::createDevice";
+    LOG_DEBUG << "CameraLucidAravis::createDevice" << endl;
 
     string deviceName;
     //free(camera);
@@ -117,14 +117,14 @@ bool CameraLucidAravis::recreateDevice(int id) {
 
     if (camera != nullptr)
     {
-        LOG_DEBUG << "CameraLucidAravis::createDevice: Instancing arv_camera_new";
+        LOG_DEBUG << "CameraLucidAravis::createDevice: Instancing arv_camera_new" << endl;
         camera = arv_camera_new(deviceName.c_str(), &error);
         CheckAravisError(&error);
     }
 
     if (camera == nullptr)
     {
-        LOG_ERROR << "Fail to connect the camera.";
+        LOG_ERROR << "Fail to connect the camera." << endl;
         return false;
     }
 
@@ -135,15 +135,15 @@ bool CameraLucidAravis::recreateDevice(int id) {
 }
 
 bool CameraLucidAravis::setSize(int startx, int starty, int width, int height, bool customSize) {
-    LOG_DEBUG << "CameraLucidAravis::setSize" << startx << "," << starty << "" << width << "x" << height;
+    LOG_DEBUG << "CameraLucidAravis::setSize" << startx << "," << starty << "" << width << "x" << height << endl;
 
     if (camera == nullptr) {
-        LOG_DEBUG << "CAMERA IS nullptr";
+        LOG_DEBUG << "CAMERA IS nullptr" << endl;
         return false;
     }
 
     if (customSize) {
-        LOG_DEBUG << "custom size is ok";
+        LOG_DEBUG << "custom size is ok" << endl;
 
         arv_camera_set_region(camera, startx, starty, width, height, &error);
         CheckAravisError(&error);
@@ -151,12 +151,12 @@ bool CameraLucidAravis::setSize(int startx, int starty, int width, int height, b
         arv_camera_get_region(camera, &m_StartX, &m_StartY, &m_Width, &m_Height, &error);
         CheckAravisError(&error);
 
-        LOG_DEBUG << "Camera region size :" << m_Width << "x" << m_Height;
+        LOG_DEBUG << "Camera region size :" << m_Width << "x" << m_Height << endl;
         if (arv_device_get_feature(arv_camera_get_device(camera), "OffsetX")) {
-            LOG_DEBUG << "Starting from :" << m_StartX << "," << m_StartY;
+            LOG_DEBUG << "Starting from :" << m_StartX << "," << m_StartY << endl;
         }
         else {
-            LOG_WARNING << "OffsetX, OffsetY are not available: cannot set offset.";
+            LOG_WARNING << "OffsetX, OffsetY are not available: cannot set offset." << endl;
         }
         CheckAravisError(&error);
 
@@ -164,13 +164,13 @@ bool CameraLucidAravis::setSize(int startx, int starty, int width, int height, b
         // Default is maximum size
     }
     else {
-        LOG_DEBUG << "custom size is false";
+        LOG_DEBUG << "custom size is false" << endl;
         int sensor_width, sensor_height;
 
         arv_camera_get_sensor_size(camera, &sensor_width, &sensor_height, &error);
         CheckAravisError(&error);
 
-        LOG_DEBUG << "Camera sensor size :" << sensor_width << "x" << sensor_height;
+        LOG_DEBUG << "Camera sensor size :" << sensor_width << "x" << sensor_height << endl;
 
         arv_camera_set_region(camera, 0, 0, sensor_width, sensor_height, &error);
         CheckAravisError(&error);
@@ -185,7 +185,7 @@ bool CameraLucidAravis::setSize(int startx, int starty, int width, int height, b
 
 bool CameraLucidAravis::getDeviceNameById(int id, string& device)
 {
-    LOG_DEBUG << "CameraLucidAravis::getDeviceNameById [#" << id << "]";
+    LOG_DEBUG << "CameraLucidAravis::getDeviceNameById [#" << id << "]" << endl;
 
     arv_update_device_list();
 
@@ -202,7 +202,7 @@ bool CameraLucidAravis::getDeviceNameById(int id, string& device)
     }
     CheckAravisError(&error);
 
-    LOG_ERROR << "Fail to retrieve camera with this ID.";
+    LOG_ERROR << "Fail to retrieve camera with this ID." << endl;
     return false;
 
 }
@@ -211,14 +211,14 @@ bool CameraLucidAravis::getDeviceNameById(int id, string& device)
 
 bool CameraLucidAravis::grabInitialization()
 {
-    LOG_DEBUG << "CameraLucidAravis::grabInitialization";
+    LOG_DEBUG << "CameraLucidAravis::grabInitialization" << endl;
 
     frameCounter = 0;
 
     payload = arv_camera_get_payload(camera, &error);
     CheckAravisError(&error);
 
-    LOG_DEBUG << "Camera payload :" << payload;
+    LOG_DEBUG << "Camera payload :" << payload << endl;
 
     pixFormat = arv_camera_get_pixel_format(camera, &error);
     CheckAravisError(&error);
@@ -229,51 +229,49 @@ bool CameraLucidAravis::grabInitialization()
     arv_camera_get_exposure_time_bounds(camera, &m_MinExposure, &m_MaxExposure, &error);
     CheckAravisError(&error);
 
-    LOG_DEBUG << "Camera exposure bound min :" << m_MinExposure;
-    LOG_DEBUG << "Camera exposure bound max :" << m_MaxExposure;
+    LOG_DEBUG << "Camera exposure bound min :" << m_MinExposure << endl;
+    LOG_DEBUG << "Camera exposure bound max :" << m_MaxExposure << endl;
 
     arv_camera_get_gain_bounds(camera, &m_MinGain, &m_MaxGain, &error);
     CheckAravisError(&error);
 
-    LOG_DEBUG << "Camera gain bound min :" << m_MinGain;
-    LOG_DEBUG << "Camera gain bound max :" << m_MaxGain;
-
-    LOG_DEBUG << "Camera frame rate :" << m_FPS;
+    LOG_DEBUG << "Camera gain bound min :" << m_MinGain << endl;
+    LOG_DEBUG << "Camera gain bound max :" << m_MaxGain << endl;
+    LOG_DEBUG << "Camera frame rate :" << m_FPS << endl;
 
     capsString = arv_pixel_format_to_gst_caps_string(pixFormat);
-    LOG_DEBUG << "Camera format :" << capsString;
+    LOG_DEBUG << "Camera format :" << capsString << endl;
 
     m_Gain = arv_camera_get_gain(camera, &error);
     CheckAravisError(&error);
 
-    LOG_DEBUG << "Camera gain :" << m_Gain;
+    LOG_DEBUG << "Camera gain :" << m_Gain << endl;
 
     m_ExposureTime = arv_camera_get_exposure_time(camera, &error);
     CheckAravisError(&error);
 
-    LOG_DEBUG << "Camera exposure :" << m_ExposureTime;
+    LOG_DEBUG << "Camera exposure :" << m_ExposureTime << endl;
 
-    LOG_DEBUG;
 
-    LOG_DEBUG << "DEVICE SELECTED :" << arv_camera_get_device_id(camera, &error);
+    LOG_DEBUG << "DEVICE SELECTED :" << arv_camera_get_device_id(camera, &error) << endl;
     CheckAravisError(&error);
 
-    LOG_DEBUG << "DEVICE NAME     :" << arv_camera_get_model_name(camera, &error);
+    LOG_DEBUG << "DEVICE NAME     :" << arv_camera_get_model_name(camera, &error) << endl;
     CheckAravisError(&error);
 
-    LOG_DEBUG << "DEVICE VENDOR   :" << arv_camera_get_vendor_name(camera, &error);
+    LOG_DEBUG << "DEVICE VENDOR   :" << arv_camera_get_vendor_name(camera, &error) << endl;
     CheckAravisError(&error);
 
-    LOG_DEBUG << "PAYLOAD         :" << payload;
-    LOG_DEBUG << "Start X         :" << m_StartX << "Start Y:" << m_StartY;
-    LOG_DEBUG << "Width           :" << m_Width << "Height:" << m_Height;
-    LOG_DEBUG << "Exp Range       : [" << m_MinExposure << "-" << m_MaxExposure << "]";
-    LOG_DEBUG << "Exp             :" << m_ExposureTime;
-    LOG_DEBUG << "Gain Range      : [" << m_MinGain << "-" << m_MaxGain << "]";
-    LOG_DEBUG << "Gain            :" << m_Gain;
-    LOG_DEBUG << "Fps Range       : [" << m_MinFPS << "-" << m_MaxFPS << "]";
-    LOG_DEBUG << "Fps             :" << m_FPS;
-    LOG_DEBUG << "Type            :" << capsString;
+    LOG_DEBUG << "PAYLOAD         :" << payload << endl;
+    LOG_DEBUG << "Start X         :" << m_StartX << "Start Y:" << m_StartY << endl;
+    LOG_DEBUG << "Width           :" << m_Width << "Height:" << m_Height << endl;
+    LOG_DEBUG << "Exp Range       : [" << m_MinExposure << "-" << m_MaxExposure << "]" << endl;
+    LOG_DEBUG << "Exp             :" << m_ExposureTime << endl;
+    LOG_DEBUG << "Gain Range      : [" << m_MinGain << "-" << m_MaxGain << "]" << endl;
+    LOG_DEBUG << "Gain            :" << m_Gain << endl;
+    LOG_DEBUG << "Fps Range       : [" << m_MinFPS << "-" << m_MaxFPS << "]" << endl;
+    LOG_DEBUG << "Fps             :" << m_FPS << endl;
+    LOG_DEBUG << "Type            :" << capsString << endl;
 
     // Create a new stream object. Open stream on Camera.
     stream = arv_camera_create_stream(camera, nullptr, nullptr, &error);
@@ -281,7 +279,7 @@ bool CameraLucidAravis::grabInitialization()
 
     if (stream == nullptr)
     {
-        LOG_ERROR << "Fail to create stream with arv_camera_create_stream()";
+        LOG_ERROR << "Fail to create stream with arv_camera_create_stream()" << endl;
         return false;
 
     }
@@ -368,17 +366,17 @@ void CameraLucidAravis::grabCleanse() {
 
 bool CameraLucidAravis::acqStart()
 {
-    LOG_DEBUG << "CameraLucidAravis::acqStart";
+    LOG_DEBUG << "CameraLucidAravis::acqStart" << endl;
 
-    LOG_DEBUG << "Set camera to CONTINUOUS MODE";
+    LOG_DEBUG << "Set camera to CONTINUOUS MODE" << endl;
     arv_camera_set_acquisition_mode(camera, ARV_ACQUISITION_MODE_CONTINUOUS, &error);
     CheckAravisError(&error);
 
-    LOG_DEBUG << "Set camera TriggerMode to Off";
+    LOG_DEBUG << "Set camera TriggerMode to Off" << endl;
     /* arv_device_set_string_feature_value(arv_camera_get_device (camera), "TriggerMode" , "Off", &error);
     CheckAravisError(&error); */
 
-    LOG_DEBUG << "Start acquisition on camera";
+    LOG_DEBUG << "Start acquisition on camera" << endl;
     arv_camera_start_acquisition(camera, &error);
     CheckAravisError(&error);
 
@@ -387,7 +385,7 @@ bool CameraLucidAravis::acqStart()
 
 void CameraLucidAravis::acqStop()
 {
-    LOG_DEBUG << "CameraLucidAravis::acqStop";
+    LOG_DEBUG << "CameraLucidAravis::acqStop" << endl;
 
     arv_stream_get_statistics(stream, &nbCompletedBuffers, &nbFailures, &nbUnderruns);
 
@@ -395,17 +393,17 @@ void CameraLucidAravis::acqStop()
     //LOG_DEBUG << "Failures          ="<< (unsigned long long) nbFailures;
     //LOG_DEBUG << "Underruns         ="<< (unsigned long long) nbUnderruns;
 
-    LOG_DEBUG << "Completed buffers =" << (unsigned long long) nbCompletedBuffers;
-    LOG_DEBUG << "Failures          =" << (unsigned long long) nbFailures;
-    LOG_DEBUG << "Underruns         =" << (unsigned long long) nbUnderruns;
+    LOG_DEBUG << "Completed buffers =" << (unsigned long long) nbCompletedBuffers << endl;
+    LOG_DEBUG << "Failures          =" << (unsigned long long) nbFailures << endl;
+    LOG_DEBUG << "Underruns         =" << (unsigned long long) nbUnderruns << endl;
 
-    LOG_DEBUG << "Stopping acquisition...";
+    LOG_DEBUG << "Stopping acquisition..." << endl;
     arv_camera_stop_acquisition(camera, &error);
     CheckAravisError(&error);
 
-    LOG_DEBUG << "Acquisition stopped.";
+    LOG_DEBUG << "Acquisition stopped." << endl;
 
-    LOG_DEBUG << "Unreferencing stream.";
+    LOG_DEBUG << "Unreferencing stream." << endl;
     g_object_unref(stream);
     stream = nullptr;
 
@@ -504,28 +502,28 @@ bool CameraLucidAravis::grabImage(shared_ptr<Frame> newFrame)
                 switch (arv_buffer_get_status(arv_buffer)) {
 
                 case 0:
-                    LOG_DEBUG << "ARV_BUFFER_STATUS_SUCCESS : the buffer contains a valid image";
+                    LOG_DEBUG << "ARV_BUFFER_STATUS_SUCCESS : the buffer contains a valid image" << endl;
                     break;
                 case 1:
-                    LOG_DEBUG << "ARV_BUFFER_STATUS_CLEARED: the buffer is cleared";
+                    LOG_DEBUG << "ARV_BUFFER_STATUS_CLEARED: the buffer is cleared" << endl;
                     break;
                 case 2:
-                    LOG_DEBUG << "ARV_BUFFER_STATUS_TIMEOUT: timeout was reached before all packets are received";
+                    LOG_DEBUG << "ARV_BUFFER_STATUS_TIMEOUT: timeout was reached before all packets are received" << endl;
                     break;
                 case 3:
-                    LOG_DEBUG << "ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets";
+                    LOG_DEBUG << "ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets" << endl;
                     break;
                 case 4:
-                    LOG_DEBUG << "ARV_BUFFER_STATUS_WRONG_PACKET_ID: stream has packet with wrong id";
+                    LOG_DEBUG << "ARV_BUFFER_STATUS_WRONG_PACKET_ID: stream has packet with wrong id" << endl;
                     break;
                 case 5:
-                    LOG_DEBUG << "ARV_BUFFER_STATUS_SIZE_MISMATCH: the received image didn't fit in the buffer data space";
+                    LOG_DEBUG << "ARV_BUFFER_STATUS_SIZE_MISMATCH: the received image didn't fit in the buffer data space" << endl;
                     break;
                 case 6:
-                    LOG_DEBUG << "ARV_BUFFER_STATUS_FILLING: the image is currently being filled";
+                    LOG_DEBUG << "ARV_BUFFER_STATUS_FILLING: the image is currently being filled" << endl;
                     break;
                 case 7:
-                    LOG_DEBUG << "ARV_BUFFER_STATUS_ABORTED: the filling was aborted before completion";
+                    LOG_DEBUG << "ARV_BUFFER_STATUS_ABORTED: the filling was aborted before completion" << endl;
                     break;
 
                 }
@@ -535,8 +533,8 @@ bool CameraLucidAravis::grabImage(shared_ptr<Frame> newFrame)
             }
         }
         catch (exception& e) {
-            LOG_DEBUG << "CameraLucidAravis::grabImage EXC";
-            LOG_DEBUG << e.what();
+            LOG_DEBUG << "CameraLucidAravis::grabImage EXC" << endl;
+            LOG_DEBUG << e.what() << endl;
             return false;
 
         }
@@ -545,7 +543,7 @@ bool CameraLucidAravis::grabImage(shared_ptr<Frame> newFrame)
 
 bool CameraLucidAravis::grabSingleImage(shared_ptr<Frame> frame)
 {
-    LOG_DEBUG << "CameraLucidAravis::grabSingleImage";
+    LOG_DEBUG << "CameraLucidAravis::grabSingleImage" << endl;
     auto arv_device = arv_camera_get_device(camera);
 
     bool res = false;
@@ -594,7 +592,7 @@ bool CameraLucidAravis::grabSingleImage(shared_ptr<Frame> frame)
     arv_camera_set_frame_rate(camera, frame->mFps, &error); /* Regular captures */
     CheckAravisError(&error);
 
-    LOG_DEBUG << "==========================";
+    LOG_DEBUG << "==========================" << endl;
 
     m_LastTemperature = arv_device_get_float_feature_value(arv_device, "DeviceTemperature", &error);
     CheckAravisError(&error);
@@ -612,27 +610,27 @@ bool CameraLucidAravis::grabSingleImage(shared_ptr<Frame> frame)
     m_ExposureTime = arv_camera_get_exposure_time(camera, &error);
     CheckAravisError(&error);
 
-    LOG_DEBUG << "DEVICE SELECTED :" << arv_camera_get_device_id(camera, &error);
+    LOG_DEBUG << "DEVICE SELECTED :" << arv_camera_get_device_id(camera, &error) << endl;
     CheckAravisError(&error);
 
-    LOG_DEBUG << "DEVICE NAME     :" << arv_camera_get_model_name(camera, &error);
+    LOG_DEBUG << "DEVICE NAME     :" << arv_camera_get_model_name(camera, &error) << endl;
     CheckAravisError(&error);
 
-    LOG_DEBUG << "DEVICE VENDOR   :" << arv_camera_get_vendor_name(camera, &error);
+    LOG_DEBUG << "DEVICE VENDOR   :" << arv_camera_get_vendor_name(camera, &error) << endl;
     CheckAravisError(&error);
 
-    LOG_DEBUG << "DEVICE TEMP     :" << m_LastTemperature;
+    LOG_DEBUG << "DEVICE TEMP     :" << m_LastTemperature << endl;
 
-    LOG_DEBUG << "PAYLOAD         :" << payload;
-    LOG_DEBUG << "Start X         :" << m_StartX << "Start Y         :" << m_StartY;
-    LOG_DEBUG << "Width           :" << m_Width << "Height          :" << m_Height;
-    LOG_DEBUG << "Exp Range       : [" << m_MinExposure << "-" << m_MaxExposure << "]";
-    LOG_DEBUG << "Exp             :" << m_ExposureTime;
-    LOG_DEBUG << "Gain Range      : [" << m_MinGain << "-" << m_MaxGain << "]";
-    LOG_DEBUG << "Gain            :" << m_Gain;
-    LOG_DEBUG << "Fps Range       : [" << m_MinFPS << "-" << m_MaxFPS << "]";
-    LOG_DEBUG << "Fps             :" << m_FPS;
-    LOG_DEBUG << "Type            :" << capsString;
+    LOG_DEBUG << "PAYLOAD         :" << payload << endl;
+    LOG_DEBUG << "Start X         :" << m_StartX << "Start Y         :" << m_StartY << endl;
+    LOG_DEBUG << "Width           :" << m_Width << "Height          :" << m_Height << endl;
+    LOG_DEBUG << "Exp Range       : [" << m_MinExposure << "-" << m_MaxExposure << "]" << endl;
+    LOG_DEBUG << "Exp             :" << m_ExposureTime << endl;
+    LOG_DEBUG << "Gain Range      : [" << m_MinGain << "-" << m_MaxGain << "]" << endl;
+    LOG_DEBUG << "Gain            :" << m_Gain << endl;
+    LOG_DEBUG << "Fps Range       : [" << m_MinFPS << "-" << m_MaxFPS << "]" << endl;
+    LOG_DEBUG << "Fps             :" << m_FPS << endl;
+    LOG_DEBUG << "Type            :" << capsString << endl;
 
     // Create a new stream object. Open stream on Camera.
     stream = arv_camera_create_stream(camera, nullptr, nullptr, &error);
@@ -738,49 +736,49 @@ bool CameraLucidAravis::grabSingleImage(shared_ptr<Frame> frame)
 
                 case 0:
 
-                    LOG_DEBUG << "ARV_BUFFER_STATUS_SUCCESS : the buffer contains a valid image";
+                    LOG_DEBUG << "ARV_BUFFER_STATUS_SUCCESS : the buffer contains a valid image" << endl;
 
                     break;
 
                 case 1:
 
-                    LOG_DEBUG << "ARV_BUFFER_STATUS_CLEARED: the buffer is cleared";
+                    LOG_DEBUG << "ARV_BUFFER_STATUS_CLEARED: the buffer is cleared" << endl;
 
                     break;
 
                 case 2:
 
-                    LOG_DEBUG << "ARV_BUFFER_STATUS_TIMEOUT: timeout was reached before all packets are received";
+                    LOG_DEBUG << "ARV_BUFFER_STATUS_TIMEOUT: timeout was reached before all packets are received" << endl;
 
                     break;
 
                 case 3:
 
-                    LOG_DEBUG << "ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets";
+                    LOG_DEBUG << "ARV_BUFFER_STATUS_MISSING_PACKETS: stream has missing packets" << endl;
 
                     break;
 
                 case 4:
 
-                    LOG_DEBUG << "ARV_BUFFER_STATUS_WRONG_PACKET_ID: stream has packet with wrong id";
+                    LOG_DEBUG << "ARV_BUFFER_STATUS_WRONG_PACKET_ID: stream has packet with wrong id" << endl;
 
                     break;
 
                 case 5:
 
-                    LOG_DEBUG << "ARV_BUFFER_STATUS_SIZE_MISMATCH: the received image didn't fit in the buffer data space";
+                    LOG_DEBUG << "ARV_BUFFER_STATUS_SIZE_MISMATCH: the received image didn't fit in the buffer data space" << endl;
 
                     break;
 
                 case 6:
 
-                    LOG_DEBUG << "ARV_BUFFER_STATUS_FILLING: the image is currently being filled";
+                    LOG_DEBUG << "ARV_BUFFER_STATUS_FILLING: the image is currently being filled" << endl;
 
                     break;
 
                 case 7:
 
-                    LOG_DEBUG << "ARV_BUFFER_STATUS_ABORTED: the filling was aborted before completion";
+                    LOG_DEBUG << "ARV_BUFFER_STATUS_ABORTED: the filling was aborted before completion" << endl;
 
                     break;
 
@@ -796,14 +794,14 @@ bool CameraLucidAravis::grabSingleImage(shared_ptr<Frame> frame)
         }
         else {
 
-            LOG_ERROR << "Fail to pop buffer from stream.";
+            LOG_ERROR << "Fail to pop buffer from stream." << endl;
             res = false;
         }
 
         arv_stream_get_statistics(stream, &nbCompletedBuffers, &nbFailures, &nbUnderruns);
 
-        LOG_DEBUG << "Completed buffers =" << (unsigned long long) nbCompletedBuffers;
-        LOG_DEBUG << "Failures          =" << (unsigned long long) nbFailures;
+        LOG_DEBUG << "Completed buffers =" << (unsigned long long) nbCompletedBuffers << endl;
+        LOG_DEBUG << "Failures          =" << (unsigned long long) nbFailures << endl;
         //LOG_DEBUG << "Underruns         ="<< (unsigned long long) nbUnderruns;
 
         // Stop acquisition.
@@ -823,7 +821,7 @@ bool CameraLucidAravis::grabSingleImage(shared_ptr<Frame> frame)
 }
 
 void CameraLucidAravis::saveGenicamXml(string p) {
-    LOG_DEBUG << "CameraLucidAravis::saveGenicamXml";
+    LOG_DEBUG << "CameraLucidAravis::saveGenicamXml" << endl;
 
     const char* xml;
 
@@ -842,7 +840,7 @@ void CameraLucidAravis::saveGenicamXml(string p) {
 
     //https://github.com/GNOME/aravis/blob/b808d34691a18e51eee72d8cac6cfa522a945433/src/arvtool.c
 void CameraLucidAravis::getAvailablePixelFormats() {
-    LOG_DEBUG << "CameraLucidAravis::getAvailablePixelFormats";
+    LOG_DEBUG << "CameraLucidAravis::getAvailablePixelFormats" << endl;
 
     ArvGc* genicam;
     ArvDevice* device;
@@ -860,7 +858,7 @@ void CameraLucidAravis::getAvailablePixelFormats() {
             const GSList* iter;
             vector<string> pixfmt;
 
-            LOG_DEBUG << "Device pixel formats :";
+            LOG_DEBUG << "Device pixel formats :" << endl;
 
             childs = arv_gc_enumeration_get_entries(ARV_GC_ENUMERATION(node));
             for (iter = childs; iter != nullptr; iter = iter->next) {
@@ -872,7 +870,7 @@ void CameraLucidAravis::getAvailablePixelFormats() {
                             string fmt = string(arv_gc_feature_node_get_name(ARV_GC_FEATURE_NODE(iter->data)));
                             transform(fmt.begin(), fmt.end(), fmt.begin(), ::toupper);
                             pixfmt.push_back(fmt);
-                            LOG_DEBUG << "-" << fmt;
+                            LOG_DEBUG << "-" << fmt << endl;
 
                         }
                     }
@@ -881,18 +879,18 @@ void CameraLucidAravis::getAvailablePixelFormats() {
 
             // Compare found pixel formats to currently formats supported by freeture
 
-            LOG_DEBUG << "Available pixel formats :";
+            LOG_DEBUG << "Available pixel formats :" << endl;
             EParser<CamPixFmt> fmt;
 
             for (int i = 0; i != pixfmt.size(); i++) {
 
                 if (fmt.isEnumValue(pixfmt.at(i))) {
 
-                    LOG_DEBUG << "Found " << pixfmt.at(i) ;
+                    LOG_DEBUG << "Found " << pixfmt.at(i) << endl;
 
                 }
                 else
-                    LOG_WARNING << "NOT Found " << pixfmt.at(i);
+                    LOG_WARNING << "NOT Found " << pixfmt.at(i) << endl;
 
             }
 
@@ -913,11 +911,11 @@ void CameraLucidAravis::getAvailablePixelFormats() {
 
     void CameraLucidAravis::getFPSBounds(double &fMin, double &fMax)
     {
-        LOG_DEBUG << "CameraLucidAravis::getFPSBounds ";
+        LOG_DEBUG << "CameraLucidAravis::getFPSBounds " << endl;
         
         
         if (camera == nullptr) {
-            LOG_DEBUG << "CAMERA IS nullptr";
+            LOG_DEBUG << "CAMERA IS nullptr" << endl;
         }
 
 
@@ -931,7 +929,7 @@ void CameraLucidAravis::getAvailablePixelFormats() {
         fMin = fpsMin;
         fMax = fpsMax;
 
-        LOG_DEBUG <<"["<< fpsMin<<", "<< fpsMax<<"]";
+        LOG_DEBUG <<"["<< fpsMin<<", "<< fpsMax<<"]" << endl;
     }
 
 
@@ -939,13 +937,13 @@ void CameraLucidAravis::getAvailablePixelFormats() {
     void CameraLucidAravis::getExposureBounds(double &eMin, double &eMax)
     {
 
-        LOG_DEBUG << "CameraLucidAravis::getExposureBounds ";
+        LOG_DEBUG << "CameraLucidAravis::getExposureBounds " << endl;
 
         double exposureMin = 0.0;
         double exposureMax = 0.0;
 
         if (arv_camera_get_exposure_time_auto(camera, &error)) {
-            LOG_DEBUG << "CAMERA EXP IS SET TO AUTO";
+            LOG_DEBUG << "CAMERA EXP IS SET TO AUTO" << endl;
         }
 
         arv_camera_get_exposure_time_bounds(camera, &exposureMin, &exposureMax, &error);
@@ -953,12 +951,12 @@ void CameraLucidAravis::getAvailablePixelFormats() {
 
         eMin = exposureMin;
         eMax = exposureMax;
-        LOG_DEBUG <<"["<< exposureMin<<", "<< exposureMax<<"]";
+        LOG_DEBUG <<"["<< exposureMin<<", "<< exposureMax<<"]" << endl;
     }
 
     double CameraLucidAravis::getExposureTime()
     {
-        LOG_DEBUG << "CameraLucidAravis::getExposureTime";
+        LOG_DEBUG << "CameraLucidAravis::getExposureTime" << endl;
 
         double result = arv_camera_get_exposure_time(camera, &error);
         CheckAravisError(&error);
@@ -966,7 +964,7 @@ void CameraLucidAravis::getAvailablePixelFormats() {
     }
 
     void CameraLucidAravis::getGainBounds(double &gMin, double &gMax){
-        LOG_DEBUG << "CameraLucidAravis::getGainBounds";
+        LOG_DEBUG << "CameraLucidAravis::getGainBounds" << endl;
 
 
         double gainMin = 0.0;
@@ -981,7 +979,7 @@ void CameraLucidAravis::getAvailablePixelFormats() {
     }
 
     bool CameraLucidAravis::getPixelFormat(CamPixFmt &format){
-        LOG_DEBUG << "CameraLucidAravis::getPixelFormat";
+        LOG_DEBUG << "CameraLucidAravis::getPixelFormat" << endl;
 
         ArvPixelFormat pixFormat = arv_camera_get_pixel_format(camera, &error);
         CheckAravisError(&error);
@@ -1018,7 +1016,7 @@ void CameraLucidAravis::getAvailablePixelFormats() {
 
 
     bool CameraLucidAravis::getFrameSize(int &x, int &y, int &w, int &h) {
-        LOG_DEBUG << "CameraLucidAravis::getFrameSize";
+        LOG_DEBUG << "CameraLucidAravis::getFrameSize" << endl;
 
         if(camera != nullptr) {
 
@@ -1037,7 +1035,7 @@ void CameraLucidAravis::getAvailablePixelFormats() {
     }
 
     bool CameraLucidAravis::getFPS(double &value){
-        LOG_DEBUG << "CameraLucidAravis::getFPS";
+        LOG_DEBUG << "CameraLucidAravis::getFPS" << endl;
 
         if(camera != nullptr) {
 
@@ -1052,7 +1050,7 @@ void CameraLucidAravis::getAvailablePixelFormats() {
     }
 
     string CameraLucidAravis::getModelName(){
-        LOG_DEBUG << "CameraLucidAravis::getModelName";
+        LOG_DEBUG << "CameraLucidAravis::getModelName" << endl;
         
 
         string result =  arv_camera_get_model_name(camera,&error);
@@ -1063,9 +1061,9 @@ void CameraLucidAravis::getAvailablePixelFormats() {
 
     bool CameraLucidAravis::setExposureTime(double val)
     {
-        LOG_DEBUG << "CameraLucidAravis::setExposureTime ["<< val<<"]";
+        LOG_DEBUG << "CameraLucidAravis::setExposureTime ["<< val<<"]" << endl;
         if (camera == nullptr) {
-            LOG_DEBUG << "CAMERA IS nullptr";
+            LOG_DEBUG << "CAMERA IS nullptr" << endl;
             return false;
         }
 
@@ -1074,7 +1072,7 @@ void CameraLucidAravis::getAvailablePixelFormats() {
         arv_camera_get_exposure_time_bounds(camera, &expMin, &expMax,&error);
         CheckAravisError(&error);
 
-        LOG_DEBUG << "arv_camera_get_exposure_time_bounds ["<< expMin<< ", "<< expMax<<"]";
+        LOG_DEBUG << "arv_camera_get_exposure_time_bounds ["<< expMin<< ", "<< expMax<<"]" << endl;
 
         if(camera != nullptr) {
 
@@ -1090,12 +1088,12 @@ void CameraLucidAravis::getAvailablePixelFormats() {
 
             } else {
 
-                LOG_DEBUG << "Exposure value (" << val << ") is not in range ["<< expMin <<"-"<< expMax <<"]";
+                LOG_DEBUG << "Exposure value (" << val << ") is not in range ["<< expMin <<"-"<< expMax <<"]" << endl;
                 if(val < expMin) {
-                    LOG_DEBUG << "Exposure value (" << val << ") less";
+                    LOG_DEBUG << "Exposure value (" << val << ") less" << endl;
                 }
                 if(val > expMax) {
-                    LOG_DEBUG << "Exposure value (" << val << ") bigger";
+                    LOG_DEBUG << "Exposure value (" << val << ") bigger" << endl;
                 }
                 return false;
 
@@ -1110,9 +1108,9 @@ void CameraLucidAravis::getAvailablePixelFormats() {
 
     bool CameraLucidAravis::setAutoExposure(bool val)
     {
-        LOG_DEBUG << "CameraLucidAravis::setAutoExp";
+        LOG_DEBUG << "CameraLucidAravis::setAutoExp" << endl;
         if (camera == nullptr) {
-            LOG_DEBUG << "CAMERA IS nullptr";
+            LOG_DEBUG << "CAMERA IS nullptr" << endl;
             return false;
         }
 
@@ -1125,9 +1123,9 @@ void CameraLucidAravis::getAvailablePixelFormats() {
     }
 
     bool CameraLucidAravis::setGain(double val) {
-        LOG_DEBUG << "CameraLucidAravis::setGain";
+        LOG_DEBUG << "CameraLucidAravis::setGain" << endl;
         if (camera == nullptr) {
-            LOG_DEBUG << "CAMERA IS nullptr";
+            LOG_DEBUG << "CAMERA IS nullptr" << endl;
             return false;
         }
 
@@ -1147,8 +1145,8 @@ void CameraLucidAravis::getAvailablePixelFormats() {
             }
             else {
 
-                LOG_DEBUG << "Gain value (" << val << ") is not in range [" << gMin << "-" << gMax << "]";
-                LOG_ERROR << "Gain value (" << val << ") is not in range [" << gMin << "-" << gMax << "]";
+                LOG_DEBUG << "Gain value (" << val << ") is not in range [" << gMin << "-" << gMax << "]" << endl;
+                LOG_ERROR << "Gain value (" << val << ") is not in range [" << gMin << "-" << gMax << "]" << endl;
                 return false;
 
             }
@@ -1163,9 +1161,9 @@ void CameraLucidAravis::getAvailablePixelFormats() {
 
     bool CameraLucidAravis::setFPS(double fps)
     {
-        LOG_DEBUG << "CameraLucidAravis::setFPS" << " [" << fps << "]";
+        LOG_DEBUG << "CameraLucidAravis::setFPS" << " [" << fps << "]" << endl;
         if (camera == nullptr) {
-            LOG_DEBUG << "CAMERA IS nullptr";
+            LOG_DEBUG << "CAMERA IS nullptr" << endl;
             return false;
         }
 
@@ -1182,14 +1180,14 @@ void CameraLucidAravis::getAvailablePixelFormats() {
 
         double setfps = arv_camera_get_frame_rate(camera, &error);
         CheckAravisError(&error);
-        LOG_DEBUG << "==" << setfps;
+        LOG_DEBUG << "==" << setfps << endl;
 
         int fps_test_l = (int)setfps;
         int fps_test_r = (int)fps;
 
         if (fps_test_l != fps_test_r) {
-            LOG_DEBUG << "Frame rate value (" << fps << ") can't be set! Please check genicam features.";
-            LOG_WARNING << "Frame rate value (" << fps << ") can't be set!";
+            LOG_DEBUG << "Frame rate value (" << fps << ") can't be set! Please check genicam features." << endl;
+            LOG_WARNING << "Frame rate value (" << fps << ") can't be set!" << endl;
         }
 
         return true;
@@ -1198,9 +1196,9 @@ void CameraLucidAravis::getAvailablePixelFormats() {
     
 
     bool CameraLucidAravis::setPixelFormat(CamPixFmt depth) {
-        LOG_DEBUG << "CameraLucidAravis::setPixelFormat";
+        LOG_DEBUG << "CameraLucidAravis::setPixelFormat" << endl;
         if (camera == nullptr) {
-            LOG_DEBUG << "CAMERA IS nullptr";
+            LOG_DEBUG << "CAMERA IS nullptr" << endl;
             return false;
         }
 
@@ -1208,7 +1206,7 @@ void CameraLucidAravis::getAvailablePixelFormats() {
 
         case CamPixFmt::MONO8:
         {
-            LOG_DEBUG << "SET PIXEL FORMAT TO MONO_8";
+            LOG_DEBUG << "SET PIXEL FORMAT TO MONO_8" << endl;
             arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_8, &error);
             CheckAravisError(&error);
         }
@@ -1216,14 +1214,14 @@ void CameraLucidAravis::getAvailablePixelFormats() {
 
         case CamPixFmt::MONO12:
         {
-            LOG_DEBUG << "SET PIXEL FORMAT TO MONO_12";
+            LOG_DEBUG << "SET PIXEL FORMAT TO MONO_12" << endl;
             arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_12, &error);
             CheckAravisError(&error);
         }
         break;
         case CamPixFmt::MONO16:
         {
-            LOG_DEBUG << "SET PIXEL FORMAT TO MONO_16";
+            LOG_DEBUG << "SET PIXEL FORMAT TO MONO_16" << endl;
             arv_camera_set_pixel_format(camera, ARV_PIXEL_FORMAT_MONO_16, &error);
             CheckAravisError(&error);
         }
@@ -1234,20 +1232,20 @@ void CameraLucidAravis::getAvailablePixelFormats() {
     }
 
     bool CameraLucidAravis::setFrameSize(int startx, int starty, int width, int height, bool customSize) {
-        LOG_DEBUG << "CameraLucidAravis::setFrameSize";
+        LOG_DEBUG << "CameraLucidAravis::setFrameSize" << endl;
         if (camera == nullptr) {
-            LOG_DEBUG << "CAMERA IS nullptr";
+            LOG_DEBUG << "CAMERA IS nullptr" << endl;
             return false;
         }
 
         if (customSize) {
 
             if (arv_device_get_feature(arv_camera_get_device(camera), "OffsetX")) {
-                LOG_DEBUG << "Starting from :" << m_StartX << "," << m_StartY;
-                LOG_DEBUG << "Starting from :" << m_StartX << "," << m_StartY;
+                LOG_DEBUG << "Starting from :" << m_StartX << "," << m_StartY << endl;
+                LOG_DEBUG << "Starting from :" << m_StartX << "," << m_StartY << endl;
             }
             else {
-                LOG_WARNING << "OffsetX, OffsetY are not available: cannot set offset.";
+                LOG_WARNING << "OffsetX, OffsetY are not available: cannot set offset." << endl;
             }
 
             arv_camera_set_region(camera, startx, starty, width, height, &error);
@@ -1265,7 +1263,7 @@ void CameraLucidAravis::getAvailablePixelFormats() {
             arv_camera_get_sensor_size(camera, &sensor_width, &sensor_height, &error);
             CheckAravisError(&error);
 
-            LOG_DEBUG << "Camera sensor size :" << sensor_width << "x" << sensor_height;
+            LOG_DEBUG << "Camera sensor size :" << sensor_width << "x" << sensor_height << endl;
 
             arv_camera_set_region(camera, 0, 0, sensor_width, sensor_height, &error);
             CheckAravisError(&error);
